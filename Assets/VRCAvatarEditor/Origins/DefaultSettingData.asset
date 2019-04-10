@@ -19,9 +19,7 @@ MonoBehaviour:
   isActiveOnlySelectedAvatar: 1
   selectedSortType: 0
   blendshapeExclusions:
-  - vrc.v_
   - vrc.blink_
   - vrc.lowerlid_
-  - vrc.owerlid_
   - mmd
   layoutType: 0

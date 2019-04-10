@@ -33,8 +33,6 @@ namespace VRCAvatarEditor
 
             if (fileName == "") fileName = "face_emotion";
 
-            bool isExclusionKey;
-
             foreach (var skinnedMesh in skinnedMeshList)
             {
                 if (!skinnedMesh.isOpenBlendShapes) continue;
@@ -43,31 +41,22 @@ namespace VRCAvatarEditor
 
                 for (int i = 0; i < skinnedMesh.blendShapeNum; i++)
                 {
-                    isExclusionKey = false;
+                    var blendshape = skinnedMesh.blendshapes[i];
 
-                    AnimationCurve curve = new AnimationCurve();
-
-                    float keyValue = skinnedMesh.renderer.GetBlendShapeWeight(i);
-
-                    // 除外するキーかどうか調べる
-                    foreach (var exclusionWord in exclusions)
+                    if (!blendshape.isExclusion && blendshape.isContains)
                     {
-                        if (exclusionWord == "" || isExclusionKey) continue;
-                        if (skinnedMesh.blendshapes[i].Contains(exclusionWord))
-                            isExclusionKey = true;
-                    }
 
-                    if (!isExclusionKey)
-                    {
-                        //if (keyValue <= 0) continue; // 0のキーは追加しない
+                        float keyValue = skinnedMesh.renderer.GetBlendShapeWeight(blendshape.id);
 
                         Keyframe startKeyframe = new Keyframe(0, keyValue);
                         Keyframe endKeyframe = new Keyframe(1 / 60.0f, keyValue);
 
+                        AnimationCurve curve = new AnimationCurve();
+
                         curve.AddKey(startKeyframe);
                         curve.AddKey(endKeyframe);
 
-                        animClip.SetCurve(path, typeof(SkinnedMeshRenderer), "blendShape." + skinnedMesh.blendshapes[i], curve);
+                        animClip.SetCurve(path, typeof(SkinnedMeshRenderer), "blendShape." + blendshape.name, curve);
                     }
 
                 }
@@ -132,11 +121,73 @@ namespace VRCAvatarEditor
             {
                 if (!skinnedMesh.isOpenBlendShapes) continue;
 
-                for (int i = 0; i < skinnedMesh.blendShapeNum; i++)
+                foreach (var blendshape in skinnedMesh.blendshapes)
                 {
-                    skinnedMesh.renderer.SetBlendShapeWeight(i, 0);
+                    if (blendshape.isContains)
+                    {
+                        SetBlendShapeMinValue(ref skinnedMesh.renderer, blendshape.id);
+                    }
                 }
             }
+        }
+
+        /// <summary>
+        /// BlendShapeの値を最大値にする
+        /// </summary>
+        public static void SetBlendShapeMaxValue(ref SkinnedMeshRenderer renderer, int id)
+        {
+            float maxValue = 1f;
+
+            if (renderer.sharedMesh != null)
+            {
+                var mesh = renderer.sharedMesh;
+
+                var frameNum = mesh.GetBlendShapeFrameCount(id);
+
+                for (int i = 0; i < frameNum; i++)
+                {
+                    var frameWeight = mesh.GetBlendShapeFrameWeight(id, i);
+                    maxValue = Mathf.Max(maxValue, frameWeight);
+                }
+
+                renderer.SetBlendShapeWeight(id, maxValue);
+            }
+        }
+
+        /// <summary>
+        /// BlendShapeの値を最小値にする
+        /// </summary>
+        public static void SetBlendShapeMinValue(ref SkinnedMeshRenderer renderer, int id)
+        {
+            float minValue = 0f;
+
+            if (renderer.sharedMesh != null)
+            {
+                var mesh = renderer.sharedMesh;
+
+                var frameNum = mesh.GetBlendShapeFrameCount(id);
+
+                for (int i = 0; i < frameNum; i++)
+                {
+                    var frameWeight = mesh.GetBlendShapeFrameWeight(id, i);
+                    minValue = Mathf.Min(minValue, frameWeight);
+                }
+
+                renderer.SetBlendShapeWeight(id, minValue);
+            }
+        }
+
+        /// <summary>
+        /// すべてのBlendshapeのisContainの値を変更する
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="blendshapes"></param>
+        public static void SetContainsAll(bool value, ref List<SkinnedMesh.BlendShape> blendshapes)
+        {
+            if (blendshapes == null) return;
+
+            foreach (var blendshape in blendshapes)
+                blendshape.isContains = value;
         }
     }
 }

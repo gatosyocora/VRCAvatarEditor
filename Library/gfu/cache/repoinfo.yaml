@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 61
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1109517887, guid: 68c7e4565cde54155bb78d8e935f1dd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cacheType: 1
+  lastUpdatedAtString: 2019-03-30T15:47:51.110+09:00
+  initializedAtString: 2019-03-30T15:47:51.110+09:00
+  currentGitRemote:
+    name: 
+    url: 
+    login: 
+    user: 
+    host: 
+    function: 0
+    token: 
+  currentGitBranch:
+    name: master
+    tracking: 
+  currentConfigBranch:
+    name: master
+    remote:
+      name: 
+      url: 
+    trackingBranch: 
+  currentConfigRemote:
+    name: 
+    url: 
+  currentHead: 

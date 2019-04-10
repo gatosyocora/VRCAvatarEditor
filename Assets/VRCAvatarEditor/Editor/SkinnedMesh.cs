@@ -15,8 +15,25 @@ namespace VRCAvatarEditor
         public string objName;
         public int blendShapeNum;
         public bool isOpenBlendShapes;
-        public Dictionary<int, string> blendshapes;
-        public Dictionary<int, string> blendshapes_origin = null;
+        public List<BlendShape> blendshapes;
+        public List<BlendShape> blendshapes_origin = null;
+        public bool isContainsAll = true;
+
+        public class BlendShape
+        {
+            public int id;
+            public string name;
+            public bool isContains;
+            public bool isExclusion;
+
+            public BlendShape(int id, string name, bool isContains)
+            {
+                this.id = id;
+                this.name = name;
+                this.isContains = isContains;
+                this.isExclusion = false;
+            }
+        }
 
         public SkinnedMesh(SkinnedMeshRenderer m_renderer)
         {
@@ -24,28 +41,51 @@ namespace VRCAvatarEditor
             objName = renderer.gameObject.name;
             blendshapes = GetBlendShapes(renderer);
             blendShapeNum = blendshapes.Count;
+            // 表情のメッシュのみtrueにする
             isOpenBlendShapes = (objName == "Body");
-
         }
 
         /// <summary>
         /// 特定のSkinnedMeshRendererが持つBlendShapeのリストを取得する
         /// </summary>
         /// <param name="skinnedMesh"></param>
-        public Dictionary<int, string> GetBlendShapes(SkinnedMeshRenderer skinnedMesh)
+        public List<BlendShape> GetBlendShapes(SkinnedMeshRenderer skinnedMesh)
         {
-            Dictionary<int, string> blendshapes = new Dictionary<int, string>();
+            List<BlendShape> blendshapes = new List<BlendShape>();
             var mesh = skinnedMesh.sharedMesh;
             blendShapeNum = mesh.blendShapeCount;
             if (blendShapeNum > 0)
             {
                 for (int i = 0; i < blendShapeNum; i++)
                 {
-                    blendshapes.Add(i, mesh.GetBlendShapeName(i));
+                    blendshapes.Add(new BlendShape(i, mesh.GetBlendShapeName(i), true));
                 }
             }
 
             return blendshapes;
+        }
+
+        /// <summary>
+        /// 名前にexclusionWordsが含まれるシェイプキーをリスト一覧表示から除外する設定にする
+        /// </summary>
+        /// <param name="exclusionWords"></param>
+        public void SetExclusionBlendShapesByContains(List<string> exclusionWords)
+        {
+            for (int i = 0; i < blendShapeNum; i++)
+            {
+                blendshapes[i].isExclusion = false;
+
+                // 除外するキーかどうか調べる
+                foreach (var exclusionWord in exclusionWords)
+                {
+                    if (exclusionWord == "") continue;
+                    if ((blendshapes[i].name).Contains(exclusionWord))
+                    {
+                        blendshapes[i].isExclusion = true;
+                        break;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -57,9 +97,9 @@ namespace VRCAvatarEditor
 
             // 元のやつをコピーしておく
             if (blendshapes_origin == null)
-                blendshapes_origin = new Dictionary<int, string>(blendshapes);
+                blendshapes_origin = new List<BlendShape>(blendshapes);
 
-            blendshapes = blendshapes.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            blendshapes = blendshapes.OrderBy(x => x.name).ToList<BlendShape>();
         }
 
         /// <summary>
