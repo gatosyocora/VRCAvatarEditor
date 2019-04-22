@@ -21,13 +21,17 @@ namespace VRCAvatarEditor
         private const string TARGETOBJNAME = "Anchor Target";
 
         /// <summary>
-        /// 特定のオブジェクト以下のRendererのProbeAnchorに設定する
+        /// 未作成であればAnchorTargetに設定用のオブジェクトを作成し, 
+        /// targetPosに設定する
         /// </summary>
         /// <param name="obj"></param>
-        public static void SetProbeAnchor(GameObject obj, TARGETPOS targetPos, ref List<SkinnedMeshRenderer> skinnedMeshRendererList, ref List<MeshRenderer> meshRendererList, bool[] isSettingToSkinnedMesh, bool[] isSettingToMesh, bool isGettingSkinnedMeshRenderer, bool isGettingMeshRenderer)
+        /// <param name="targetPos"></param>
+        /// <param name="anchorTargetObj"></param>
+        /// <returns></returns>
+        public static bool CreateAndSetProbeAnchorObject(GameObject obj, TARGETPOS targetPos, ref GameObject anchorTargetObj)
         {
             var animator = obj.GetComponent<Animator>();
-            if (animator == null) return;
+            if (animator == null) return false;
 
             // AnchorTargetを設定する基準の場所を取得
             Transform targetPosTrans = null;
@@ -48,47 +52,40 @@ namespace VRCAvatarEditor
             {
                 targetPosTrans = obj.transform;
             }
-            if (targetPosTrans == null) return;
+            else
+                return false;
 
             // AnchorTargetに設定用のオブジェクトを作成
-            GameObject anchorTargetObj = GameObject.Find(obj.name + "/" + TARGETOBJNAME);
+            anchorTargetObj = GameObject.Find(obj.name + "/" + TARGETOBJNAME);
             if (anchorTargetObj == null)
             {
                 anchorTargetObj = new GameObject(TARGETOBJNAME);
-                anchorTargetObj.transform.parent = obj.transform;
+                anchorTargetObj.transform.SetParent(obj.transform);
             }
             anchorTargetObj.transform.position = targetPosTrans.position;
 
-            // SkiinedMeshRendererに設定
-            if (isGettingSkinnedMeshRenderer)
+            return true;
+        }
+
+        public static void SetProbeAnchorToSkinnedMeshRenderers(ref GameObject anchorTargetObj, ref List<SkinnedMeshRenderer> skinnedMeshRendererList, ref bool[] isSettingToSkinnedMesh)
+        {
+            for(int index = 0; index < skinnedMeshRendererList.Count; index++)
             {
-                int index = 0;
-                var skinnedMeshes = skinnedMeshRendererList;
-                foreach (var skinnedMesh in skinnedMeshes)
-                {
-                    if (isSettingToSkinnedMesh.Length <= index) break;
-
-                    if (isSettingToSkinnedMesh[index])
-                        skinnedMesh.probeAnchor = anchorTargetObj.transform;
-                    else
-                        skinnedMesh.probeAnchor = null;
-
-                    index++;
-                }
+                if (isSettingToSkinnedMesh[index])
+                    skinnedMeshRendererList[index].probeAnchor = anchorTargetObj.transform;
+                else
+                    skinnedMeshRendererList[index].probeAnchor = null;
             }
+        }
 
-            // MeshRendererに設定
-            if (isGettingMeshRenderer)
+        public static void SetProbeAnchorToMeshRenderers(ref GameObject anchorTargetObj, ref List<MeshRenderer> meshRendererList, ref bool[] isSettingToMesh)
+        {
+            for (int index = 0; index < meshRendererList.Count; index++)
             {
-                int index = 0;
-                var meshes = meshRendererList;
-                foreach (var mesh in meshes)
-                {
-                    if (isSettingToMesh[index++])
-                        mesh.probeAnchor = anchorTargetObj.transform;
-                    else
-                        mesh.probeAnchor = null;
-                }
+                if (isSettingToMesh[index])
+                    meshRendererList[index].probeAnchor = anchorTargetObj.transform;
+                else
+                    meshRendererList[index].probeAnchor = null;
             }
         }
 

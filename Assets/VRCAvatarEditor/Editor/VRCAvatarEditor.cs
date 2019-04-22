@@ -535,10 +535,9 @@ namespace VRCAvatarEditor
                     {
                         using (new EditorGUILayout.HorizontalScope())
                         {
-                            AvatarMonitorGUI(new Vector2(256f, 256f));
-
-                            var option = new GUILayoutOption[] { GUILayout.MinWidth(300), GUILayout.MaxHeight(275) };
-                            AnimationsGUI(option);
+                            AvatarMonitorGUI(256f, 256f);
+                            
+                            AnimationsGUI(GUILayout.MinWidth(300), GUILayout.MaxHeight(275));
                         }
 
                         // 各種機能
@@ -589,7 +588,7 @@ namespace VRCAvatarEditor
                     {
                         using (new EditorGUILayout.HorizontalScope())
                         {
-                            AvatarMonitorGUI(new Vector2(512f, 512f));
+                            AvatarMonitorGUI(512f, 512f);
 
                             using (new EditorGUILayout.VerticalScope())
                             {
@@ -612,8 +611,7 @@ namespace VRCAvatarEditor
                                 {
                                     using (new EditorGUILayout.HorizontalScope())
                                     {
-                                        var option = new GUILayoutOption[] { GUILayout.Height(200f) };
-                                        AnimationsGUI(option);
+                                        AnimationsGUI(GUILayout.Height(200f));
                                     }
 
                                     // アバター情報
@@ -673,7 +671,7 @@ namespace VRCAvatarEditor
             //ShaderUI.Shader(100f, 30f);
         }
 
-        private void AvatarMonitorGUI(Vector2 MonitorSize)
+        private void AvatarMonitorGUI(float monitorSizeX, float monitorSizeY)
         {
             using (new EditorGUILayout.HorizontalScope())
             {
@@ -684,7 +682,7 @@ namespace VRCAvatarEditor
                     {
                         GUILayout.FlexibleSpace();
                         int eventType = 0;
-                        var delta = GatoGUILayout.MiniMonitor(avatarCamTexture, MonitorSize.x, MonitorSize.y, ref eventType, isGammaCorrection);
+                        var delta = GatoGUILayout.MiniMonitor(avatarCamTexture, monitorSizeX, monitorSizeY, ref eventType, isGammaCorrection);
                         if (!isLightPressing)
                         {
                             if (eventType == (int)EventType.MouseDrag) RotateAvatarCam(delta);
@@ -700,7 +698,7 @@ namespace VRCAvatarEditor
                         if (GUILayout.Button("<"))
                         {
                             if (avatarCam != null)
-                                avatarCam.transform.Rotate(new Vector3(0, CAMERA_ROTATE_ANGLE, 0));
+                                avatarCam.transform.Rotate(0, CAMERA_ROTATE_ANGLE, 0);
                         }
 
                         if (GUILayout.Button("Reset"))
@@ -715,7 +713,7 @@ namespace VRCAvatarEditor
                         if (GUILayout.Button(">"))
                         {
                             if (avatarCam != null)
-                                avatarCam.transform.Rotate(new Vector3(0, -CAMERA_ROTATE_ANGLE, 0));
+                                avatarCam.transform.Rotate(0, -CAMERA_ROTATE_ANGLE, 0);
                         }
                     }
 
@@ -759,7 +757,7 @@ namespace VRCAvatarEditor
             }
         }
 
-        private void AnimationsGUI(GUILayoutOption[] option)
+        private void AnimationsGUI(params GUILayoutOption[] option)
         {
             // 設定済みアニメーション一覧
             using (new EditorGUILayout.VerticalScope(GUI.skin.box, option))
@@ -893,63 +891,7 @@ namespace VRCAvatarEditor
 
                     if (skinnedMeshList != null)
                     {
-                        // BlendShapeのリスト
-                        using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos))
-                        {
-                            scrollPos = scrollView.scrollPosition;
-                            foreach (var skinnedMesh in skinnedMeshList)
-                            {
-                                skinnedMesh.isOpenBlendShapes = EditorGUILayout.Foldout(skinnedMesh.isOpenBlendShapes, skinnedMesh.objName);
-                                if (skinnedMesh.isOpenBlendShapes)
-                                {
-                                    using (new EditorGUI.IndentLevelScope())
-                                    {
-                                        using (new GUILayout.HorizontalScope())
-                                        {
-                                            using (var check = new EditorGUI.ChangeCheckScope())
-                                            {
-                                                skinnedMesh.isContainsAll = EditorGUILayout.ToggleLeft("", skinnedMesh.isContainsAll, GUILayout.Width(45));
-                                                if (check.changed)
-                                                {
-                                                    FaceEmotion.SetContainsAll(skinnedMesh.isContainsAll, ref skinnedMesh.blendshapes);
-                                                }
-                                            }
-                                            EditorGUILayout.LabelField("Toggle All", GUILayout.Height(20));
-                                        }
-
-                                        foreach (var blendshape in skinnedMesh.blendshapes)
-                                        {
-
-                                            if (!blendshape.isExclusion)
-                                            {
-                                                using (new EditorGUILayout.HorizontalScope())
-                                                {
-                                                    blendshape.isContains = EditorGUILayout.ToggleLeft("", blendshape.isContains, GUILayout.Width(45));
-
-                                                    EditorGUILayout.SelectableLabel(blendshape.name, GUILayout.Height(20));
-                                                    using (var check = new EditorGUI.ChangeCheckScope())
-                                                    {
-                                                        var value = skinnedMesh.renderer.GetBlendShapeWeight(blendshape.id);
-                                                        value = EditorGUILayout.Slider(value, 0, 100);
-                                                        if (check.changed)
-                                                            skinnedMesh.renderer.SetBlendShapeWeight(blendshape.id, value);
-                                                    }
-
-                                                    if (GUILayout.Button("Min", GUILayout.MaxWidth(50)))
-                                                    {
-                                                        FaceEmotion.SetBlendShapeMinValue(ref skinnedMesh.renderer, blendshape.id);
-                                                    }
-                                                    if (GUILayout.Button("Max", GUILayout.MaxWidth(50)))
-                                                    {
-                                                        FaceEmotion.SetBlendShapeMaxValue(ref skinnedMesh.renderer, blendshape.id);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        BlendShapeListGUI();
                     }
                 }
 
@@ -976,17 +918,86 @@ namespace VRCAvatarEditor
                     if (GUILayout.Button("Create AnimFile"))
                     {
                         var animController = edittingAvatar.standingAnimController;
-                        FaceEmotion.CreateAndSetAnimClip(animName, saveFolder, skinnedMeshList, ref animController, selectedHandAnim, blendshapeExclusions);
+
+                        var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, saveFolder, ref skinnedMeshList, ref blendshapeExclusions);
+                        if (selectedHandAnim != HandPose.HandPoseType.None)
+                        {
+                            HandPose.AddHandPoseAnimationKeysFromOriginClip(ref createdAnimClip, selectedHandAnim);
+                            animController[HANDANIMS[(int)selectedHandAnim - 1]] = createdAnimClip;
+                        }
+
                         edittingAvatar.standingAnimController = animController;
                     }
                     if (GUILayout.Button("Reset All"))
                     {
-                        FaceEmotion.ResetBlendShapes(ref skinnedMeshList);
+                        FaceEmotion.ResetAllBlendShapeValues(ref skinnedMeshList);
                     }
                 }
 
                 EditorGUILayout.HelpBox("Reset Allを押すとチェックをいれているすべてのシェイプキーの値が最低値になります", MessageType.Warning);
 
+            }
+        }
+
+        private void BlendShapeListGUI()
+        {
+            // BlendShapeのリスト
+            using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos))
+            {
+                scrollPos = scrollView.scrollPosition;
+                foreach (var skinnedMesh in skinnedMeshList)
+                {
+
+                    skinnedMesh.isOpenBlendShapes = EditorGUILayout.Foldout(skinnedMesh.isOpenBlendShapes, skinnedMesh.objName);
+                    if (skinnedMesh.isOpenBlendShapes)
+                    {
+                        using (new EditorGUI.IndentLevelScope())
+                        {
+                            using (new GUILayout.HorizontalScope())
+                            {
+                                using (var check = new EditorGUI.ChangeCheckScope())
+                                {
+                                    skinnedMesh.isContainsAll = EditorGUILayout.ToggleLeft("", skinnedMesh.isContainsAll, GUILayout.Width(45));
+                                    if (check.changed)
+                                    {
+                                        FaceEmotion.SetContainsAll(skinnedMesh.isContainsAll, ref skinnedMesh.blendshapes);
+                                    }
+                                }
+                                EditorGUILayout.LabelField("Toggle All", GUILayout.Height(20));
+                            }
+                            
+                            foreach (var blendshape in skinnedMesh.blendshapes)
+                            {
+
+                                if (!blendshape.isExclusion)
+                                {
+                                    using (new EditorGUILayout.HorizontalScope())
+                                    {
+                                        blendshape.isContains = EditorGUILayout.ToggleLeft("", blendshape.isContains, GUILayout.Width(45));
+
+                                        EditorGUILayout.SelectableLabel(blendshape.name, GUILayout.Height(20));
+                                        using (var check = new EditorGUI.ChangeCheckScope())
+                                        {
+                                            var value = skinnedMesh.renderer.GetBlendShapeWeight(blendshape.id);
+                                            value = EditorGUILayout.Slider(value, 0, 100);
+                                            if (check.changed)
+                                                skinnedMesh.renderer.SetBlendShapeWeight(blendshape.id, value);
+                                        }
+
+                                        if (GUILayout.Button("Min", GUILayout.MaxWidth(50)))
+                                        {
+                                            FaceEmotion.SetBlendShapeMinValue(ref skinnedMesh.renderer, blendshape.id);
+                                        }
+                                        if (GUILayout.Button("Max", GUILayout.MaxWidth(50)))
+                                        {
+                                            FaceEmotion.SetBlendShapeMaxValue(ref skinnedMesh.renderer, blendshape.id);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -1064,8 +1075,12 @@ namespace VRCAvatarEditor
 
             if (GUILayout.Button("Set ProbeAnchor"))
             {
-                ProbeAnchor.SetProbeAnchor(edittingAvatar.descriptor.gameObject, targetPos, ref skinnedMeshRendererList, ref meshRendererList, isSettingToSkinnedMesh, isSettingToMesh, isGettingSkinnedMeshRenderer, isGettingMeshRenderer);
-            }
+                GameObject anchorTarget = new GameObject();
+                ProbeAnchor.CreateAndSetProbeAnchorObject(edittingAvatar.descriptor.gameObject, targetPos, ref anchorTarget);
+                if (isGettingSkinnedMeshRenderer)
+                    ProbeAnchor.SetProbeAnchorToSkinnedMeshRenderers(ref anchorTarget, ref skinnedMeshRendererList, ref isSettingToSkinnedMesh);
+                if (isGettingMeshRenderer)
+                    ProbeAnchor.SetProbeAnchorToMeshRenderers(ref anchorTarget, ref meshRendererList, ref isSettingToMesh);}
         }
 
         private void MeshBoundsGUI()
@@ -1476,7 +1491,7 @@ namespace VRCAvatarEditor
                 skinnedMesh.SetExclusionBlendShapesByContains(blendshapeExclusions.Union(edittingAvatar.lipSyncShapeKeyNames).ToList<string>());
 
                 if (selectedSortType == SortType.AToZ)
-                    skinnedMesh.SortBlendShapes();
+                    skinnedMesh.SortBlendShapesToAscending();
                 else
                     skinnedMesh.ResetDefaultSort();
             }
