@@ -1,0 +1,19 @@
+VRChatで使用するアバターの作成・編集を支援するエディタ拡張です。
+
+導入方法や各種機能の説明などの詳しい説明はオンラインマニュアルをご覧ください。
+https://docs.google.com/document/d/1DU7mP5PTvERqHzZiiCBJ9ep5CilQ1iaXC_3IoiuPEgA/edit?usp=sharing
+
+また、README.txtやマニュアル等に内容に矛盾が発生していた場合は
+オンラインマニュアルの内容を最優先とします。
+
+〇利用規約
+本ツールをUnityにインポートした時点で利用規約に同意したものとします。
+本ツールおよびそのソースコードを含む各種ファイルの著作権はgatosyocoraに帰属します。
+本ツールを使ったことによって起こった問題に対して
+gatosyocoraは一切の責任を負いかねますのであらかじめご了承ください。
+また、本ツールはZlibライセンスで運用されます。詳しくはLICENSE.txtをご覧ください。
+ライセンスは予告なく変更される可能性があります。
+
+〇連絡先
+  Twitter @gatosyocora
+	Discord gatosyocora#9575
