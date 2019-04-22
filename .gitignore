@@ -1,7 +1,13 @@
-Assets/VRCSDK/
-Assets/Plugins/VRCSDK/
-Assets/Plugins/VRCSDK.meta
-Assets/VRCSDK.meta
+# AssetsˆÈŠO‚Íœ‚­
+Library/
+ProjectSettings/
+UnityPackageManager/
 
-Assets/VRCSettingExtension/
-Assets/VRCSettingExtension.meta
+*.csproj
+*.sln
+
+# VRCAvatarEditorˆÈŠO‚Íœ‚­
+Assets/*
+!Assets/VRCAvatarEditor/
+
+*.meta
