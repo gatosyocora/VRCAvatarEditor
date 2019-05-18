@@ -14,7 +14,7 @@ Assets/*
 Assets/VRCAvatarEditor/Origins/CustomSettingData.asset
 
 # ì¬‚µ‚½Animationƒtƒ@ƒCƒ‹‚Íœ‚­
-Assets/VRCAvatarEditor/Animations/
+Assets/VRCAvatarEditor/Animations/*.anim
 !Assets/VRCAvatarEditor/Animations/Dummy.anim
 
 *.meta
