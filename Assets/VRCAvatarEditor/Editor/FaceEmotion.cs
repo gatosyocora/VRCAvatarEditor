@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
@@ -11,10 +12,22 @@ namespace VRCAvatarEditor
     {
         private static readonly string[] HANDANIMS = { "FIST", "FINGERPOINT", "ROCKNROLL", "HANDOPEN", "THUMBSUP", "VICTORY", "HANDGUN" };
 
+
+        /// <summary>
+        /// 表情用のAnimationClipを作成する
+        /// </summary>
+        public static void CreateAndSetAnimClip(string animFileName, string saveFolderPath, List<SkinnedMesh> skinnedMeshList, ref AnimatorOverrideController controller, HandPose.HandPoseType selectedHandAnim, List<string> exclusions)
+        {
+            var animClip = CreateBlendShapeAnimationClip(animFileName, saveFolderPath, skinnedMeshList, selectedHandAnim, exclusions);
+
+            if (selectedHandAnim != HandPose.HandPoseType.None)
+                controller[HANDANIMS[(int)selectedHandAnim-1]] = animClip;
+        }
+
         /// <summary>
         /// 指定したBlendShapeのアニメーションファイルを作成する
         /// </summary>
-        public static AnimationClip CreateBlendShapeAnimationClip(string fileName, string saveFolderPath, ref List<SkinnedMesh> skinnedMeshList, ref List<string> exclusions)
+        public static AnimationClip CreateBlendShapeAnimationClip(string fileName, string saveFolderPath, List<SkinnedMesh> skinnedMeshList, HandPose.HandPoseType selectedHandAnim, List<string> exclusions)
         {
             AnimationClip animClip = new AnimationClip();
 
@@ -26,24 +39,32 @@ namespace VRCAvatarEditor
 
                 string path = GetHierarchyPath(skinnedMesh.renderer.gameObject);
 
-                foreach (var blendshape in skinnedMesh.blendshapes)
+                for (int i = 0; i < skinnedMesh.blendShapeNum; i++)
                 {
-                    float keyValue;
-                    AnimationCurve curve = new AnimationCurve();
+                    var blendshape = skinnedMesh.blendshapes[i];
+
                     if (!blendshape.isExclusion && blendshape.isContains)
                     {
-                        keyValue = skinnedMesh.renderer.GetBlendShapeWeight(blendshape.id);
 
-                        curve.keys = null;
+                        float keyValue = skinnedMesh.renderer.GetBlendShapeWeight(blendshape.id);
 
-                        curve.AddKey(0, keyValue);
-                        curve.AddKey(1 / 60.0f, keyValue);
+                        Keyframe startKeyframe = new Keyframe(0, keyValue);
+                        Keyframe endKeyframe = new Keyframe(1 / 60.0f, keyValue);
+
+                        AnimationCurve curve = new AnimationCurve();
+
+                        curve.AddKey(startKeyframe);
+                        curve.AddKey(endKeyframe);
 
                         animClip.SetCurve(path, typeof(SkinnedMeshRenderer), "blendShape." + blendshape.name, curve);
-
                     }
+
                 }
             }
+
+            // 特定の手の形を追加する
+            if (selectedHandAnim != HandPose.HandPoseType.None)
+                HandPose.AddHandPoseAnimationKeys(animClip, selectedHandAnim);
 
             AssetDatabase.CreateAsset(animClip, AssetDatabase.GenerateUniqueAssetPath(saveFolderPath + fileName + ".anim"));
             AssetDatabase.SaveAssets();
@@ -51,7 +72,6 @@ namespace VRCAvatarEditor
 
             return animClip;
         }
-
         /// <summary>
         /// 特定のオブジェクトまでのパスを取得する
         /// </summary>
@@ -83,70 +103,78 @@ namespace VRCAvatarEditor
             var skinnedMeshes = parentObj.GetComponentsInChildren<SkinnedMeshRenderer>();
 
             foreach (var skinnedMesh in skinnedMeshes)
-                if (skinnedMesh.sharedMesh.blendShapeCount > 0)
+            {
+                var blendShapeNum = skinnedMesh.sharedMesh.blendShapeCount;
+                if (blendShapeNum > 0)
                     skinnedMeshList.Add(new SkinnedMesh(skinnedMesh));
+            }
 
             return skinnedMeshList;
         }
 
         /// <summary>
-        /// BlendShapeの値をすべてリセットする
+        /// BlendShapeをすべてリセットする
         /// </summary>
-        public static void ResetAllBlendShapeValues(ref List<SkinnedMesh> skinnedMeshList)
+        public static void ResetBlendShapes(ref List<SkinnedMesh> skinnedMeshList)
         {
             foreach (var skinnedMesh in skinnedMeshList)
             {
                 if (!skinnedMesh.isOpenBlendShapes) continue;
-                
+
                 foreach (var blendshape in skinnedMesh.blendshapes)
+                {
                     if (blendshape.isContains)
+                    {
                         SetBlendShapeMinValue(ref skinnedMesh.renderer, blendshape.id);
+                    }
+                }
             }
         }
 
         /// <summary>
         /// BlendShapeの値を最大値にする
         /// </summary>
-        public static bool SetBlendShapeMaxValue(ref SkinnedMeshRenderer renderer, int id)
+        public static void SetBlendShapeMaxValue(ref SkinnedMeshRenderer renderer, int id)
         {
-            float maxValue = 0f;
+            float maxValue = 1f;
 
             if (renderer.sharedMesh != null)
             {
                 var mesh = renderer.sharedMesh;
-                if (mesh == null) return false;
-                
-                for (int frameIndex = 0; frameIndex < mesh.GetBlendShapeFrameCount(id); frameIndex++)
-                    maxValue = Mathf.Max(maxValue, mesh.GetBlendShapeFrameWeight(id, frameIndex));
+
+                var frameNum = mesh.GetBlendShapeFrameCount(id);
+
+                for (int i = 0; i < frameNum; i++)
+                {
+                    var frameWeight = mesh.GetBlendShapeFrameWeight(id, i);
+                    maxValue = Mathf.Max(maxValue, frameWeight);
+                }
 
                 renderer.SetBlendShapeWeight(id, maxValue);
-
-                return true;
             }
-
-            return false;
         }
 
         /// <summary>
         /// BlendShapeの値を最小値にする
         /// </summary>
-        public static bool SetBlendShapeMinValue(ref SkinnedMeshRenderer renderer, int id)
+        public static void SetBlendShapeMinValue(ref SkinnedMeshRenderer renderer, int id)
         {
-            float minValue = 256f;
+            float minValue = 0f;
 
             if (renderer.sharedMesh != null)
             {
                 var mesh = renderer.sharedMesh;
-                if (mesh == null) return false;
-                
-                for (int frameIndex = 0; frameIndex < mesh.GetBlendShapeFrameCount(id); frameIndex++)
-                    minValue = Mathf.Min(minValue, mesh.GetBlendShapeFrameWeight(id, frameIndex));
+
+                var frameNum = mesh.GetBlendShapeFrameCount(id);
+
+                for (int i = 0; i < frameNum; i++)
+                {
+                    var frameWeight = mesh.GetBlendShapeFrameWeight(id, i);
+                    minValue = Mathf.Min(minValue, frameWeight);
+                }
 
                 renderer.SetBlendShapeWeight(id, minValue);
-
-                return true;
             }
-            return false;
         }
 
         /// <summary>
@@ -154,14 +182,12 @@ namespace VRCAvatarEditor
         /// </summary>
         /// <param name="value"></param>
         /// <param name="blendshapes"></param>
-        public static bool SetContainsAll(bool value, ref List<SkinnedMesh.BlendShape> blendshapes)
+        public static void SetContainsAll(bool value, ref List<SkinnedMesh.BlendShape> blendshapes)
         {
-            if (blendshapes == null) return false;
+            if (blendshapes == null) return;
 
             foreach (var blendshape in blendshapes)
                 blendshape.isContains = value;
-
-            return true;
         }
     }
 }
