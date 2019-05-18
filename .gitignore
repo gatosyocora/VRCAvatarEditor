@@ -10,4 +10,11 @@ UnityPackageManager/
 Assets/*
 !Assets/VRCAvatarEditor/
 
+# カスタム設定ファイルは除く
+Assets/VRCAvatarEditor/Origins/CustomSettingData.asset
+
+# 作成したAnimationファイルは除く
+Assets/VRCAvatarEditor/Animations/
+!Assets/VRCAvatarEditor/Animations/Dummy.anim
+
 *.meta
