@@ -42,6 +42,8 @@ namespace VRCAvatarEditor
             public List<Material> materials { get; set; }
             public int triangleCount { get; set; }
             public int triangleCountInactive { get; set; }
+            public VRC_AvatarDescriptor.LipSyncStyle lipSyncStyle { get; set; }
+            public Enum faceShapeKeyEnum { get; set; }
 
             public Avatar()
             {
@@ -57,6 +59,8 @@ namespace VRCAvatarEditor
                 lipSyncShapeKeyNames = null;
                 triangleCount = 0;
                 triangleCountInactive = 0;
+                lipSyncStyle = VRC_AvatarDescriptor.LipSyncStyle.Default;
+                faceShapeKeyEnum = null;
             }
             
         };
@@ -305,6 +309,14 @@ namespace VRCAvatarEditor
         private Vector2 animOverScrollPos = Vector2.zero;
 
         private readonly string[] HANDANIMS = { "FIST", "FINGERPOINT", "ROCKNROLL", "HANDOPEN", "THUMBSUP", "VICTORY", "HANDGUN" };
+
+        #endregion
+
+        #region AvatarInfo Variable
+
+        private bool isOpeningLipSync = false;
+        private Vector2 lipSyncScrollPos = Vector2.zero;
+        private const int LIPSYNC_SYPEKEY_NUM = 15;
 
         #endregion
 
@@ -879,6 +891,58 @@ namespace VRCAvatarEditor
                 }
 
                 EditorGUILayout.LabelField("Triangles", edittingAvatar.triangleCount + "(" + (edittingAvatar.triangleCount + edittingAvatar.triangleCountInactive) + ")");
+
+                // リップシンク
+                string lipSyncWarningMessage = "リップシンクが正しく設定されていない可能性があります";
+                using (var check = new EditorGUI.ChangeCheckScope())
+                {
+                    edittingAvatar.lipSyncStyle = (VRC_AvatarDescriptor.LipSyncStyle)EditorGUILayout.EnumPopup("LipSync", edittingAvatar.lipSyncStyle);
+
+                    if (check.changed) edittingAvatar.descriptor.lipSync = edittingAvatar.lipSyncStyle;
+
+                }
+                if (edittingAvatar.lipSyncStyle == VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape)
+                {
+                    using (var check = new EditorGUI.ChangeCheckScope())
+                    {
+                        edittingAvatar.faceMesh = EditorGUILayout.ObjectField(
+                            "Face Mesh",
+                            edittingAvatar.faceMesh,
+                            typeof(SkinnedMeshRenderer),
+                            true
+                        ) as SkinnedMeshRenderer;
+
+                        if (check.changed)
+                            edittingAvatar.descriptor.VisemeSkinnedMesh = edittingAvatar.faceMesh;
+                    }
+                    if (edittingAvatar.faceMesh != null)
+                    {
+                        isOpeningLipSync = EditorGUILayout.Foldout(isOpeningLipSync, "ShapeKeys");
+                        if (isOpeningLipSync)
+                        {
+                            using (new EditorGUI.IndentLevelScope())
+                            using (var scrollView = new EditorGUILayout.ScrollViewScope(lipSyncScrollPos))
+                            {
+                                lipSyncScrollPos = scrollView.scrollPosition;
+
+                                for (int visemeIndex = 0; visemeIndex < LIPSYNC_SYPEKEY_NUM; visemeIndex++)
+                                {
+                                    EditorGUILayout.LabelField("Viseme:" + Enum.GetName(typeof(VRC_AvatarDescriptor.Viseme), visemeIndex), edittingAvatar.descriptor.VisemeBlendShapes[visemeIndex]);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (edittingAvatar.lipSyncStyle != VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape || edittingAvatar.faceMesh == null)
+                {
+                    EditorGUILayout.HelpBox(lipSyncWarningMessage, MessageType.Warning);
+                    if (GUILayout.Button("シェイプキーによるリップシンクを自動設定する"))
+                    {
+                        SetLipSyncToViseme(ref edittingAvatar);
+                    }
+                }
+
+                EditorGUILayout.Space();
             }
             #endregion
         }
@@ -1470,6 +1534,8 @@ namespace VRCAvatarEditor
             edittingAvatar.triangleCount = GetAllTrianglesCount(avatarObj, ref triangleCountInactive);
             edittingAvatar.triangleCountInactive = triangleCountInactive;
 
+            edittingAvatar.lipSyncStyle = descriptor.lipSync;
+
             // FaceEmotion
             skinnedMeshList = FaceEmotion.GetSkinnedMeshListOfBlendShape(avatarObj);
 
@@ -1741,6 +1807,40 @@ namespace VRCAvatarEditor
             }
 
             return meshList;
+        }
+
+        /// <summary>
+        /// Avatarにシェイプキー基準のLipSyncの設定をおこなう
+        /// </summary>
+        private bool SetLipSyncToViseme(ref Avatar avatar)
+        {
+            if (avatar == null) return false;
+
+            var desc = avatar.descriptor;
+            if (desc == null) return false;
+
+            avatar.lipSyncStyle = VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape;
+            desc.lipSync = VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape;
+
+            if (avatar.faceMesh == null)
+            {
+                var rootObj = avatar.animator.gameObject;
+                avatar.faceMesh = rootObj.GetComponentInChildren<SkinnedMeshRenderer>();
+                desc.VisemeSkinnedMesh = avatar.faceMesh;
+            }
+
+            if (avatar.faceMesh == null) return false;
+            var faseMesh = avatar.faceMesh.sharedMesh;
+
+            for (int visemeIndex = 0; visemeIndex < Enum.GetNames(typeof(VRC_AvatarDescriptor.Viseme)).Length; visemeIndex++)
+            {
+                // VRC用アバターとしてよくあるシェイプキーの名前を元に自動設定
+                var visemeShapeKeyName = "vrc.v_" + Enum.GetName(typeof(VRC_AvatarDescriptor.Viseme), visemeIndex).ToLower();
+                if (faseMesh.GetBlendShapeIndex(visemeShapeKeyName) == -1) continue;
+                desc.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
+            }
+            
+            return true;
         }
 
         #endregion
