@@ -1078,11 +1078,11 @@ namespace VRCAvatarEditor
 
             if (GUILayout.Button("Set ProbeAnchor"))
             {
-                GameObject anchorTarget = new GameObject();
-                ProbeAnchor.CreateAndSetProbeAnchorObject(edittingAvatar.descriptor.gameObject, targetPos, ref anchorTarget);
-                if (isGettingSkinnedMeshRenderer)
+                GameObject anchorTarget = null;
+                var result = ProbeAnchor.CreateAndSetProbeAnchorObject(edittingAvatar.descriptor.gameObject, targetPos, ref anchorTarget);
+                if (result && isGettingSkinnedMeshRenderer)
                     ProbeAnchor.SetProbeAnchorToSkinnedMeshRenderers(ref anchorTarget, ref skinnedMeshRendererList, ref isSettingToSkinnedMesh);
-                if (isGettingMeshRenderer)
+                if (result && isGettingMeshRenderer)
                     ProbeAnchor.SetProbeAnchorToMeshRenderers(ref anchorTarget, ref meshRendererList, ref isSettingToMesh);}
         }
 
