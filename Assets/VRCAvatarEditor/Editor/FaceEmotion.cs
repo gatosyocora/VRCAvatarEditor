@@ -129,16 +129,15 @@ namespace VRCAvatarEditor
 
         /// <summary>
         /// BlendShapeの値を最小値にする
-        /// </summary>
         public static bool SetBlendShapeMinValue(ref SkinnedMeshRenderer renderer, int id)
         {
-            float minValue = 256f;
+            float minValue = 0f;
 
             if (renderer.sharedMesh != null)
             {
                 var mesh = renderer.sharedMesh;
                 if (mesh == null) return false;
-                
+
                 for (int frameIndex = 0; frameIndex < mesh.GetBlendShapeFrameCount(id); frameIndex++)
                     minValue = Mathf.Min(minValue, mesh.GetBlendShapeFrameWeight(id, frameIndex));
 
