@@ -770,18 +770,21 @@ namespace VRCAvatarEditor
                     GUILayout.FlexibleSpace();
                 }
 
+                string kind;
                 string titleText;
                 AnimatorOverrideController controller;
                 if (_tab == Tab.Standing)
                 {
-                    titleText = "Standing Animations";
+                    kind = "Standing";
                     controller = edittingAvatar.standingAnimController;
                 }
                 else
                 {
-                    titleText = "Sitting Animations";
+                    kind = "Sitting";
                     controller = edittingAvatar.sittingAnimController;
                 }
+
+                titleText = kind + " Animations";
 
                 EditorGUILayout.LabelField(titleText, EditorStyles.boldLabel);
 
@@ -824,7 +827,7 @@ namespace VRCAvatarEditor
                 }
                 else
                 {
-                    EditorGUILayout.HelpBox("Not Setting Custom Standing Anims", MessageType.Warning);
+                    EditorGUILayout.HelpBox("Not Setting Custom "+ kind + " Anims", MessageType.Warning);
                 }
             }
             
@@ -1317,7 +1320,8 @@ namespace VRCAvatarEditor
                 {
                     for (int i = 0; i < skinnedMeshList.Count; i++)
                     {
-                        skinnedMeshList[i].SetExclusionBlendShapesByContains(blendshapeExclusions.Union(edittingAvatar.lipSyncShapeKeyNames).ToList<string>());
+                        if (edittingAvatar.lipSyncShapeKeyNames != null && edittingAvatar.lipSyncShapeKeyNames.Count > 0)
+                            skinnedMeshList[i].SetExclusionBlendShapesByContains(blendshapeExclusions.Union(edittingAvatar.lipSyncShapeKeyNames).ToList<string>());
                     }
                 }
             }
@@ -1488,7 +1492,8 @@ namespace VRCAvatarEditor
 
             foreach (var skinnedMesh in skinnedMeshList)
             {
-                skinnedMesh.SetExclusionBlendShapesByContains(blendshapeExclusions.Union(edittingAvatar.lipSyncShapeKeyNames).ToList<string>());
+                if (edittingAvatar.lipSyncShapeKeyNames != null && edittingAvatar.lipSyncShapeKeyNames.Count > 0)
+                    skinnedMesh.SetExclusionBlendShapesByContains(blendshapeExclusions.Union(edittingAvatar.lipSyncShapeKeyNames).ToList<string>());
 
                 if (selectedSortType == SortType.AToZ)
                     skinnedMesh.SortBlendShapesToAscending();
