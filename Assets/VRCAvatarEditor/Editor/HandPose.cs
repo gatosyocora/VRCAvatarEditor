@@ -17,7 +17,7 @@ namespace VRCAvatarEditor
             None,
             FIST,
             FINGERPOINT,
-            ROKUNROLL,
+            ROCKNROLL,
             HANDOPEN,
             THUMBSUP,
             VICTORY,
