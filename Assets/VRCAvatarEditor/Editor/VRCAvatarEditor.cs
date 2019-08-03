@@ -1495,6 +1495,7 @@ namespace VRCAvatarEditor
 
             var avatarCam_prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ORIGIN_FOLDER_PATH + "AvatarCam.prefab");
             avatarCam = PrefabUtility.InstantiatePrefab(avatarCam_prefab) as GameObject;
+            avatarCam.transform.position = obj.transform.position;
 
             if (edittingAvatar.eyePos != null) maxCamHeight = edittingAvatar.eyePos.y;
 
