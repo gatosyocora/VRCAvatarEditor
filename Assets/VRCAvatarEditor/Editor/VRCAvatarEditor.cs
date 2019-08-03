@@ -1001,7 +1001,7 @@ namespace VRCAvatarEditor
                     {
                         var animController = edittingAvatar.standingAnimController;
 
-                        var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, saveFolder, ref skinnedMeshList, ref blendshapeExclusions);
+                        var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, saveFolder, ref skinnedMeshList, ref blendshapeExclusions, edittingAvatar.descriptor.gameObject);
                         if (selectedHandAnim != HandPose.HandPoseType.None)
                         {
                             HandPose.AddHandPoseAnimationKeysFromOriginClip(ref createdAnimClip, selectedHandAnim);

@@ -14,7 +14,7 @@ namespace VRCAvatarEditor
         /// <summary>
         /// 指定したBlendShapeのアニメーションファイルを作成する
         /// </summary>
-        public static AnimationClip CreateBlendShapeAnimationClip(string fileName, string saveFolderPath, ref List<SkinnedMesh> skinnedMeshList, ref List<string> exclusions)
+        public static AnimationClip CreateBlendShapeAnimationClip(string fileName, string saveFolderPath, ref List<SkinnedMesh> skinnedMeshList, ref List<string> exclusions, GameObject rootObj)
         {
             AnimationClip animClip = new AnimationClip();
 
@@ -24,7 +24,7 @@ namespace VRCAvatarEditor
             {
                 if (!skinnedMesh.isOpenBlendShapes) continue;
 
-                string path = GetHierarchyPath(skinnedMesh.renderer.gameObject);
+                string path = GetHierarchyPath(rootObj, skinnedMesh.renderer.gameObject);
 
                 foreach (var blendshape in skinnedMesh.blendshapes)
                 {
@@ -57,13 +57,13 @@ namespace VRCAvatarEditor
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static string GetHierarchyPath(GameObject obj)
+        public static string GetHierarchyPath(GameObject rootObj, GameObject obj)
         {
             string path = obj.name;
             Transform parent = obj.transform.parent;
             while (parent != null)
             {
-                if (parent.parent == null) return path;
+                if (parent.parent == null || parent.gameObject == rootObj) return path;
 
                 path = parent.name + "/" + path;
                 parent = parent.parent;
