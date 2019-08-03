@@ -483,6 +483,21 @@ namespace VRCAvatarEditor
             saveFolder = EDITOR_FOLDER_PATH + "Animations/";
 
             LoadSettingDataFromScriptableObject();
+
+            // Windowを開いたときにオブジェクトが選択されていればそれをアバターとして設定する
+            if (Selection.gameObjects.Length == 1)
+            {
+                var descriptor = Selection.gameObjects[0].GetComponent<VRC_AvatarDescriptor>();
+                if (descriptor != null)
+                {
+                    edittingAvatar.descriptor = descriptor;
+                    
+                    SetAvatarActive(edittingAvatar.descriptor);
+                    GetAvatarInfo(edittingAvatar.descriptor);
+                    ApplySettingsToEditorGUI();
+                    SetAvatarCam(edittingAvatar.descriptor.gameObject);
+                }
+            }
         }
 
         private void OnDisable()
