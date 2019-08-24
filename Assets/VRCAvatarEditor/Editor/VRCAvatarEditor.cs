@@ -974,27 +974,24 @@ namespace VRCAvatarEditor
 
             EditorGUILayout.LabelField("表情設定", EditorStyles.boldLabel);
 
-            if (GUILayout.Button("Load Animation")) 
-            {
-                string animFilePath = EditorUtility.OpenFilePanel("Select Loading Animation File", "Assets", "anim");
-                
-                animFilePath = FileUtil.GetProjectRelativePath(animFilePath);
-
-                sendData = CreateInstance<SendData> ();
-                sendData.filePath = animFilePath;
-                sendData.window = this;
-                AssetDatabase.CreateAsset (sendData, "Assets/SendData.asset");
-                AssetDatabase.Refresh ();
-
-                var window = GetWindow<AnimationLoaderGUI>("Animation Loader", true);
-               
-            }
-
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
             {
+                using (new EditorGUI.DisabledScope(edittingAvatar.descriptor == null))
+                using (new EditorGUILayout.HorizontalScope()) {
+                    GUILayout.FlexibleSpace();
+
+                    if (GUILayout.Button("Load Animation")) 
+                    {
+                        sendData = CreateInstance<SendData>();
+                        var result = FaceEmotion.LoadAnimationProperties(ref sendData, this);
+
+                        if (result)
+                            GetWindow<AnimationLoaderGUI>("Animation Loader", true);                
+                    }
+                }
+
                 using (new EditorGUI.IndentLevelScope())
                 {
-
                     if (skinnedMeshList != null)
                     {
                         BlendShapeListGUI();

@@ -12,6 +12,8 @@ namespace VRCAvatarEditor
     {
         private static readonly string[] HANDANIMS = { "FIST", "FINGERPOINT", "ROCKNROLL", "HANDOPEN", "THUMBSUP", "VICTORY", "HANDGUN" };
 
+        public static readonly string SENDDATAASSET_PATH = "Assets/SendData.asset";
+
         /// <summary>
         /// 指定したBlendShapeのアニメーションファイルを作成する
         /// </summary>
@@ -163,7 +165,35 @@ namespace VRCAvatarEditor
 
             return true;
         }
+        
+        /// <summary>
+        /// アニメーションファイルを選択し, BlendShapeのデータを読み込む
+        /// 読み込んだデータはSendData.assetに格納される
+        /// </summary>
+        /// <param name="sendData"></param>
+        /// <param name="preWindow"></param>
+        public static bool LoadAnimationProperties(ref SendData sendData, EditorWindow preWindow) {
+            
+                    string animFilePath = EditorUtility.OpenFilePanel("Select Loading Animation File", "Assets", "anim");
+                    
+                    if (animFilePath == "") return false;
 
+                    animFilePath = FileUtil.GetProjectRelativePath(animFilePath);
+
+                    sendData.filePath = animFilePath;
+                    sendData.window = preWindow;            
+                    // データ送受信用assetを作成する
+                    AssetDatabase.CreateAsset (sendData, SENDDATAASSET_PATH);
+                    AssetDatabase.Refresh ();
+
+                    return true;
+        }
+
+        /// <summary>
+        /// 選択したblendshapeのプロパティを反映する
+        /// </summary>
+        /// <param name="animProperties"></param>
+        /// <param name="skinnedMeshes"></param>
         public static void ApplyAnimationProperties(List<AnimationLoaderGUI.AnimParam> animProperties, ref List<SkinnedMesh> skinnedMeshes) 
         {
             for (int skinnedMeshIndex = 0; skinnedMeshIndex < skinnedMeshes.Count; skinnedMeshIndex++) {
@@ -177,6 +207,9 @@ namespace VRCAvatarEditor
                     }
                 }
             }
+
+            // データの処理は終わったのでデータ送受信用assetを削除する
+            AssetDatabase.DeleteAsset(SENDDATAASSET_PATH);
         }
     }
 }

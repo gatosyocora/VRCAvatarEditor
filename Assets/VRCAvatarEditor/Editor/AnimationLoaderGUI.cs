@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 using System.Linq;
+using VRCAvatarEditor;
 
 namespace VRCAvatarEditor {
 	public class AnimationLoaderGUI : EditorWindow {
@@ -32,7 +33,7 @@ namespace VRCAvatarEditor {
 		private Vector2 scrollPos = Vector2.zero;
 
 		void OnEnable() {
-			    sendData = AssetDatabase.LoadAssetAtPath<SendData>("Assets/SendData.asset");
+			    sendData = AssetDatabase.LoadAssetAtPath<SendData>(FaceEmotion.SENDDATAASSET_PATH);
 				filePath = sendData.filePath;
 
 				fileName = Path.GetFileName(filePath);
