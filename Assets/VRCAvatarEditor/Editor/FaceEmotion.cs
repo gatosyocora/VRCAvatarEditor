@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.Linq;
 
 // Copyright (c) 2019 gatosyocora
 
@@ -161,6 +162,21 @@ namespace VRCAvatarEditor
                 blendshape.isContains = value;
 
             return true;
+        }
+
+        public static void ApplyAnimationProperties(List<AnimationLoaderGUI.AnimParam> animProperties, ref List<SkinnedMesh> skinnedMeshes) 
+        {
+            for (int skinnedMeshIndex = 0; skinnedMeshIndex < skinnedMeshes.Count; skinnedMeshIndex++) {
+                var mesh = skinnedMeshes[skinnedMeshIndex].mesh;
+                var renderer = skinnedMeshes[skinnedMeshIndex].renderer;
+
+                foreach (var animProperty in animProperties) {
+                    var index = mesh.GetBlendShapeIndex(animProperty.blendShapeName);
+                    if (index >= 0) {
+                        renderer.SetBlendShapeWeight(index, animProperty.value);
+                    }
+                }
+            }
         }
     }
 }
