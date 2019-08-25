@@ -8,8 +8,6 @@ namespace VRCAvatarEditor
 
     public class HandPose
     {
-        private static string ORIGIN_ANIM_PATH = "Assets/VRCAvatarEditor/Origins/"; // コピー元となるAnimationファイルが置いてあるディレクトリのパス
-
         public static readonly string[] HAND_ORIGIN_ANIM_FILE_NAMES = { "Fist", "FingerPoint", "RocknRoll", "HandOpen", "ThumbsUp", "Victory", "HandGun" };
 
         public enum HandPoseType
@@ -31,8 +29,8 @@ namespace VRCAvatarEditor
         {
             if (originHandType == HandPoseType.None) return false;
 
-            string originPath = ORIGIN_ANIM_PATH + HAND_ORIGIN_ANIM_FILE_NAMES[(int)originHandType-1] + ".anim";
-            AnimationClip originClip = (AnimationClip)AssetDatabase.LoadAssetAtPath(originPath, typeof(AnimationClip));         // originPathよりAnimationClipの読み込み
+            string handPoseAnimPath = "HandPoseAnimation/"+HAND_ORIGIN_ANIM_FILE_NAMES[(int)originHandType-1];
+            AnimationClip originClip = Resources.Load<AnimationClip>(handPoseAnimPath);
 
             CopyAnimationKeysFromOriginClip(originClip, targetClip);
 

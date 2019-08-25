@@ -22,6 +22,8 @@ namespace VRCAvatarEditor
         private const string DISCORD_ID = "gatosyocora#9575";
         private const string MANUAL_URL = "https://docs.google.com/document/d/1DU7mP5PTvERqHzZiiCBJ9ep5CilQ1iaXC_3IoiuPEgA/edit?usp=sharing";
         
+        private string resourceFolderPath;
+
         private GameObject avatarCam = null;
         private RenderTexture avatarCamTexture;
         private const int CAMERA_ROTATE_ANGLE = 30;
@@ -66,8 +68,7 @@ namespace VRCAvatarEditor
         };
         private Avatar edittingAvatar = null;
 
-        private const string EDITOR_FOLDER_PATH = "Assets/VRCAvatarEditor/";
-        private const string ORIGIN_FOLDER_PATH = EDITOR_FOLDER_PATH + "Origins/";
+        private string editorFolderPath;
 
         private enum Tab
         {
@@ -134,13 +135,9 @@ namespace VRCAvatarEditor
             private static float sliderPos;
             #endregion
 
-            #region MiniMonitor Variable
-            private static Material gammaMat = AssetDatabase.LoadAssetAtPath<Material>(GAMMA_MATRIAL_PATH);
-            #endregion
-
             #region LightRotater Variable
-            private static Texture lightActiveTex = AssetDatabase.LoadAssetAtPath<Texture>(ORIGIN_FOLDER_PATH + "Sun_ON.png");
-            private static Texture lightInactiveTex = AssetDatabase.LoadAssetAtPath<Texture>(ORIGIN_FOLDER_PATH + "Sun_OFF.png");
+            private static Texture lightActiveTex = Resources.Load<Texture>("Icon/Sun_ON");
+            private static Texture lightInactiveTex = Resources.Load<Texture>("Icon/Sun_OFF");
             #endregion
 
             public static float VerticalSlider(Texture texture, float texSize, float height, float value, float minValue, float maxValue)
@@ -226,7 +223,7 @@ namespace VRCAvatarEditor
                 return value;
             }
 
-            public static Vector2 MiniMonitor(Texture texture, float width, float height, ref int type, bool isGammaCorrection)
+            public static Vector2 MiniMonitor(Texture texture, float width, float height, ref int type, bool isGammaCorrection, Material gammaMat)
             {
                 var rect = GUILayoutUtility.GetRect(width, height, GUI.skin.box);
 
@@ -288,8 +285,6 @@ namespace VRCAvatarEditor
 
         #region AvatarMonitor Variable
 
-        private const string GAMMA_MATRIAL_PATH = EDITOR_FOLDER_PATH + "Origins/Gamma.mat";
-
         private float cameraHeight = 1;
         private float maxCamHeight = 1;
         private float minCamHeight = 0;
@@ -301,7 +296,7 @@ namespace VRCAvatarEditor
         private bool isLightPressing = false;
 
         private Texture upDownTexture;
-
+        private Material gammaMat;
         #endregion
 
         #region Animations Variable
@@ -323,7 +318,7 @@ namespace VRCAvatarEditor
         #region FaceEmotion Variable
 
         private string animName = "faceAnim";
-        private string saveFolder = EDITOR_FOLDER_PATH + "Animations/";
+        private string saveFolder;
         private HandPose.HandPoseType selectedHandAnim = HandPose.HandPoseType.None;
 
         private List<SkinnedMesh> skinnedMeshList = null;
@@ -410,9 +405,9 @@ namespace VRCAvatarEditor
         #region ToolInfo Variable
 
         private bool isShowingToolInfo = false;
-        private const string LICENSE_FILE_PATH = EDITOR_FOLDER_PATH + "LICENSE.txt";
-        private const string README_FILE_PATH = EDITOR_FOLDER_PATH + "README.txt";
-        private const string USING_SOFTWARE_LICENSE_FILE_PATH = EDITOR_FOLDER_PATH + "USING_SOFTWARE_LICENSES.txt";
+        private const string LICENSE_FILE_NAME = "LICENSE.txt";
+        private const string README_FILE_NAME = "README.txt";
+        private const string USING_SOFTWARE_FILE_NAME = "USING_SOFTWARE_LICENSES.txt";
         private readonly string[] TOOL_FUNCS = { "Avatar Monitor", "SunLight Rotator", "FaceEmotion Creator", "HandPose Adder", "ProbeAnchor Setter", "MeshBounds Setter", "Shader Checker", "HumanoidPose Resetter" };
         private string licenseText;
         private string readmeText;
@@ -467,22 +462,28 @@ namespace VRCAvatarEditor
 
         private void OnEnable()
         {
-            upDownTexture = AssetDatabase.LoadAssetAtPath<Texture>(ORIGIN_FOLDER_PATH + "UpDown.png");
+            upDownTexture = Resources.Load<Texture>("Icon/UpDown");
 
-            avatarCamTexture = AssetDatabase.LoadAssetAtPath<RenderTexture>(ORIGIN_FOLDER_PATH + "AvatarRT.renderTexture");
-
-            licenseText = GetFileTexts(LICENSE_FILE_PATH);
-
-            readmeText = GetFileTexts(README_FILE_PATH);
-
-            usingSoftwareLicenseText = GetFileTexts(USING_SOFTWARE_LICENSE_FILE_PATH);
+            avatarCamTexture = Resources.Load<RenderTexture>("AvatarRT");
 
             sceneLight = GetDirectionalLight();
 
             edittingAvatar = new Avatar();
-                
+
+            var editorScriptPath = AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this));
+            editorFolderPath = Path.GetDirectoryName(editorScriptPath).Replace("Editor/", "") + "/";
+
             animName = "faceAnim";
-            saveFolder = EDITOR_FOLDER_PATH + "Animations/";
+            saveFolder = editorFolderPath + "Animations/";
+
+            gammaMat = Resources.Load<Material>("Gamma");
+
+            resourceFolderPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(gammaMat))+"/";
+            
+            licenseText = GetFileTexts(editorFolderPath + LICENSE_FILE_NAME);
+            readmeText = GetFileTexts(editorFolderPath + README_FILE_NAME);
+            usingSoftwareLicenseText = GetFileTexts(editorFolderPath + USING_SOFTWARE_FILE_NAME);
+
 
             LoadSettingDataFromScriptableObject();
 
@@ -711,7 +712,7 @@ namespace VRCAvatarEditor
                     {
                         GUILayout.FlexibleSpace();
                         int eventType = 0;
-                        var delta = GatoGUILayout.MiniMonitor(avatarCamTexture, monitorSizeX, monitorSizeY, ref eventType, isGammaCorrection);
+                        var delta = GatoGUILayout.MiniMonitor(avatarCamTexture, monitorSizeX, monitorSizeY, ref eventType, isGammaCorrection, gammaMat);
                         if (!isLightPressing)
                         {
                             if (eventType == (int)EventType.MouseDrag) RotateAvatarCam(delta);
@@ -982,6 +983,7 @@ namespace VRCAvatarEditor
 
                     if (GUILayout.Button("Load Animation")) 
                     {
+                        
                         sendData = CreateInstance<SendData>();
                         var result = FaceEmotion.LoadAnimationProperties(ref sendData, this);
 
@@ -1007,9 +1009,7 @@ namespace VRCAvatarEditor
                     if (GUILayout.Button("Select Folder", GUILayout.Width(100)))
                     {
                         saveFolder = EditorUtility.OpenFolderPanel("Select saved folder", saveFolder, "");
-                        var match = Regex.Match(saveFolder, @"Assets/.*");
-                        Debug.Log(match.Value);
-                        saveFolder = match.Value + "/";
+                        saveFolder = FileUtil.GetProjectRelativePath(saveFolder);
                         if (saveFolder == "/") saveFolder = "Assets/";
                     }
 
@@ -1434,10 +1434,10 @@ namespace VRCAvatarEditor
         /// </summary>
         private void LoadSettingDataFromScriptableObject()
         {
-            var settingAsset = AssetDatabase.LoadAssetAtPath<SettingData>(ORIGIN_FOLDER_PATH + "CustomSettingData.asset");
+            var settingAsset = Resources.Load<SettingData>("CustomSettingData");
 
             if (settingAsset == null)
-                settingAsset = AssetDatabase.LoadAssetAtPath<SettingData>(ORIGIN_FOLDER_PATH + "DefaultSettingData.asset");
+                settingAsset = Resources.Load<SettingData>("DefaultSettingData");
 
             defaultZoomDist = settingAsset.defaultZoomDist;
             faceZoomDist = settingAsset.faceZoomDist;
@@ -1459,7 +1459,7 @@ namespace VRCAvatarEditor
         private void SaveSettingDataToScriptableObject()
         {
             bool newCreated = false;
-            var settingAsset = AssetDatabase.LoadAssetAtPath<SettingData>(ORIGIN_FOLDER_PATH + "CustomSettingData.asset");
+            var settingAsset = Resources.Load<SettingData>("CustomSettingData");
 
             if (settingAsset == null)
             {
@@ -1482,7 +1482,7 @@ namespace VRCAvatarEditor
 
             if (newCreated)
             {
-                AssetDatabase.CreateAsset(settingAsset, ORIGIN_FOLDER_PATH + "CustomSettingData.asset");
+                AssetDatabase.CreateAsset(settingAsset, resourceFolderPath + "CustomSettingData.asset");
                 AssetDatabase.Refresh();
             }
             else
@@ -1499,10 +1499,10 @@ namespace VRCAvatarEditor
         private void DeleteMySettingData()
         {
             // 一度読み込んでみて存在するか確認
-            var settingAsset = AssetDatabase.LoadAssetAtPath<SettingData>(ORIGIN_FOLDER_PATH + "CustomSettingData.asset");
+            var settingAsset = Resources.Load<SettingData>("CustomSettingData");
             if (settingAsset == null) return;
 
-            AssetDatabase.MoveAssetToTrash(ORIGIN_FOLDER_PATH + "CustomSettingData.asset");
+            AssetDatabase.MoveAssetToTrash(AssetDatabase.GetAssetPath(settingAsset.GetInstanceID()));
             AssetDatabase.Refresh();
         }
 
@@ -1514,7 +1514,7 @@ namespace VRCAvatarEditor
             if (avatarCam != null)
                 DestroyImmediate(avatarCam);
 
-            var avatarCam_prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ORIGIN_FOLDER_PATH + "AvatarCam.prefab");
+            var avatarCam_prefab = Resources.Load<GameObject>("AvatarCam");
             avatarCam = PrefabUtility.InstantiatePrefab(avatarCam_prefab) as GameObject;
             avatarCam.transform.position = obj.transform.position;
 
