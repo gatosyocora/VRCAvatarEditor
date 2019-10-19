@@ -675,6 +675,8 @@ namespace VRCAvatarEditor
                         
                     }
 
+                    EditorGUILayout.Space();
+
                     // ポーズ修正
                     if (GUILayout.Button("Reset Pose"))
                     {
