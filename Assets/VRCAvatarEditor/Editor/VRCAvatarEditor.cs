@@ -1219,6 +1219,20 @@ namespace VRCAvatarEditor
 
             EditorGUILayout.LabelField("Bounds", EditorStyles.boldLabel);
 
+            EditorGUILayout.Space();
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                GUILayout.FlexibleSpace();
+
+                if (GUILayout.Button("Reset Bounds to Prefab"))
+                {
+                    MeshBounds.RevertBoundsToPrefab(targetRenderers);
+                }
+            }
+
+            EditorGUILayout.Space();
+
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
             {
                 using (new EditorGUILayout.HorizontalScope())

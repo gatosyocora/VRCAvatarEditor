@@ -73,6 +73,31 @@ namespace VRCAvatarEditor
             Handles.color = Color.white;
             Handles.DrawWireCube(bounds.center, bounds.size);
         }
+
+        /// <summary>
+        /// Boundsの値をPrefabの状態に戻す
+        /// </summary>
+        /// <param name="renderers"></param>
+        public static void RevertBoundsToPrefab(List<SkinnedMeshRenderer> renderers)
+        {
+            foreach (var renderer in renderers)
+            {
+                PrefabUtility.ReconnectToLastPrefab(renderer.gameObject);
+
+                var so = new SerializedObject(renderer);
+                so.Update();
+
+                var sp = so.FindProperty("m_AABB");
+#if UNITY_2018_3_OR_NEWER
+            PrefabUtility.RevertPropertyOverride(sp, InteractionMode.UserAction);
+#else
+                sp.prefabOverride = false;
+                sp.serializedObject.ApplyModifiedProperties();
+#endif
+            }
+        }
+
+        // TODO: 特定のオブジェクト以下のBoundsをすべて無効機能
     }
 
 }
