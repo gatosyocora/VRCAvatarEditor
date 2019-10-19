@@ -356,7 +356,7 @@ namespace VRCAvatarEditor
 
         #region MeshBounds Variable
         private Vector3 boundsScale = new Vector3(1, 2, 1);
-        private List<GameObject> exclusions = new List<GameObject>();
+        private List<SkinnedMeshRenderer> exclusions = new List<SkinnedMeshRenderer>();
         #endregion
 
         #region Shader Variable
@@ -1216,9 +1216,9 @@ namespace VRCAvatarEditor
                         exclusions[i] = EditorGUILayout.ObjectField(
                             "Object " + (i + 1),
                             exclusions[i],
-                            typeof(GameObject),
+                            typeof(SkinnedMeshRenderer),
                             true
-                        ) as GameObject;
+                        ) as SkinnedMeshRenderer;
                     }
                 }
             }

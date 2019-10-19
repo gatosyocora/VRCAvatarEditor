@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,63 +9,43 @@ using UnityEngine;
 namespace VRCAvatarEditor
 {
 
-    public class MeshBounds
+    public static class MeshBounds
     {
-
         /// <summary>
         /// 特定のオブジェクト以下のメッシュのBoundsがすべて同じ範囲になるように設定する
         /// </summary>
         /// <param name="parentObj"></param>
-        public static void BoundsSetter(GameObject parentObj, List<GameObject> exclusions, Vector3 boundsScale)
+        public static void BoundsSetter(GameObject parentObj, List<SkinnedMeshRenderer> exclusions, Vector3 boundsScale)
         {
-            var objs = GetAllChildrens(parentObj);
+            var renderers = parentObj.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
 
-            foreach (var obj in objs)
+            foreach (var renderer in renderers)
             {
                 // 除外リストに含まれていれば処理しない
-                if (exclusions.Contains(obj)) continue;
+                if (exclusions.Contains(renderer)) continue;
 
-                var mesh = obj.GetComponent<MeshRenderer>();
-                var skinnedMesh = obj.GetComponent<SkinnedMeshRenderer>();
+                if (renderer == null) continue;
 
-                if (mesh == null && skinnedMesh == null) continue;
+                Undo.RecordObject(renderer, "Change Bounds " + renderer.name);
 
-                // Mesh Rendererの場合
-                if (mesh != null)
-                {
-                    Undo.RecordObject(mesh, "Change Transform " + mesh.name);
-                }
-                // SkinnedMeshRendererの場合
-                else
-                {
-                    Undo.RecordObject(skinnedMesh, "Change Transform " + skinnedMesh.name);
-
-                    var objScale = skinnedMesh.gameObject.transform.localScale;
-                    var meshBoundsScale = new Vector3(boundsScale.x / objScale.x, boundsScale.y / objScale.y, boundsScale.z / objScale.z);
-                    skinnedMesh.localBounds = new Bounds(Vector3.zero, meshBoundsScale);
-                }
-
+                var objScale = renderer.transform.localScale;
+                var meshBoundsScale = new Vector3(boundsScale.x / objScale.x, boundsScale.y / objScale.y, boundsScale.z / objScale.z);
+                renderer.localBounds = new Bounds(Vector3.zero, meshBoundsScale);
             }
-
         }
 
-        /// <summary>
-        /// 指定オブジェクトの子オブジェクト以降をすべて取得する
-        /// </summary>
-        /// <param name="parentObj"></param>
-        /// <returns></returns>
-        private static List<GameObject> GetAllChildrens(GameObject parentObj)
+        [ExecuteInEditMode]
+        private static void DrawBoundsArea(SkinnedMeshRenderer renderer)
         {
-            List<GameObject> objs = new List<GameObject>();
+            var cubeObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            var cubeMesh = cubeObj.GetComponent<MeshFilter>().sharedMesh;
 
-            var childTransform = parentObj.GetComponentsInChildren<Transform>();
+            var transform = renderer.transform;
+            var bounds = renderer.bounds;
 
-            foreach (Transform child in childTransform)
-            {
-                objs.Add(child.gameObject);
-            }
-
-            return objs;
+            Gizmos.DrawWireMesh(cubeMesh, 
+                                transform.position + bounds.center,
+                                transform.rotation);
         }
     }
 
