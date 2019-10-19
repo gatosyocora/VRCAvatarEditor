@@ -19,14 +19,14 @@ namespace VRCAvatarEditor
         {
             var renderers = parentObj.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
 
+            Undo.RecordObjects(renderers.ToArray(), "Change Bounds");
+
             foreach (var renderer in renderers)
             {
                 // 除外リストに含まれていれば処理しない
                 if (exclusions.Contains(renderer)) continue;
 
                 if (renderer == null) continue;
-
-                Undo.RecordObject(renderer, "Change Bounds " + renderer.name);
 
                 var objScale = renderer.transform.localScale;
                 var meshBoundsScale = new Vector3(boundsScale.x / objScale.x, boundsScale.y / objScale.y, boundsScale.z / objScale.z);
