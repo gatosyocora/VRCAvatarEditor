@@ -356,6 +356,7 @@ namespace VRCAvatarEditor
 
         #region MeshBounds Variable
         private Vector3 boundsScale = new Vector3(1, 2, 1);
+        private List<SkinnedMeshRenderer> targetRenderers;
         private List<SkinnedMeshRenderer> exclusions = new List<SkinnedMeshRenderer>();
         #endregion
 
@@ -501,12 +502,16 @@ namespace VRCAvatarEditor
                     SetAvatarCam(edittingAvatar.descriptor.gameObject);
                 }
             }
+            
+            SceneView.onSceneGUIDelegate += OnSceneGUI;
         }
 
         private void OnDisable()
         {
             if (avatarCam != null)
                 UnityEngine.Object.DestroyImmediate(avatarCam);
+
+            SceneView.onSceneGUIDelegate -= OnSceneGUI;
         }
 
         private void OnGUI()
@@ -549,6 +554,8 @@ namespace VRCAvatarEditor
                             // アバター変更時の処理
                             if (edittingAvatar.descriptor != null)
                             {
+                                targetRenderers = null;
+
                                 SetAvatarActive(edittingAvatar.descriptor);
 
                                 GetAvatarInfo(edittingAvatar.descriptor);
@@ -701,6 +708,20 @@ namespace VRCAvatarEditor
             }
 
             //ShaderUI.Shader(100f, 30f);
+        }
+
+        void OnSceneGUI(SceneView sceneView)
+        {
+            if (currentTool == ToolFunc.Bounds)
+            {
+                foreach (var renderer in targetRenderers)
+                {
+                    MeshBounds.DrawBoundsGizmo(renderer);
+                }
+            }
+
+            SceneView.lastActiveSceneView.Repaint();
+
         }
 
         private void AvatarMonitorGUI(float monitorSizeX, float monitorSizeY)
@@ -1190,6 +1211,13 @@ namespace VRCAvatarEditor
 
         private void MeshBoundsGUI()
         {
+            if (targetRenderers == null)
+            {
+                targetRenderers = MeshBounds.GetSkinnedMeshRenderersWithoutExclusions(
+                                    edittingAvatar.descriptor.gameObject,
+                                    exclusions);
+            }
+
             EditorGUILayout.LabelField("Bounds", EditorStyles.boldLabel);
 
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
@@ -1208,10 +1236,15 @@ namespace VRCAvatarEditor
                     {
                         if (exclusions.Count > 0)
                             exclusions.RemoveAt(exclusions.Count - 1);
+
+                        targetRenderers = MeshBounds.GetSkinnedMeshRenderersWithoutExclusions(
+                                                        edittingAvatar.descriptor.gameObject,
+                                                        exclusions);
                     }
                 }
 
                 using (new EditorGUI.IndentLevelScope())
+                using (var check = new EditorGUI.ChangeCheckScope())
                 {
                     for (int i = 0; i < exclusions.Count; i++)
                     {
@@ -1222,12 +1255,19 @@ namespace VRCAvatarEditor
                             true
                         ) as SkinnedMeshRenderer;
                     }
+
+                    if (check.changed)
+                    {
+                        targetRenderers = MeshBounds.GetSkinnedMeshRenderersWithoutExclusions(
+                                            edittingAvatar.descriptor.gameObject,
+                                            exclusions);
+                    }
                 }
             }
 
             if (GUILayout.Button("Set Bounds"))
             {
-                MeshBounds.BoundsSetter(edittingAvatar.descriptor.gameObject, exclusions, boundsScale);
+                MeshBounds.BoundsSetter(targetRenderers, boundsScale);
             }
         }
 
