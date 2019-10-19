@@ -1211,7 +1211,7 @@ namespace VRCAvatarEditor
         // TODO: UIの見直し
         private void MeshBoundsGUI()
         {
-            if (targetRenderers == null)
+            if (targetRenderers == null && edittingAvatar != null)
             {
                 targetRenderers = MeshBounds.GetSkinnedMeshRenderersWithoutExclusions(
                                     edittingAvatar.descriptor.gameObject,
@@ -1236,24 +1236,7 @@ namespace VRCAvatarEditor
 
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
             {
-                using (new EditorGUILayout.HorizontalScope())
-                {
-                    EditorGUILayout.LabelField("Exclusions");
-
-                    if (GUILayout.Button("+"))
-                    {
-                        exclusions.Add(null);
-                    }
-                    if (GUILayout.Button("-"))
-                    {
-                        if (exclusions.Count > 0)
-                            exclusions.RemoveAt(exclusions.Count - 1);
-
-                        targetRenderers = MeshBounds.GetSkinnedMeshRenderersWithoutExclusions(
-                                                        edittingAvatar.descriptor.gameObject,
-                                                        exclusions);
-                    }
-                }
+                EditorGUILayout.LabelField("Exclusions");
 
                 using (new EditorGUI.IndentLevelScope())
                 {
@@ -1266,7 +1249,7 @@ namespace VRCAvatarEditor
                             true
                         ) as GameObject;
 
-                        if (check.changed && parentObject != null)
+                        if (check.changed && parentObject != null && edittingAvatar != null)
                         {
                             var renderers = parentObject.GetComponentsInChildren<SkinnedMeshRenderer>();
                             foreach (var renderer in renderers)
@@ -1283,29 +1266,47 @@ namespace VRCAvatarEditor
 
                     EditorGUILayout.Space();
 
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        GUILayout.FlexibleSpace();
+
+                        if (GUILayout.Button("+", GUILayout.MaxWidth(60)))
+                        {
+                            exclusions.Add(null);
+                        }
+                    }
+
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
+
                         for (int i = 0; i < exclusions.Count; i++)
                         {
-                            exclusions[i] = EditorGUILayout.ObjectField(
-                                "Object " + (i + 1),
-                                exclusions[i],
-                                typeof(SkinnedMeshRenderer),
-                                true
-                            ) as SkinnedMeshRenderer;
+                            using (new EditorGUILayout.HorizontalScope())
+                            {
+                                exclusions[i] = EditorGUILayout.ObjectField(
+                                    "Object " + (i + 1),
+                                    exclusions[i],
+                                    typeof(SkinnedMeshRenderer),
+                                    true
+                                ) as SkinnedMeshRenderer;
+
+                                if (GUILayout.Button("x", GUILayout.MaxWidth(30)))
+                                {
+                                    exclusions.RemoveAt(i);
+                                }
+                            }
                         }
 
-                        if (check.changed)
+                        if (check.changed && edittingAvatar != null)
                         {
                             targetRenderers = MeshBounds.GetSkinnedMeshRenderersWithoutExclusions(
                                                 edittingAvatar.descriptor.gameObject,
                                                 exclusions);
                         }
                     }
+                    
+                    EditorGUILayout.Space();
                 }
-
-
-
             }
 
             if (GUILayout.Button("Set Bounds"))
