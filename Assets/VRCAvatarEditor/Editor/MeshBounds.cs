@@ -8,7 +8,6 @@ using UnityEngine;
 
 namespace VRCAvatarEditor
 {
-
     public static class MeshBounds
     {
         /// <summary>
@@ -30,12 +29,12 @@ namespace VRCAvatarEditor
             }
         }
 
+        // TODO: rootBoneが異なるものを持つアバターだとうまく計算できない
         /// <summary>
         /// アバター全体を囲うBoundsのサイズを計算する
         /// </summary>
         /// <param name="renderers"></param>
         /// <returns></returns>
-        /// 
         private static Bounds CalcAvatarBoundsSize(List<SkinnedMeshRenderer> renderers)
         {
             var avatarCenter = Vector3.zero;
@@ -59,6 +58,12 @@ namespace VRCAvatarEditor
             return avatarBounds;
         }
 
+        /// <summary>
+        /// exclusionsに含まれるものを除いたrootObject以下のSkinnedMeshRendererをすべて取得する
+        /// </summary>
+        /// <param name="rootObject"></param>
+        /// <param name="exclusions"></param>
+        /// <returns></returns>
         public static List<SkinnedMeshRenderer> GetSkinnedMeshRenderersWithoutExclusions(GameObject rootObject, List<SkinnedMeshRenderer> exclusions)
         {
             return rootObject
@@ -67,6 +72,10 @@ namespace VRCAvatarEditor
                     .ToList();
         }
 
+        /// <summary>
+        /// BoundsサイズをSceneViewに表示する
+        /// </summary>
+        /// <param name="renderer"></param>
         public static void DrawBoundsGizmo(SkinnedMeshRenderer renderer)
         {
             var bounds = renderer.bounds;
@@ -96,8 +105,6 @@ namespace VRCAvatarEditor
 #endif
             }
         }
-
-        // TODO: 特定のオブジェクト以下のBoundsをすべて無効機能
     }
 
 }
