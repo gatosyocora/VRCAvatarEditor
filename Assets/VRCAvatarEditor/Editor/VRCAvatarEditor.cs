@@ -355,7 +355,6 @@ namespace VRCAvatarEditor
         #endregion
 
         #region MeshBounds Variable
-        private Vector3 boundsScale = new Vector3(1, 2, 1);
         private List<SkinnedMeshRenderer> targetRenderers;
         private List<SkinnedMeshRenderer> exclusions = new List<SkinnedMeshRenderer>();
         #endregion
@@ -1222,8 +1221,6 @@ namespace VRCAvatarEditor
 
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
             {
-                boundsScale = EditorGUILayout.Vector3Field("Bounds Scale", boundsScale);
-
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     EditorGUILayout.LabelField("Exclusions");
@@ -1267,7 +1264,7 @@ namespace VRCAvatarEditor
 
             if (GUILayout.Button("Set Bounds"))
             {
-                MeshBounds.BoundsSetter(targetRenderers, boundsScale);
+                MeshBounds.BoundsSetter(targetRenderers);
             }
         }
 

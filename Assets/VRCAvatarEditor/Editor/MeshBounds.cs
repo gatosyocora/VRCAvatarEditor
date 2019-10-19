@@ -15,17 +15,18 @@ namespace VRCAvatarEditor
         /// 特定のオブジェクト以下のメッシュのBoundsがすべて同じ範囲になるように設定する
         /// </summary>
         /// <param name="parentObj"></param>
-        public static void BoundsSetter(List<SkinnedMeshRenderer> renderers, Vector3 boundsScale)
+        public static void BoundsSetter(List<SkinnedMeshRenderer> renderers)
         {
+            var avatarBounds = CalcAvatarBoundsSize(renderers);
+
+            Debug.Log("center:"+avatarBounds.center+", size:"+avatarBounds.size);
+
             Undo.RecordObjects(renderers.ToArray(), "Change Bounds");
 
             foreach (var renderer in renderers)
             {
                 if (renderer == null) continue;
-
-                var objScale = renderer.transform.localScale;
-                var meshBoundsScale = new Vector3(boundsScale.x / objScale.x, boundsScale.y / objScale.y, boundsScale.z / objScale.z);
-                renderer.localBounds = new Bounds(Vector3.zero, meshBoundsScale);
+                renderer.localBounds = avatarBounds;
             }
         }
 
@@ -35,19 +36,28 @@ namespace VRCAvatarEditor
         /// <param name="renderers"></param>
         /// <returns></returns>
         /// 
-        /*
-        private static Vector3 CalcAvatarBoundsSize(List<SkinnedMeshRenderer> renderers)
+        private static Bounds CalcAvatarBoundsSize(List<SkinnedMeshRenderer> renderers)
         {
-            Bounds avatarBounds = new Bounds(Vector3.zero, Vector3.zero);
+            var avatarCenter = Vector3.zero;
+            var avatarMin = Vector3.zero;
+            var avatarMax = Vector3.zero;
+            Bounds rendererBounds;
 
             foreach (var renderer in renderers)
             {
-                var bounds = renderer.bounds;
-
-                avatarBounds.Contains(bounds.min)
+                avatarCenter += renderer.localBounds.center;
             }
+            avatarCenter /= renderers.Count;
+
+            var avatarBounds = new Bounds(avatarCenter, Vector3.zero);
+            foreach (var renderer in renderers)
+            {
+                rendererBounds = renderer.localBounds;
+                avatarBounds.Encapsulate(rendererBounds.min);
+                avatarBounds.Encapsulate(rendererBounds.max);
+            }
+            return avatarBounds;
         }
-        */
 
         public static List<SkinnedMeshRenderer> GetSkinnedMeshRenderersWithoutExclusions(GameObject rootObject, List<SkinnedMeshRenderer> exclusions)
         {
