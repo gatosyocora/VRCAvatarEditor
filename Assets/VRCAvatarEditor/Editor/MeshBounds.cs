@@ -17,7 +17,7 @@ namespace VRCAvatarEditor
         /// <param name="parentObj"></param>
         public static void BoundsSetter(GameObject parentObj, List<SkinnedMeshRenderer> exclusions, Vector3 boundsScale)
         {
-            var renderers = parentObj.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
+            var renderers = parentObj.GetComponentsInChildren<SkinnedMeshRenderer>(true).ToList();
 
             Undo.RecordObjects(renderers.ToArray(), "Change Bounds");
 
