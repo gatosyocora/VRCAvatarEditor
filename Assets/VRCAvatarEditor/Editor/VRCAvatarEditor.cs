@@ -57,7 +57,7 @@ namespace VRCAvatarEditor
                 standingAnimController = null;
                 sittingAnimController = null;
                 sex = VRC_AvatarDescriptor.AnimationSet.None;
-                avatarId = "";
+                avatarId = string.Empty;
                 overridesNum = 0;
                 faceMesh = null;
                 lipSyncShapeKeyNames = null;
@@ -149,7 +149,7 @@ namespace VRCAvatarEditor
                 var rect = GUILayoutUtility.GetRect(10f, height);
 
                 var boxRect = new Rect(rect.position, new Vector2(7f, height));
-                GUI.Box(boxRect, "");
+                GUI.Box(boxRect, string.Empty);
 
                 var texRect = new Rect( 
                                     rect.position.x - texSize / 2f + 3f,
@@ -191,7 +191,7 @@ namespace VRCAvatarEditor
 
                 Debug.Log(rect.position);
                 var boxRect = new Rect(rect.position, new Vector2(width, 7f));
-                GUI.Box(boxRect, "");
+                GUI.Box(boxRect, string.Empty);
 
                 var texRect = new Rect(
                                     rect.position.x + (rect.width - sliderPos * width) - texSize / 2f ,
@@ -299,6 +299,18 @@ namespace VRCAvatarEditor
 
         private Texture upDownTexture;
         private Material gammaMat;
+
+        public enum MonitorSize
+        {
+            Small = 256,
+            Mediam = 512,
+            Lerge = 768,
+            Custom
+        }
+
+        private MonitorSize sizeType = MonitorSize.Small;
+        private int monitorSize;
+
         #endregion
 
         #region Animations Variable
@@ -579,7 +591,7 @@ namespace VRCAvatarEditor
                     {
                         using (new EditorGUILayout.HorizontalScope())
                         {
-                            AvatarMonitorGUI(256f, 256f);
+                            AvatarMonitorGUI(monitorSize, monitorSize);
                             
                             AnimationsGUI(GUILayout.MinWidth(300), GUILayout.MaxHeight(275));
                         }
@@ -632,8 +644,8 @@ namespace VRCAvatarEditor
                     {
                         using (new EditorGUILayout.HorizontalScope())
                         {
-                            AvatarMonitorGUI(512f, 512f);
-
+                            AvatarMonitorGUI(monitorSize, monitorSize);
+                            
                             using (new EditorGUILayout.VerticalScope())
                             {
                                 // 各種機能
@@ -683,9 +695,7 @@ namespace VRCAvatarEditor
                                     ShaderGUI();
                                 }
                             }
-
                         }
-                        
                     }
 
                     EditorGUILayout.Space();
@@ -785,8 +795,6 @@ namespace VRCAvatarEditor
                         if (check.changed) ZoomAvatarCam(zoomLevel);
                     }
                 }
-
-
             }
 
             using (new GUILayout.VerticalScope())
@@ -859,7 +867,7 @@ namespace VRCAvatarEditor
                                 GUILayout.Label(handAnim, GUILayout.Width(90));
 
                                 controller[handAnim] = EditorGUILayout.ObjectField(
-                                    "",
+                                    string.Empty,
                                     anim,
                                     typeof(AnimationClip),
                                     true,
@@ -1091,7 +1099,7 @@ namespace VRCAvatarEditor
                             {
                                 using (var check = new EditorGUI.ChangeCheckScope())
                                 {
-                                    skinnedMesh.isContainsAll = EditorGUILayout.ToggleLeft("", skinnedMesh.isContainsAll, GUILayout.Width(45));
+                                    skinnedMesh.isContainsAll = EditorGUILayout.ToggleLeft(string.Empty, skinnedMesh.isContainsAll, GUILayout.Width(45));
                                     if (check.changed)
                                     {
                                         FaceEmotion.SetContainsAll(skinnedMesh.isContainsAll, ref skinnedMesh.blendshapes);
@@ -1107,7 +1115,7 @@ namespace VRCAvatarEditor
                                 {
                                     using (new EditorGUILayout.HorizontalScope())
                                     {
-                                        blendshape.isContains = EditorGUILayout.ToggleLeft("", blendshape.isContains, GUILayout.Width(45));
+                                        blendshape.isContains = EditorGUILayout.ToggleLeft(string.Empty, blendshape.isContains, GUILayout.Width(45));
 
                                         EditorGUILayout.SelectableLabel(blendshape.name, GUILayout.Height(20));
                                         using (var check = new EditorGUI.ChangeCheckScope())
@@ -1459,6 +1467,19 @@ namespace VRCAvatarEditor
                 monitorBgColor = EditorGUILayout.ColorField("モニター背景色", monitorBgColor);
                 if (check.changed) SetAvatarCamBgColor(monitorBgColor);
             }
+            using (var check = new EditorGUI.ChangeCheckScope())
+            {
+                sizeType = (MonitorSize)EditorGUILayout.EnumPopup("Monitor Size", sizeType);
+                if (check.changed && sizeType != MonitorSize.Custom)
+                {
+                    monitorSize = (int)sizeType;
+                }
+            }
+            using (new EditorGUI.DisabledGroupScope(sizeType != MonitorSize.Custom))
+            {
+                monitorSize = EditorGUILayout.IntField("Size", monitorSize);
+            }
+
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("FaceEmotion Creator", EditorStyles.boldLabel);
 
@@ -1483,7 +1504,7 @@ namespace VRCAvatarEditor
                 using (new GUILayout.HorizontalScope())
                 {
                     if (GUILayout.Button("Add"))
-                        blendshapeExclusions.Add("");
+                        blendshapeExclusions.Add(string.Empty);
                 }
             }
 
@@ -1546,6 +1567,16 @@ namespace VRCAvatarEditor
 
             isActiveOnlySelectedAvatar = settingAsset.isActiveOnlySelectedAvatar;
             layoutType = settingAsset.layoutType;
+
+            sizeType = settingAsset.monitorSizeType;
+            if (settingAsset.monitorSizeType != MonitorSize.Custom)
+            {
+                monitorSize = (int)settingAsset.monitorSizeType;
+            }
+            else
+            {
+                monitorSize = (int)settingAsset.monitorSize;
+            }
         }
 
         /// <summary>
@@ -1574,6 +1605,12 @@ namespace VRCAvatarEditor
 
             settingAsset.isActiveOnlySelectedAvatar = isActiveOnlySelectedAvatar;
             settingAsset.layoutType = layoutType;
+
+            settingAsset.monitorSizeType = sizeType;
+            if (sizeType == MonitorSize.Custom)
+            {
+                settingAsset.monitorSize = monitorSize;
+            }
 
             if (newCreated)
             {
@@ -1885,7 +1922,7 @@ namespace VRCAvatarEditor
         /// <returns></returns>
         private string GetFileTexts(string path)
         {
-            string text = "";
+            string text = string.Empty;
             var fi = new FileInfo(path);
             try
             {

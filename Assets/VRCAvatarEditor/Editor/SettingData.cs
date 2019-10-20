@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace VRCAvatarEditor
 {
+    //[CreateAssetMenu(menuName ="VRCAvatarEditor/Setting Data")]
     public class SettingData : ScriptableObject
     {
         public float defaultZoomDist = 1.0f;
@@ -21,6 +22,9 @@ namespace VRCAvatarEditor
         public List<string> blendshapeExclusions = new List<string> { "vrc.blink_", "vrc.lowerlid_", "mmd" };
 
         public VRCAvatarEditor.LayoutType layoutType = VRCAvatarEditor.LayoutType.Default;
+
+        public VRCAvatarEditor.MonitorSize monitorSizeType = VRCAvatarEditor.MonitorSize.Small;
+        public int monitorSize = 0;
     }
 }
 
