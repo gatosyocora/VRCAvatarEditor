@@ -28,6 +28,8 @@ namespace VRCAvatarEditor
         private RenderTexture avatarCamTexture;
         private const int CAMERA_ROTATE_ANGLE = 30;
 
+        private bool newSDKUI;
+
         // Avatarの情報
         private class Avatar
         {
@@ -505,7 +507,9 @@ namespace VRCAvatarEditor
                     SetAvatarCam(edittingAvatar.descriptor.gameObject);
                 }
             }
-            
+
+            newSDKUI = IsNewSDKUI();
+
             SceneView.onSceneGUIDelegate += OnSceneGUI;
         }
 
@@ -695,7 +699,7 @@ namespace VRCAvatarEditor
                     // アップロード
                     if (GUILayout.Button("Upload Avatar"))
                     {
-                        EditorApplication.ExecuteMenuItem("VRChat SDK/Show Build Control Panel");
+                        UploadAvatar(newSDKUI);
                     }
 
                 }
@@ -1978,15 +1982,7 @@ namespace VRCAvatarEditor
         /// <returns></returns>
         private AnimatorOverrideController InstantiateVrcCustomOverideController(string newFilePath)
         {
-            // VRCSDKフォルダが移動されている可能性があるため対象ファイルを探す
-            var guids = AssetDatabase.FindAssets("CustomOverrideEmpty", null);
-            string path = "";
-            foreach (var guid in guids)
-            {
-                path = AssetDatabase.GUIDToAssetPath(guid);
-                if (!path.Contains("VRCSDK/")) continue;
-            }
-            var fileName = Path.GetFileName(path);
+            string path = GetVRCSDKFilePath("CustomOverrideEmpty");
 
             newFilePath = AssetDatabase.GenerateUniqueAssetPath(newFilePath);
             AssetDatabase.CopyAsset(path, newFilePath);
@@ -1994,6 +1990,74 @@ namespace VRCAvatarEditor
             var overrideController = AssetDatabase.LoadAssetAtPath(newFilePath, typeof(AnimatorOverrideController)) as AnimatorOverrideController;
 
             return overrideController;
+        }
+
+        /// <summary>
+        /// VRCSDKのバージョンを取得する
+        /// </summary>
+        /// <returns></returns>
+        private string GetVRCSDKVersion()
+        {
+            string path = GetVRCSDKFilePath("version");
+            return GetFileTexts(path);
+        }
+
+        /// <summary>
+        /// VRCSDKに含まれるファイルを取得する
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        private string GetVRCSDKFilePath(string fileName)
+        {
+            // VRCSDKフォルダが移動されている可能性があるため対象ファイルを探す
+            var guids = AssetDatabase.FindAssets(fileName, null);
+            string path = "";
+            bool couldFindFile = false;
+            foreach (var guid in guids)
+            {
+                path = AssetDatabase.GUIDToAssetPath(guid);
+                if (path.Contains("VRCSDK/"))
+                {
+                    couldFindFile = true;
+                    break;
+                }
+            }
+            if (couldFindFile)
+                return path;
+            else
+                return "";
+        }
+
+        /// <summary>
+        /// VRCSDKが新しいUIかどうか
+        /// </summary>
+        /// <returns></returns>
+        private bool IsNewSDKUI()
+        {
+            var sdkVersion = GetVRCSDKVersion();
+            // 新UI以降のバージョンにはファイルが存在するため何かしらは返ってくる
+            if (sdkVersion == "") return false;
+
+            var versions = sdkVersion.Split('.');
+            var version = 
+                    versions[0].PadLeft(4, '0') + "." +
+                    versions[1].PadLeft(2, '0') + "." +
+                    versions[2].PadLeft(2, '0');
+            var newVersion = "2019.08.23";
+
+            return newVersion.CompareTo(version) <= 0;
+        }
+
+        private void UploadAvatar(bool newSDKUI)
+        {
+            if (newSDKUI)
+            {
+                EditorApplication.ExecuteMenuItem("VRChat SDK/Show Control Panel");
+            }
+            else
+            {
+                EditorApplication.ExecuteMenuItem("VRChat SDK/Show Build Control Panel");
+            }
         }
 
         #endregion
