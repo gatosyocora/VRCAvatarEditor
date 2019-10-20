@@ -306,6 +306,8 @@ namespace VRCAvatarEditor
         private readonly string[] HANDANIMS = { "FIST", "FINGERPOINT", "ROCKNROLL", "HANDOPEN", "THUMBSUP", "VICTORY", "HANDGUN" };
 
         private string kind;
+        string titleText;
+        AnimatorOverrideController controller;
 
         #endregion
 
@@ -820,9 +822,6 @@ namespace VRCAvatarEditor
                     _tab = (Tab)GUILayout.Toolbar((int)_tab, Styles.TabToggles, Styles.TabButtonStyle, Styles.TabButtonSize);
                     GUILayout.FlexibleSpace();
                 }
-
-                string titleText;
-                AnimatorOverrideController controller;
                 if (_tab == Tab.Standing)
                 {
                     kind = "Standing";
