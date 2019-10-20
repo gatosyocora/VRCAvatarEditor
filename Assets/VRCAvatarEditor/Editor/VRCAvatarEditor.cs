@@ -477,7 +477,7 @@ namespace VRCAvatarEditor
             edittingAvatar = new Avatar();
 
             var editorScriptPath = AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this));
-            editorFolderPath = Path.GetDirectoryName(editorScriptPath).Replace("Editor/", "") + "/";
+            editorFolderPath = Path.GetDirectoryName(editorScriptPath).Replace("Editor/", string.Empty) + "/";
 
             animName = "faceAnim";
             saveFolder = editorFolderPath + "Animations/";
@@ -912,7 +912,7 @@ namespace VRCAvatarEditor
                 }
 
                 // アップロード状態
-                EditorGUILayout.LabelField("Status", (edittingAvatar.avatarId == "") ? "New Avatar" : "Uploaded Avatar");
+                EditorGUILayout.LabelField("Status", (string.IsNullOrEmpty(edittingAvatar.avatarId)) ? "New Avatar" : "Uploaded Avatar");
                 edittingAvatar.animator.runtimeAnimatorController = EditorGUILayout.ObjectField(
                     "Animator",
                     edittingAvatar.animator.runtimeAnimatorController,
@@ -1040,7 +1040,7 @@ namespace VRCAvatarEditor
 
                     if (GUILayout.Button("Select Folder", GUILayout.Width(100)))
                     {
-                        saveFolder = EditorUtility.OpenFolderPanel("Select saved folder", saveFolder, "");
+                        saveFolder = EditorUtility.OpenFolderPanel("Select saved folder", saveFolder, string.Empty);
                         saveFolder = FileUtil.GetProjectRelativePath(saveFolder);
                         if (saveFolder == "/") saveFolder = "Assets/";
                     }
@@ -1986,7 +1986,6 @@ namespace VRCAvatarEditor
 
             newFilePath = AssetDatabase.GenerateUniqueAssetPath(newFilePath);
             AssetDatabase.CopyAsset(path, newFilePath);
-            AssetDatabase.Refresh();
             var overrideController = AssetDatabase.LoadAssetAtPath(newFilePath, typeof(AnimatorOverrideController)) as AnimatorOverrideController;
 
             return overrideController;
@@ -2011,7 +2010,7 @@ namespace VRCAvatarEditor
         {
             // VRCSDKフォルダが移動されている可能性があるため対象ファイルを探す
             var guids = AssetDatabase.FindAssets(fileName, null);
-            string path = "";
+            string path = string.Empty;
             bool couldFindFile = false;
             foreach (var guid in guids)
             {
@@ -2025,7 +2024,7 @@ namespace VRCAvatarEditor
             if (couldFindFile)
                 return path;
             else
-                return "";
+                return string.Empty;
         }
 
         /// <summary>
@@ -2036,13 +2035,15 @@ namespace VRCAvatarEditor
         {
             var sdkVersion = GetVRCSDKVersion();
             // 新UI以降のバージョンにはファイルが存在するため何かしらは返ってくる
-            if (sdkVersion == "") return false;
+            if (string.IsNullOrEmpty(sdkVersion)) return false;
 
-            var versions = sdkVersion.Split('.');
+            var dotChar = '.';
+            var zero = '0';
+            var versions = sdkVersion.Split(dotChar);
             var version = 
-                    versions[0].PadLeft(4, '0') + "." +
-                    versions[1].PadLeft(2, '0') + "." +
-                    versions[2].PadLeft(2, '0');
+                    versions[0].PadLeft(4, zero) + dotChar +
+                    versions[1].PadLeft(2, zero) + dotChar +
+                    versions[2].PadLeft(2, zero);
             var newVersion = "2019.08.23";
 
             return newVersion.CompareTo(version) <= 0;
