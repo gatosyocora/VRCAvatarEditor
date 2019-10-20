@@ -305,6 +305,8 @@ namespace VRCAvatarEditor
 
         private readonly string[] HANDANIMS = { "FIST", "FINGERPOINT", "ROCKNROLL", "HANDOPEN", "THUMBSUP", "VICTORY", "HANDGUN" };
 
+        private string kind;
+
         #endregion
 
         #region AvatarInfo Variable
@@ -656,7 +658,6 @@ namespace VRCAvatarEditor
                                 }
                                 else if (currentTool == ToolFunc.表情設定)
                                 {
-
                                     // 表情設定
                                     FaceEmotionGUI();
                                 }
@@ -705,8 +706,6 @@ namespace VRCAvatarEditor
             {
                 SettingGUI();
             }
-
-            //ShaderUI.Shader(100f, 30f);
         }
 
         void OnSceneGUI(SceneView sceneView)
@@ -822,7 +821,6 @@ namespace VRCAvatarEditor
                     GUILayout.FlexibleSpace();
                 }
 
-                string kind;
                 string titleText;
                 AnimatorOverrideController controller;
                 if (_tab == Tab.Standing)
@@ -873,16 +871,28 @@ namespace VRCAvatarEditor
                         }
                     }
                 }
-                else if (edittingAvatar.descriptor == null)
-                {
-                    EditorGUILayout.HelpBox("Not Setting Avatar", MessageType.Warning);
-                }
                 else
                 {
-                    EditorGUILayout.HelpBox("Not Setting Custom "+ kind + " Anims", MessageType.Warning);
+                    if (edittingAvatar.descriptor == null)
+                    {
+                        EditorGUILayout.HelpBox("Not Setting Avatar", MessageType.Warning);
+                    }
+                    else
+                    {
+                        EditorGUILayout.HelpBox("Not Setting Custom " + kind + " Anims", MessageType.Warning);
+
+                        if (_tab == Tab.Standing)
+                        {
+                            if (GUILayout.Button("Auto Setting"))
+                            {
+                                var fileName = "CO_" + edittingAvatar.animator.gameObject.name + ".overrideController";
+                                edittingAvatar.descriptor.CustomStandingAnims = InstantiateVrcCustomOverideController(saveFolder + "/" + fileName);
+                                GetAvatarInfo(edittingAvatar.descriptor);
+                            }
+                        }
+                    }
                 }
             }
-            
         }
 
         private void AvatarInfoGUI()
@@ -1960,6 +1970,31 @@ namespace VRCAvatarEditor
             }
             
             return true;
+        }
+
+        /// <summary>
+        /// VRChat用のCustomOverrideControllerの複製を取得する
+        /// </summary>
+        /// <param name="animFolder"></param>
+        /// <returns></returns>
+        private AnimatorOverrideController InstantiateVrcCustomOverideController(string newFilePath)
+        {
+            // VRCSDKフォルダが移動されている可能性があるため対象ファイルを探す
+            var guids = AssetDatabase.FindAssets("CustomOverrideEmpty", null);
+            string path = "";
+            foreach (var guid in guids)
+            {
+                path = AssetDatabase.GUIDToAssetPath(guid);
+                if (!path.Contains("VRCSDK/")) continue;
+            }
+            var fileName = Path.GetFileName(path);
+
+            newFilePath = AssetDatabase.GenerateUniqueAssetPath(newFilePath);
+            AssetDatabase.CopyAsset(path, newFilePath);
+            AssetDatabase.Refresh();
+            var overrideController = AssetDatabase.LoadAssetAtPath(newFilePath, typeof(AnimatorOverrideController)) as AnimatorOverrideController;
+
+            return overrideController;
         }
 
         #endregion
