@@ -1014,12 +1014,9 @@ namespace VRCAvatarEditor
                     }
                 }
 
-                using (new EditorGUI.IndentLevelScope())
+                if (skinnedMeshList != null)
                 {
-                    if (skinnedMeshList != null)
-                    {
-                        BlendShapeListGUI();
-                    }
+                    BlendShapeListGUI();
                 }
 
                 animName = EditorGUILayout.TextField("AnimClipFileName", animName);
@@ -1072,7 +1069,6 @@ namespace VRCAvatarEditor
                 scrollPos = scrollView.scrollPosition;
                 foreach (var skinnedMesh in skinnedMeshList)
                 {
-
                     skinnedMesh.isOpenBlendShapes = EditorGUILayout.Foldout(skinnedMesh.isOpenBlendShapes, skinnedMesh.objName);
                     if (skinnedMesh.isOpenBlendShapes)
                     {
@@ -1090,7 +1086,7 @@ namespace VRCAvatarEditor
                                 }
                                 EditorGUILayout.LabelField("Toggle All", GUILayout.Height(20));
                             }
-                            
+
                             foreach (var blendshape in skinnedMesh.blendshapes)
                             {
 
