@@ -17,6 +17,11 @@ namespace VRCAvatarEditor
         public static void BoundsSetter(List<SkinnedMeshRenderer> renderers)
         {
             var avatarBounds = CalcAvatarBoundsSize(renderers);
+            var offset = Vector3.zero;
+            Transform boneTrans;
+            var center = Vector3.zero;
+            var size = Vector3.zero;
+            var scale = Vector3.zero;
 
             Debug.Log("center:"+avatarBounds.center+", size:"+avatarBounds.size);
 
@@ -25,7 +30,18 @@ namespace VRCAvatarEditor
             foreach (var renderer in renderers)
             {
                 if (renderer == null) continue;
-                renderer.localBounds = avatarBounds;
+
+                boneTrans = renderer.rootBone.transform;
+                center = avatarBounds.center - boneTrans.position;
+                center = Quaternion.Inverse(boneTrans.rotation) * center;
+
+                //scale = renderer.transform.localScale;
+                scale = GetScale(boneTrans);
+                size = Quaternion.Inverse(renderer.rootBone.transform.rotation) * avatarBounds.size;
+                size = new Vector3( size.x / scale.x,
+                                    size.y / scale.y,
+                                    size.z / scale.z);
+                renderer.localBounds = new Bounds(center, size);
             }
         }
 
@@ -40,18 +56,19 @@ namespace VRCAvatarEditor
             var avatarCenter = Vector3.zero;
             var avatarMin = Vector3.zero;
             var avatarMax = Vector3.zero;
+            var offset = Vector3.zero;
             Bounds rendererBounds;
 
             foreach (var renderer in renderers)
             {
-                avatarCenter += renderer.localBounds.center;
+                avatarCenter += renderer.bounds.center;
             }
             avatarCenter /= renderers.Count;
 
             var avatarBounds = new Bounds(avatarCenter, Vector3.zero);
             foreach (var renderer in renderers)
             {
-                rendererBounds = renderer.localBounds;
+                rendererBounds = renderer.bounds;
                 avatarBounds.Encapsulate(rendererBounds.min);
                 avatarBounds.Encapsulate(rendererBounds.max);
             }
@@ -109,6 +126,21 @@ namespace VRCAvatarEditor
                 sp.serializedObject.ApplyModifiedProperties();
 #endif
             }
+        }
+
+        private static Vector3 GetScale(Transform transform)
+        {
+            var scale = Vector3.one;
+
+            while(true)
+            {
+                scale.Scale(transform.localScale);
+                transform = transform.parent;
+
+                if (transform == null) break;
+            }
+
+            return scale;
         }
     }
 
