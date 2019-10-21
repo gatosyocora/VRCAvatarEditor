@@ -16,14 +16,13 @@ namespace VRCAvatarEditor
         /// <param name="parentObj"></param>
         public static void BoundsSetter(List<SkinnedMeshRenderer> renderers)
         {
+            RevertBoundsToPrefab(renderers);
             var avatarBounds = CalcAvatarBoundsSize(renderers);
             var offset = Vector3.zero;
             Transform boneTrans;
             var center = Vector3.zero;
             var size = Vector3.zero;
             var scale = Vector3.zero;
-
-            Debug.Log("center:"+avatarBounds.center+", size:"+avatarBounds.size);
 
             Undo.RecordObjects(renderers.ToArray(), "Change Bounds");
 
@@ -32,11 +31,14 @@ namespace VRCAvatarEditor
                 if (renderer == null) continue;
 
                 boneTrans = renderer.rootBone.transform;
+                scale = GetScale(boneTrans);
+
                 center = avatarBounds.center - boneTrans.position;
                 center = Quaternion.Inverse(boneTrans.rotation) * center;
-
-                //scale = renderer.transform.localScale;
-                scale = GetScale(boneTrans);
+                center = new Vector3(center.x / scale.x,
+                                        center.y / scale.y,
+                                        center.z / scale.z);
+                
                 size = Quaternion.Inverse(renderer.rootBone.transform.rotation) * avatarBounds.size;
                 size = new Vector3( size.x / scale.x,
                                     size.y / scale.y,
@@ -128,6 +130,11 @@ namespace VRCAvatarEditor
             }
         }
 
+        /// <summary>
+        /// 特定のオブジェクトのScaleを取得
+        /// </summary>
+        /// <param name="transform"></param>
+        /// <returns></returns>
         private static Vector3 GetScale(Transform transform)
         {
             var scale = Vector3.one;
