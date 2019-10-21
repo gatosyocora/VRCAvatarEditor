@@ -586,132 +586,134 @@ namespace VRCAvatarEditor
                         }
                     }
 
-                    // LayoutType: Defalut
-                    if (layoutType == LayoutType.Default)
+                    using (new EditorGUI.DisabledGroupScope(edittingAvatar.descriptor == null))
                     {
-                        using (new EditorGUILayout.HorizontalScope())
+                        // LayoutType: Defalut
+                        if (layoutType == LayoutType.Default)
                         {
-                            AvatarMonitorGUI(monitorSize, monitorSize);
-                            
-                            AnimationsGUI(GUILayout.MinWidth(300), GUILayout.MaxHeight(275));
-                        }
-
-                        // 各種機能
-                        using (new EditorGUILayout.HorizontalScope())
-                        {
-                            using (var check = new EditorGUI.ChangeCheckScope())
+                            using (new EditorGUILayout.HorizontalScope())
                             {
-                                GUILayout.FlexibleSpace();
-                                // タブを描画する
-                                currentTool = (ToolFunc)GUILayout.Toolbar((int)currentTool, ToolTab.TabToggles, ToolTab.TabButtonStyle, ToolTab.TabButtonSize);
-                                GUILayout.FlexibleSpace();
+                                AvatarMonitorGUI(monitorSize, monitorSize);
 
-                                if (check.changed)
-                                {
-                                    TabChanged();
-                                }
+                                AnimationsGUI(GUILayout.MinWidth(300), GUILayout.MaxHeight(275));
                             }
-                        }
 
-                        if (currentTool == ToolFunc.アバター情報)
-                        {
-                            // アバター情報
-                            AvatarInfoGUI();
-                        }
-                        else if (currentTool == ToolFunc.表情設定)
-                        {
-                            // 表情設定
-                            FaceEmotionGUI();
-                        }
-                        else if (currentTool == ToolFunc.ProbeAnchor)
-                        {
-                            // Probe Anchor設定
-                            ProbeAnchorGUI();
-                        }
-                        else if (currentTool == ToolFunc.Bounds)
-                        {
-                            // Bounds設定
-                            MeshBoundsGUI();
-                        }
-                        else if (currentTool == ToolFunc.Shader)
-                        {
-                            // Shader設定
-                            ShaderGUI();
-                        }
-                    }
-                    // LayoutType: Half
-                    else
-                    {
-                        using (new EditorGUILayout.HorizontalScope())
-                        {
-                            AvatarMonitorGUI(monitorSize, monitorSize);
-                            
-                            using (new EditorGUILayout.VerticalScope())
+                            // 各種機能
+                            using (new EditorGUILayout.HorizontalScope())
                             {
-                                // 各種機能
-                                using (new EditorGUILayout.HorizontalScope())
+                                using (var check = new EditorGUI.ChangeCheckScope())
                                 {
-                                    using (var check = new EditorGUI.ChangeCheckScope())
-                                    {
-                                        // タブを描画する
-                                        currentTool = (ToolFunc)GUILayout.Toolbar((int)currentTool, ToolTab.TabToggles, ToolTab.TabButtonStyle, ToolTab.TabButtonSize);
+                                    GUILayout.FlexibleSpace();
+                                    // タブを描画する
+                                    currentTool = (ToolFunc)GUILayout.Toolbar((int)currentTool, ToolTab.TabToggles, ToolTab.TabButtonStyle, ToolTab.TabButtonSize);
+                                    GUILayout.FlexibleSpace();
 
-                                        if (check.changed)
-                                        {
-                                            TabChanged();
-                                        }
+                                    if (check.changed)
+                                    {
+                                        TabChanged();
                                     }
                                 }
+                            }
 
-                                if (currentTool == ToolFunc.アバター情報)
+                            if (currentTool == ToolFunc.アバター情報)
+                            {
+                                // アバター情報
+                                AvatarInfoGUI();
+                            }
+                            else if (currentTool == ToolFunc.表情設定)
+                            {
+                                // 表情設定
+                                FaceEmotionGUI();
+                            }
+                            else if (currentTool == ToolFunc.ProbeAnchor)
+                            {
+                                // Probe Anchor設定
+                                ProbeAnchorGUI();
+                            }
+                            else if (currentTool == ToolFunc.Bounds)
+                            {
+                                // Bounds設定
+                                MeshBoundsGUI();
+                            }
+                            else if (currentTool == ToolFunc.Shader)
+                            {
+                                // Shader設定
+                                ShaderGUI();
+                            }
+                        }
+                        // LayoutType: Half
+                        else
+                        {
+                            using (new EditorGUILayout.HorizontalScope())
+                            {
+                                AvatarMonitorGUI(monitorSize, monitorSize);
+
+                                using (new EditorGUILayout.VerticalScope())
                                 {
+                                    // 各種機能
                                     using (new EditorGUILayout.HorizontalScope())
                                     {
-                                        AnimationsGUI(GUILayout.Height(200f));
+                                        using (var check = new EditorGUI.ChangeCheckScope())
+                                        {
+                                            // タブを描画する
+                                            currentTool = (ToolFunc)GUILayout.Toolbar((int)currentTool, ToolTab.TabToggles, ToolTab.TabButtonStyle, ToolTab.TabButtonSize);
+
+                                            if (check.changed)
+                                            {
+                                                TabChanged();
+                                            }
+                                        }
                                     }
 
-                                    // アバター情報
-                                    AvatarInfoGUI();
+                                    if (currentTool == ToolFunc.アバター情報)
+                                    {
+                                        using (new EditorGUILayout.HorizontalScope())
+                                        {
+                                            AnimationsGUI(GUILayout.Height(200f));
+                                        }
 
-                                }
-                                else if (currentTool == ToolFunc.表情設定)
-                                {
-                                    // 表情設定
-                                    FaceEmotionGUI();
-                                }
-                                else if (currentTool == ToolFunc.ProbeAnchor)
-                                {
-                                    // Probe Anchor設定
-                                    ProbeAnchorGUI();
-                                }
-                                else if (currentTool == ToolFunc.Bounds)
-                                {
-                                    // Bounds設定
-                                    MeshBoundsGUI();
-                                }
-                                else if (currentTool == ToolFunc.Shader)
-                                {
-                                    // Shader設定
-                                    ShaderGUI();
+                                        // アバター情報
+                                        AvatarInfoGUI();
+
+                                    }
+                                    else if (currentTool == ToolFunc.表情設定)
+                                    {
+                                        // 表情設定
+                                        FaceEmotionGUI();
+                                    }
+                                    else if (currentTool == ToolFunc.ProbeAnchor)
+                                    {
+                                        // Probe Anchor設定
+                                        ProbeAnchorGUI();
+                                    }
+                                    else if (currentTool == ToolFunc.Bounds)
+                                    {
+                                        // Bounds設定
+                                        MeshBoundsGUI();
+                                    }
+                                    else if (currentTool == ToolFunc.Shader)
+                                    {
+                                        // Shader設定
+                                        ShaderGUI();
+                                    }
                                 }
                             }
                         }
+
+                        EditorGUILayout.Space();
+
+                        // ポーズ修正
+                        if (GUILayout.Button("Reset Pose"))
+                        {
+                            HumanoidPose.ResetPose(edittingAvatar.descriptor.gameObject);
+                        }
+
+                        // アップロード
+                        if (GUILayout.Button("Upload Avatar"))
+                        {
+                            UploadAvatar(newSDKUI);
+                        }
                     }
-
-                    EditorGUILayout.Space();
-
-                    // ポーズ修正
-                    if (GUILayout.Button("Reset Pose"))
-                    {
-                        HumanoidPose.ResetPose(edittingAvatar.descriptor.gameObject);
-                    }
-
-                    // アップロード
-                    if (GUILayout.Button("Upload Avatar"))
-                    {
-                        UploadAvatar(newSDKUI);
-                    }
-
                 }
             }
             else if (isShowingToolInfo)
