@@ -98,7 +98,12 @@ namespace VRCAvatarEditor
 
                 var sp = so.FindProperty("m_AABB");
 #if UNITY_2018_3_OR_NEWER
-            PrefabUtility.RevertPropertyOverride(sp, InteractionMode.UserAction);
+                var currentEnabled = renderer.enabled;
+                // Transform has 'ReflectionProbeAnchorManager::kChangeSystem' change interests present when destroying the hierarchy.
+                // 対策で一度disableにする
+                renderer.enabled = false;
+                PrefabUtility.RevertPropertyOverride(sp, InteractionMode.UserAction);
+                renderer.enabled = currentEnabled;
 #else
                 sp.prefabOverride = false;
                 sp.serializedObject.ApplyModifiedProperties();
