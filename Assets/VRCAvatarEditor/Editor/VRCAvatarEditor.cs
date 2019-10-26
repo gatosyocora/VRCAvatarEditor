@@ -876,9 +876,9 @@ namespace VRCAvatarEditor
                                     GUILayout.Width(170)
                                 ) as AnimationClip;
 
-                                if (GUILayout.Button("R", GUILayout.Width(20)))
+                                if (GUILayout.Button("↓", GUILayout.Width(20)))
                                 {
-                                    controller[handAnim] = null;
+                                    FaceEmotion.ApplyAnimationProperties(controller[handAnim], ref skinnedMeshList);
                                 }
                             }
                         }
