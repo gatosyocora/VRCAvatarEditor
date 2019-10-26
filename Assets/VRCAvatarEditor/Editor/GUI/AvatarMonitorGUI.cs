@@ -319,7 +319,7 @@ namespace VRCAvatarEditor
             avatarCam = PrefabUtility.InstantiatePrefab(avatarCam_prefab) as GameObject;
             avatarCam.transform.position = obj.transform.position;
 
-            if (avatar.eyePos != null) maxCamHeight = avatar.eyePos.y;
+            maxCamHeight = avatar.eyePos.y;
 
             SetAvatarCamBgColor(monitorBgColor);
 

@@ -10,8 +10,6 @@ namespace VRCAvatarEditor
 
     public class FaceEmotion
     {
-        private static readonly string[] HANDANIMS = { "FIST", "FINGERPOINT", "ROCKNROLL", "HANDOPEN", "THUMBSUP", "VICTORY", "HANDGUN" };
-
         public static readonly string SENDDATAASSET_PATH = "Assets/SendData.asset";
 
         public class AnimParam

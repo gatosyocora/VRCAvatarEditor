@@ -36,7 +36,6 @@ namespace VRCAvatarEditor
         public static void ResetPose(GameObject obj)
         {
             Object prefab = PrefabUtility.GetPrefabParent(obj);
-            string prefabPath = AssetDatabase.GetAssetPath(prefab);
 
             if (prefab == null) return;
 
