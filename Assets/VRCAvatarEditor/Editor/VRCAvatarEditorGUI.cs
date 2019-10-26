@@ -15,7 +15,7 @@ using VRCAvatarEditor;
 
 namespace VRCAvatarEditor
 {
-    public class VRCAvatarEditor : EditorWindow
+    public class VRCAvatarEditorGUI : EditorWindow
     {
         private const string TOOL_VERSION = "beta v0.2.3";
         private const string TWITTER_ID = "gatosyocora";
@@ -27,7 +27,7 @@ namespace VRCAvatarEditor
         private bool newSDKUI;
         private bool needRepaint = false;
         
-        private Avatar edittingAvatar = null;
+        private VRCAvatarEditor.Avatar edittingAvatar = null;
 
         private string editorFolderPath;
 
@@ -242,7 +242,7 @@ namespace VRCAvatarEditor
         [MenuItem("VRCAvatarEditor/Editor")]
         private static void Create()
         {
-            var window = GetWindow<VRCAvatarEditor>("VRCAvatarEditor");
+            var window = GetWindow<VRCAvatarEditorGUI>("VRCAvatarEditor");
             window.minSize = new Vector2(650f, 500f);
         }
 

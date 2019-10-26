@@ -18,10 +18,10 @@ namespace VRCAvatarEditor
 
         public bool isActiveOnlySelectedAvatar = true;
 
-        public VRCAvatarEditor.SortType selectedSortType = VRCAvatarEditor.SortType.UnSort;
+        public VRCAvatarEditorGUI.SortType selectedSortType = VRCAvatarEditorGUI.SortType.UnSort;
         public List<string> blendshapeExclusions = new List<string> { "vrc.blink_", "vrc.lowerlid_", "mmd" };
 
-        public VRCAvatarEditor.LayoutType layoutType = VRCAvatarEditor.LayoutType.Default;
+        public VRCAvatarEditorGUI.LayoutType layoutType = VRCAvatarEditorGUI.LayoutType.Default;
 
         public AvatarMonitorGUI.MonitorSize monitorSizeType = AvatarMonitorGUI.MonitorSize.Small;
         public int monitorSize = 0;

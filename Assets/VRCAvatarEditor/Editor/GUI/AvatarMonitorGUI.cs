@@ -7,8 +7,8 @@ namespace VRCAvatarEditor
 {
     public class AvatarMonitorGUI : Editor, IVRCAvatarEditorGUI
     {
-        private Avatar avatar;
-        private VRCAvatarEditor.ToolFunc currentTool;
+        private VRCAvatarEditor.Avatar avatar;
+        private VRCAvatarEditorGUI.ToolFunc currentTool;
             
         private RenderTexture avatarCamTexture;
         private bool isGammaCorrection = true;
@@ -46,7 +46,7 @@ namespace VRCAvatarEditor
         private MonitorSize sizeType = MonitorSize.Small;
         private int monitorSize;
 
-        public AvatarMonitorGUI(ref Avatar avatar, VRCAvatarEditor.ToolFunc currentTool)
+        public AvatarMonitorGUI(ref VRCAvatarEditor.Avatar avatar, VRCAvatarEditorGUI.ToolFunc currentTool)
         {
             this.avatar = avatar;
             this.currentTool = currentTool;
@@ -194,7 +194,7 @@ namespace VRCAvatarEditor
             var childTrans = avatarCam.transform.Find("Main").gameObject.transform;
 
             // 顔にあわせる
-            if (this.currentTool == VRCAvatarEditor.ToolFunc.表情設定)
+            if (this.currentTool == VRCAvatarEditorGUI.ToolFunc.表情設定)
             {
                 cameraHeight = avatar.eyePos.y;
                 avatarCam.transform.position = new Vector3(nowPos.x, cameraHeight + avatarPos.y, nowPos.z);
@@ -362,7 +362,7 @@ namespace VRCAvatarEditor
             }
         }
 
-        public void ChangeTab(VRCAvatarEditor.ToolFunc tool)
+        public void ChangeTab(VRCAvatarEditorGUI.ToolFunc tool)
         {
             this.currentTool = tool;
         }
