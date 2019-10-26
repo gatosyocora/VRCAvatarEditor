@@ -25,6 +25,7 @@ namespace VRCAvatarEditor
         private AvatarMonitorGUI avatarMonitorGUI;
 
         private bool newSDKUI;
+        private bool needRepaint = false;
 
         // Avatarの情報
         public class Avatar
@@ -128,8 +129,6 @@ namespace VRCAvatarEditor
         }
 
         #region Animations Variable
-
-        private Vector2 animOverScrollPos = Vector2.zero;
 
         private readonly string[] HANDANIMS = { "FIST", "FINGERPOINT", "ROCKNROLL", "HANDOPEN", "THUMBSUP", "VICTORY", "HANDGUN" };
 
@@ -390,10 +389,11 @@ namespace VRCAvatarEditor
                         {
                             using (new EditorGUILayout.HorizontalScope())
                             {
-                                var needRepaint = avatarMonitorGUI.DrawGUI();
+                                needRepaint = avatarMonitorGUI.DrawGUI();
                                 if (needRepaint) Repaint();
 
-                                AnimationsGUI(GUILayout.MinWidth(300), GUILayout.MaxHeight(275));
+                                if (!needRepaint)
+                                    AnimationsGUI(GUILayout.MinWidth(300), GUILayout.MaxHeight(275));
                             }
 
                             // 各種機能
@@ -444,7 +444,7 @@ namespace VRCAvatarEditor
                         {
                             using (new EditorGUILayout.HorizontalScope())
                             {
-                                var needRepaint = avatarMonitorGUI.DrawGUI();
+                                needRepaint = avatarMonitorGUI.DrawGUI();
                                 if (needRepaint) Repaint();
 
                                 using (new EditorGUILayout.VerticalScope())
@@ -468,7 +468,8 @@ namespace VRCAvatarEditor
                                     {
                                         using (new EditorGUILayout.HorizontalScope())
                                         {
-                                            AnimationsGUI(GUILayout.Height(200f));
+                                            if (!needRepaint)
+                                                AnimationsGUI(GUILayout.Height(200f));
                                         }
 
                                         // アバター情報
@@ -568,33 +569,29 @@ namespace VRCAvatarEditor
 
                 if (controller != null)
                 {
-                    using (var scrollView = new EditorGUILayout.ScrollViewScope(animOverScrollPos))
+                    AnimationClip anim;
+                    foreach (var handAnim in HANDANIMS)
                     {
-                        animOverScrollPos = scrollView.scrollPosition;
-                        AnimationClip anim;
-                        foreach (var handAnim in HANDANIMS)
+                        if (handAnim == controller[handAnim].name)
+                            anim = null;
+                        else
+                            anim = controller[handAnim];
+
+                        using (new EditorGUILayout.HorizontalScope())
                         {
-                            if (handAnim == controller[handAnim].name)
-                                anim = null;
-                            else
-                                anim = controller[handAnim];
+                            GUILayout.Label(handAnim, GUILayout.Width(90));
 
-                            using (new EditorGUILayout.HorizontalScope())
+                            controller[handAnim] = EditorGUILayout.ObjectField(
+                                string.Empty,
+                                anim,
+                                typeof(AnimationClip),
+                                true,
+                                GUILayout.Width(170)
+                            ) as AnimationClip;
+
+                            if (GUILayout.Button("↓", GUILayout.Width(20)))
                             {
-                                GUILayout.Label(handAnim, GUILayout.Width(90));
-
-                                controller[handAnim] = EditorGUILayout.ObjectField(
-                                    string.Empty,
-                                    anim,
-                                    typeof(AnimationClip),
-                                    true,
-                                    GUILayout.Width(170)
-                                ) as AnimationClip;
-
-                                if (GUILayout.Button("↓", GUILayout.Width(20)))
-                                {
-                                    FaceEmotion.ApplyAnimationProperties(controller[handAnim], ref skinnedMeshList);
-                                }
+                                FaceEmotion.ApplyAnimationProperties(controller[handAnim], ref skinnedMeshList);
                             }
                         }
                     }
