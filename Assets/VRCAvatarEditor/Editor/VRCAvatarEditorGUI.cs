@@ -93,10 +93,12 @@ namespace VRCAvatarEditor
         #region Animations Variable
 
         private readonly string[] HANDANIMS = { "FIST", "FINGERPOINT", "ROCKNROLL", "HANDOPEN", "THUMBSUP", "VICTORY", "HANDGUN" };
+        private readonly string[] EMOTEANIMS = { "EMOTE1", "EMOTE2", "EMOTE3", "EMOTE4", "EMOTE5", "EMOTE6", "EMOTE7", "EMOTE8" };
 
         private string kind;
         string titleText;
         AnimatorOverrideController controller;
+        private bool showEmoteAnimations = false;
 
         #endregion
 
@@ -528,33 +530,78 @@ namespace VRCAvatarEditor
 
                 titleText = kind + " Animations";
 
-                EditorGUILayout.LabelField(titleText, EditorStyles.boldLabel);
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    EditorGUILayout.LabelField(titleText, EditorStyles.boldLabel);
+
+                    string btnText;
+                    if (!showEmoteAnimations)
+                    {
+                        btnText = "Emote";
+                    }
+                    else
+                    {
+                        btnText = "Face&Hand";
+                    }
+
+                    if (GUILayout.Button(btnText))
+                    {
+                        showEmoteAnimations = !showEmoteAnimations;
+                    }
+                }
 
                 if (controller != null)
                 {
-                    AnimationClip anim;
-                    foreach (var handAnim in HANDANIMS)
+                    if (!showEmoteAnimations)
                     {
-                        if (handAnim == controller[handAnim].name)
-                            anim = null;
-                        else
-                            anim = controller[handAnim];
-
-                        using (new EditorGUILayout.HorizontalScope())
+                        AnimationClip anim;
+                        foreach (var handAnim in HANDANIMS)
                         {
-                            GUILayout.Label(handAnim, GUILayout.Width(90));
+                            if (handAnim == controller[handAnim].name)
+                                anim = null;
+                            else
+                                anim = controller[handAnim];
 
-                            controller[handAnim] = EditorGUILayout.ObjectField(
-                                string.Empty,
-                                anim,
-                                typeof(AnimationClip),
-                                true,
-                                GUILayout.Width(170)
-                            ) as AnimationClip;
-
-                            if (GUILayout.Button("↓", GUILayout.Width(20)))
+                            using (new EditorGUILayout.HorizontalScope())
                             {
-                                FaceEmotion.ApplyAnimationProperties(controller[handAnim], ref skinnedMeshList);
+                                GUILayout.Label(handAnim, GUILayout.Width(90));
+
+                                controller[handAnim] = EditorGUILayout.ObjectField(
+                                    string.Empty,
+                                    anim,
+                                    typeof(AnimationClip),
+                                    true,
+                                    GUILayout.Width(170)
+                                ) as AnimationClip;
+
+                                if (GUILayout.Button("↓", GUILayout.Width(20)))
+                                {
+                                    FaceEmotion.ApplyAnimationProperties(controller[handAnim], ref skinnedMeshList);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        AnimationClip anim;
+                        foreach (var emoteAnim in EMOTEANIMS)
+                        {
+                            if (emoteAnim == controller[emoteAnim].name)
+                                anim = null;
+                            else
+                                anim = controller[emoteAnim];
+
+                            using (new EditorGUILayout.HorizontalScope())
+                            {
+                                GUILayout.Label(emoteAnim, GUILayout.Width(90));
+
+                                controller[emoteAnim] = EditorGUILayout.ObjectField(
+                                    string.Empty,
+                                    anim,
+                                    typeof(AnimationClip),
+                                    true,
+                                    GUILayout.Width(170)
+                                ) as AnimationClip;
                             }
                         }
                     }
