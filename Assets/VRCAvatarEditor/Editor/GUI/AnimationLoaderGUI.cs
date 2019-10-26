@@ -43,9 +43,19 @@ namespace VRCAvatarEditor {
 				}
 			}
 
-			if (GUILayout.Button("Load Properties")) {
-				LoadAnimationProperties();
-			}
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                if (GUILayout.Button("Canncel"))
+                {
+                    // データの処理は終わったのでデータ送受信用assetを削除する
+                    AssetDatabase.DeleteAsset(FaceEmotion.SENDDATAASSET_PATH);
+                    this.Close();
+                }
+                if (GUILayout.Button("Load Properties"))
+                {
+                    LoadAnimationProperties();
+                }
+            }
 		}
 
 		private void LoadAnimationProperties() {
