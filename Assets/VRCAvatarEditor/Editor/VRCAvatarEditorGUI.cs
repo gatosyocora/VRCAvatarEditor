@@ -288,6 +288,7 @@ namespace VRCAvatarEditor
 
         private void OnDisable()
         {
+            avatarMonitorGUI.Dispose();
             SceneView.onSceneGUIDelegate -= OnSceneGUI;
         }
 

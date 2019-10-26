@@ -58,7 +58,7 @@ namespace VRCAvatarEditor
             sceneLight = GetDirectionalLight();
         }
 
-        private void OnDisable()
+        public void Dispose()
         {
             if (avatarCam != null)
                 UnityEngine.Object.DestroyImmediate(avatarCam);
@@ -334,6 +334,7 @@ namespace VRCAvatarEditor
 
             isGammaCorrection = settingAsset.isGammaCorrection;
             monitorBgColor = settingAsset.monitorBgColor;
+            SetAvatarCamBgColor(monitorBgColor);
 
             sizeType = settingAsset.monitorSizeType;
             if (settingAsset.monitorSizeType != MonitorSize.Custom)

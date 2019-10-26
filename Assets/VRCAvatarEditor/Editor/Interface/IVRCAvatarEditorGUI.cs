@@ -10,5 +10,6 @@ namespace VRCAvatarEditor
         void DrawSettingsGUI();
         void LoadSettingData(SettingData settingAsset);
         void SaveSettingData(ref SettingData settingAsset);
+        void Dispose();
     }
 }
