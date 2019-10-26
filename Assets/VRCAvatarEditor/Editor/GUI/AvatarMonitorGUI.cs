@@ -7,7 +7,7 @@ namespace VRCAvatarEditor
 {
     public class AvatarMonitorGUI : Editor, IVRCAvatarEditorGUI
     {
-        private VRCAvatarEditor.Avatar avatar;
+        private Avatar avatar;
         private VRCAvatarEditor.ToolFunc currentTool;
             
         private RenderTexture avatarCamTexture;
@@ -46,7 +46,7 @@ namespace VRCAvatarEditor
         private MonitorSize sizeType = MonitorSize.Small;
         private int monitorSize;
 
-        public AvatarMonitorGUI(ref VRCAvatarEditor.Avatar avatar, VRCAvatarEditor.ToolFunc currentTool)
+        public AvatarMonitorGUI(ref Avatar avatar, VRCAvatarEditor.ToolFunc currentTool)
         {
             this.avatar = avatar;
             this.currentTool = currentTool;
