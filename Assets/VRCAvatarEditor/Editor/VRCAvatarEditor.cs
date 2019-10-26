@@ -21,17 +21,13 @@ namespace VRCAvatarEditor
         private const string TWITTER_ID = "gatosyocora";
         private const string DISCORD_ID = "gatosyocora#9575";
         private const string MANUAL_URL = "https://docs.google.com/document/d/1DU7mP5PTvERqHzZiiCBJ9ep5CilQ1iaXC_3IoiuPEgA/edit?usp=sharing";
-        
-        private string resourceFolderPath;
 
-        private GameObject avatarCam = null;
-        private RenderTexture avatarCamTexture;
-        private const int CAMERA_ROTATE_ANGLE = 30;
+        private AvatarMonitorGUI avatarMonitorGUI;
 
         private bool newSDKUI;
 
         // Avatarの情報
-        private class Avatar
+        public class Avatar
         {
             public Animator animator { get; set; }
             public VRC_AvatarDescriptor descriptor { get; set; }
@@ -100,7 +96,7 @@ namespace VRCAvatarEditor
             public static readonly GUI.ToolbarButtonSize TabButtonSize = GUI.ToolbarButtonSize.Fixed;
         }
 
-        private enum ToolFunc
+        public enum ToolFunc
         {
             アバター情報,
             表情設定,
@@ -130,188 +126,6 @@ namespace VRCAvatarEditor
 
             public static readonly GUI.ToolbarButtonSize TabButtonSize = GUI.ToolbarButtonSize.Fixed;
         }
-
-        private static class GatoGUILayout
-        {
-            #region VericalSlider Variable
-            private static float sliderPos;
-            #endregion
-
-            #region LightRotater Variable
-            private static Texture lightActiveTex = Resources.Load<Texture>("Icon/Sun_ON");
-            private static Texture lightInactiveTex = Resources.Load<Texture>("Icon/Sun_OFF");
-            #endregion
-
-            public static float VerticalSlider(Texture texture, float texSize, float height, float value, float minValue, float maxValue)
-            {
-                sliderPos = value/(maxValue+minValue);
-
-                var rect = GUILayoutUtility.GetRect(10f, height);
-
-                var boxRect = new Rect(rect.position, new Vector2(7f, height));
-                GUI.Box(boxRect, string.Empty);
-
-                var texRect = new Rect( 
-                                    rect.position.x - texSize / 2f + 3f,
-                                    rect.position.y + (rect.height - sliderPos * height) - texSize / 2f,
-                                    texSize, texSize
-                              );
-
-                var e = Event.current;
-
-                if (texRect.Contains(e.mousePosition))
-                {
-                    if (e.type == EventType.MouseDrag)
-                    {
-                        GUI.changed = true;
-
-                        var diff = e.delta.y / height;
-
-                        if (sliderPos - diff <= 1 && sliderPos - diff >= 0)
-                            sliderPos -= diff;
-                        else if (sliderPos - diff > 1)
-                            sliderPos = 1;
-                        else if (sliderPos - diff < 0)
-                            sliderPos = 0;
-                    }
-                }
-
-                GUI.DrawTexture(texRect, texture);
-
-                value = sliderPos * (maxValue + minValue);
-
-                return value;
-            }
-
-            public static float HorizontalSlider(Texture texture, float texSize, float width, float value, float minValue, float maxValue)
-            {
-                sliderPos = value / (maxValue + minValue);
-
-                var rect = GUILayoutUtility.GetRect(width, 10f);
-
-                Debug.Log(rect.position);
-                var boxRect = new Rect(rect.position, new Vector2(width, 7f));
-                GUI.Box(boxRect, string.Empty);
-
-                var texRect = new Rect(
-                                    rect.position.x + (rect.width - sliderPos * width) - texSize / 2f ,
-                                    rect.position.y - texSize / 2f + 3f,
-                                    texSize, texSize
-                              );
-
-                var e = Event.current;
-
-                if (texRect.Contains(e.mousePosition))
-                {
-                    if (e.type == EventType.MouseDrag)
-                    {
-                        GUI.changed = true;
-
-                        var diff = e.delta.x / width;
-
-                        if (sliderPos - diff <= 1 && sliderPos - diff >= 0)
-                            sliderPos -= diff;
-                        else if (sliderPos - diff > 1)
-                            sliderPos = 1;
-                        else if (sliderPos - diff < 0)
-                            sliderPos = 0;
-                    }
-                }
-
-                GUI.DrawTexture(texRect, texture);
-
-                value = sliderPos * (maxValue + minValue);
-
-                return value;
-            }
-
-            public static Vector2 MiniMonitor(Texture texture, float width, float height, ref int type, bool isGammaCorrection, Material gammaMat)
-            {
-                var rect = GUILayoutUtility.GetRect(width, height, GUI.skin.box);
-
-                //GUI.DrawTexture(rect, texture, ScaleMode.ScaleToFit, false, 0);
-                Graphics.DrawTexture(rect, texture, (isGammaCorrection) ? gammaMat : null);
-
-                var e = Event.current;
-
-                if (rect.Contains(e.mousePosition))
-                {
-                    if (e.type == EventType.MouseDrag)
-                    {
-                        type = (int)e.type;
-                        return e.delta;
-                    }
-                    else if (e.type == EventType.ScrollWheel)
-                    {
-                        type = (int)e.type;
-                        return e.delta;
-                    }
-                }
-
-                return Vector2.zero;
-            }
-
-            public static Vector2 LightRotater(Light light, float width, float height, ref bool isPressing)
-            {
-                var isExistLight = (light != null && light.gameObject.activeInHierarchy);
-
-                var rect = GUILayoutUtility.GetRect(width, height, GUI.skin.box);
-                var texture = (isExistLight) ? lightActiveTex : lightInactiveTex;
-
-                GUI.DrawTexture(rect, texture, ScaleMode.ScaleToFit, true, 0);
-
-                var e = Event.current;
-
-                if (isExistLight)
-                {
-
-                    if (rect.Contains(e.mousePosition) && e.type == EventType.MouseDown)
-                    {
-                        isPressing = true;
-                    }
-                    else if (isPressing && e.type == EventType.MouseUp)
-                    {
-                        isPressing = false;
-                    }
-
-                    if (e.type == EventType.MouseDrag && isPressing)
-                    {
-                        return e.delta;
-                    }
-
-                }
-
-                return Vector2.zero;
-            }
-        }
-
-        #region AvatarMonitor Variable
-
-        private float cameraHeight = 1;
-        private float maxCamHeight = 1;
-        private float minCamHeight = 0;
-        private float camPosZ;
-
-        private float zoomLevel = 1.0f;
-        
-        private Light sceneLight;
-        private bool isLightPressing = false;
-
-        private Texture upDownTexture;
-        private Material gammaMat;
-
-        public enum MonitorSize
-        {
-            Small = 256,
-            Mediam = 512,
-            Lerge = 768,
-            Custom
-        }
-
-        private MonitorSize sizeType = MonitorSize.Small;
-        private int monitorSize;
-
-        #endregion
 
         #region Animations Variable
 
@@ -455,13 +269,6 @@ namespace VRCAvatarEditor
 
         #region Changeable Parameters from Setting
 
-        private float defaultZoomDist = 1.0f;
-        private float faceZoomDist = 0.5f;
-        private float zoomStepDist = 0.25f;
-
-        private bool isGammaCorrection = true;
-        private Color monitorBgColor = new Color(0.95f, 0.95f, 0.95f, 1);
-
         private SortType selectedSortType = SortType.UnSort;
         private List<string> blendshapeExclusions = new List<string> { "vrc.v_", "vrc.blink_", "vrc.lowerlid_", "vrc.owerlid_", "mmd" };
 
@@ -480,23 +287,16 @@ namespace VRCAvatarEditor
 
         private void OnEnable()
         {
-            upDownTexture = Resources.Load<Texture>("Icon/UpDown");
-
-            avatarCamTexture = Resources.Load<RenderTexture>("AvatarRT");
-
-            sceneLight = GetDirectionalLight();
 
             edittingAvatar = new Avatar();
+
+            avatarMonitorGUI = new AvatarMonitorGUI(ref edittingAvatar, currentTool);
 
             var editorScriptPath = AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this));
             editorFolderPath = Path.GetDirectoryName(editorScriptPath).Replace("Editor/", string.Empty) + "/";
 
             animName = "faceAnim";
             saveFolder = editorFolderPath + "Animations/";
-
-            gammaMat = Resources.Load<Material>("Gamma");
-
-            resourceFolderPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(gammaMat))+"/";
             
             licenseText = GetFileTexts(editorFolderPath + LICENSE_FILE_NAME);
             readmeText = GetFileTexts(editorFolderPath + README_FILE_NAME);
@@ -516,7 +316,7 @@ namespace VRCAvatarEditor
                     SetAvatarActive(edittingAvatar.descriptor);
                     GetAvatarInfo(edittingAvatar.descriptor);
                     ApplySettingsToEditorGUI();
-                    SetAvatarCam(edittingAvatar.descriptor.gameObject);
+                    avatarMonitorGUI.SetAvatarCam(edittingAvatar.descriptor.gameObject);
                 }
             }
 
@@ -527,9 +327,6 @@ namespace VRCAvatarEditor
 
         private void OnDisable()
         {
-            if (avatarCam != null)
-                UnityEngine.Object.DestroyImmediate(avatarCam);
-
             SceneView.onSceneGUIDelegate -= OnSceneGUI;
         }
 
@@ -581,7 +378,7 @@ namespace VRCAvatarEditor
 
                                 ApplySettingsToEditorGUI();
 
-                                SetAvatarCam(edittingAvatar.descriptor.gameObject);
+                                avatarMonitorGUI.SetAvatarCam(edittingAvatar.descriptor.gameObject);
                             }
                         }
                     }
@@ -593,7 +390,8 @@ namespace VRCAvatarEditor
                         {
                             using (new EditorGUILayout.HorizontalScope())
                             {
-                                AvatarMonitorGUI(monitorSize, monitorSize);
+                                var needRepaint = avatarMonitorGUI.DrawGUI();
+                                if (needRepaint) Repaint();
 
                                 AnimationsGUI(GUILayout.MinWidth(300), GUILayout.MaxHeight(275));
                             }
@@ -646,7 +444,8 @@ namespace VRCAvatarEditor
                         {
                             using (new EditorGUILayout.HorizontalScope())
                             {
-                                AvatarMonitorGUI(monitorSize, monitorSize);
+                                var needRepaint = avatarMonitorGUI.DrawGUI();
+                                if (needRepaint) Repaint();
 
                                 using (new EditorGUILayout.VerticalScope())
                                 {
@@ -738,90 +537,6 @@ namespace VRCAvatarEditor
 
             SceneView.lastActiveSceneView.Repaint();
 
-        }
-
-        private void AvatarMonitorGUI(float monitorSizeX, float monitorSizeY)
-        {
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                using (new EditorGUILayout.VerticalScope())
-                {
-                    // アバター表示
-                    using (new EditorGUILayout.HorizontalScope())
-                    {
-                        GUILayout.FlexibleSpace();
-                        int eventType = 0;
-                        var delta = GatoGUILayout.MiniMonitor(avatarCamTexture, monitorSizeX, monitorSizeY, ref eventType, isGammaCorrection, gammaMat);
-                        if (!isLightPressing)
-                        {
-                            if (eventType == (int)EventType.MouseDrag) RotateAvatarCam(delta);
-                            else if (eventType == (int)EventType.ScrollWheel) ZoomAvatarCam(delta, zoomLevel);
-                        }
-
-                        GUILayout.FlexibleSpace();
-                    }
-
-                    // アバター回転
-                    using (new EditorGUILayout.HorizontalScope())
-                    {
-                        if (GUILayout.Button("<"))
-                        {
-                            if (avatarCam != null)
-                                avatarCam.transform.Rotate(0, CAMERA_ROTATE_ANGLE, 0);
-                        }
-
-                        if (GUILayout.Button("Reset"))
-                        {
-                            if (avatarCam != null)
-                            {
-                                avatarCam.transform.localRotation = Quaternion.identity;
-                                MoveAvatarCam();
-                            }
-                        }
-
-                        if (GUILayout.Button(">"))
-                        {
-                            if (avatarCam != null)
-                                avatarCam.transform.Rotate(0, -CAMERA_ROTATE_ANGLE, 0);
-                        }
-                    }
-
-                    using (new GUILayout.HorizontalScope())
-                    using (var check = new EditorGUI.ChangeCheckScope())
-                    {
-                        //GUILayout.FlexibleSpace();
-                        zoomLevel = EditorGUILayout.Slider(zoomLevel, 0f, 1f);
-                        //zoomLevel = GatoGUILayout.HorizontalSlider(upDownTexture, 20f, 200f, zoomLevel, 0f, 1f);
-                        //GUILayout.FlexibleSpace();
-
-                        if (check.changed) ZoomAvatarCam(zoomLevel);
-                    }
-                }
-            }
-
-            using (new GUILayout.VerticalScope())
-            {
-                using (new GUILayout.HorizontalScope())
-                {
-                    GUILayout.FlexibleSpace();
-                    var lightDelta = GatoGUILayout.LightRotater(sceneLight, 50f, 50f, ref isLightPressing);
-                    RotateLight(lightDelta);
-                    GUILayout.FlexibleSpace();
-                }
-
-                GUILayout.Space(20f);
-
-                using (new GUILayout.HorizontalScope())
-                {
-                    GUILayout.FlexibleSpace();
-                    using (var check = new EditorGUI.ChangeCheckScope())
-                    {
-                        cameraHeight = GatoGUILayout.VerticalSlider(upDownTexture, 30f, 150f, cameraHeight, minCamHeight, maxCamHeight);
-                        if (check.changed) MoveAvatarCamHeight(cameraHeight);
-                    }
-                    GUILayout.FlexibleSpace();
-                }
-            }
         }
 
         private void AnimationsGUI(params GUILayoutOption[] option)
@@ -1456,31 +1171,7 @@ namespace VRCAvatarEditor
 
             EditorGUILayout.HelpBox("設定は変更後からウィンドウを閉じるまで適用されます。「Save Setting」で次回以降も適用されます", MessageType.Info);
 
-            EditorGUILayout.LabelField("AvatarMonitor", EditorStyles.boldLabel);
-            defaultZoomDist = EditorGUILayout.FloatField("Default Camera Distance", defaultZoomDist);
-            faceZoomDist = EditorGUILayout.FloatField("Face Camera Distance", faceZoomDist);
-            zoomStepDist = EditorGUILayout.FloatField("Camera Zoom Step Distance", zoomStepDist);
-
-            EditorGUILayout.Space();
-            isGammaCorrection = EditorGUILayout.ToggleLeft("ガンマ補正", isGammaCorrection);
-
-            using (var check = new EditorGUI.ChangeCheckScope())
-            {
-                monitorBgColor = EditorGUILayout.ColorField("モニター背景色", monitorBgColor);
-                if (check.changed) SetAvatarCamBgColor(monitorBgColor);
-            }
-            using (var check = new EditorGUI.ChangeCheckScope())
-            {
-                sizeType = (MonitorSize)EditorGUILayout.EnumPopup("Monitor Size", sizeType);
-                if (check.changed && sizeType != MonitorSize.Custom)
-                {
-                    monitorSize = (int)sizeType;
-                }
-            }
-            using (new EditorGUI.DisabledGroupScope(sizeType != MonitorSize.Custom))
-            {
-                monitorSize = EditorGUILayout.IntField("Size", monitorSize);
-            }
+            avatarMonitorGUI.DrawSettingsGUI();
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("FaceEmotion Creator", EditorStyles.boldLabel);
@@ -1530,7 +1221,8 @@ namespace VRCAvatarEditor
 
         private void TabChanged()
         {
-            MoveAvatarCam();
+            avatarMonitorGUI.ChangeTab(currentTool);
+            avatarMonitorGUI.MoveAvatarCam();
 
             if (currentTool == ToolFunc.表情設定)
             {
@@ -1557,28 +1249,13 @@ namespace VRCAvatarEditor
             if (settingAsset == null)
                 settingAsset = Resources.Load<SettingData>("DefaultSettingData");
 
-            defaultZoomDist = settingAsset.defaultZoomDist;
-            faceZoomDist = settingAsset.faceZoomDist;
-            zoomStepDist = settingAsset.zoomStepDist;
-
-            isGammaCorrection = settingAsset.isGammaCorrection;
-            monitorBgColor = settingAsset.monitorBgColor;
-
             selectedSortType = settingAsset.selectedSortType;
             blendshapeExclusions = new List<string>(settingAsset.blendshapeExclusions);
 
             isActiveOnlySelectedAvatar = settingAsset.isActiveOnlySelectedAvatar;
             layoutType = settingAsset.layoutType;
 
-            sizeType = settingAsset.monitorSizeType;
-            if (settingAsset.monitorSizeType != MonitorSize.Custom)
-            {
-                monitorSize = (int)settingAsset.monitorSizeType;
-            }
-            else
-            {
-                monitorSize = (int)settingAsset.monitorSize;
-            }
+            avatarMonitorGUI.LoadSettingData(settingAsset);
         }
 
         /// <summary>
@@ -1595,12 +1272,7 @@ namespace VRCAvatarEditor
                 newCreated = true;
             }
 
-            settingAsset.defaultZoomDist = defaultZoomDist;
-            settingAsset.faceZoomDist = faceZoomDist;
-            settingAsset.zoomStepDist = zoomStepDist;
-
-            settingAsset.isGammaCorrection = isGammaCorrection;
-            settingAsset.monitorBgColor = monitorBgColor;
+            avatarMonitorGUI.SaveSettingData(ref settingAsset);
 
             settingAsset.selectedSortType = selectedSortType;
             settingAsset.blendshapeExclusions = new List<string>(blendshapeExclusions);
@@ -1608,14 +1280,10 @@ namespace VRCAvatarEditor
             settingAsset.isActiveOnlySelectedAvatar = isActiveOnlySelectedAvatar;
             settingAsset.layoutType = layoutType;
 
-            settingAsset.monitorSizeType = sizeType;
-            if (sizeType == MonitorSize.Custom)
-            {
-                settingAsset.monitorSize = monitorSize;
-            }
-
             if (newCreated)
             {
+                var data = Resources.Load<SettingData>("DefaultSettingData");
+                var resourceFolderPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(data)) + "/";
                 AssetDatabase.CreateAsset(settingAsset, resourceFolderPath + "CustomSettingData.asset");
                 AssetDatabase.Refresh();
             }
@@ -1638,38 +1306,6 @@ namespace VRCAvatarEditor
 
             AssetDatabase.MoveAssetToTrash(AssetDatabase.GetAssetPath(settingAsset.GetInstanceID()));
             AssetDatabase.Refresh();
-        }
-
-        /// <summary>
-        /// アバターを写す用のカメラを設定する
-        /// </summary>
-        private void SetAvatarCam(GameObject obj)
-        {
-            if (avatarCam != null)
-                DestroyImmediate(avatarCam);
-
-            var avatarCam_prefab = Resources.Load<GameObject>("AvatarCam");
-            avatarCam = PrefabUtility.InstantiatePrefab(avatarCam_prefab) as GameObject;
-            avatarCam.transform.position = obj.transform.position;
-
-            if (edittingAvatar.eyePos != null) maxCamHeight = edittingAvatar.eyePos.y;
-
-            SetAvatarCamBgColor(monitorBgColor);
-
-            MoveAvatarCam();
-        }
-
-        /// <summary>
-        /// アバターモニターの背景色を設定する
-        /// </summary>
-        /// <param name="col"></param>
-        private void SetAvatarCamBgColor(Color col)
-        {
-            if (avatarCam == null) return;
-
-            var mainTrans = avatarCam.transform.GetChild(0);
-            var camera = mainTrans.GetComponent<Camera>();
-            camera.backgroundColor = col;
         }
 
         /// <summary>
@@ -1801,120 +1437,6 @@ namespace VRCAvatarEditor
 
             foreach (var avatar in allAvatars)
                 avatar.gameObject.SetActive(avatar.gameObject == targetObj);
-        }
-
-        /// <summary>
-        /// AvatarCamの位置を動かす
-        /// </summary>
-        private void MoveAvatarCam()
-        {
-            if (avatarCam == null || edittingAvatar.descriptor == null) return;
-
-            var nowPos = avatarCam.transform.position;
-            var avatarPos = edittingAvatar.descriptor.transform.position;
-            var childTrans = avatarCam.transform.Find("Main").gameObject.transform;
-
-            // 顔にあわせる
-            if (currentTool == ToolFunc.表情設定)
-            {
-                cameraHeight = edittingAvatar.eyePos.y;
-                avatarCam.transform.position = new Vector3(nowPos.x, cameraHeight + avatarPos.y, nowPos.z);
-                childTrans.localPosition = new Vector3(0, 0, faceZoomDist);
-                camPosZ = faceZoomDist;
-            }
-            else
-            {
-                cameraHeight = (maxCamHeight > 1)?1:maxCamHeight;
-                avatarCam.transform.position = new Vector3(nowPos.x, cameraHeight + avatarPos.y, nowPos.z);
-                childTrans.localPosition = new Vector3(0, 0, defaultZoomDist);
-                camPosZ = defaultZoomDist;
-            }
-
-            zoomLevel = 1;
-        }
-
-        /// <summary>
-        /// AvatarCamの高さを変える
-        /// </summary>
-        /// <param name="value"></param>
-        private void MoveAvatarCamHeight(float value)
-        {
-            if (avatarCam == null || edittingAvatar.descriptor == null) return;
-            var nowPos = avatarCam.transform.position;
-            var avatarPos = edittingAvatar.descriptor.transform.position;
-            avatarCam.transform.position = new Vector3(nowPos.x, avatarPos.y + value, nowPos.z);
-        }
-
-        /// <summary>
-        /// AvatarCamを回転させる
-        /// </summary>
-        /// <param name="delta"></param>
-        private void RotateAvatarCam(Vector2 delta)
-        {
-            if (avatarCam == null || delta == Vector2.zero) return;
-
-            avatarCam.transform.Rotate(new Vector3(-delta.y, delta.x, 0));
-            Repaint();
-        }
-
-        /// <summary>
-        /// AvatarCamをズームさせる(マウスホイール)
-        /// </summary>
-        /// <param name="delta"></param>
-        private void ZoomAvatarCam(Vector2 delta, float level)
-        {
-            if (avatarCam == null || delta == Vector2.zero) return;
-
-            var cam = avatarCam.transform.GetChild(0);
-            cam.transform.Translate(new Vector3(0, 0, (float)(-(delta.y/Mathf.Abs(delta.y)) * zoomStepDist)));
-            camPosZ = cam.transform.localPosition.z + zoomStepDist * (1 - level);
-            Repaint();
-        }
-
-        /// <summary>
-        /// AvatarCamをズームさせる（スライダー）
-        /// </summary>
-        /// <param name="delta"></param>
-        private void ZoomAvatarCam(float level)
-        {
-            if (avatarCam == null) return;
-            var cam = avatarCam.transform.GetChild(0);
-            cam.transform.localPosition = new Vector3(0, 0, camPosZ - zoomStepDist * (1-level));
-            Repaint();
-        }
-
-        /// <summary>
-        /// DirectionalLightを取得する
-        /// </summary>
-        /// <returns></returns>
-        private Light GetDirectionalLight()
-        {
-
-            var lights = Resources.FindObjectsOfTypeAll(typeof(Light)) as Light[];
-            
-            foreach (var light in lights)
-            {
-                if (light.type == LightType.Directional)
-                {
-                    if (light.name == "SceneLight") continue;
-                    return light;
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// DirectionalLightを回転させる
-        /// </summary>
-        /// <param name="delta"></param>
-        private void RotateLight(Vector2 delta)
-        {
-            if (sceneLight == null) return;
-
-            (sceneLight.gameObject).transform.Rotate(new Vector3(0, 1, 0), -delta.x);
-            //(m_light.gameObject).transform.Rotate(new Vector3(1, 0, 0), -delta.y);
-            Repaint();
         }
 
         /// <summary>

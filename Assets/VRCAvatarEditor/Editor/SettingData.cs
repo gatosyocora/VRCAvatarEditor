@@ -23,7 +23,7 @@ namespace VRCAvatarEditor
 
         public VRCAvatarEditor.LayoutType layoutType = VRCAvatarEditor.LayoutType.Default;
 
-        public VRCAvatarEditor.MonitorSize monitorSizeType = VRCAvatarEditor.MonitorSize.Small;
+        public AvatarMonitorGUI.MonitorSize monitorSizeType = AvatarMonitorGUI.MonitorSize.Small;
         public int monitorSize = 0;
     }
 }
