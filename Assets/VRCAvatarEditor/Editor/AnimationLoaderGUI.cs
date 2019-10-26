@@ -14,21 +14,7 @@ namespace VRCAvatarEditor {
 		private string filePath;
 		private string fileName;
 
-		public class AnimParam {
-			public string objPath;
-			public string blendShapeName;
-			public float value;
-			public bool isSelect;
-
-			public AnimParam(string path, string propertyName, float value){
-				objPath = path;
-				this.blendShapeName = propertyName.Replace("blendShape.", "");
-				this.value = value;
-				isSelect = true;
-			}
-		}
-
-		private List<AnimParam> animParamList;
+		private List<FaceEmotion.AnimParam> animParamList;
 
 		private Vector2 scrollPos = Vector2.zero;
 
@@ -39,20 +25,7 @@ namespace VRCAvatarEditor {
 				fileName = Path.GetFileName(filePath);
 
 				var anim = AssetDatabase.LoadAssetAtPath(filePath, typeof(AnimationClip)) as AnimationClip;
-				var bindings = AnimationUtility.GetCurveBindings(anim);
-
-				animParamList = new List<AnimParam>();
-
-				foreach (var binding in bindings) {
-					
-					if ((binding.propertyName).Split('.')[0] != "blendShape") continue;
-
-					var curve = AnimationUtility.GetEditorCurve(anim, binding);
-					
-					var animParam = new AnimParam(binding.path, binding.propertyName, curve[0].value);
-
-					animParamList.Add(animParam);
-				}
+                animParamList = FaceEmotion.GetAnimationParamaters(anim);
 		}
 
 		void OnGUI() {

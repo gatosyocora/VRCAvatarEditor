@@ -10,6 +10,6 @@ namespace VRCAvatarEditor
     {
         public EditorWindow window;
         public string filePath;
-        public List<AnimationLoaderGUI.AnimParam> loadingProperties;
+        public List<FaceEmotion.AnimParam> loadingProperties;
     }
 }

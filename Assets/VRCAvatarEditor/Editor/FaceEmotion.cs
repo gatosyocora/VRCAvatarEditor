@@ -14,6 +14,22 @@ namespace VRCAvatarEditor
 
         public static readonly string SENDDATAASSET_PATH = "Assets/SendData.asset";
 
+        public class AnimParam
+        {
+            public string objPath;
+            public string blendShapeName;
+            public float value;
+            public bool isSelect;
+
+            public AnimParam(string path, string propertyName, float value)
+            {
+                objPath = path;
+                this.blendShapeName = propertyName.Replace("blendShape.", "");
+                this.value = value;
+                isSelect = true;
+            }
+        }
+
         /// <summary>
         /// 指定したBlendShapeのアニメーションファイルを作成する
         /// </summary>
@@ -194,7 +210,7 @@ namespace VRCAvatarEditor
         /// </summary>
         /// <param name="animProperties"></param>
         /// <param name="skinnedMeshes"></param>
-        public static void ApplyAnimationProperties(List<AnimationLoaderGUI.AnimParam> animProperties, ref List<SkinnedMesh> skinnedMeshes) 
+        public static void ApplyAnimationProperties(List<AnimParam> animProperties, ref List<SkinnedMesh> skinnedMeshes) 
         {
             for (int skinnedMeshIndex = 0; skinnedMeshIndex < skinnedMeshes.Count; skinnedMeshIndex++) {
                 var mesh = skinnedMeshes[skinnedMeshIndex].mesh;
@@ -210,6 +226,28 @@ namespace VRCAvatarEditor
 
             // データの処理は終わったのでデータ送受信用assetを削除する
             AssetDatabase.DeleteAsset(SENDDATAASSET_PATH);
+        }
+
+        public static void ApplyAnimationProperties(AnimationClip clip, ref List<SkinnedMesh> skinnedMeshes)
+        {
+            var paramList = GetAnimationParamaters(clip);
+            ApplyAnimationProperties(paramList, ref skinnedMeshes);
+        }
+
+        public static List<AnimParam> GetAnimationParamaters(AnimationClip clip)
+        {
+            var bindings = AnimationUtility.GetCurveBindings(clip);
+            var animParamList = new List<AnimParam>();
+
+            foreach (var binding in bindings)
+            {
+                if ((binding.propertyName).Split('.')[0] != "blendShape") continue;
+                var curve = AnimationUtility.GetEditorCurve(clip, binding);
+                var animParam = new AnimParam(binding.path, binding.propertyName, curve[0].value);
+                animParamList.Add(animParam);
+            }
+
+            return animParamList;
         }
     }
 }
