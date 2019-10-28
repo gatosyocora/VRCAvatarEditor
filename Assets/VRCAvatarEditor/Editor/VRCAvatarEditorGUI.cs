@@ -24,6 +24,7 @@ namespace VRCAvatarEditor
 
         private AvatarMonitorGUI avatarMonitorGUI;
         private AnimationsGUI animationsGUI;
+        private AvatarInfoGUI avatarInfoGUI;
 
         private bool newSDKUI;
         private bool needRepaint = false;
@@ -69,14 +70,6 @@ namespace VRCAvatarEditor
                                 new GUILayoutOption[]{ GUILayout.MinWidth(300), GUILayout.MaxHeight(270) },
                                 new GUILayoutOption[]{ GUILayout.Height(200)}
                             };
-
-    #region AvatarInfo Variable
-
-    private bool isOpeningLipSync = false;
-        private Vector2 lipSyncScrollPos = Vector2.zero;
-        private const int LIPSYNC_SYPEKEY_NUM = 15;
-
-        #endregion
 
         #region FaceEmotion Variable
 
@@ -220,6 +213,7 @@ namespace VRCAvatarEditor
             
             avatarMonitorGUI = new AvatarMonitorGUI(ref edittingAvatar, currentTool);
             animationsGUI = new AnimationsGUI(ref edittingAvatar, saveFolder);
+            avatarInfoGUI = new AvatarInfoGUI(ref edittingAvatar);
 
             var editorScriptPath = AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this));
             editorFolderPath = Path.GetDirectoryName(editorScriptPath).Replace("Editor/", string.Empty) + "/";
@@ -345,7 +339,7 @@ namespace VRCAvatarEditor
                             if (currentTool == ToolFunc.アバター情報)
                             {
                                 // アバター情報
-                                AvatarInfoGUI();
+                                avatarInfoGUI.DrawGUI(null);
                             }
                             else if (currentTool == ToolFunc.表情設定)
                             {
@@ -402,7 +396,7 @@ namespace VRCAvatarEditor
                                         }
 
                                         // アバター情報
-                                        AvatarInfoGUI();
+                                        avatarInfoGUI.DrawGUI(null);
 
                                     }
                                     else if (currentTool == ToolFunc.表情設定)
@@ -467,108 +461,6 @@ namespace VRCAvatarEditor
 
             SceneView.lastActiveSceneView.Repaint();
 
-        }
-
-        private void AvatarInfoGUI()
-        {
-            #region アバター情報
-            if (edittingAvatar.descriptor != null)
-            {
-                // 性別
-                using (var check = new EditorGUI.ChangeCheckScope())
-                {
-                    edittingAvatar.sex = (VRC_AvatarDescriptor.AnimationSet)EditorGUILayout.EnumPopup("Gender", edittingAvatar.sex);
-
-                    if (check.changed) edittingAvatar.descriptor.Animations = edittingAvatar.sex;
-                }
-
-                // アップロード状態
-                EditorGUILayout.LabelField("Status", (string.IsNullOrEmpty(edittingAvatar.avatarId)) ? "New Avatar" : "Uploaded Avatar");
-                edittingAvatar.animator.runtimeAnimatorController = EditorGUILayout.ObjectField(
-                    "Animator",
-                    edittingAvatar.animator.runtimeAnimatorController,
-                    typeof(AnimatorOverrideController),
-                    true
-                ) as RuntimeAnimatorController;
-
-                // AnimatorOverrideController
-                using (var check = new EditorGUI.ChangeCheckScope())
-                {
-                    edittingAvatar.standingAnimController = EditorGUILayout.ObjectField(
-                        "Standing Animations",
-                        edittingAvatar.standingAnimController,
-                        typeof(AnimatorOverrideController),
-                        true
-                    ) as AnimatorOverrideController;
-                    edittingAvatar.sittingAnimController = EditorGUILayout.ObjectField(
-                        "Sitting Animations",
-                        edittingAvatar.sittingAnimController,
-                        typeof(AnimatorOverrideController),
-                        true
-                    ) as AnimatorOverrideController;
-
-                    if (check.changed)
-                    {
-                        edittingAvatar.descriptor.CustomStandingAnims = edittingAvatar.standingAnimController;
-                        edittingAvatar.descriptor.CustomSittingAnims = edittingAvatar.sittingAnimController;
-                    }
-                }
-
-                EditorGUILayout.LabelField("Triangles", edittingAvatar.triangleCount + "(" + (edittingAvatar.triangleCount + edittingAvatar.triangleCountInactive) + ")");
-
-                // リップシンク
-                string lipSyncWarningMessage = "リップシンクが正しく設定されていない可能性があります";
-                using (var check = new EditorGUI.ChangeCheckScope())
-                {
-                    edittingAvatar.lipSyncStyle = (VRC_AvatarDescriptor.LipSyncStyle)EditorGUILayout.EnumPopup("LipSync", edittingAvatar.lipSyncStyle);
-
-                    if (check.changed) edittingAvatar.descriptor.lipSync = edittingAvatar.lipSyncStyle;
-
-                }
-                if (edittingAvatar.lipSyncStyle == VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape)
-                {
-                    using (var check = new EditorGUI.ChangeCheckScope())
-                    {
-                        edittingAvatar.faceMesh = EditorGUILayout.ObjectField(
-                            "Face Mesh",
-                            edittingAvatar.faceMesh,
-                            typeof(SkinnedMeshRenderer),
-                            true
-                        ) as SkinnedMeshRenderer;
-
-                        if (check.changed)
-                            edittingAvatar.descriptor.VisemeSkinnedMesh = edittingAvatar.faceMesh;
-                    }
-                    if (edittingAvatar.faceMesh != null)
-                    {
-                        isOpeningLipSync = EditorGUILayout.Foldout(isOpeningLipSync, "ShapeKeys");
-                        if (isOpeningLipSync)
-                        {
-                            using (new EditorGUI.IndentLevelScope())
-                            using (var scrollView = new EditorGUILayout.ScrollViewScope(lipSyncScrollPos))
-                            {
-                                lipSyncScrollPos = scrollView.scrollPosition;
-
-                                for (int visemeIndex = 0; visemeIndex < LIPSYNC_SYPEKEY_NUM; visemeIndex++)
-                                {
-                                    EditorGUILayout.LabelField("Viseme:" + Enum.GetName(typeof(VRC_AvatarDescriptor.Viseme), visemeIndex), edittingAvatar.descriptor.VisemeBlendShapes[visemeIndex]);
-                                }
-                            }
-                        }
-                    }
-                }
-                if (edittingAvatar.lipSyncStyle != VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape || edittingAvatar.faceMesh == null)
-                {
-                    EditorGUILayout.HelpBox(lipSyncWarningMessage, MessageType.Warning);
-                    if (GUILayout.Button("シェイプキーによるリップシンクを自動設定する"))
-                    {
-                        SetLipSyncToViseme(ref edittingAvatar);
-                    }
-                }
-
-                EditorGUILayout.Space();
-            }
-            #endregion
         }
 
         private void FaceEmotionGUI()
@@ -1228,42 +1120,6 @@ namespace VRCAvatarEditor
             }
 
             return text;
-        }
-
-
-
-        /// <summary>
-        /// Avatarにシェイプキー基準のLipSyncの設定をおこなう
-        /// </summary>
-        private bool SetLipSyncToViseme(ref Avatar avatar)
-        {
-            if (avatar == null) return false;
-
-            var desc = avatar.descriptor;
-            if (desc == null) return false;
-
-            avatar.lipSyncStyle = VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape;
-            desc.lipSync = VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape;
-
-            if (avatar.faceMesh == null)
-            {
-                var rootObj = avatar.animator.gameObject;
-                avatar.faceMesh = rootObj.GetComponentInChildren<SkinnedMeshRenderer>();
-                desc.VisemeSkinnedMesh = avatar.faceMesh;
-            }
-
-            if (avatar.faceMesh == null) return false;
-            var faseMesh = avatar.faceMesh.sharedMesh;
-
-            for (int visemeIndex = 0; visemeIndex < Enum.GetNames(typeof(VRC_AvatarDescriptor.Viseme)).Length; visemeIndex++)
-            {
-                // VRC用アバターとしてよくあるシェイプキーの名前を元に自動設定
-                var visemeShapeKeyName = "vrc.v_" + Enum.GetName(typeof(VRC_AvatarDescriptor.Viseme), visemeIndex).ToLower();
-                if (faseMesh.GetBlendShapeIndex(visemeShapeKeyName) == -1) continue;
-                desc.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
-            }
-            
-            return true;
         }
 
         /// <summary>
