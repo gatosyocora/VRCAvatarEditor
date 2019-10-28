@@ -88,6 +88,35 @@ namespace VRCAvatarEditor
             skinnedMeshRendererList = GatoUtility.GetSkinnedMeshList(avatarObj);
             meshRendererList = GatoUtility.GetMeshList(avatarObj);
         }
+
+        /// <summary>
+        /// Avatarにシェイプキー基準のLipSyncの設定をおこなう
+        /// </summary>
+        public void SetLipSyncToViseme()
+        {
+            if (descriptor == null) return;
+
+            lipSyncStyle = VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape;
+            descriptor.lipSync = VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape;
+
+            if (faceMesh == null)
+            {
+                var rootObj = animator.gameObject;
+                faceMesh = rootObj.GetComponentInChildren<SkinnedMeshRenderer>();
+                descriptor.VisemeSkinnedMesh = faceMesh;
+            }
+
+            if (faceMesh == null) return;
+            var mesh = faceMesh.sharedMesh;
+
+            for (int visemeIndex = 0; visemeIndex < Enum.GetNames(typeof(VRC_AvatarDescriptor.Viseme)).Length; visemeIndex++)
+            {
+                // VRC用アバターとしてよくあるシェイプキーの名前を元に自動設定
+                var visemeShapeKeyName = "vrc.v_" + Enum.GetName(typeof(VRC_AvatarDescriptor.Viseme), visemeIndex).ToLower();
+                if (mesh.GetBlendShapeIndex(visemeShapeKeyName) == -1) continue;
+                descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
+            }
+        }
     }
 }
 
