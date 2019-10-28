@@ -31,13 +31,13 @@ namespace VRCAvatarEditor
         /// <summary>
         /// 指定したBlendShapeのアニメーションファイルを作成する
         /// </summary>
-        public static AnimationClip CreateBlendShapeAnimationClip(string fileName, string saveFolderPath, ref List<SkinnedMesh> skinnedMeshList, ref List<string> exclusions, GameObject rootObj)
+        public static AnimationClip CreateBlendShapeAnimationClip(string fileName, string saveFolderPath, ref VRCAvatarEditor.Avatar avatar, ref List<string> exclusions, GameObject rootObj)
         {
             AnimationClip animClip = new AnimationClip();
 
             if (fileName == "") fileName = "face_emotion";
 
-            foreach (var skinnedMesh in skinnedMeshList)
+            foreach (var skinnedMesh in avatar.skinnedMeshList)
             {
                 if (!skinnedMesh.isOpenBlendShapes) continue;
 
@@ -109,9 +109,9 @@ namespace VRCAvatarEditor
         /// <summary>
         /// BlendShapeの値をすべてリセットする
         /// </summary>
-        public static void ResetAllBlendShapeValues(ref List<SkinnedMesh> skinnedMeshList)
+        public static void ResetAllBlendShapeValues(ref VRCAvatarEditor.Avatar avatar)
         {
-            foreach (var skinnedMesh in skinnedMeshList)
+            foreach (var skinnedMesh in avatar.skinnedMeshList)
             {
                 if (!skinnedMesh.isOpenBlendShapes) continue;
                 
@@ -208,11 +208,11 @@ namespace VRCAvatarEditor
         /// </summary>
         /// <param name="animProperties"></param>
         /// <param name="skinnedMeshes"></param>
-        public static void ApplyAnimationProperties(List<AnimParam> animProperties, ref List<SkinnedMesh> skinnedMeshes) 
+        public static void ApplyAnimationProperties(List<AnimParam> animProperties, ref VRCAvatarEditor.Avatar avatar) 
         {
-            for (int skinnedMeshIndex = 0; skinnedMeshIndex < skinnedMeshes.Count; skinnedMeshIndex++) {
-                var mesh = skinnedMeshes[skinnedMeshIndex].mesh;
-                var renderer = skinnedMeshes[skinnedMeshIndex].renderer;
+            for (int skinnedMeshIndex = 0; skinnedMeshIndex < avatar.skinnedMeshList.Count; skinnedMeshIndex++) {
+                var mesh = avatar.skinnedMeshList[skinnedMeshIndex].mesh;
+                var renderer = avatar.skinnedMeshList[skinnedMeshIndex].renderer;
 
                 foreach (var animProperty in animProperties) {
                     var index = mesh.GetBlendShapeIndex(animProperty.blendShapeName);
@@ -226,10 +226,10 @@ namespace VRCAvatarEditor
             AssetDatabase.DeleteAsset(SENDDATAASSET_PATH);
         }
 
-        public static void ApplyAnimationProperties(AnimationClip clip, ref List<SkinnedMesh> skinnedMeshes)
+        public static void ApplyAnimationProperties(AnimationClip clip, ref VRCAvatarEditor.Avatar avatar)
         {
             var paramList = GetAnimationParamaters(clip);
-            ApplyAnimationProperties(paramList, ref skinnedMeshes);
+            ApplyAnimationProperties(paramList, ref avatar);
         }
 
         public static List<AnimParam> GetAnimationParamaters(AnimationClip clip)

@@ -67,9 +67,11 @@ namespace VRCAvatarEditor
             return true;
         }
 
-        public static void SetProbeAnchorToSkinnedMeshRenderers(ref GameObject anchorTargetObj, ref List<SkinnedMeshRenderer> skinnedMeshRendererList, ref bool[] isSettingToSkinnedMesh)
+        public static void SetProbeAnchorToSkinnedMeshRenderers(ref GameObject anchorTargetObj, ref VRCAvatarEditor.Avatar avatar, ref bool[] isSettingToSkinnedMesh)
         {
-            for(int index = 0; index < skinnedMeshRendererList.Count; index++)
+            List<SkinnedMeshRenderer> skinnedMeshRendererList = avatar.skinnedMeshRendererList;
+
+            for (int index = 0; index < skinnedMeshRendererList.Count; index++)
             {
                 if (isSettingToSkinnedMesh[index])
                     skinnedMeshRendererList[index].probeAnchor = anchorTargetObj.transform;
@@ -78,8 +80,10 @@ namespace VRCAvatarEditor
             }
         }
 
-        public static void SetProbeAnchorToMeshRenderers(ref GameObject anchorTargetObj, ref List<MeshRenderer> meshRendererList, ref bool[] isSettingToMesh)
+        public static void SetProbeAnchorToMeshRenderers(ref GameObject anchorTargetObj, ref VRCAvatarEditor.Avatar avatar, ref bool[] isSettingToMesh)
         {
+            List<MeshRenderer> meshRendererList = avatar.meshRendererList;
+
             for (int index = 0; index < meshRendererList.Count; index++)
             {
                 if (isSettingToMesh[index])
