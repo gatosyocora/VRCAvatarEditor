@@ -64,7 +64,7 @@ namespace VRCAvatarEditor
                 UnityEngine.Object.DestroyImmediate(avatarCam);
         }
 
-        public bool DrawGUI()
+        public bool DrawGUI(GUILayoutOption[] layoutOptions)
         {
             using (new EditorGUILayout.HorizontalScope())
             {
