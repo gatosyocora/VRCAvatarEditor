@@ -109,12 +109,23 @@ namespace VRCAvatarEditor
             if (faceMesh == null) return;
             var mesh = faceMesh.sharedMesh;
 
-            for (int visemeIndex = 0; visemeIndex < Enum.GetNames(typeof(VRC_AvatarDescriptor.Viseme)).Length; visemeIndex++)
+            var visemeBlendShapeNames = Enum.GetNames(typeof(VRC_AvatarDescriptor.Viseme));
+
+            for (int visemeIndex = 0; visemeIndex < visemeBlendShapeNames.Length; visemeIndex++)
             {
                 // VRC用アバターとしてよくあるシェイプキーの名前を元に自動設定
-                var visemeShapeKeyName = "vrc.v_" + Enum.GetName(typeof(VRC_AvatarDescriptor.Viseme), visemeIndex).ToLower();
-                if (mesh.GetBlendShapeIndex(visemeShapeKeyName) == -1) continue;
-                descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
+                var visemeShapeKeyName = "vrc.v_" + visemeBlendShapeNames[visemeIndex];
+                if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
+                {
+                    descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
+                    continue;
+                }
+
+                visemeShapeKeyName = "VRC.v_" + visemeBlendShapeNames[visemeIndex];
+                if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
+                {
+                    descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
+                }
             }
         }
     }
