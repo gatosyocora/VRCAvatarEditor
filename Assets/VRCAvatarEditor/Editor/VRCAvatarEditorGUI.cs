@@ -26,6 +26,7 @@ namespace VRCAvatarEditor
         public AnimationsGUI animationsGUI;
         private AvatarInfoGUI avatarInfoGUI;
         private FaceEmotionGUI faceEmotionGUI;
+        private ProbeAnchorGUI probeAnchorGUI;
 
         private bool newSDKUI;
         private bool needRepaint = false;
@@ -73,21 +74,6 @@ namespace VRCAvatarEditor
                                 new GUILayoutOption[]{ GUILayout.MinWidth(300), GUILayout.MaxHeight(270) },
                                 new GUILayoutOption[]{ GUILayout.Height(200)}
                             };
-
-        #region ProbeAnchor Variable
-
-        private ProbeAnchor.TARGETPOS targetPos = ProbeAnchor.TARGETPOS.HEAD;
-
-        private bool isGettingSkinnedMeshRenderer = true;
-        private bool isGettingMeshRenderer = true;
-
-        private bool isOpeningRendererList = false;
-
-        private bool[] isSettingToSkinnedMesh = null;
-        private bool[] isSettingToMesh = null;
-
-        private Vector2 leftScrollPos = Vector2.zero;
-        #endregion
 
         #region MeshBounds Variable
         private List<SkinnedMeshRenderer> targetRenderers;
@@ -194,6 +180,7 @@ namespace VRCAvatarEditor
             animationsGUI = new AnimationsGUI(ref edittingAvatar, saveFolder);
             avatarInfoGUI = new AvatarInfoGUI(ref edittingAvatar);
             faceEmotionGUI = new FaceEmotionGUI(ref edittingAvatar, saveFolder, this);
+            probeAnchorGUI = new ProbeAnchorGUI(ref edittingAvatar);
 
             var editorScriptPath = AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this));
             editorFolderPath = Path.GetDirectoryName(editorScriptPath).Replace("Editor/", string.Empty) + "/";
@@ -201,8 +188,7 @@ namespace VRCAvatarEditor
             licenseText = GetFileTexts(editorFolderPath + LICENSE_FILE_NAME);
             readmeText = GetFileTexts(editorFolderPath + README_FILE_NAME);
             usingSoftwareLicenseText = GetFileTexts(editorFolderPath + USING_SOFTWARE_FILE_NAME);
-
-
+            
             LoadSettingDataFromScriptableObject();
 
             // Windowを開いたときにオブジェクトが選択されていればそれをアバターとして設定する
@@ -215,7 +201,7 @@ namespace VRCAvatarEditor
                     
                     SetAvatarActive(edittingAvatar.descriptor);
                     edittingAvatar.LoadAvatarInfo();
-                    SettingForProbeSetter();
+                    probeAnchorGUI.SettingForProbeSetter();
                     ApplySettingsToEditorGUI();
                     avatarMonitorGUI.SetAvatarCam(edittingAvatar.descriptor.gameObject);
                 }
@@ -276,7 +262,7 @@ namespace VRCAvatarEditor
 
                                 SetAvatarActive(edittingAvatar.descriptor);
                                 edittingAvatar.LoadAvatarInfo();
-                                SettingForProbeSetter();
+                                probeAnchorGUI.SettingForProbeSetter();
                                 ApplySettingsToEditorGUI();
                                 avatarMonitorGUI.SetAvatarCam(edittingAvatar.descriptor.gameObject);
                             }
@@ -327,7 +313,7 @@ namespace VRCAvatarEditor
                             else if (currentTool == ToolFunc.ProbeAnchor)
                             {
                                 // Probe Anchor設定
-                                ProbeAnchorGUI();
+                               probeAnchorGUI.DrawGUI(null);
                             }
                             else if (currentTool == ToolFunc.Bounds)
                             {
@@ -385,7 +371,7 @@ namespace VRCAvatarEditor
                                     else if (currentTool == ToolFunc.ProbeAnchor)
                                     {
                                         // Probe Anchor設定
-                                        ProbeAnchorGUI();
+                                        probeAnchorGUI.DrawGUI(null);
                                     }
                                     else if (currentTool == ToolFunc.Bounds)
                                     {
@@ -439,88 +425,6 @@ namespace VRCAvatarEditor
 
             SceneView.lastActiveSceneView.Repaint();
 
-        }
-
-        private void ProbeAnchorGUI()
-        {
-            EditorGUILayout.LabelField("Probe Anchor", EditorStyles.boldLabel);
-
-            using (new EditorGUILayout.VerticalScope(GUI.skin.box))
-            {
-                // 設定するRendererの選択
-                isGettingSkinnedMeshRenderer = EditorGUILayout.Toggle("Set To SkinnedMeshRenderer", isGettingSkinnedMeshRenderer);
-                isGettingMeshRenderer = EditorGUILayout.Toggle("Set To MeshRenderer", isGettingMeshRenderer);
-
-                // ライティングの計算の基準とする位置を選択
-                targetPos = (ProbeAnchor.TARGETPOS)EditorGUILayout.EnumPopup("TargetPosition", targetPos);
-
-                // Rendererの一覧を表示
-                if (edittingAvatar.descriptor != null)
-                {
-                    isOpeningRendererList = EditorGUILayout.Foldout(isOpeningRendererList, "Renderer List");
-
-                    if (isOpeningRendererList)
-                    {
-                        using (var scrollView = new EditorGUILayout.ScrollViewScope(leftScrollPos))
-                        {
-                            leftScrollPos = scrollView.scrollPosition;
-
-                            using (new EditorGUI.IndentLevelScope())
-                            {
-                                int index = 0;
-                                
-                                if (isGettingSkinnedMeshRenderer && edittingAvatar.skinnedMeshRendererList != null && isSettingToSkinnedMesh != null)
-                                {
-                                    foreach (var skinnedMesh in edittingAvatar.skinnedMeshRendererList)
-                                    {
-                                        if (skinnedMesh == null) continue;
-
-                                        using (new GUILayout.HorizontalScope())
-                                        {
-                                            isSettingToSkinnedMesh[index] = EditorGUILayout.Toggle(skinnedMesh.gameObject.name, isSettingToSkinnedMesh[index]);
-                                            if (GUILayout.Button("Select"))
-                                                Selection.activeGameObject = skinnedMesh.gameObject;
-                                        }
-
-                                        index++;
-                                    }
-                                }
-
-                                index = 0;
-                                
-                                if (isGettingMeshRenderer && edittingAvatar.meshRendererList != null && isSettingToMesh != null)
-                                {
-                                    foreach (var mesh in edittingAvatar.meshRendererList)
-                                    {
-                                        if (mesh == null) continue;
-
-                                        using (new GUILayout.HorizontalScope())
-                                        {
-                                            isSettingToMesh[index] = EditorGUILayout.Toggle(mesh.gameObject.name, isSettingToMesh[index]);
-                                            if (GUILayout.Button("Select"))
-                                                Selection.activeGameObject = mesh.gameObject;
-                                        }
-
-                                        index++;
-
-                                    }
-                                }
-                            }
-                                
-                            EditorGUILayout.HelpBox("チェックがついているメッシュのProbeAnchorが設定されます", MessageType.Info);
-                        }
-                    }
-                }
-            }
-
-            if (GUILayout.Button("Set ProbeAnchor"))
-            {
-                GameObject anchorTarget = null;
-                var result = ProbeAnchor.CreateAndSetProbeAnchorObject(edittingAvatar.descriptor.gameObject, targetPos, ref anchorTarget);
-                if (result && isGettingSkinnedMeshRenderer)
-                    ProbeAnchor.SetProbeAnchorToSkinnedMeshRenderers(ref anchorTarget, ref edittingAvatar, ref isSettingToSkinnedMesh);
-                if (result && isGettingMeshRenderer)
-                    ProbeAnchor.SetProbeAnchorToMeshRenderers(ref anchorTarget, ref edittingAvatar, ref isSettingToMesh);}
         }
 
         // TODO: UIの見直し
@@ -869,6 +773,7 @@ namespace VRCAvatarEditor
         {
             if (edittingAvatar.descriptor == null) return;
 
+
             foreach (var skinnedMesh in edittingAvatar.skinnedMeshList)
             {
                 if (edittingAvatar.lipSyncShapeKeyNames != null && edittingAvatar.lipSyncShapeKeyNames.Count > 0)
@@ -879,17 +784,6 @@ namespace VRCAvatarEditor
                 else
                     skinnedMesh.ResetDefaultSort();
             }
-        }
-
-        private void SettingForProbeSetter()
-        {
-            if (edittingAvatar.skinnedMeshRendererList == null || edittingAvatar.meshRendererList == null)
-                return;
-
-            isSettingToSkinnedMesh = new bool[edittingAvatar.skinnedMeshRendererList.Count];
-            for (int i = 0; i < edittingAvatar.skinnedMeshRendererList.Count; i++) isSettingToSkinnedMesh[i] = true;
-            isSettingToMesh = new bool[edittingAvatar.meshRendererList.Count];
-            for (int i = 0; i < edittingAvatar.meshRendererList.Count; i++) isSettingToMesh[i] = true;
         }
 
         /// <summary>
