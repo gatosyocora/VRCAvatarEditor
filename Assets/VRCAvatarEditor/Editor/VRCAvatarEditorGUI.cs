@@ -28,6 +28,7 @@ namespace VRCAvatarEditor
         private FaceEmotionGUI faceEmotionGUI;
         private ProbeAnchorGUI probeAnchorGUI;
         private MeshBoundsGUI meshBoundsGUI;
+        private ShaderGUI shaderGUI;
 
         private bool newSDKUI;
         private bool needRepaint = false;
@@ -77,46 +78,6 @@ namespace VRCAvatarEditor
                             };
 
         #region Shader Variable
-
-        private Vector2 leftScrollPosShader = Vector2.zero;
-
-        private static class ShaderUI
-        {
-            private static bool isOpening = false;
-
-            public static bool Shader(float btnWidth, float btnHeight)
-            {
-                var windowRect = GUILayoutUtility.GetLastRect();
-
-                if (btnHeight == 0f) btnHeight = windowRect.height;
-
-                Vector2 btnPos;
-
-                if (isOpening)
-                {
-                    var shaderRect = windowRect;
-                    shaderRect.width = shaderRect.width / 2f - btnHeight;
-                    shaderRect.position = new Vector2(windowRect.width / 2f + btnHeight*2, shaderRect.position.y);
-                    EditorGUI.DrawRect(shaderRect, new Color(0.9f, 0.9f, 0.9f));
-                    
-                    btnPos = new Vector2(windowRect.width / 2f, windowRect.position.y + btnHeight);
-                }
-                else
-                    btnPos = new Vector2(windowRect.width - btnHeight*2, windowRect.position.y + btnHeight);
-
-                var btnRect = new Rect(btnPos.x, btnPos.y, btnWidth, btnHeight);
-
-                GUIUtility.RotateAroundPivot(-90f, btnRect.center);
-
-                if (GUI.Button(btnRect, "test"))
-                    isOpening = !isOpening;
-
-                GUI.matrix = Matrix4x4.identity;
-
-                return isOpening;
-            }
-        }
-
         #endregion
 
         #region ToolInfo Variable
@@ -178,6 +139,7 @@ namespace VRCAvatarEditor
             faceEmotionGUI = new FaceEmotionGUI(ref edittingAvatar, saveFolder, this);
             probeAnchorGUI = new ProbeAnchorGUI(ref edittingAvatar);
             meshBoundsGUI = new MeshBoundsGUI(ref edittingAvatar);
+            shaderGUI = new ShaderGUI(ref edittingAvatar);
 
             var editorScriptPath = AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this));
             editorFolderPath = Path.GetDirectoryName(editorScriptPath).Replace("Editor/", string.Empty) + "/";
@@ -320,7 +282,7 @@ namespace VRCAvatarEditor
                             else if (currentTool == ToolFunc.Shader)
                             {
                                 // Shader設定
-                                ShaderGUI();
+                                shaderGUI.DrawGUI(null);
                             }
                         }
                         // LayoutType: Half
@@ -378,7 +340,7 @@ namespace VRCAvatarEditor
                                     else if (currentTool == ToolFunc.Shader)
                                     {
                                         // Shader設定
-                                        ShaderGUI();
+                                        shaderGUI.DrawGUI(null);
                                     }
                                 }
                             }
@@ -422,41 +384,6 @@ namespace VRCAvatarEditor
 
             SceneView.lastActiveSceneView.Repaint();
 
-        }
-
-        private void ShaderGUI()
-        {
-            EditorGUILayout.LabelField("Shader", EditorStyles.boldLabel);
-
-            using (new EditorGUILayout.VerticalScope())
-            {
-                using (var scrollView = new EditorGUILayout.ScrollViewScope(leftScrollPosShader))
-                {
-                    leftScrollPosShader = scrollView.scrollPosition;
-                    using (new EditorGUI.IndentLevelScope())
-                    {
-                        if (edittingAvatar.materials != null)
-                        {
-                            foreach (var mat in edittingAvatar.materials)
-                            {
-                                if (mat == null) continue;
-                                if (mat.shader == null) continue;
-
-                                using (new EditorGUILayout.HorizontalScope())
-                                {
-                                    EditorGUILayout.LabelField(mat.shader.name);
-                                    EditorGUILayout.LabelField("("+mat.name+")");
-                                    if (GUILayout.Button("Select"))
-                                    {
-                                        Selection.activeObject = mat;
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         private void ToolInfoGUI()
