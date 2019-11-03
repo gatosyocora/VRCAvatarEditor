@@ -77,7 +77,7 @@ namespace VRCAvatarEditor
                 foreach (var exclusionWord in exclusionWords)
                 {
                     if (exclusionWord == "") continue;
-                    if ((blendshapes[blendShapeIndex].name).Contains(exclusionWord))
+                    if ((blendshapes[blendShapeIndex].name.ToLower()).Contains(exclusionWord.ToLower()))
                     {
                         blendshapes[blendShapeIndex].isExclusion = true;
                         break;
