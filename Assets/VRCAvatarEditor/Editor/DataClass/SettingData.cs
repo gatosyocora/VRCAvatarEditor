@@ -18,7 +18,7 @@ namespace VRCAvatarEditor
 
         public bool isActiveOnlySelectedAvatar = true;
 
-        public VRCAvatarEditorGUI.SortType selectedSortType = VRCAvatarEditorGUI.SortType.UnSort;
+        public FaceEmotionGUI.SortType selectedSortType = FaceEmotionGUI.SortType.UnSort;
         public List<string> blendshapeExclusions = new List<string> { "vrc.blink_", "vrc.lowerlid_", "mmd" };
 
         public VRCAvatarEditorGUI.LayoutType layoutType = VRCAvatarEditorGUI.LayoutType.Default;
