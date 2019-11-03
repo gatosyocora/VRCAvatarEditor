@@ -27,6 +27,7 @@ namespace VRCAvatarEditor
         private AvatarInfoGUI avatarInfoGUI;
         private FaceEmotionGUI faceEmotionGUI;
         private ProbeAnchorGUI probeAnchorGUI;
+        private MeshBoundsGUI meshBoundsGUI;
 
         private bool newSDKUI;
         private bool needRepaint = false;
@@ -74,11 +75,6 @@ namespace VRCAvatarEditor
                                 new GUILayoutOption[]{ GUILayout.MinWidth(300), GUILayout.MaxHeight(270) },
                                 new GUILayoutOption[]{ GUILayout.Height(200)}
                             };
-
-        #region MeshBounds Variable
-        private List<SkinnedMeshRenderer> targetRenderers;
-        private List<SkinnedMeshRenderer> exclusions = new List<SkinnedMeshRenderer>();
-        #endregion
 
         #region Shader Variable
 
@@ -181,6 +177,7 @@ namespace VRCAvatarEditor
             avatarInfoGUI = new AvatarInfoGUI(ref edittingAvatar);
             faceEmotionGUI = new FaceEmotionGUI(ref edittingAvatar, saveFolder, this);
             probeAnchorGUI = new ProbeAnchorGUI(ref edittingAvatar);
+            meshBoundsGUI = new MeshBoundsGUI(ref edittingAvatar);
 
             var editorScriptPath = AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this));
             editorFolderPath = Path.GetDirectoryName(editorScriptPath).Replace("Editor/", string.Empty) + "/";
@@ -258,7 +255,7 @@ namespace VRCAvatarEditor
                             // アバター変更時の処理
                             if (edittingAvatar.descriptor != null)
                             {
-                                targetRenderers = null;
+                                meshBoundsGUI.targetRenderers = null;
 
                                 SetAvatarActive(edittingAvatar.descriptor);
                                 edittingAvatar.LoadAvatarInfo();
@@ -318,7 +315,7 @@ namespace VRCAvatarEditor
                             else if (currentTool == ToolFunc.Bounds)
                             {
                                 // Bounds設定
-                                MeshBoundsGUI();
+                                meshBoundsGUI.DrawGUI(null);
                             }
                             else if (currentTool == ToolFunc.Shader)
                             {
@@ -376,7 +373,7 @@ namespace VRCAvatarEditor
                                     else if (currentTool == ToolFunc.Bounds)
                                     {
                                         // Bounds設定
-                                        MeshBoundsGUI();
+                                        meshBoundsGUI.DrawGUI(null);
                                     }
                                     else if (currentTool == ToolFunc.Shader)
                                     {
@@ -417,7 +414,7 @@ namespace VRCAvatarEditor
         {
             if (currentTool == ToolFunc.Bounds)
             {
-                foreach (var renderer in targetRenderers)
+                foreach (var renderer in meshBoundsGUI.targetRenderers)
                 {
                     MeshBounds.DrawBoundsGizmo(renderer);
                 }
@@ -425,113 +422,6 @@ namespace VRCAvatarEditor
 
             SceneView.lastActiveSceneView.Repaint();
 
-        }
-
-        // TODO: UIの見直し
-        private void MeshBoundsGUI()
-        {
-            if (targetRenderers == null && edittingAvatar != null)
-            {
-                targetRenderers = MeshBounds.GetSkinnedMeshRenderersWithoutExclusions(
-                                    edittingAvatar.descriptor.gameObject,
-                                    exclusions);
-            }
-
-            EditorGUILayout.LabelField("Bounds", EditorStyles.boldLabel);
-
-            EditorGUILayout.Space();
-
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                GUILayout.FlexibleSpace();
-
-                if (GUILayout.Button("Reset Bounds to Prefab"))
-                {
-                    MeshBounds.RevertBoundsToPrefab(targetRenderers);
-                }
-            }
-
-            EditorGUILayout.Space();
-
-            using (new EditorGUILayout.VerticalScope(GUI.skin.box))
-            {
-                EditorGUILayout.LabelField("Exclusions");
-
-                using (new EditorGUI.IndentLevelScope())
-                {
-                    using (var check = new EditorGUI.ChangeCheckScope())
-                    {
-                        var parentObject = EditorGUILayout.ObjectField(
-                            "Child objects",
-                            null,
-                            typeof(GameObject),
-                            true
-                        ) as GameObject;
-
-                        if (check.changed && parentObject != null && edittingAvatar != null)
-                        {
-                            var renderers = parentObject.GetComponentsInChildren<SkinnedMeshRenderer>();
-                            foreach (var renderer in renderers)
-                            {
-                                exclusions.Add(renderer);
-                            }
-                            exclusions = exclusions.Distinct().ToList();
-
-                            targetRenderers = MeshBounds.GetSkinnedMeshRenderersWithoutExclusions(
-                                                            edittingAvatar.descriptor.gameObject,
-                                                            exclusions);
-                        }
-                    }
-
-                    EditorGUILayout.Space();
-
-                    using (new EditorGUILayout.HorizontalScope())
-                    {
-                        GUILayout.FlexibleSpace();
-
-                        if (GUILayout.Button("+", GUILayout.MaxWidth(60)))
-                        {
-                            exclusions.Add(null);
-                        }
-                    }
-
-                    using (var check = new EditorGUI.ChangeCheckScope())
-                    {
-
-                        for (int i = 0; i < exclusions.Count; i++)
-                        {
-                            using (new EditorGUILayout.HorizontalScope())
-                            {
-                                exclusions[i] = EditorGUILayout.ObjectField(
-                                    "Object " + (i + 1),
-                                    exclusions[i],
-                                    typeof(SkinnedMeshRenderer),
-                                    true
-                                ) as SkinnedMeshRenderer;
-
-                                if (GUILayout.Button("x", GUILayout.MaxWidth(30)))
-                                {
-                                    exclusions.RemoveAt(i);
-                                }
-                            }
-                        }
-
-                        if (check.changed && edittingAvatar != null)
-                        {
-                            targetRenderers = MeshBounds.GetSkinnedMeshRenderersWithoutExclusions(
-                                                edittingAvatar.descriptor.gameObject,
-                                                exclusions);
-                        }
-                    }
-                    
-                    EditorGUILayout.Space();
-                }
-            }
-
-            if (GUILayout.Button("Set Bounds"))
-            {
-                MeshBounds.BoundsSetter(targetRenderers);
-            }
         }
 
         private void ShaderGUI()
