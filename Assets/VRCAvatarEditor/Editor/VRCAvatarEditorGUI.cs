@@ -23,8 +23,9 @@ namespace VRCAvatarEditor
         private const string MANUAL_URL = "https://docs.google.com/document/d/1DU7mP5PTvERqHzZiiCBJ9ep5CilQ1iaXC_3IoiuPEgA/edit?usp=sharing";
 
         private AvatarMonitorGUI avatarMonitorGUI;
-        private AnimationsGUI animationsGUI;
+        public AnimationsGUI animationsGUI;
         private AvatarInfoGUI avatarInfoGUI;
+        private FaceEmotionGUI faceEmotionGUI;
 
         private bool newSDKUI;
         private bool needRepaint = false;
@@ -32,6 +33,8 @@ namespace VRCAvatarEditor
         private VRCAvatarEditor.Avatar edittingAvatar = null;
 
         private string editorFolderPath;
+
+        private string saveFolder;
 
         public enum ToolFunc
         {
@@ -70,26 +73,6 @@ namespace VRCAvatarEditor
                                 new GUILayoutOption[]{ GUILayout.MinWidth(300), GUILayout.MaxHeight(270) },
                                 new GUILayoutOption[]{ GUILayout.Height(200)}
                             };
-
-        #region FaceEmotion Variable
-
-        private string animName = "faceAnim";
-        private string saveFolder;
-        private HandPose.HandPoseType selectedHandAnim = HandPose.HandPoseType.None;
-
-        private Vector2 scrollPos = Vector2.zero;
-
-        private bool isExclusionKey;
-
-        public enum SortType
-        {
-            UnSort,
-            AToZ,
-        }
-
-        private SendData sendData;
-
-        #endregion
 
         #region ProbeAnchor Variable
 
@@ -177,7 +160,6 @@ namespace VRCAvatarEditor
         #region Setting Variable
 
         private bool isShowingSetting = false;
-        private bool isOpeningBlendShapeExclusionList = false;
 
         public enum LayoutType
         {
@@ -188,9 +170,6 @@ namespace VRCAvatarEditor
         #endregion
 
         #region Changeable Parameters from Setting
-
-        private SortType selectedSortType = SortType.UnSort;
-        private List<string> blendshapeExclusions = new List<string> { "vrc.v_", "vrc.blink_", "vrc.lowerlid_", "vrc.owerlid_", "mmd" };
 
         private bool isActiveOnlySelectedAvatar = true;
         private LayoutType layoutType = LayoutType.Default;
@@ -214,11 +193,10 @@ namespace VRCAvatarEditor
             avatarMonitorGUI = new AvatarMonitorGUI(ref edittingAvatar, currentTool);
             animationsGUI = new AnimationsGUI(ref edittingAvatar, saveFolder);
             avatarInfoGUI = new AvatarInfoGUI(ref edittingAvatar);
+            faceEmotionGUI = new FaceEmotionGUI(ref edittingAvatar, saveFolder, this);
 
             var editorScriptPath = AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this));
             editorFolderPath = Path.GetDirectoryName(editorScriptPath).Replace("Editor/", string.Empty) + "/";
-
-            animName = "faceAnim";
             
             licenseText = GetFileTexts(editorFolderPath + LICENSE_FILE_NAME);
             readmeText = GetFileTexts(editorFolderPath + README_FILE_NAME);
@@ -344,7 +322,7 @@ namespace VRCAvatarEditor
                             else if (currentTool == ToolFunc.表情設定)
                             {
                                 // 表情設定
-                                FaceEmotionGUI();
+                                faceEmotionGUI.DrawGUI(null);
                             }
                             else if (currentTool == ToolFunc.ProbeAnchor)
                             {
@@ -402,7 +380,7 @@ namespace VRCAvatarEditor
                                     else if (currentTool == ToolFunc.表情設定)
                                     {
                                         // 表情設定
-                                        FaceEmotionGUI();
+                                        faceEmotionGUI.DrawGUI(null);
                                     }
                                     else if (currentTool == ToolFunc.ProbeAnchor)
                                     {
@@ -461,142 +439,6 @@ namespace VRCAvatarEditor
 
             SceneView.lastActiveSceneView.Repaint();
 
-        }
-
-        private void FaceEmotionGUI()
-        {
-            if (Event.current.type == EventType.ExecuteCommand &&
-                Event.current.commandName == "ApplyAnimationProperties") 
-            {
-                FaceEmotion.ApplyAnimationProperties(sendData.loadingProperties, ref edittingAvatar);
-            }
-
-            EditorGUILayout.LabelField("表情設定", EditorStyles.boldLabel);
-
-            using (new EditorGUILayout.VerticalScope(GUI.skin.box))
-            {
-                using (new EditorGUI.DisabledScope(edittingAvatar.descriptor == null))
-                using (new EditorGUILayout.HorizontalScope()) {
-                    GUILayout.FlexibleSpace();
-
-                    if (GUILayout.Button("Load Animation")) 
-                    {
-                        
-                        sendData = CreateInstance<SendData>();
-                        var result = FaceEmotion.LoadAnimationProperties(ref sendData, this);
-
-                        if (result)
-                            GetWindow<AnimationLoaderGUI>("Animation Loader", true);                
-                    }
-                }
-
-                if (edittingAvatar.skinnedMeshList != null)
-                {
-                    BlendShapeListGUI();
-                }
-
-                animName = EditorGUILayout.TextField("AnimClipFileName", animName);
-
-                using (new EditorGUILayout.HorizontalScope())
-                {
-                    EditorGUILayout.LabelField("AnimClipSaveFolder", saveFolder);
-
-                    if (GUILayout.Button("Select Folder", GUILayout.Width(100)))
-                    {
-                        saveFolder = EditorUtility.OpenFolderPanel("Select saved folder", saveFolder, string.Empty);
-                        saveFolder = FileUtil.GetProjectRelativePath(saveFolder);
-                        if (saveFolder == "/") saveFolder = "Assets/";
-                        animationsGUI.UpdateSaveFolderPath(saveFolder);
-                    }
-
-                }
-
-                using (new EditorGUILayout.HorizontalScope())
-                {
-                    selectedHandAnim = (HandPose.HandPoseType)EditorGUILayout.EnumPopup("HandPose", selectedHandAnim);
-                    if (GUILayout.Button("Create AnimFile"))
-                    {
-                        var animController = edittingAvatar.standingAnimController;
-
-                        var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, saveFolder, ref edittingAvatar, ref blendshapeExclusions, edittingAvatar.descriptor.gameObject);
-                        if (selectedHandAnim != HandPose.HandPoseType.None)
-                        {
-                            HandPose.AddHandPoseAnimationKeysFromOriginClip(ref createdAnimClip, selectedHandAnim);
-                            animController[AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]] = createdAnimClip;
-                        }
-
-                        edittingAvatar.standingAnimController = animController;
-                    }
-                    if (GUILayout.Button("Reset All"))
-                    {
-                        FaceEmotion.ResetAllBlendShapeValues(ref edittingAvatar);
-                    }
-                }
-
-                EditorGUILayout.HelpBox("Reset Allを押すとチェックをいれているすべてのシェイプキーの値が最低値になります", MessageType.Warning);
-
-            }
-        }
-
-        private void BlendShapeListGUI()
-        {
-            // BlendShapeのリスト
-            using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos))
-            {
-                scrollPos = scrollView.scrollPosition;
-                foreach (var skinnedMesh in edittingAvatar.skinnedMeshList)
-                {
-                    skinnedMesh.isOpenBlendShapes = EditorGUILayout.Foldout(skinnedMesh.isOpenBlendShapes, skinnedMesh.objName);
-                    if (skinnedMesh.isOpenBlendShapes)
-                    {
-                        using (new EditorGUI.IndentLevelScope())
-                        {
-                            using (new GUILayout.HorizontalScope())
-                            {
-                                using (var check = new EditorGUI.ChangeCheckScope())
-                                {
-                                    skinnedMesh.isContainsAll = EditorGUILayout.ToggleLeft(string.Empty, skinnedMesh.isContainsAll, GUILayout.Width(45));
-                                    if (check.changed)
-                                    {
-                                        FaceEmotion.SetContainsAll(skinnedMesh.isContainsAll, ref skinnedMesh.blendshapes);
-                                    }
-                                }
-                                EditorGUILayout.LabelField("Toggle All", GUILayout.Height(20));
-                            }
-
-                            foreach (var blendshape in skinnedMesh.blendshapes)
-                            {
-
-                                if (!blendshape.isExclusion)
-                                {
-                                    using (new EditorGUILayout.HorizontalScope())
-                                    {
-                                        blendshape.isContains = EditorGUILayout.ToggleLeft(string.Empty, blendshape.isContains, GUILayout.Width(45));
-
-                                        EditorGUILayout.SelectableLabel(blendshape.name, GUILayout.Height(20));
-                                        using (var check = new EditorGUI.ChangeCheckScope())
-                                        {
-                                            var value = skinnedMesh.renderer.GetBlendShapeWeight(blendshape.id);
-                                            value = EditorGUILayout.Slider(value, 0, 100);
-                                            if (check.changed)
-                                                skinnedMesh.renderer.SetBlendShapeWeight(blendshape.id, value);
-                                        }
-
-                                        if (GUILayout.Button("Min", GUILayout.MaxWidth(50)))
-                                        {
-                                            FaceEmotion.SetBlendShapeMinValue(ref skinnedMesh.renderer, blendshape.id);
-                                        }
-                                        if (GUILayout.Button("Max", GUILayout.MaxWidth(50)))
-                                        {
-                                            FaceEmotion.SetBlendShapeMaxValue(ref skinnedMesh.renderer, blendshape.id);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         private void ProbeAnchorGUI()
@@ -913,32 +755,8 @@ namespace VRCAvatarEditor
             avatarMonitorGUI.DrawSettingsGUI();
 
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField("FaceEmotion Creator", EditorStyles.boldLabel);
 
-            selectedSortType = (SortType)EditorGUILayout.EnumPopup("SortType", selectedSortType);
-
-            isOpeningBlendShapeExclusionList = EditorGUILayout.Foldout(isOpeningBlendShapeExclusionList, "Blendshape Exclusions");
-            if (isOpeningBlendShapeExclusionList)
-            {
-                using (new EditorGUI.IndentLevelScope())
-                {
-                    for (int i = 0; i < blendshapeExclusions.Count; i++)
-                    {
-                        using (new GUILayout.HorizontalScope())
-                        {
-                            blendshapeExclusions[i] =  EditorGUILayout.TextField(blendshapeExclusions[i]);
-                            if (GUILayout.Button("Remove"))
-                                blendshapeExclusions.RemoveAt(i);
-                        }
-                    }
-                }
-
-                using (new GUILayout.HorizontalScope())
-                {
-                    if (GUILayout.Button("Add"))
-                        blendshapeExclusions.Add(string.Empty);
-                }
-            }
+            faceEmotionGUI.DrawSettingsGUI();
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Other", EditorStyles.boldLabel);
@@ -970,7 +788,7 @@ namespace VRCAvatarEditor
                     for (int i = 0; i < edittingAvatar.skinnedMeshList.Count; i++)
                     {
                         if (edittingAvatar.lipSyncShapeKeyNames != null && edittingAvatar.lipSyncShapeKeyNames.Count > 0)
-                            edittingAvatar.skinnedMeshList[i].SetExclusionBlendShapesByContains(blendshapeExclusions.Union(edittingAvatar.lipSyncShapeKeyNames).ToList<string>());
+                            edittingAvatar.skinnedMeshList[i].SetExclusionBlendShapesByContains(faceEmotionGUI.blendshapeExclusions.Union(edittingAvatar.lipSyncShapeKeyNames).ToList<string>());
                     }
                 }
             }
@@ -987,14 +805,12 @@ namespace VRCAvatarEditor
 
             if (settingAsset == null)
                 settingAsset = Resources.Load<SettingData>("DefaultSettingData");
-
-            selectedSortType = settingAsset.selectedSortType;
-            blendshapeExclusions = new List<string>(settingAsset.blendshapeExclusions);
-
+            
             isActiveOnlySelectedAvatar = settingAsset.isActiveOnlySelectedAvatar;
             layoutType = settingAsset.layoutType;
 
             avatarMonitorGUI.LoadSettingData(settingAsset);
+            faceEmotionGUI.LoadSettingData(settingAsset);
         }
 
         /// <summary>
@@ -1013,8 +829,7 @@ namespace VRCAvatarEditor
 
             avatarMonitorGUI.SaveSettingData(ref settingAsset);
 
-            settingAsset.selectedSortType = selectedSortType;
-            settingAsset.blendshapeExclusions = new List<string>(blendshapeExclusions);
+            faceEmotionGUI.SaveSettingData(ref settingAsset);
 
             settingAsset.isActiveOnlySelectedAvatar = isActiveOnlySelectedAvatar;
             settingAsset.layoutType = layoutType;
@@ -1057,9 +872,9 @@ namespace VRCAvatarEditor
             foreach (var skinnedMesh in edittingAvatar.skinnedMeshList)
             {
                 if (edittingAvatar.lipSyncShapeKeyNames != null && edittingAvatar.lipSyncShapeKeyNames.Count > 0)
-                    skinnedMesh.SetExclusionBlendShapesByContains(blendshapeExclusions.Union(edittingAvatar.lipSyncShapeKeyNames).ToList<string>());
+                    skinnedMesh.SetExclusionBlendShapesByContains(faceEmotionGUI.blendshapeExclusions.Union(edittingAvatar.lipSyncShapeKeyNames).ToList<string>());
 
-                if (selectedSortType == SortType.AToZ)
+                if (faceEmotionGUI.selectedSortType == FaceEmotionGUI.SortType.AToZ)
                     skinnedMesh.SortBlendShapesToAscending();
                 else
                     skinnedMesh.ResetDefaultSort();
@@ -1190,6 +1005,11 @@ namespace VRCAvatarEditor
             {
                 EditorApplication.ExecuteMenuItem("VRChat SDK/Show Build Control Panel");
             }
+        }
+
+        public void OpenSubWindow()
+        {
+            GetWindow<AnimationLoaderGUI>("Animation Loader", true);
         }
 
         #endregion
