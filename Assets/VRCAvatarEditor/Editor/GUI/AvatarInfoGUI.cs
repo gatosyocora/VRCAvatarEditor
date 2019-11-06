@@ -68,6 +68,20 @@ namespace VRCAvatarEditor
                 // ポリゴン数
                 EditorGUILayout.LabelField("Triangles", avatar.triangleCount + "(" + (avatar.triangleCount + avatar.triangleCountInactive) + ")");
 
+                // faceMesh
+                using (var check = new EditorGUI.ChangeCheckScope())
+                {
+                    avatar.faceMesh = EditorGUILayout.ObjectField(
+                        "Face Mesh",
+                        avatar.faceMesh,
+                        typeof(SkinnedMeshRenderer),
+                        true
+                    ) as SkinnedMeshRenderer;
+
+                    if (check.changed)
+                        avatar.descriptor.VisemeSkinnedMesh = avatar.faceMesh;
+                }
+
                 EditorGUILayout.Space();
 
                 // View Position
@@ -81,6 +95,7 @@ namespace VRCAvatarEditor
                     }
                 }
                 using (new EditorGUILayout.HorizontalScope())
+                using (new EditorGUI.DisabledGroupScope(avatar.faceMesh == null))
                 {
                     GUILayout.FlexibleSpace();
                     if (GUILayout.Button("Auto Setting"))
@@ -88,6 +103,10 @@ namespace VRCAvatarEditor
                         avatar.eyePos = CalcAvatarViewPosition(avatar);
                         avatar.descriptor.ViewPosition = avatar.eyePos;
                     }
+                }
+                if (avatar.faceMesh == null)
+                {
+                    EditorGUILayout.HelpBox("ViewPositionを自動設定するためにはFaceMeshを設定する必要があります", MessageType.Warning);
                 }
 
                 EditorGUILayout.Space();
@@ -102,18 +121,6 @@ namespace VRCAvatarEditor
                 }
                 if (avatar.lipSyncStyle == VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape)
                 {
-                    using (var check = new EditorGUI.ChangeCheckScope())
-                    {
-                        avatar.faceMesh = EditorGUILayout.ObjectField(
-                            "Face Mesh",
-                            avatar.faceMesh,
-                            typeof(SkinnedMeshRenderer),
-                            true
-                        ) as SkinnedMeshRenderer;
-
-                        if (check.changed)
-                            avatar.descriptor.VisemeSkinnedMesh = avatar.faceMesh;
-                    }
                     if (avatar.faceMesh != null)
                     {
                         isOpeningLipSync = EditorGUILayout.Foldout(isOpeningLipSync, "ShapeKeys");
