@@ -68,25 +68,29 @@ namespace VRCAvatarEditor
                 // ポリゴン数
                 EditorGUILayout.LabelField("Triangles", avatar.triangleCount + "(" + (avatar.triangleCount + avatar.triangleCountInactive) + ")");
 
+                EditorGUILayout.Space();
+
                 // View Position
-                using (new EditorGUILayout.HorizontalScope())
+                using (var check = new EditorGUI.ChangeCheckScope())
                 {
-                    using (var check = new EditorGUI.ChangeCheckScope())
+                    avatar.eyePos = EditorGUILayout.Vector3Field("View Position", avatar.eyePos);
+
+                    if (check.changed)
                     {
-                        avatar.eyePos = EditorGUILayout.Vector3Field("View Position", avatar.eyePos);
-
-                        if (check.changed)
-                        {
-                            avatar.descriptor.ViewPosition = avatar.eyePos;
-                        }
-
-                        if (GUILayout.Button("Auto Setting"))
-                        {
-                            avatar.eyePos = CalcAvatarViewPosition(avatar);
-                            avatar.descriptor.ViewPosition = avatar.eyePos;
-                        }
+                        avatar.descriptor.ViewPosition = avatar.eyePos;
                     }
                 }
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    GUILayout.FlexibleSpace();
+                    if (GUILayout.Button("Auto Setting"))
+                    {
+                        avatar.eyePos = CalcAvatarViewPosition(avatar);
+                        avatar.descriptor.ViewPosition = avatar.eyePos;
+                    }
+                }
+
+                EditorGUILayout.Space();
 
                 // リップシンク
                 string lipSyncWarningMessage = "リップシンクが正しく設定されていない可能性があります";
@@ -147,6 +151,7 @@ namespace VRCAvatarEditor
         public void SaveSettingData(ref SettingData settingAsset) { }
         public void Dispose() { }
 
+        // TODO : モデルによっては前髪あたりまでviewpositionがいってしまう
         private Vector3 CalcAvatarViewPosition(VRCAvatarEditor.Avatar avatar)
         {
             var viewPos = Vector3.zero;
@@ -158,43 +163,50 @@ namespace VRCAvatarEditor
             var rightEyeTrans = animator.GetBoneTransform(HumanBodyBones.RightEye);
             viewPos = (leftEyeTrans.position + rightEyeTrans.position) / 2f;
 
-
             var renderer = avatar.faceMesh;
             var mesh = renderer.sharedMesh;
             var vertices = mesh.vertices;
             var local2WorldMat = renderer.transform.localToWorldMatrix;
 
             // 左目メッシュの頂点のうち, 左目ボーンから一番離れた頂点までの距離を計算する
-            var leftEyeBoneIndex = Array.IndexOf(renderer.bones, leftEyeTrans);
-            var leftEyeMeshVertexIndices = mesh.boneWeights
-                                .Select((x, index) => new { index = index, boneIndex0 = x.boneIndex0, boneIndex1 = x.boneIndex1, boneIndex2 = x.boneIndex2, boneIndex3 = x.boneIndex3})
-                                .Where(x => x.boneIndex0 == leftEyeBoneIndex || x.boneIndex1 == leftEyeBoneIndex || x.boneIndex2 == leftEyeBoneIndex || x.boneIndex3 == leftEyeBoneIndex)
-                                .Select(x => x.index)
-                                .ToArray();
-            var leftMaxDistance = 0f;
-            foreach (var index in leftEyeMeshVertexIndices)
-                if (leftMaxDistance < Vector3.Distance(local2WorldMat.MultiplyPoint3x4(vertices[index]), leftEyeTrans.position))
-                    leftMaxDistance = Vector3.Distance(local2WorldMat.MultiplyPoint3x4(vertices[index]), leftEyeTrans.position);
-
-
-            // 右目も同じく計算する
-            var rightEyeBoneIndex = Array.IndexOf(renderer.bones, rightEyeTrans);
-            var rightEyeMeshVertexIndices = mesh.boneWeights
-                                .Select((x, index) => new { index = index, boneIndex0 = x.boneIndex0, boneIndex1 = x.boneIndex1, boneIndex2 = x.boneIndex2, boneIndex3 = x.boneIndex3 })
-                                .Where(x => x.boneIndex0 == rightEyeBoneIndex || x.boneIndex1 == rightEyeBoneIndex || x.boneIndex2 == rightEyeBoneIndex || x.boneIndex3 == rightEyeBoneIndex)
-                                .Select(x => x.index)
-                                .ToArray();
-            var rightMaxDistance = 0f;
-            foreach (var index in rightEyeMeshVertexIndices)
-                if (rightMaxDistance < Vector3.Distance(local2WorldMat.MultiplyPoint3x4(vertices[index]), rightEyeTrans.position))
-                    rightMaxDistance = Vector3.Distance(local2WorldMat.MultiplyPoint3x4(vertices[index]), rightEyeTrans.position);
-
+            // 右目も同様に計算し, その平均距離+eyeBoneの平均z位置をzとする
+            var leftMaxDistance = CalcDistanceFromMaxFarVertexTo(leftEyeTrans, renderer);
+            var rightMaxDistance = CalcDistanceFromMaxFarVertexTo(rightEyeTrans, renderer);
             viewPos.z += (leftMaxDistance + rightMaxDistance) / 2f;
+
+            var leftEyeBoneIndex = Array.IndexOf(renderer.bones, leftEyeTrans);
+            var boneWeights = renderer.sharedMesh.boneWeights
+                                .Where(x => x.boneIndex0 == leftEyeBoneIndex ||
+                                            x.boneIndex1 == leftEyeBoneIndex ||
+                                            x.boneIndex2 == leftEyeBoneIndex ||
+                                            x.boneIndex3 == leftEyeBoneIndex )
+                                .ToArray();
 
             // ローカル座標に変換
             viewPos = objTrans.worldToLocalMatrix.MultiplyPoint3x4(viewPos);
 
             return viewPos;
+        }
+
+        private float CalcDistanceFromMaxFarVertexTo(Transform targetBone, SkinnedMeshRenderer renderer)
+        {
+            var targetBoneIndex = Array.IndexOf(renderer.bones, targetBone);
+            var meshVertexIndices = renderer.sharedMesh.boneWeights
+                                .Select((x, index) => new { index = index, value = x })
+                                .Where(x => (x.value.boneIndex0 == targetBoneIndex && x.value.weight0 > 0f) ||
+                                            (x.value.boneIndex1 == targetBoneIndex && x.value.weight1 > 0f) ||
+                                            (x.value.boneIndex2 == targetBoneIndex && x.value.weight2 > 0f) ||
+                                            (x.value.boneIndex3 == targetBoneIndex && x.value.weight3 > 0f))
+                                .Select(x => x.index)
+                                .ToArray();
+            var maxDistance = 0f;
+            var vertices = renderer.sharedMesh.vertices;
+            var local2WorldMatrix = renderer.transform.localToWorldMatrix;
+            foreach (var index in meshVertexIndices)
+                if (maxDistance < Vector3.Distance(local2WorldMatrix.MultiplyPoint3x4(vertices[index]), targetBone.position))
+                    maxDistance = Vector3.Distance(local2WorldMatrix.MultiplyPoint3x4(vertices[index]), targetBone.position);
+
+            return maxDistance;
         }
     }
 }
