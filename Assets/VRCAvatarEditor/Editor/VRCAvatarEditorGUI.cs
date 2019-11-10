@@ -131,8 +131,15 @@ namespace VRCAvatarEditor
         {
             edittingAvatar = new Avatar();
             
+            var editorScriptPath = AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this));
+            editorFolderPath = Path.GetDirectoryName(editorScriptPath).Replace("Editor/", string.Empty) + "/";
+
             saveFolder = editorFolderPath + "Animations/";
-            
+
+            licenseText = GetFileTexts(editorFolderPath + LICENSE_FILE_NAME);
+            readmeText = GetFileTexts(editorFolderPath + README_FILE_NAME);
+            usingSoftwareLicenseText = GetFileTexts(editorFolderPath + USING_SOFTWARE_FILE_NAME);
+
             avatarMonitorGUI = new AvatarMonitorGUI(ref edittingAvatar, currentTool);
             animationsGUI = new AnimationsGUI(ref edittingAvatar, saveFolder);
             avatarInfoGUI = new AvatarInfoGUI(ref edittingAvatar);
@@ -141,13 +148,6 @@ namespace VRCAvatarEditor
             meshBoundsGUI = new MeshBoundsGUI(ref edittingAvatar);
             shaderGUI = new ShaderGUI(ref edittingAvatar);
 
-            var editorScriptPath = AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this));
-            editorFolderPath = Path.GetDirectoryName(editorScriptPath).Replace("Editor/", string.Empty) + "/";
-            
-            licenseText = GetFileTexts(editorFolderPath + LICENSE_FILE_NAME);
-            readmeText = GetFileTexts(editorFolderPath + README_FILE_NAME);
-            usingSoftwareLicenseText = GetFileTexts(editorFolderPath + USING_SOFTWARE_FILE_NAME);
-            
             LoadSettingDataFromScriptableObject();
 
             // Windowを開いたときにオブジェクトが選択されていればそれをアバターとして設定する
