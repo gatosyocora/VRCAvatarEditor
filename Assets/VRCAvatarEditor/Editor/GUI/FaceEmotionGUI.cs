@@ -96,18 +96,21 @@ namespace VRCAvatarEditor
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     selectedHandAnim = (HandPose.HandPoseType)EditorGUILayout.EnumPopup("HandPose", selectedHandAnim);
-                    if (GUILayout.Button("Create AnimFile"))
+                    using (new EditorGUI.DisabledGroupScope(selectedHandAnim == HandPose.HandPoseType.None))
                     {
-                        var animController = avatar.standingAnimController;
-
-                        var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, saveFolderPath, ref avatar, ref blendshapeExclusions, avatar.descriptor.gameObject);
-                        if (selectedHandAnim != HandPose.HandPoseType.None)
+                        if (GUILayout.Button("Create AnimFile"))
                         {
-                            HandPose.AddHandPoseAnimationKeysFromOriginClip(ref createdAnimClip, selectedHandAnim);
-                            animController[AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]] = createdAnimClip;
-                        }
+                            var animController = avatar.standingAnimController;
 
-                        avatar.standingAnimController = animController;
+                            var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, saveFolderPath, ref avatar, ref blendshapeExclusions, avatar.descriptor.gameObject);
+                            if (selectedHandAnim != HandPose.HandPoseType.None)
+                            {
+                                HandPose.AddHandPoseAnimationKeysFromOriginClip(ref createdAnimClip, selectedHandAnim);
+                                animController[AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]] = createdAnimClip;
+                            }
+
+                            avatar.standingAnimController = animController;
+                        }
                     }
                     if (GUILayout.Button("Reset All"))
                     {
