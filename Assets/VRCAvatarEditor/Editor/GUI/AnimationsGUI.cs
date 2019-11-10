@@ -102,6 +102,8 @@ namespace VRCAvatarEditor
                     }
                 }
 
+                EditorGUILayout.Space();
+
                 if (controller != null)
                 {
                     if (!showEmoteAnimations)
@@ -123,10 +125,10 @@ namespace VRCAvatarEditor
                                     anim,
                                     typeof(AnimationClip),
                                     true,
-                                    GUILayout.Width(170)
+                                    GUILayout.Width(200)
                                 ) as AnimationClip;
 
-                                if (GUILayout.Button("↓", GUILayout.Width(20)))
+                                if (GUILayout.Button("Apply", GUILayout.Width(50)))
                                 {
                                     FaceEmotion.ApplyAnimationProperties(controller[handAnim], ref avatar);
                                 }

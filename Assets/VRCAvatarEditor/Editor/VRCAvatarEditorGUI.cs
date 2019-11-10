@@ -73,7 +73,7 @@ namespace VRCAvatarEditor
         private GUILayoutOption[][] layoutOptions
                         = new GUILayoutOption[][] 
                             {
-                                new GUILayoutOption[]{ GUILayout.MinWidth(300), GUILayout.MaxHeight(270) },
+                                new GUILayoutOption[]{ GUILayout.MinWidth(350), GUILayout.MaxHeight(270) },
                                 new GUILayoutOption[]{ GUILayout.Height(200)}
                             };
 
@@ -124,7 +124,7 @@ namespace VRCAvatarEditor
         private static void Create()
         {
             var window = GetWindow<VRCAvatarEditorGUI>("VRCAvatarEditor");
-            window.minSize = new Vector2(650f, 500f);
+            window.minSize = new Vector2(700f, 500f);
         }
 
         private void OnEnable()
