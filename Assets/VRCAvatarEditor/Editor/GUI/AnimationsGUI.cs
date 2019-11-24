@@ -116,7 +116,7 @@ namespace VRCAvatarEditor
                             else
                                 anim = controller[handAnim];
 
-                            using (new EditorGUILayout.HorizontalScope())
+                            using (new EditorGUILayout.HorizontalScope(GUILayout.Width(350)))
                             {
                                 GUILayout.Label(handAnim, GUILayout.Width(90));
 
@@ -145,7 +145,7 @@ namespace VRCAvatarEditor
                             else
                                 anim = controller[emoteAnim];
 
-                            using (new EditorGUILayout.HorizontalScope())
+                            using (new EditorGUILayout.HorizontalScope(GUILayout.Width(350)))
                             {
                                 GUILayout.Label(emoteAnim, GUILayout.Width(90));
 
@@ -154,7 +154,7 @@ namespace VRCAvatarEditor
                                     anim,
                                     typeof(AnimationClip),
                                     true,
-                                    GUILayout.Width(170)
+                                    GUILayout.Width(250)
                                 ) as AnimationClip;
                             }
                         }
