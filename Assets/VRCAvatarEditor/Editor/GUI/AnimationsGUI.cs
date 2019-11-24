@@ -128,9 +128,12 @@ namespace VRCAvatarEditor
                                     GUILayout.Width(200)
                                 ) as AnimationClip;
 
-                                if (GUILayout.Button("Apply", GUILayout.Width(50)))
+                                using (new EditorGUI.DisabledGroupScope(anim == null))
                                 {
-                                    FaceEmotion.ApplyAnimationProperties(controller[handAnim], ref avatar);
+                                    if (GUILayout.Button("Apply", GUILayout.Width(50)))
+                                    {
+                                        FaceEmotion.ApplyAnimationProperties(controller[handAnim], ref avatar);
+                                    }
                                 }
                             }
                         }
