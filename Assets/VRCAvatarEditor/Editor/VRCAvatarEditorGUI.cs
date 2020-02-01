@@ -720,7 +720,7 @@ namespace VRCAvatarEditor
 
         public void OpenSubWindow()
         {
-            GetWindow<AnimationLoaderGUI>("Animation Loader", true);
+            GetWindow<AnimationLoaderGUI>("Animation Loader", typeof(VRCAvatarEditorGUI));
         }
 
         #endregion
