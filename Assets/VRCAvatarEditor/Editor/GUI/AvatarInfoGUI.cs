@@ -105,6 +105,11 @@ namespace VRCAvatarEditor
                         avatar.eyePos = CalcAvatarViewPosition(avatar);
                         avatar.descriptor.ViewPosition = avatar.eyePos;
                     }
+
+                    if (GUILayout.Button("Revert to Prefab"))
+                    {
+                        avatar.eyePos = RevertEyePosToPrefab(avatar.descriptor);
+                    }
                 }
                 if (avatar.faceMesh == null)
                 {
@@ -216,6 +221,28 @@ namespace VRCAvatarEditor
                     maxDistance = Vector3.Distance(local2WorldMatrix.MultiplyPoint3x4(vertices[index]), targetBone.position);
 
             return maxDistance;
+        }
+
+        private static Vector3 RevertEyePosToPrefab(VRC_AvatarDescriptor descriptor)
+        {
+            PrefabUtility.ReconnectToLastPrefab(descriptor.gameObject);
+
+            var so = new SerializedObject(descriptor);
+            so.Update();
+
+            var sp = so.FindProperty("ViewPosition");
+#if UNITY_2018_3_OR_NEWER
+            var currentEnabled = descriptor.enabled;
+            // Transform has 'ReflectionProbeAnchorManager::kChangeSystem' change interests present when destroying the hierarchy.
+            // 対策で一度disableにする
+            descriptor.enabled = false;
+            PrefabUtility.RevertPropertyOverride(sp, InteractionMode.UserAction);
+            descriptor.enabled = currentEnabled;
+#else
+            sp.prefabOverride = false;
+            sp.serializedObject.ApplyModifiedProperties();
+#endif
+            return descriptor.ViewPosition;
         }
     }
 }
