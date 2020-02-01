@@ -99,13 +99,13 @@ namespace VRCAvatarEditor
                             avatar.standingAnimController = animController;
                         }
                     }
-                    if (GUILayout.Button("Reset All"))
+                    if (GUILayout.Button("Min All"))
                     {
                         FaceEmotion.ResetAllBlendShapeValues(ref avatar);
                     }
                 }
 
-                EditorGUILayout.HelpBox("Reset Allを押すとチェックをいれているすべてのシェイプキーの値が最低値になります", MessageType.Warning);
+                EditorGUILayout.HelpBox("Min Allを押すとチェックをいれているすべてのシェイプキーの値が最低値になります", MessageType.Warning);
 
             }
 
