@@ -130,7 +130,7 @@ namespace VRCAvatarEditor
 
                                 using (new EditorGUI.DisabledGroupScope(anim == null))
                                 {
-                                    if (GUILayout.Button("Apply", GUILayout.Width(50)))
+                                    if (GUILayout.Button("Edit", GUILayout.Width(50)))
                                     {
                                         FaceEmotion.ApplyAnimationProperties(controller[handAnim], ref avatar);
                                     }
