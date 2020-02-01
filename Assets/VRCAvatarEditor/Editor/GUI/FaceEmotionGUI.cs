@@ -17,8 +17,6 @@ namespace VRCAvatarEditor
 
         private Vector2 scrollPos = Vector2.zero;
 
-        private bool isExclusionKey;
-
         public enum SortType
         {
             UnSort,
@@ -30,16 +28,12 @@ namespace VRCAvatarEditor
 
         private bool isOpeningBlendShapeExclusionList = false;
 
-        private SendData sendData;
-
-        private string saveFolderPath;
         private string animName;
 
         public FaceEmotionGUI(ref VRCAvatarEditor.Avatar avatar, string saveFolderPath, EditorWindow window)
         {
             this.avatar = avatar;
             animName = DEFAULT_ANIM_NAME;
-            this.saveFolderPath = saveFolderPath;
             this.parentWindow = window as VRCAvatarEditorGUI;
         }
 
@@ -74,14 +68,14 @@ namespace VRCAvatarEditor
 
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    EditorGUILayout.LabelField("AnimClipSaveFolder", saveFolderPath);
+                    EditorGUILayout.LabelField("AnimClipSaveFolder", avatar.animSavedFolderPath);
 
                     if (GUILayout.Button("Select Folder", GUILayout.Width(100)))
                     {
-                        saveFolderPath = EditorUtility.OpenFolderPanel("Select saved folder", saveFolderPath, string.Empty);
-                        saveFolderPath = FileUtil.GetProjectRelativePath(saveFolderPath);
-                        if (saveFolderPath == "/") saveFolderPath = "Assets/";
-                        parentWindow.animationsGUI.UpdateSaveFolderPath(saveFolderPath);
+                        avatar.animSavedFolderPath = EditorUtility.OpenFolderPanel("Select saved folder", avatar.animSavedFolderPath, string.Empty);
+                        avatar.animSavedFolderPath = FileUtil.GetProjectRelativePath(avatar.animSavedFolderPath) + "/";
+                        if (avatar.animSavedFolderPath == "/") avatar.animSavedFolderPath = "Assets/";
+                        parentWindow.animationsGUI.UpdateSaveFolderPath(avatar.animSavedFolderPath);
                     }
 
                 }
@@ -95,7 +89,7 @@ namespace VRCAvatarEditor
                         {
                             var animController = avatar.standingAnimController;
 
-                            var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, saveFolderPath, ref avatar, ref blendshapeExclusions, avatar.descriptor.gameObject);
+                            var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, avatar.animSavedFolderPath, ref avatar, ref blendshapeExclusions, avatar.descriptor.gameObject);
                             if (selectedHandAnim != HandPose.HandPoseType.None)
                             {
                                 HandPose.AddHandPoseAnimationKeysFromOriginClip(ref createdAnimClip, selectedHandAnim);

@@ -4,6 +4,8 @@ using UnityEngine;
 using VRCSDK2;
 using System;
 using VRC.Core;
+using UnityEditor;
+using System.IO;
 
 namespace VRCAvatarEditor
 {
@@ -29,6 +31,8 @@ namespace VRCAvatarEditor
         public List<SkinnedMeshRenderer> skinnedMeshRendererList { get; set; }
         public List<MeshRenderer> meshRendererList { get; set; }
 
+        public string animSavedFolderPath { get; set; }
+
         public Avatar()
         {
             animator = null;
@@ -46,6 +50,7 @@ namespace VRCAvatarEditor
             lipSyncStyle = VRC_AvatarDescriptor.LipSyncStyle.Default;
             faceShapeKeyEnum = null;
             skinnedMeshList = null;
+            animSavedFolderPath = "Assets/";
         }
 
         /// <summary>
@@ -64,6 +69,12 @@ namespace VRCAvatarEditor
 
             standingAnimController = descriptor.CustomStandingAnims;
             sittingAnimController = descriptor.CustomSittingAnims;
+
+            if (standingAnimController != null)
+            {
+                var assetPath = AssetDatabase.GetAssetPath(standingAnimController);
+                animSavedFolderPath = Path.GetDirectoryName(assetPath) + "/";
+            }
 
             avatarId = descriptor.gameObject.GetComponent<PipelineManager>().blueprintId;
 

@@ -178,7 +178,7 @@ namespace VRCAvatarEditor
                             if (GUILayout.Button("Auto Setting"))
                             {
                                 var fileName = "CO_" + avatar.animator.gameObject.name + ".overrideController";
-                                avatar.descriptor.CustomStandingAnims = InstantiateVrcCustomOverideController(saveFolderPath + "/" + fileName);
+                                avatar.descriptor.CustomStandingAnims = InstantiateVrcCustomOverideController(saveFolderPath + fileName);
                                 avatar.LoadAvatarInfo();
                             }
                         }
