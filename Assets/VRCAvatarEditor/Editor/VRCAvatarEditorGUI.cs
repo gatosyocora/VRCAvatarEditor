@@ -21,6 +21,8 @@ namespace VRCAvatarEditor
         private const string TWITTER_ID = "gatosyocora";
         private const string DISCORD_ID = "gatosyocora#9575";
         private const string MANUAL_URL = "https://docs.google.com/document/d/1DU7mP5PTvERqHzZiiCBJ9ep5CilQ1iaXC_3IoiuPEgA/edit?usp=sharing";
+        private const string BOOTH_URL = "gatosyocora.booth.pm";
+        private const string BOOTH_ITEM_URL = "https://booth.pm/ja/items/1258744";
 
         private AvatarMonitorGUI avatarMonitorGUI;
         public AnimationsGUI animationsGUI;
@@ -420,6 +422,13 @@ namespace VRCAvatarEditor
                     GUILayout.FlexibleSpace();
                 }
                 EditorGUILayout.LabelField("Discord", DISCORD_ID);
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    EditorGUILayout.LabelField("Booth", BOOTH_URL, GUILayout.Width(300));
+                    if (GUILayout.Button("Open", GUILayout.Width(50)))
+                        Application.OpenURL(BOOTH_ITEM_URL);
+                    GUILayout.FlexibleSpace();
+                }
             }
 
             EditorGUILayout.Space();
