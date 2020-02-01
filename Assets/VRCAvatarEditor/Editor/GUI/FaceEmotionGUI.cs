@@ -45,12 +45,6 @@ namespace VRCAvatarEditor
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
         {
-            if (Event.current.type == EventType.ExecuteCommand &&
-                Event.current.commandName == "ApplyAnimationProperties")
-            {
-                FaceEmotion.ApplyAnimationProperties(sendData.loadingProperties, ref avatar);
-            }
-
             EditorGUILayout.LabelField("表情設定", EditorStyles.boldLabel);
 
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
@@ -62,8 +56,7 @@ namespace VRCAvatarEditor
 
                     if (GUILayout.Button("Load Animation"))
                     {
-                        sendData = CreateInstance<SendData>();
-                        var result = FaceEmotion.LoadAnimationProperties(ref sendData, parentWindow);
+                        var result = FaceEmotion.LoadAnimationProperties(parentWindow, this);
 
                         if (result)
                         {
@@ -227,6 +220,11 @@ namespace VRCAvatarEditor
                     }
                 }
             }
+        }
+
+        public void ApplyAnimationProperties()
+        {
+            FaceEmotion.ApplyAnimationProperties(ScriptableSingleton<SendData>.instance.loadingProperties, ref avatar);
         }
     }
 }

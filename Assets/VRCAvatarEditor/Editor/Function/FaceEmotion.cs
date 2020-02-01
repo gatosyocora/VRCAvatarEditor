@@ -186,7 +186,7 @@ namespace VRCAvatarEditor
         /// </summary>
         /// <param name="sendData"></param>
         /// <param name="preWindow"></param>
-        public static bool LoadAnimationProperties(ref SendData sendData, EditorWindow preWindow) {
+        public static bool LoadAnimationProperties(EditorWindow preWindow, FaceEmotionGUI faceEmotionGUI) {
             
                     string animFilePath = EditorUtility.OpenFilePanel("Select Loading Animation File", "Assets", "anim");
                     
@@ -194,11 +194,9 @@ namespace VRCAvatarEditor
 
                     animFilePath = FileUtil.GetProjectRelativePath(animFilePath);
 
-                    sendData.filePath = animFilePath;
-                    sendData.window = preWindow;            
-                    // データ送受信用assetを作成する
-                    AssetDatabase.CreateAsset (sendData, SENDDATAASSET_PATH);
-                    AssetDatabase.Refresh ();
+                    ScriptableSingleton<SendData>.instance.filePath = animFilePath;
+                    ScriptableSingleton<SendData>.instance.window = preWindow;
+                    ScriptableSingleton<SendData>.instance.caller = faceEmotionGUI;
 
                     return true;
         }
@@ -221,9 +219,6 @@ namespace VRCAvatarEditor
                     }
                 }
             }
-
-            // データの処理は終わったのでデータ送受信用assetを削除する
-            AssetDatabase.DeleteAsset(SENDDATAASSET_PATH);
         }
 
         public static void ApplyAnimationProperties(AnimationClip clip, ref VRCAvatarEditor.Avatar avatar)

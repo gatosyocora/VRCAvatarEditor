@@ -9,8 +9,6 @@ using VRCAvatarEditor;
 namespace VRCAvatarEditor {
 	public class AnimationLoaderGUI : EditorWindow {
 
-		private SendData sendData;
-
 		private string filePath;
 		private string fileName;
 
@@ -19,8 +17,7 @@ namespace VRCAvatarEditor {
 		private Vector2 scrollPos = Vector2.zero;
 
 		void OnEnable() {
-			    sendData = AssetDatabase.LoadAssetAtPath<SendData>(FaceEmotion.SENDDATAASSET_PATH);
-				filePath = sendData.filePath;
+				filePath = ScriptableSingleton<SendData>.instance.filePath;
 
 				fileName = Path.GetFileName(filePath);
 
@@ -47,21 +44,20 @@ namespace VRCAvatarEditor {
             {
                 if (GUILayout.Button("Canncel"))
                 {
-                    // データの処理は終わったのでデータ送受信用assetを削除する
-                    AssetDatabase.DeleteAsset(FaceEmotion.SENDDATAASSET_PATH);
                     this.Close();
                 }
                 if (GUILayout.Button("Load Properties"))
                 {
                     LoadAnimationProperties();
+                    this.Close();
                 }
             }
 		}
 
 		private void LoadAnimationProperties() {
-			sendData.loadingProperties = animParamList.Where(x => x.isSelect).ToList();
-			sendData.window.SendEvent(EditorGUIUtility.CommandEvent("ApplyAnimationProperties"));
-			this.Close();
+            ScriptableSingleton<SendData>.instance.loadingProperties = animParamList.Where(x => x.isSelect).ToList();
+            var caller = ScriptableSingleton<SendData>.instance.caller;
+            caller.ApplyAnimationProperties();
 		}
 	}
 }
