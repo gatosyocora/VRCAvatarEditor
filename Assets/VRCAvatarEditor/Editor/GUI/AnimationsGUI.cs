@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using VRCSDK2;
 using System.Linq;
+using System.IO;
 
 namespace VRCAvatarEditor
 {
@@ -178,6 +179,13 @@ namespace VRCAvatarEditor
                             if (GUILayout.Button("Auto Setting"))
                             {
                                 var fileName = "CO_" + avatar.animator.gameObject.name + ".overrideController";
+                                saveFolderPath = "Assets/" + avatar.animator.gameObject.name + "/";
+                                var fullFolderPath = Path.GetFullPath(saveFolderPath);
+                                if (!Directory.Exists(fullFolderPath)) 
+                                {
+                                    Directory.CreateDirectory(fullFolderPath);
+                                    AssetDatabase.Refresh();
+                                }
                                 avatar.descriptor.CustomStandingAnims = InstantiateVrcCustomOverideController(saveFolderPath + fileName);
                                 avatar.LoadAvatarInfo();
                             }
