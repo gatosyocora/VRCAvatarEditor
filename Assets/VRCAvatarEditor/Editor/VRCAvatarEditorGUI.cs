@@ -232,7 +232,7 @@ namespace VRCAvatarEditor
 
                     using (new EditorGUI.DisabledGroupScope(edittingAvatar.descriptor == null))
                     {
-                        // LayoutType: Defalut
+                        // LayoutType: Default
                         if (layoutType == LayoutType.Default)
                         {
                             using (new EditorGUILayout.HorizontalScope())
