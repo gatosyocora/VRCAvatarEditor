@@ -70,11 +70,7 @@ namespace VRCAvatarEditor
             standingAnimController = descriptor.CustomStandingAnims;
             sittingAnimController = descriptor.CustomSittingAnims;
 
-            if (standingAnimController != null)
-            {
-                var assetPath = AssetDatabase.GetAssetPath(standingAnimController);
-                animSavedFolderPath = Path.GetDirectoryName(assetPath) + "/";
-            }
+            SetAnimSavedFolderPath();
 
             avatarId = descriptor.gameObject.GetComponent<PipelineManager>().blueprintId;
 
@@ -137,6 +133,15 @@ namespace VRCAvatarEditor
                 {
                     descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
                 }
+            }
+        }
+
+        public void SetAnimSavedFolderPath()
+        {
+            if (standingAnimController != null)
+            {
+                var assetPath = AssetDatabase.GetAssetPath(standingAnimController);
+                animSavedFolderPath = Path.GetDirectoryName(assetPath) + "/";
             }
         }
     }

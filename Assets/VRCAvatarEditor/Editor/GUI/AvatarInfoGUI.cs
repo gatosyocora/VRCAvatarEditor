@@ -62,6 +62,8 @@ namespace VRCAvatarEditor
                     {
                         avatar.descriptor.CustomStandingAnims = avatar.standingAnimController;
                         avatar.descriptor.CustomSittingAnims = avatar.sittingAnimController;
+
+                        avatar.SetAnimSavedFolderPath();
                     }
                 }
 
