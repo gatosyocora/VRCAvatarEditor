@@ -94,6 +94,7 @@ namespace VRCAvatarEditor
                         avatar.descriptor.ViewPosition = avatar.eyePos;
                     }
                 }
+                /*
                 using (new EditorGUILayout.HorizontalScope())
                 using (new EditorGUI.DisabledGroupScope(avatar.faceMesh == null))
                 {
@@ -113,6 +114,7 @@ namespace VRCAvatarEditor
                 {
                     EditorGUILayout.HelpBox("ViewPositionを自動設定するためにはFaceMeshを設定する必要があります", MessageType.Warning);
                 }
+                */
 
                 EditorGUILayout.Space();
 
@@ -230,12 +232,11 @@ namespace VRCAvatarEditor
 
             var sp = so.FindProperty("ViewPosition");
 #if UNITY_2018_3_OR_NEWER
-            var currentEnabled = descriptor.enabled;
             // Transform has 'ReflectionProbeAnchorManager::kChangeSystem' change interests present when destroying the hierarchy.
             // 対策で一度disableにする
             descriptor.enabled = false;
             PrefabUtility.RevertPropertyOverride(sp, InteractionMode.UserAction);
-            descriptor.enabled = currentEnabled;
+            descriptor.enabled = true;
 #else
             sp.prefabOverride = false;
             sp.serializedObject.ApplyModifiedProperties();
