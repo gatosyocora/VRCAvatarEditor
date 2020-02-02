@@ -94,6 +94,8 @@ namespace VRCAvatarEditor
                         {
                             if (avatarCam != null)
                                 avatarCam.transform.Rotate(0, -CAMERA_ROTATE_ANGLE, 0);
+
+                            return true;
                         }
 
                         if (GUILayout.Button("Reset"))
@@ -103,12 +105,16 @@ namespace VRCAvatarEditor
                                 avatarCam.transform.localRotation = Quaternion.identity;
                                 MoveAvatarCam();
                             }
+
+                            return true;
                         }
 
                         if (GUILayout.Button(">"))
                         {
                             if (avatarCam != null)
                                 avatarCam.transform.Rotate(0, CAMERA_ROTATE_ANGLE, 0);
+
+                            return true;
                         }
                     }
 
@@ -117,7 +123,11 @@ namespace VRCAvatarEditor
                     {
                         zoomLevel = EditorGUILayout.Slider(zoomLevel, 0f, 1f);
 
-                        if (check.changed) ZoomAvatarCam(zoomLevel);
+                        if (check.changed)
+                        {
+                            ZoomAvatarCam(zoomLevel);
+                            return true;
+                        }
                     }
                 }
             }
@@ -128,7 +138,12 @@ namespace VRCAvatarEditor
                 {
                     GUILayout.FlexibleSpace();
                     var lightDelta = GatoGUILayout.LightRotater(sceneLight, 50f, 50f, ref isLightPressing);
-                    RotateLight(lightDelta);
+
+                    if (lightDelta != Vector2.zero)
+                    {
+                        RotateLight(lightDelta);
+                        return true;
+                    }
                     GUILayout.FlexibleSpace();
                 }
 
@@ -140,7 +155,11 @@ namespace VRCAvatarEditor
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
                         cameraHeight = GatoGUILayout.VerticalSlider(upDownTexture, 30f, 150f, cameraHeight, minCamHeight, maxCamHeight);
-                        if (check.changed) MoveAvatarCamHeight(cameraHeight);
+                        if (check.changed)
+                        {
+                            MoveAvatarCamHeight(cameraHeight);
+                            return true;
+                        }
                     }
                     GUILayout.FlexibleSpace();
                 }
