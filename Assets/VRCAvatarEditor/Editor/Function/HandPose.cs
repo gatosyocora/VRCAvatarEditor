@@ -5,7 +5,6 @@ using UnityEditor;
 
 namespace VRCAvatarEditor
 {
-
     public class HandPose
     {
         public static readonly string[] HAND_ORIGIN_ANIM_FILE_NAMES = { "Fist", "FingerPoint", "RocknRoll", "HandOpen", "ThumbsUp", "Victory", "HandGun" };

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 
 namespace VRCAvatarEditor
@@ -117,10 +115,7 @@ namespace VRCAvatarEditor
                     using (new GUILayout.HorizontalScope())
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
-                        //GUILayout.FlexibleSpace();
                         zoomLevel = EditorGUILayout.Slider(zoomLevel, 0f, 1f);
-                        //zoomLevel = GatoGUILayout.HorizontalSlider(upDownTexture, 20f, 200f, zoomLevel, 0f, 1f);
-                        //GUILayout.FlexibleSpace();
 
                         if (check.changed) ZoomAvatarCam(zoomLevel);
                     }
@@ -290,7 +285,6 @@ namespace VRCAvatarEditor
             if (sceneLight == null) return;
 
             (sceneLight.gameObject).transform.Rotate(new Vector3(0, 1, 0), -delta.x);
-            //(m_light.gameObject).transform.Rotate(new Vector3(1, 0, 0), -delta.y);
             Repaint();
         }
 

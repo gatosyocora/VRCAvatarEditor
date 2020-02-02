@@ -1,11 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using VRCSDK2;
-using VRC.Core;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.IO;
 using System.Text;
 using System;
@@ -123,7 +119,7 @@ namespace VRCAvatarEditor
 
 
         [MenuItem("VRCAvatarEditor/Editor")]
-        private static void Create()
+        public static void Create()
         {
             var window = GetWindow<VRCAvatarEditorGUI>("VRCAvatarEditor");
             window.minSize = new Vector2(700f, 500f);
@@ -216,7 +212,7 @@ namespace VRCAvatarEditor
                             "Avatar",
                             edittingAvatar.descriptor,
                             typeof(VRC_AvatarDescriptor),
-                            true
+                            allowSceneObjects: true
                         ) as VRC_AvatarDescriptor;
 
                         if (check.changed)

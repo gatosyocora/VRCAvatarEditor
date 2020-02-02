@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 // Copyright (c) 2019 gatosyocora
 
 namespace VRCAvatarEditor
 {
-
     public class ProbeAnchor
     {
 

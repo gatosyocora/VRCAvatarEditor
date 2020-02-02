@@ -100,7 +100,6 @@ public static class GatoGUILayout
     {
         var rect = GUILayoutUtility.GetRect(width, height, GUI.skin.box);
 
-        //GUI.DrawTexture(rect, texture, ScaleMode.ScaleToFit, false, 0);
         Graphics.DrawTexture(rect, texture, (isGammaCorrection) ? gammaMat : null);
 
         var e = Event.current;

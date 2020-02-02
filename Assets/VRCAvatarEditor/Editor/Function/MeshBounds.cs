@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -20,9 +19,6 @@ namespace VRCAvatarEditor
             var avatarBounds = CalcAvatarBoundsSize(renderers);
             var offset = Vector3.zero;
             Transform boneTrans;
-            var center = Vector3.zero;
-            var size = Vector3.zero;
-            var scale = Vector3.zero;
 
             Undo.RecordObjects(renderers.ToArray(), "Change Bounds");
 
@@ -31,15 +27,15 @@ namespace VRCAvatarEditor
                 if (renderer == null) continue;
 
                 boneTrans = renderer.rootBone.transform;
-                scale = GetScale(boneTrans);
+                var  scale = GetScale(boneTrans);
 
-                center = avatarBounds.center - boneTrans.position;
+                var center = avatarBounds.center - boneTrans.position;
                 center = Quaternion.Inverse(boneTrans.rotation) * center;
                 center = new Vector3(center.x / scale.x,
                                         center.y / scale.y,
                                         center.z / scale.z);
                 
-                size = Quaternion.Inverse(renderer.rootBone.transform.rotation) * avatarBounds.size;
+                var size = Quaternion.Inverse(renderer.rootBone.transform.rotation) * avatarBounds.size;
                 size = new Vector3( size.x / scale.x,
                                     size.y / scale.y,
                                     size.z / scale.z);

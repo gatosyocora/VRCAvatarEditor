@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using System.Linq;
 
 // Copyright (c) 2019 gatosyocora
 
@@ -188,17 +187,17 @@ namespace VRCAvatarEditor
         /// <param name="preWindow"></param>
         public static bool LoadAnimationProperties(EditorWindow preWindow, FaceEmotionGUI faceEmotionGUI) {
             
-                    string animFilePath = EditorUtility.OpenFilePanel("Select Loading Animation File", "Assets", "anim");
+            string animFilePath = EditorUtility.OpenFilePanel("Select Loading Animation File", "Assets", "anim");
                     
-                    if (animFilePath == "") return false;
+            if (animFilePath == "") return false;
 
-                    animFilePath = FileUtil.GetProjectRelativePath(animFilePath);
+            animFilePath = FileUtil.GetProjectRelativePath(animFilePath);
 
-                    ScriptableSingleton<SendData>.instance.filePath = animFilePath;
-                    ScriptableSingleton<SendData>.instance.window = preWindow;
-                    ScriptableSingleton<SendData>.instance.caller = faceEmotionGUI;
+            ScriptableSingleton<SendData>.instance.filePath = animFilePath;
+            ScriptableSingleton<SendData>.instance.window = preWindow;
+            ScriptableSingleton<SendData>.instance.caller = faceEmotionGUI;
 
-                    return true;
+            return true;
         }
 
         /// <summary>

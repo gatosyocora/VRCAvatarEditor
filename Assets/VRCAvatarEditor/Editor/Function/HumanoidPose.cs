@@ -7,7 +7,6 @@ using UnityEditor;
 
 namespace VRCAvatarEditor
 {
-
     public class HumanoidPose
     {
 
@@ -35,8 +34,11 @@ namespace VRCAvatarEditor
         /// <param name="obj"></param>
         public static void ResetPose(GameObject obj)
         {
+#if UNITY_2018_3_OR_NEWER
+            Object prefab = PrefabUtility.GetCorrespondingObjectFromSource(obj);
+#else
             Object prefab = PrefabUtility.GetPrefabParent(obj);
-
+#endif
             if (prefab == null) return;
 
             var prefabObj = Object.Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
@@ -49,8 +51,9 @@ namespace VRCAvatarEditor
             var boneTrans = new Transform[boneList.Length];
 
             for (int i = 0; i < boneList.Length; i++)
+            {
                 boneTrans[i] = animator.GetBoneTransform(boneList[i]);
-
+            }
 
             /* 対象オブジェクトの親Prefabのポーズを取得 */
             Animator prefabAnim = prefabObj.GetComponent<Animator>();
@@ -61,9 +64,7 @@ namespace VRCAvatarEditor
             for (int i = 0; i < boneList.Length; i++)
             {
                 boneTrans_p[i] = prefabAnim.GetBoneTransform(boneList[i]);
-
             }
-
 
             for (int j = 0; j < boneList.Length; j++)
             {
@@ -77,8 +78,6 @@ namespace VRCAvatarEditor
                 }
 
                 Undo.RecordObject(trans, "Change Transform " + trans.name);
-
-
 
                 trans.localPosition = prefabTrans.localPosition;
                 trans.localRotation = prefabTrans.localRotation;
