@@ -57,6 +57,11 @@ namespace VRCAvatarEditor
                             parentWindow.OpenSubWindow();
                         }
                     }
+
+                    if (GUILayout.Button("Reset To Default"))
+                    {
+                        FaceEmotion.ResetToDefaultFaceEmotion(ref avatar);
+                    }
                 }
 
                 if (avatar.skinnedMeshList != null)
@@ -80,6 +85,8 @@ namespace VRCAvatarEditor
 
                 }
 
+                EditorGUILayout.Space();
+
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     selectedHandAnim = (HandPose.HandPoseType)EditorGUILayout.EnumPopup("HandPose", selectedHandAnim);
@@ -100,10 +107,6 @@ namespace VRCAvatarEditor
 
                             avatar.standingAnimController = animController;
                         }
-                    }
-                    if (GUILayout.Button("Reset To Default"))
-                    {
-                        FaceEmotion.ResetToDefaultFaceEmotion(ref avatar);
                     }
                 }
 
