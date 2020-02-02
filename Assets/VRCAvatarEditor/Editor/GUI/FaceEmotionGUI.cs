@@ -60,7 +60,13 @@ namespace VRCAvatarEditor
 
                     if (GUILayout.Button("Set To Default"))
                     {
-                        FaceEmotion.SetToDefaultFaceEmotion(ref avatar);
+                        if (EditorUtility.DisplayDialog(
+                                "Default FaceEmotion Setting", 
+                                "現在の表情をデフォルトに設定しますか", 
+                                "OK", "Cancel"))
+                        {
+                            FaceEmotion.SetToDefaultFaceEmotion(ref avatar);
+                        }
                     }
 
                     if (GUILayout.Button("Reset To Default"))
