@@ -179,6 +179,11 @@ namespace VRCAvatarEditor
             SceneView.onSceneGUIDelegate -= OnSceneGUI;
         }
 
+        private void OnDestroy()
+        {
+            faceEmotionGUI.Dispose();
+        }
+
         private void OnGUI()
         {
             using (new EditorGUILayout.HorizontalScope())

@@ -227,6 +227,11 @@ namespace VRCAvatarEditor
             ApplyAnimationProperties(paramList, ref avatar);
         }
 
+        public static void ResetToDefaultFaceEmotion(ref VRCAvatarEditor.Avatar avatar)
+        {
+            ApplyAnimationProperties(avatar.defaultFaceEmotion, ref avatar);
+        }
+
         public static List<AnimParam> GetAnimationParamaters(AnimationClip clip)
         {
             var bindings = AnimationUtility.GetCurveBindings(clip);
@@ -238,6 +243,28 @@ namespace VRCAvatarEditor
                 var curve = AnimationUtility.GetEditorCurve(clip, binding);
                 var animParam = new AnimParam(binding.path, binding.propertyName, curve[0].value);
                 animParamList.Add(animParam);
+            }
+
+            return animParamList;
+        }
+
+        public static List<AnimParam> GetAvatarFaceParamaters(List<SkinnedMesh> skinnedMeshList)
+        {
+            var animParamList = new List<AnimParam>();
+
+            for (int skinnedMeshIndex = 0; skinnedMeshIndex < skinnedMeshList.Count; skinnedMeshIndex++)
+            {
+                var mesh = skinnedMeshList[skinnedMeshIndex].mesh;
+                var renderer = skinnedMeshList[skinnedMeshIndex].renderer;
+
+                for (int blendShapeIndex = 0; blendShapeIndex < mesh.blendShapeCount; blendShapeIndex++)
+                {
+                    var blendShapeName = mesh.GetBlendShapeName(blendShapeIndex);
+                    var weight = renderer.GetBlendShapeWeight(blendShapeIndex);
+
+                    var animParam = new AnimParam("", blendShapeName, weight);
+                    animParamList.Add(animParam);
+                }
             }
 
             return animParamList;

@@ -33,6 +33,8 @@ namespace VRCAvatarEditor
 
         public string animSavedFolderPath { get; set; }
 
+        public List<FaceEmotion.AnimParam> defaultFaceEmotion { get; set; }
+
         public Avatar()
         {
             animator = null;
@@ -94,6 +96,8 @@ namespace VRCAvatarEditor
             
             skinnedMeshRendererList = GatoUtility.GetSkinnedMeshList(avatarObj);
             meshRendererList = GatoUtility.GetMeshList(avatarObj);
+
+            defaultFaceEmotion = FaceEmotion.GetAvatarFaceParamaters(skinnedMeshList);
         }
 
         /// <summary>

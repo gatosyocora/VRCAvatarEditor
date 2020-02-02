@@ -94,18 +94,18 @@ namespace VRCAvatarEditor
                             {
                                 HandPose.AddHandPoseAnimationKeysFromOriginClip(ref createdAnimClip, selectedHandAnim);
                                 animController[AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]] = createdAnimClip;
+
+                                FaceEmotion.ResetToDefaultFaceEmotion(ref avatar);
                             }
 
                             avatar.standingAnimController = animController;
                         }
                     }
-                    if (GUILayout.Button("Min All"))
+                    if (GUILayout.Button("Reset To Default"))
                     {
-                        FaceEmotion.ResetAllBlendShapeValues(ref avatar);
+                        FaceEmotion.ResetToDefaultFaceEmotion(ref avatar);
                     }
                 }
-
-                EditorGUILayout.HelpBox("Min Allを押すとチェックをいれているすべてのシェイプキーの値が最低値になります", MessageType.Warning);
 
             }
 
@@ -154,7 +154,10 @@ namespace VRCAvatarEditor
             settingAsset.blendshapeExclusions = new List<string>(blendshapeExclusions);
         }
 
-        public void Dispose() { }
+        public void Dispose() 
+        {
+            FaceEmotion.ResetToDefaultFaceEmotion(ref avatar);
+        }
 
         private void BlendShapeListGUI()
         {
