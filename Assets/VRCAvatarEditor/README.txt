@@ -16,4 +16,4 @@ gatosyocoraは一切の責任を負いかねますのであらかじめご了承
 
 〇連絡先
   Twitter @gatosyocora
-	Discord gatosyocora#9575
+  Discord gatosyocora#9575
