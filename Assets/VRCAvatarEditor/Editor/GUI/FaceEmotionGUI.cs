@@ -30,7 +30,7 @@ namespace VRCAvatarEditor
 
         private string animName;
 
-        public FaceEmotionGUI(ref VRCAvatarEditor.Avatar avatar, string saveFolderPath, EditorWindow window)
+        public void Initialize(ref VRCAvatarEditor.Avatar avatar, string saveFolderPath, EditorWindow window)
         {
             this.avatar = avatar;
             animName = DEFAULT_ANIM_NAME;

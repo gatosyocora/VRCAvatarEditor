@@ -10,7 +10,7 @@ namespace VRCAvatarEditor
 
         private Vector2 leftScrollPosShader = Vector2.zero;
 
-        public ShaderGUI(ref VRCAvatarEditor.Avatar avatar)
+        public void Initialize(ref VRCAvatarEditor.Avatar avatar)
         {
             this.avatar = avatar;
         }

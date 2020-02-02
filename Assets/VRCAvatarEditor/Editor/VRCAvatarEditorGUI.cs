@@ -138,13 +138,21 @@ namespace VRCAvatarEditor
             readmeText = GetFileTexts(editorFolderPath + README_FILE_NAME);
             usingSoftwareLicenseText = GetFileTexts(editorFolderPath + USING_SOFTWARE_FILE_NAME);
 
-            avatarMonitorGUI = new AvatarMonitorGUI(ref edittingAvatar, currentTool);
-            animationsGUI = new AnimationsGUI(ref edittingAvatar, saveFolder);
-            avatarInfoGUI = new AvatarInfoGUI(ref edittingAvatar);
-            faceEmotionGUI = new FaceEmotionGUI(ref edittingAvatar, saveFolder, this);
-            probeAnchorGUI = new ProbeAnchorGUI(ref edittingAvatar);
-            meshBoundsGUI = new MeshBoundsGUI(ref edittingAvatar);
-            shaderGUI = new ShaderGUI(ref edittingAvatar);
+            avatarMonitorGUI = ScriptableObject.CreateInstance<AvatarMonitorGUI>();
+            animationsGUI = ScriptableObject.CreateInstance<AnimationsGUI>();
+            avatarInfoGUI = ScriptableObject.CreateInstance<AvatarInfoGUI>();
+            faceEmotionGUI = ScriptableObject.CreateInstance<FaceEmotionGUI>();
+            probeAnchorGUI = ScriptableObject.CreateInstance<ProbeAnchorGUI>();
+            meshBoundsGUI = ScriptableObject.CreateInstance<MeshBoundsGUI>();
+            shaderGUI = ScriptableObject.CreateInstance<ShaderGUI>();
+
+            avatarMonitorGUI.Initialize(ref edittingAvatar, currentTool);
+            animationsGUI.Initialize(ref edittingAvatar, saveFolder);
+            avatarInfoGUI.Initialize(ref edittingAvatar);
+            faceEmotionGUI.Initialize(ref edittingAvatar, saveFolder, this);
+            probeAnchorGUI.Initialize(ref edittingAvatar);
+            meshBoundsGUI.Initialize(ref edittingAvatar);
+            shaderGUI.Initialize(ref edittingAvatar);
 
             LoadSettingDataFromScriptableObject();
 

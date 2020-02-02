@@ -20,7 +20,7 @@ namespace VRCAvatarEditor
 
         private Vector2 leftScrollPos = Vector2.zero;
 
-        public ProbeAnchorGUI(ref VRCAvatarEditor.Avatar avatar)
+        public void Initialize(ref VRCAvatarEditor.Avatar avatar)
         {
             this.avatar = avatar;
         }

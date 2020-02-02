@@ -13,7 +13,7 @@ namespace VRCAvatarEditor
         public List<SkinnedMeshRenderer> targetRenderers;
         private List<SkinnedMeshRenderer> exclusions = new List<SkinnedMeshRenderer>();
 
-        public MeshBoundsGUI(ref VRCAvatarEditor.Avatar avatar)
+        public void Initialize(ref VRCAvatarEditor.Avatar avatar)
         {
             this.avatar = avatar;
         }

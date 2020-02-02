@@ -44,7 +44,7 @@ namespace VRCAvatarEditor
         private MonitorSize sizeType = MonitorSize.Small;
         private int monitorSize;
 
-        public AvatarMonitorGUI(ref VRCAvatarEditor.Avatar avatar, VRCAvatarEditorGUI.ToolFunc currentTool)
+        public void Initialize(ref VRCAvatarEditor.Avatar avatar, VRCAvatarEditorGUI.ToolFunc currentTool)
         {
             this.avatar = avatar;
             this.currentTool = currentTool;

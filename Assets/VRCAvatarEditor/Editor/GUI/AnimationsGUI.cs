@@ -49,7 +49,7 @@ namespace VRCAvatarEditor
 
         private string saveFolderPath;
 
-        public AnimationsGUI(ref VRCAvatarEditor.Avatar avatar, string saveFolderPath)
+        public void Initialize(ref VRCAvatarEditor.Avatar avatar, string saveFolderPath)
         {
             this.avatar = avatar;
             UpdateSaveFolderPath(saveFolderPath);
