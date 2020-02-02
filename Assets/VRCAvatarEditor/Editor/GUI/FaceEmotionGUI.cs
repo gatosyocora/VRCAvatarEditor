@@ -58,6 +58,11 @@ namespace VRCAvatarEditor
                         }
                     }
 
+                    if (GUILayout.Button("Set To Default"))
+                    {
+                        FaceEmotion.SetToDefaultFaceEmotion(ref avatar);
+                    }
+
                     if (GUILayout.Button("Reset To Default"))
                     {
                         FaceEmotion.ResetToDefaultFaceEmotion(ref avatar);
