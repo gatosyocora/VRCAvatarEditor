@@ -53,11 +53,15 @@ namespace VRCAvatarEditor {
             }
 		}
 
-		private void LoadAnimationProperties() {
+        // Callback用
+        public delegate void LoadedAnimationPropertiesHandler();
+        public static event LoadedAnimationPropertiesHandler OnLoadedAnimationProperties;
+
+        private void LoadAnimationProperties() {
             ScriptableSingleton<SendData>.instance.loadingProperties = animParamList.Where(x => x.isSelect).ToList();
-            var caller = ScriptableSingleton<SendData>.instance.caller;
-            caller.ApplyAnimationProperties();
-		}
-	}
+
+            OnLoadedAnimationProperties();
+        }
+    }
 }
 

@@ -50,12 +50,7 @@ namespace VRCAvatarEditor
 
                     if (GUILayout.Button("Load Animation"))
                     {
-                        var result = FaceEmotion.LoadAnimationProperties(this);
-
-                        if (result)
-                        {
-                            parentWindow.OpenSubWindow();
-                        }
+                        FaceEmotion.LoadAnimationProperties(this, parentWindow);
                     }
 
                     if (GUILayout.Button("Set To Default"))
@@ -233,7 +228,7 @@ namespace VRCAvatarEditor
             }
         }
 
-        public void ApplyAnimationProperties()
+        public void OnLoadedAnimationProperties()
         {
             FaceEmotion.ApplyAnimationProperties(ScriptableSingleton<SendData>.instance.loadingProperties, ref avatar);
         }

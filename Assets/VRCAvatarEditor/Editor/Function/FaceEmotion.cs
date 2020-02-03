@@ -178,25 +178,26 @@ namespace VRCAvatarEditor
 
             return true;
         }
-        
+
         /// <summary>
         /// アニメーションファイルを選択し, BlendShapeのデータを読み込む
-        /// 読み込んだデータはSendData.assetに格納される
+        /// 読み込んだデータはScriptableSingleton<SendData>に格納される
         /// </summary>
         /// <param name="sendData"></param>
         /// <param name="preWindow"></param>
-        public static bool LoadAnimationProperties(FaceEmotionGUI faceEmotionGUI) {
+        public static void LoadAnimationProperties(FaceEmotionGUI faceEmotionGUI, VRCAvatarEditorGUI editorGUI) {
             
             string animFilePath = EditorUtility.OpenFilePanel("Select Loading Animation File", "Assets", "anim");
                     
-            if (animFilePath == "") return false;
+            if (animFilePath == "") return;
 
             animFilePath = FileUtil.GetProjectRelativePath(animFilePath);
 
             ScriptableSingleton<SendData>.instance.filePath = animFilePath;
-            ScriptableSingleton<SendData>.instance.caller = faceEmotionGUI;
 
-            return true;
+            AnimationLoaderGUI.OnLoadedAnimationProperties -= faceEmotionGUI.OnLoadedAnimationProperties;
+            AnimationLoaderGUI.OnLoadedAnimationProperties += faceEmotionGUI.OnLoadedAnimationProperties;
+            editorGUI.OpenSubWindow();
         }
 
         /// <summary>
