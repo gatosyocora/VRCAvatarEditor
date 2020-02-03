@@ -660,7 +660,7 @@ namespace VRCAvatarEditor
             catch (Exception e)
             {
                 // 改行コード
-                text += "読み込みに失敗しました";
+                text += "読み込みに失敗しました:"+e.Message;
             }
 
             return text;

@@ -9,8 +9,6 @@ namespace VRCAvatarEditor
     {
         private VRCAvatarEditor.Avatar avatar;
 
-        private GUILayoutOption[] layoutOptions;
-
         public static readonly string[] HANDANIMS = { "FIST", "FINGERPOINT", "ROCKNROLL", "HANDOPEN", "THUMBSUP", "VICTORY", "HANDGUN" };
         public static readonly string[] EMOTEANIMS = { "EMOTE1", "EMOTE2", "EMOTE3", "EMOTE4", "EMOTE5", "EMOTE6", "EMOTE7", "EMOTE8" };
 
@@ -212,11 +210,6 @@ namespace VRCAvatarEditor
             var overrideController = AssetDatabase.LoadAssetAtPath(newFilePath, typeof(AnimatorOverrideController)) as AnimatorOverrideController;
 
             return overrideController;
-        }
-
-        public void SetAnimationsAreaLayout(GUILayoutOption[] layoutOptions)
-        {
-            this.layoutOptions = layoutOptions;
         }
 
         public void UpdateSaveFolderPath (string saveFolderPath)
