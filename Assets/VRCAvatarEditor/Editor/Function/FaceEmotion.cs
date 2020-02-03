@@ -185,7 +185,7 @@ namespace VRCAvatarEditor
         /// </summary>
         /// <param name="sendData"></param>
         /// <param name="preWindow"></param>
-        public static bool LoadAnimationProperties(EditorWindow preWindow, FaceEmotionGUI faceEmotionGUI) {
+        public static bool LoadAnimationProperties(FaceEmotionGUI faceEmotionGUI) {
             
             string animFilePath = EditorUtility.OpenFilePanel("Select Loading Animation File", "Assets", "anim");
                     
@@ -194,7 +194,6 @@ namespace VRCAvatarEditor
             animFilePath = FileUtil.GetProjectRelativePath(animFilePath);
 
             ScriptableSingleton<SendData>.instance.filePath = animFilePath;
-            ScriptableSingleton<SendData>.instance.window = preWindow;
             ScriptableSingleton<SendData>.instance.caller = faceEmotionGUI;
 
             return true;

@@ -50,7 +50,7 @@ namespace VRCAvatarEditor
 
                     if (GUILayout.Button("Load Animation"))
                     {
-                        var result = FaceEmotion.LoadAnimationProperties(parentWindow, this);
+                        var result = FaceEmotion.LoadAnimationProperties(this);
 
                         if (result)
                         {
