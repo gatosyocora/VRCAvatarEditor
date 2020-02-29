@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System;
 
 namespace VRCAvatarEditor
 {
@@ -44,22 +45,28 @@ namespace VRCAvatarEditor
         private MonitorSize sizeType = MonitorSize.Small;
         private int monitorSize;
 
+        public AvatarMonitorField avatarMonitorField;
+
         public void Initialize(ref VRCAvatarEditor.Avatar avatar, VRCAvatarEditorGUI.ToolFunc currentTool)
         {
             this.avatar = avatar;
             this.currentTool = currentTool;
 
             upDownTexture = Resources.Load<Texture>("Icon/UpDown");
-            avatarCamTexture = Resources.Load<RenderTexture>("AvatarRT");
-            gammaMat = Resources.Load<Material>("Gamma");
 
-            sceneLight = GetDirectionalLight();
+            avatarMonitorField = new AvatarMonitorField(256, 256);
+
+            MoveAvatarCam += avatarMonitorField.MoveAvatarCam;
         }
+
+        public Action<bool> MoveAvatarCam;
 
         public void Dispose()
         {
             if (avatarCam != null)
                 UnityEngine.Object.DestroyImmediate(avatarCam);
+
+            avatarMonitorField.Dispose();
         }
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
@@ -72,16 +79,10 @@ namespace VRCAvatarEditor
                     using (new EditorGUILayout.HorizontalScope())
                     {
                         GUILayout.FlexibleSpace();
-                        int eventType = 0;
-                        var delta = GatoGUILayout.MiniMonitor(avatarCamTexture, monitorSize, monitorSize, ref eventType, isGammaCorrection, gammaMat);
-                        if (!isLightPressing)
+
+                        if (avatarMonitorField.Render())
                         {
-                            if (delta != Vector2.zero)
-                            {
-                                if (eventType == (int)EventType.MouseDrag) RotateAvatarCam(delta);
-                                else if (eventType == (int)EventType.ScrollWheel) ZoomAvatarCam(delta, zoomLevel);
-                                return true;
-                            }
+                            return true;
                         }
 
                         GUILayout.FlexibleSpace();
@@ -92,28 +93,19 @@ namespace VRCAvatarEditor
                     {
                         if (GUILayout.Button("<"))
                         {
-                            if (avatarCam != null)
-                                avatarCam.transform.Rotate(0, -CAMERA_ROTATE_ANGLE, 0);
-
+                            avatarMonitorField.RotateCamera(-CAMERA_ROTATE_ANGLE);
                             return true;
                         }
 
                         if (GUILayout.Button("Reset"))
                         {
-                            if (avatarCam != null)
-                            {
-                                avatarCam.transform.localRotation = Quaternion.identity;
-                                MoveAvatarCam();
-                            }
-
+                            avatarMonitorField.ResetCameraTransform();
                             return true;
                         }
 
                         if (GUILayout.Button(">"))
                         {
-                            if (avatarCam != null)
-                                avatarCam.transform.Rotate(0, CAMERA_ROTATE_ANGLE, 0);
-
+                            avatarMonitorField.RotateCamera(CAMERA_ROTATE_ANGLE);
                             return true;
                         }
                     }
@@ -125,7 +117,7 @@ namespace VRCAvatarEditor
 
                         if (check.changed)
                         {
-                            ZoomAvatarCam(zoomLevel);
+                            avatarMonitorField.ZoomAvatarCam(zoomLevel);
                             return true;
                         }
                     }
@@ -141,7 +133,7 @@ namespace VRCAvatarEditor
 
                     if (lightDelta != Vector2.zero)
                     {
-                        RotateLight(lightDelta);
+                        avatarMonitorField.RotateLight(lightDelta);
                         return true;
                     }
                     GUILayout.FlexibleSpace();
@@ -157,7 +149,7 @@ namespace VRCAvatarEditor
                         cameraHeight = GatoGUILayout.VerticalSlider(upDownTexture, 30f, 150f, cameraHeight, minCamHeight, maxCamHeight);
                         if (check.changed)
                         {
-                            MoveAvatarCamHeight(cameraHeight);
+                            avatarMonitorField.MoveAvatarCamHeight(cameraHeight);
                             return true;
                         }
                     }
@@ -180,7 +172,7 @@ namespace VRCAvatarEditor
             using (var check = new EditorGUI.ChangeCheckScope())
             {
                 monitorBgColor = EditorGUILayout.ColorField("モニター背景色", monitorBgColor);
-                if (check.changed) SetAvatarCamBgColor(monitorBgColor);
+                if (check.changed) avatarMonitorField.SetAvatarCamBgColor(monitorBgColor);
             }
             using (var check = new EditorGUI.ChangeCheckScope())
             {
@@ -196,147 +188,14 @@ namespace VRCAvatarEditor
             }
         }
 
-        /// <summary>
-        /// AvatarCamの位置を動かす
-        /// </summary>
-        public void MoveAvatarCam()
-        {
-            if (avatarCam == null || avatar.descriptor == null) return;
-
-            var nowPos = avatarCam.transform.position;
-            var avatarPos = avatar.descriptor.transform.position;
-            var childTrans = avatarCam.transform.Find("Main").gameObject.transform;
-
-            // 顔にあわせる
-            if (this.currentTool == VRCAvatarEditorGUI.ToolFunc.表情設定)
-            {
-                cameraHeight = avatar.eyePos.y;
-                avatarCam.transform.position = new Vector3(nowPos.x, cameraHeight + avatarPos.y, nowPos.z);
-                childTrans.localPosition = new Vector3(0, 0, faceZoomDist);
-                camPosZ = faceZoomDist;
-            }
-            else
-            {
-                cameraHeight = (maxCamHeight > 1) ? 1 : maxCamHeight;
-                avatarCam.transform.position = new Vector3(nowPos.x, cameraHeight + avatarPos.y, nowPos.z);
-                childTrans.localPosition = new Vector3(0, 0, defaultZoomDist);
-                camPosZ = defaultZoomDist;
-            }
-
-            zoomLevel = 1;
-        }
-
-        /// <summary>
-        /// AvatarCamの高さを変える
-        /// </summary>
-        /// <param name="value"></param>
-        private void MoveAvatarCamHeight(float value)
-        {
-            if (avatarCam == null || avatar.descriptor == null) return;
-            var nowPos = avatarCam.transform.position;
-            var avatarPos = avatar.descriptor.transform.position;
-            avatarCam.transform.position = new Vector3(nowPos.x, avatarPos.y + value, nowPos.z);
-        }
-
-        /// <summary>
-        /// AvatarCamを回転させる
-        /// </summary>
-        /// <param name="delta"></param>
-        private void RotateAvatarCam(Vector2 delta)
-        {
-            if (avatarCam == null || delta == Vector2.zero) return;
-
-            avatarCam.transform.Rotate(new Vector3(-delta.y, delta.x, 0));
-            Repaint();
-        }
-
-        /// <summary>
-        /// AvatarCamをズームさせる(マウスホイール)
-        /// </summary>
-        /// <param name="delta"></param>
-        private void ZoomAvatarCam(Vector2 delta, float level)
-        {
-            if (avatarCam == null || delta == Vector2.zero) return;
-
-            var cam = avatarCam.transform.GetChild(0);
-            cam.transform.Translate(new Vector3(0, 0, (float)(-(delta.y / Mathf.Abs(delta.y)) * zoomStepDist)));
-            camPosZ = cam.transform.localPosition.z + zoomStepDist * (1 - level);
-        }
-
-        /// <summary>
-        /// AvatarCamをズームさせる（スライダー）
-        /// </summary>
-        /// <param name="delta"></param>
-        private void ZoomAvatarCam(float level)
-        {
-            if (avatarCam == null) return;
-            var cam = avatarCam.transform.GetChild(0);
-            cam.transform.localPosition = new Vector3(0, 0, camPosZ - zoomStepDist * (1 - level));
-        }
-
-        /// <summary>
-        /// DirectionalLightを取得する
-        /// </summary>
-        /// <returns></returns>
-        private Light GetDirectionalLight()
-        {
-
-            var lights = Resources.FindObjectsOfTypeAll(typeof(Light)) as Light[];
-
-            foreach (var light in lights)
-            {
-                if (light.type == LightType.Directional)
-                {
-                    if (light.name == "SceneLight") continue;
-                    return light;
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// DirectionalLightを回転させる
-        /// </summary>
-        /// <param name="delta"></param>
-        private void RotateLight(Vector2 delta)
-        {
-            if (sceneLight == null) return;
-
-            (sceneLight.gameObject).transform.Rotate(new Vector3(0, 1, 0), -delta.x);
-            Repaint();
-        }
-
-        /// <summary>
-        /// アバターモニターの背景色を設定する
-        /// </summary>
-        /// <param name="col"></param>
-        private void SetAvatarCamBgColor(Color col)
-        {
-            if (avatarCam == null) return;
-
-            var mainTrans = avatarCam.transform.GetChild(0);
-            var camera = mainTrans.GetComponent<Camera>();
-            camera.backgroundColor = col;
-        }
 
         /// <summary>
         /// アバターを写す用のカメラを設定する
         /// </summary>
         public void SetAvatarCam(GameObject obj)
         {
-            if (avatarCam != null)
-                DestroyImmediate(avatarCam);
-
-            var avatarCam_prefab = Resources.Load<GameObject>("AvatarCam");
-            avatarCam = PrefabUtility.InstantiatePrefab(avatarCam_prefab) as GameObject;
-            avatarCam.transform.position = obj.transform.position;
-
-            maxCamHeight = avatar.eyePos.y;
-
-            SetAvatarCamBgColor(monitorBgColor);
-
-            MoveAvatarCam();
+            avatarMonitorField.AddAvatar(obj);
+            avatarMonitorField.SetAvatarCamBgColor(monitorBgColor);
         }
 
         public void LoadSettingData(SettingData settingAsset)
@@ -347,7 +206,7 @@ namespace VRCAvatarEditor
 
             isGammaCorrection = settingAsset.isGammaCorrection;
             monitorBgColor = settingAsset.monitorBgColor;
-            SetAvatarCamBgColor(monitorBgColor);
+            avatarMonitorField.SetAvatarCamBgColor(monitorBgColor);
 
             sizeType = settingAsset.monitorSizeType;
             if (settingAsset.monitorSizeType != MonitorSize.Custom)
@@ -374,11 +233,6 @@ namespace VRCAvatarEditor
             {
                 settingAsset.monitorSize = monitorSize;
             }
-        }
-
-        public void ChangeTab(VRCAvatarEditorGUI.ToolFunc tool)
-        {
-            this.currentTool = tool;
         }
     }
 }

@@ -517,9 +517,6 @@ namespace VRCAvatarEditor
 
         private void TabChanged()
         {
-            avatarMonitorGUI.ChangeTab(currentTool);
-            avatarMonitorGUI.MoveAvatarCam();
-
             if (currentTool == ToolFunc.表情設定)
             {
                 if (edittingAvatar.skinnedMeshList != null)
@@ -530,6 +527,13 @@ namespace VRCAvatarEditor
                             edittingAvatar.skinnedMeshList[i].SetExclusionBlendShapesByContains(faceEmotionGUI.blendshapeExclusions.Union(edittingAvatar.lipSyncShapeKeyNames).ToList<string>());
                     }
                 }
+
+                avatarMonitorGUI.MoveAvatarCam(true);
+
+            }
+            else
+            {
+                avatarMonitorGUI.MoveAvatarCam(false);
             }
         }
 
