@@ -726,6 +726,12 @@ namespace VRCAvatarEditor
         }
 
         #endregion
+
+        [MenuItem("VRCAvatarEditor/Check for Updates")]
+        public static void CheckForUpdates()
+        {
+            Application.OpenURL(BOOTH_ITEM_URL);
+        }
     }
 
 }
