@@ -30,7 +30,8 @@ namespace VRCAvatarEditor
 
         private bool newSDKUI;
         private bool needRepaint = false;
-        
+
+        private VRC_AvatarDescriptor targetAvatarDescriptor;
         private VRCAvatarEditor.Avatar edittingAvatar = null;
 
         private string editorFolderPath;
@@ -158,14 +159,10 @@ namespace VRCAvatarEditor
             // Windowを開いたときにオブジェクトが選択されていればそれをアバターとして設定する
             if (Selection.gameObjects.Length == 1)
             {
-                var descriptor = Selection.gameObjects[0].GetComponent<VRC_AvatarDescriptor>();
-                if (descriptor != null)
+                targetAvatarDescriptor = Selection.gameObjects[0].GetComponent<VRC_AvatarDescriptor>();
+                if (targetAvatarDescriptor != null)
                 {
-                    //edittingAvatar.descriptor = descriptor;
-
-                    //SetAvatarActive(edittingAvatar.descriptor);
-                    //edittingAvatar.LoadAvatarInfo();
-                    edittingAvatar = avatarMonitorGUI.SetAvatarPreview(descriptor);
+                    edittingAvatar = avatarMonitorGUI.SetAvatarPreview(targetAvatarDescriptor);
                     probeAnchorGUI.SettingForProbeSetter();
                     ApplySettingsToEditorGUI();
                 }
@@ -215,9 +212,9 @@ namespace VRCAvatarEditor
                     // アバター選択
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
-                        var descriptor = EditorGUILayout.ObjectField(
+                        targetAvatarDescriptor = EditorGUILayout.ObjectField(
                             "Avatar",
-                            edittingAvatar.descriptor,
+                            targetAvatarDescriptor,
                             typeof(VRC_AvatarDescriptor),
                             allowSceneObjects: true
                         ) as VRC_AvatarDescriptor;
@@ -225,10 +222,10 @@ namespace VRCAvatarEditor
                         if (check.changed)
                         {
                             // アバター変更時の処理
-                            if (descriptor != null)
+                            if (targetAvatarDescriptor != null)
                             {
                                 meshBoundsGUI.targetRenderers = null;
-                                edittingAvatar = avatarMonitorGUI.SetAvatarPreview(descriptor);
+                                edittingAvatar = avatarMonitorGUI.SetAvatarPreview(targetAvatarDescriptor);
                                 probeAnchorGUI.SettingForProbeSetter();
                                 ApplySettingsToEditorGUI();
                             }
