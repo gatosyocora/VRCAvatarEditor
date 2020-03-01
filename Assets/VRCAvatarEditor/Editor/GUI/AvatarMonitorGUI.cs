@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System;
+using VRCSDK2;
 
 namespace VRCAvatarEditor
 {
@@ -192,10 +193,12 @@ namespace VRCAvatarEditor
         /// <summary>
         /// アバターを写す用のカメラを設定する
         /// </summary>
-        public void SetAvatarCam(GameObject obj)
+        public VRCAvatarEditor.Avatar SetAvatarPreview(VRC_AvatarDescriptor descriptor)
         {
-            avatarMonitorField.AddAvatar(obj);
+            var avatar = avatarMonitorField.AddAvatar(descriptor);
             avatarMonitorField.SetAvatarCamBgColor(monitorBgColor);
+
+            return avatar;
         }
 
         public void LoadSettingData(SettingData settingAsset)

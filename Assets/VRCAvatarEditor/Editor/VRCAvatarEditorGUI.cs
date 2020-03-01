@@ -162,13 +162,13 @@ namespace VRCAvatarEditor
                 var descriptor = Selection.gameObjects[0].GetComponent<VRC_AvatarDescriptor>();
                 if (descriptor != null)
                 {
-                    edittingAvatar.descriptor = descriptor;
-                    
-                    SetAvatarActive(edittingAvatar.descriptor);
-                    edittingAvatar.LoadAvatarInfo();
+                    //edittingAvatar.descriptor = descriptor;
+
+                    //SetAvatarActive(edittingAvatar.descriptor);
+                    //edittingAvatar.LoadAvatarInfo();
+                    edittingAvatar = avatarMonitorGUI.SetAvatarPreview(descriptor);
                     probeAnchorGUI.SettingForProbeSetter();
                     ApplySettingsToEditorGUI();
-                    avatarMonitorGUI.SetAvatarCam(edittingAvatar.descriptor.gameObject);
                 }
             }
 
@@ -216,7 +216,7 @@ namespace VRCAvatarEditor
                     // アバター選択
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
-                        edittingAvatar.descriptor = EditorGUILayout.ObjectField(
+                        var descriptor = EditorGUILayout.ObjectField(
                             "Avatar",
                             edittingAvatar.descriptor,
                             typeof(VRC_AvatarDescriptor),
@@ -226,15 +226,12 @@ namespace VRCAvatarEditor
                         if (check.changed)
                         {
                             // アバター変更時の処理
-                            if (edittingAvatar.descriptor != null)
+                            if (descriptor != null)
                             {
                                 meshBoundsGUI.targetRenderers = null;
-
-                                SetAvatarActive(edittingAvatar.descriptor);
-                                edittingAvatar.LoadAvatarInfo();
+                                edittingAvatar = avatarMonitorGUI.SetAvatarPreview(descriptor);
                                 probeAnchorGUI.SettingForProbeSetter();
                                 ApplySettingsToEditorGUI();
-                                avatarMonitorGUI.SetAvatarCam(edittingAvatar.descriptor.gameObject);
                             }
                         }
                     }

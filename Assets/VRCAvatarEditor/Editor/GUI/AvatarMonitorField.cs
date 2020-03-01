@@ -16,7 +16,9 @@ public class AvatarMonitorField : IDisposable
     private int width, height;
     private Material textureMat;
 
-    private VRC_AvatarDescriptor avatar;
+    private VRC_AvatarDescriptor descriptor;
+    public VRCAvatarEditor.Avatar avatar { get; private set; }
+    private SkinnedMeshRenderer faceMesh;
 
     private Rect rect;
 
@@ -94,14 +96,18 @@ public class AvatarMonitorField : IDisposable
         SceneManager.MoveGameObjectToScene(obj, scene);
     }
 
-    public void AddAvatar(GameObject avatarObj)
+    public VRCAvatarEditor.Avatar AddAvatar(VRC_AvatarDescriptor descriptor)
     {
-        var newAvatarObj = GameObject.Instantiate(avatarObj);
+        var newAvatarObj = GameObject.Instantiate(descriptor.gameObject);
+        newAvatarObj.SetActive(true);
         AddGameObject(newAvatarObj);
         this.avatarObj = newAvatarObj;
         newAvatarObj.transform.position = new Vector3(0, 0, 0);
-        avatar = newAvatarObj.GetComponent<VRC_AvatarDescriptor>();
+        this.descriptor = newAvatarObj.GetComponent<VRC_AvatarDescriptor>();
+        avatar = new VRCAvatarEditor.Avatar(this.descriptor);
         ResetCameraTransform();
+
+        return avatar;
     }
 
     public void SetAvatarCamBgColor(Color col)
@@ -140,17 +146,17 @@ public class AvatarMonitorField : IDisposable
     /// </summary>
     public void MoveAvatarCam(bool setToFace)
     {
-        if (camera == null || avatar == null) return;
+        if (camera == null || descriptor == null) return;
 
         // 顔にあわせる
         if (setToFace)
         {
-            camera.transform.position = new Vector3(0, avatar.ViewPosition.y, faceZoomDist);
+            camera.transform.position = new Vector3(0, descriptor.ViewPosition.y, faceZoomDist);
             cameraObj.transform.rotation = Quaternion.Euler(0, 180, 0);
         }
         else
         {
-            camera.transform.position = new Vector3(0, avatar.ViewPosition.y, defaultZoomDist);
+            camera.transform.position = new Vector3(0, descriptor.ViewPosition.y, defaultZoomDist);
 
         }
         cameraObj.transform.rotation = Quaternion.Euler(0, 180, 0);
@@ -159,7 +165,7 @@ public class AvatarMonitorField : IDisposable
 
     public void ResetCameraTransform()
     {
-        cameraObj.transform.position = new Vector3(0, avatar.ViewPosition.y, 1);
+        cameraObj.transform.position = new Vector3(0, 1, 1);
         cameraObj.transform.rotation = Quaternion.Euler(0, 180, 0);
     }
 
@@ -169,8 +175,8 @@ public class AvatarMonitorField : IDisposable
     /// <param name="value"></param>
     public void MoveAvatarCamHeight(float value)
     {
-        if (camera == null || avatar == null) return;
-        var y = Mathf.Lerp(0, avatar.ViewPosition.y * 1.1f, value);
+        if (camera == null || descriptor == null) return;
+        var y = Mathf.Lerp(0, descriptor.ViewPosition.y * 1.1f, value);
         var nowCamPos = camera.transform.position;
         camera.transform.position = new Vector3(nowCamPos.x, y, nowCamPos.z);
     }
