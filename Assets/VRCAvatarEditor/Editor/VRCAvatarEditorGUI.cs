@@ -626,26 +626,6 @@ namespace VRCAvatarEditor
         }
 
         /// <summary>
-        /// targetAvatarのみアクティブにする
-        /// </summary>
-        /// <param name="targetAvatar"></param>
-        private void SetAvatarActive(VRC_AvatarDescriptor targetAvatar)
-        {
-            var targetObj = targetAvatar.gameObject;
-
-            if (!isActiveOnlySelectedAvatar)
-            {
-                targetObj.SetActive(true);
-                return;
-            }
-
-            var allAvatars = Resources.FindObjectsOfTypeAll(typeof(VRC_AvatarDescriptor)) as VRC_AvatarDescriptor[];
-
-            foreach (var avatar in allAvatars)
-                avatar.gameObject.SetActive(avatar.gameObject == targetObj);
-        }
-
-        /// <summary>
         /// pathのファイル内容を取得する
         /// </summary>
         /// <param name="path"></param>
