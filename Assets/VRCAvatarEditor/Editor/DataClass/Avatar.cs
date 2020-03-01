@@ -55,6 +55,17 @@ namespace VRCAvatarEditor
             animSavedFolderPath = "Assets/";
         }
 
+        public Avatar(VRC_AvatarDescriptor descriptor) : this()
+        {
+            LoadAvatarInfo(descriptor);
+        }
+
+        public void LoadAvatarInfo(VRC_AvatarDescriptor descriptor)
+        {
+            this.descriptor = descriptor;
+            LoadAvatarInfo();
+        }
+
         /// <summary>
         /// アバターの情報を取得する
         /// </summary>
