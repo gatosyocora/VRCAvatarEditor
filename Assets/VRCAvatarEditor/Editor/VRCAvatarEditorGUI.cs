@@ -149,7 +149,6 @@ namespace VRCAvatarEditor
             avatarMonitorGUI.Initialize(ref edittingAvatar, currentTool);
             animationsGUI.Initialize(ref edittingAvatar, saveFolder);
             avatarInfoGUI.Initialize(ref edittingAvatar);
-            faceEmotionGUI.Initialize(ref edittingAvatar, saveFolder, this);
             probeAnchorGUI.Initialize(ref edittingAvatar);
             meshBoundsGUI.Initialize(ref edittingAvatar);
             shaderGUI.Initialize(ref edittingAvatar);
@@ -516,6 +515,8 @@ namespace VRCAvatarEditor
         {
             if (currentTool == ToolFunc.表情設定)
             {
+                faceEmotionGUI.Initialize(ref edittingAvatar, saveFolder, this);
+
                 if (edittingAvatar.skinnedMeshList != null)
                 {
                     for (int i = 0; i < edittingAvatar.skinnedMeshList.Count; i++)
@@ -526,7 +527,6 @@ namespace VRCAvatarEditor
                 }
 
                 avatarMonitorGUI.MoveAvatarCam(true);
-
             }
             else
             {
