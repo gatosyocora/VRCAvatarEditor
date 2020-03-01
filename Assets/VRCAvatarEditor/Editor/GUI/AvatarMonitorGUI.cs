@@ -48,9 +48,8 @@ namespace VRCAvatarEditor
 
         public AvatarMonitorField avatarMonitorField;
 
-        public void Initialize(ref VRCAvatarEditor.Avatar avatar, VRCAvatarEditorGUI.ToolFunc currentTool)
+        public void Initialize(VRCAvatarEditorGUI.ToolFunc currentTool)
         {
-            this.avatar = avatar;
             this.currentTool = currentTool;
 
             upDownTexture = Resources.Load<Texture>("Icon/UpDown");
@@ -197,6 +196,7 @@ namespace VRCAvatarEditor
         {
             var avatar = avatarMonitorField.AddAvatar(descriptor);
             avatarMonitorField.SetAvatarCamBgColor(monitorBgColor);
+            this.avatar = avatar;
 
             return avatar;
         }

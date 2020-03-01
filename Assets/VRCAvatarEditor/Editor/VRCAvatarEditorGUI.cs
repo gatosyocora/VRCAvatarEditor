@@ -147,7 +147,7 @@ namespace VRCAvatarEditor
             meshBoundsGUI = ScriptableObject.CreateInstance<MeshBoundsGUI>();
             shaderGUI = ScriptableObject.CreateInstance<ShaderGUI>();
 
-            avatarMonitorGUI.Initialize(ref edittingAvatar, currentTool);
+            avatarMonitorGUI.Initialize(currentTool);
             animationsGUI.Initialize(ref edittingAvatar, saveFolder);
             avatarInfoGUI.Initialize(ref edittingAvatar);
             probeAnchorGUI.Initialize(ref edittingAvatar);
@@ -162,9 +162,7 @@ namespace VRCAvatarEditor
                 targetAvatarDescriptor = Selection.gameObjects[0].GetComponent<VRC_AvatarDescriptor>();
                 if (targetAvatarDescriptor != null)
                 {
-                    edittingAvatar = avatarMonitorGUI.SetAvatarPreview(targetAvatarDescriptor);
-                    probeAnchorGUI.SettingForProbeSetter();
-                    ApplySettingsToEditorGUI();
+                    OnChangedAvatar();
                 }
             }
 
@@ -225,9 +223,7 @@ namespace VRCAvatarEditor
                             if (targetAvatarDescriptor != null)
                             {
                                 meshBoundsGUI.targetRenderers = null;
-                                edittingAvatar = avatarMonitorGUI.SetAvatarPreview(targetAvatarDescriptor);
-                                probeAnchorGUI.SettingForProbeSetter();
-                                ApplySettingsToEditorGUI();
+                                OnChangedAvatar();
                             }
                         }
                     }
@@ -529,6 +525,16 @@ namespace VRCAvatarEditor
             {
                 avatarMonitorGUI.MoveAvatarCam(false);
             }
+        }
+
+        private void OnChangedAvatar()
+        {
+            edittingAvatar = avatarMonitorGUI.SetAvatarPreview(targetAvatarDescriptor);
+            probeAnchorGUI.SettingForProbeSetter();
+            ApplySettingsToEditorGUI();
+
+            animationsGUI.Initialize(ref edittingAvatar, saveFolder);
+            avatarInfoGUI.Initialize(ref edittingAvatar);
         }
 
         #region General Functions

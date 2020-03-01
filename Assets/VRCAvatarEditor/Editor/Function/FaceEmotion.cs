@@ -211,6 +211,8 @@ namespace VRCAvatarEditor
                 var mesh = avatar.skinnedMeshList[skinnedMeshIndex].mesh;
                 var renderer = avatar.skinnedMeshList[skinnedMeshIndex].renderer;
 
+                if (renderer == null) continue;
+
                 foreach (var animProperty in animProperties) {
                     var index = mesh.GetBlendShapeIndex(animProperty.blendShapeName);
                     if (index >= 0) {
