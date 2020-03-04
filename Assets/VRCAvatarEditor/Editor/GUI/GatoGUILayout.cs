@@ -121,34 +121,26 @@ public static class GatoGUILayout
         return Vector2.zero;
     }
 
-    public static Vector2 LightRotater(Light light, float width, float height, ref bool isPressing)
+    public static Vector2 LightRotater(float width, float height, ref bool isPressing)
     {
-        var isExistLight = (light != null && light.gameObject.activeInHierarchy);
-
         var rect = GUILayoutUtility.GetRect(width, height, GUI.skin.box);
-        var texture = (isExistLight) ? lightActiveTex : lightInactiveTex;
 
-        GUI.DrawTexture(rect, texture, ScaleMode.ScaleToFit, true, 0);
+        GUI.DrawTexture(rect, lightActiveTex, ScaleMode.ScaleToFit, true, 0);
 
         var e = Event.current;
 
-        if (isExistLight)
+        if (rect.Contains(e.mousePosition) && e.type == EventType.MouseDown)
         {
+            isPressing = true;
+        }
+        else if (isPressing && e.type == EventType.MouseUp)
+        {
+            isPressing = false;
+        }
 
-            if (rect.Contains(e.mousePosition) && e.type == EventType.MouseDown)
-            {
-                isPressing = true;
-            }
-            else if (isPressing && e.type == EventType.MouseUp)
-            {
-                isPressing = false;
-            }
-
-            if (e.type == EventType.MouseDrag && isPressing)
-            {
-                return e.delta;
-            }
-
+        if (e.type == EventType.MouseDrag && isPressing)
+        {
+            return e.delta;
         }
 
         return Vector2.zero;

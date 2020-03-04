@@ -129,7 +129,7 @@ namespace VRCAvatarEditor
                 using (new GUILayout.HorizontalScope())
                 {
                     GUILayout.FlexibleSpace();
-                    var lightDelta = GatoGUILayout.LightRotater(sceneLight, 50f, 50f, ref isLightPressing);
+                    var lightDelta = GatoGUILayout.LightRotater(50f, 50f, ref isLightPressing);
 
                     if (lightDelta != Vector2.zero)
                     {
