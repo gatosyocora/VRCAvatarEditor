@@ -98,6 +98,9 @@ public class AvatarMonitorField : IDisposable
 
     public VRCAvatarEditor.Avatar AddAvatar(VRC_AvatarDescriptor descriptor)
     {
+        if (avatarObj != null)
+            UnityEngine.Object.DestroyImmediate(avatarObj);
+
         var newAvatarObj = GameObject.Instantiate(descriptor.gameObject);
         newAvatarObj.SetActive(true);
         AddGameObject(newAvatarObj);
