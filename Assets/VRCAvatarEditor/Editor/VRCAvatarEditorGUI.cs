@@ -543,6 +543,8 @@ namespace VRCAvatarEditor
             animationsGUI.Initialize(ref edittingAvatar, saveFolder);
             avatarInfoGUI.Initialize(ref edittingAvatar);
             meshBoundsGUI.Initialize(ref originalAvatar);
+
+            currentTool = ToolFunc.アバター情報;
         }
 
         #region General Functions
