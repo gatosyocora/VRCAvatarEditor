@@ -235,6 +235,8 @@ namespace VRCAvatarEditor
 
         public static void ResetToDefaultFaceEmotion(ref VRCAvatarEditor.Avatar avatar)
         {
+            if (avatar == null) return;
+
             ApplyAnimationProperties(avatar.defaultFaceEmotion, ref avatar);
         }
 

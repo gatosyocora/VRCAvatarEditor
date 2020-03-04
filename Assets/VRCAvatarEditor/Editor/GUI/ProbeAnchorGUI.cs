@@ -39,7 +39,7 @@ namespace VRCAvatarEditor
                 targetPos = (ProbeAnchor.TARGETPOS)EditorGUILayout.EnumPopup("TargetPosition", targetPos);
 
                 // Rendererの一覧を表示
-                if (avatar.descriptor != null)
+                if (avatar != null && avatar.descriptor != null)
                 {
                     isOpeningRendererList = EditorGUILayout.Foldout(isOpeningRendererList, "Renderer List");
 
@@ -116,7 +116,7 @@ namespace VRCAvatarEditor
 
         public void SettingForProbeSetter()
         {
-            if (avatar.skinnedMeshRendererList == null || avatar.meshRendererList == null)
+            if (avatar == null || avatar.skinnedMeshRendererList == null || avatar.meshRendererList == null)
                 return;
 
             isSettingToSkinnedMesh = new bool[avatar.skinnedMeshRendererList.Count];

@@ -375,9 +375,12 @@ namespace VRCAvatarEditor
         {
             if (currentTool == ToolFunc.Bounds)
             {
-                foreach (var renderer in meshBoundsGUI.targetRenderers)
+                if (meshBoundsGUI != null && meshBoundsGUI.targetRenderers != null)
                 {
-                    MeshBounds.DrawBoundsGizmo(renderer);
+                    foreach (var renderer in meshBoundsGUI.targetRenderers)
+                    {
+                        MeshBounds.DrawBoundsGizmo(renderer);
+                    }
                 }
             }
 
