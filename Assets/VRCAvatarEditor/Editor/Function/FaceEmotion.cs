@@ -92,7 +92,7 @@ namespace VRCAvatarEditor
         /// </summary>
         /// <param name="parentObj">親オブジェクト</param>
         /// <returns>BlendShapeがついているSkinnedMeshRendererのリスト</returns>
-        public static List<SkinnedMesh> GetSkinnedMeshListOfBlendShape(GameObject parentObj)
+        public static List<SkinnedMesh> GetSkinnedMeshListOfBlendShape(GameObject parentObj, GameObject faceMeshObj)
         {
             var skinnedMeshList = new List<SkinnedMesh>();
 
@@ -100,7 +100,7 @@ namespace VRCAvatarEditor
 
             foreach (var skinnedMesh in skinnedMeshes)
                 if (skinnedMesh.sharedMesh.blendShapeCount > 0)
-                    skinnedMeshList.Add(new SkinnedMesh(skinnedMesh));
+                    skinnedMeshList.Add(new SkinnedMesh(skinnedMesh, faceMeshObj));
 
             return skinnedMeshList;
         }

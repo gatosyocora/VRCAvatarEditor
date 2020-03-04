@@ -176,7 +176,7 @@ namespace VRCAvatarEditor
                 scrollPos = scrollView.scrollPosition;
                 foreach (var skinnedMesh in avatar.skinnedMeshList)
                 {
-                    skinnedMesh.isOpenBlendShapes = EditorGUILayout.Foldout(skinnedMesh.isOpenBlendShapes, skinnedMesh.objName);
+                    skinnedMesh.isOpenBlendShapes = EditorGUILayout.Foldout(skinnedMesh.isOpenBlendShapes, skinnedMesh.obj.name);
                     if (skinnedMesh.isOpenBlendShapes)
                     {
                         using (new EditorGUI.IndentLevelScope())

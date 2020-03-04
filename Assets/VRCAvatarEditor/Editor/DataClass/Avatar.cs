@@ -103,7 +103,7 @@ namespace VRCAvatarEditor
 
             lipSyncStyle = descriptor.lipSync;
 
-            skinnedMeshList = FaceEmotion.GetSkinnedMeshListOfBlendShape(avatarObj);
+            skinnedMeshList = FaceEmotion.GetSkinnedMeshListOfBlendShape(avatarObj, faceMesh.gameObject);
             
             skinnedMeshRendererList = GatoUtility.GetSkinnedMeshList(avatarObj);
             meshRendererList = GatoUtility.GetMeshList(avatarObj);

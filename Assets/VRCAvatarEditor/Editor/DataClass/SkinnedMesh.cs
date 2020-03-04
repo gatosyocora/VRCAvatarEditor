@@ -13,7 +13,7 @@ namespace VRCAvatarEditor
     {
         public SkinnedMeshRenderer renderer;
         public Mesh mesh;
-        public string objName;
+        public GameObject obj;
         public int blendShapeNum;
         public bool isOpenBlendShapes;
         public List<BlendShape> blendshapes;
@@ -36,15 +36,15 @@ namespace VRCAvatarEditor
             }
         }
 
-        public SkinnedMesh(SkinnedMeshRenderer m_renderer)
+        public SkinnedMesh(SkinnedMeshRenderer m_renderer, GameObject faceMeshObj)
         {
             renderer = m_renderer;
             mesh = m_renderer.sharedMesh;
-            objName = renderer.gameObject.name;
+            obj = renderer.gameObject;
             blendshapes = GetBlendShapes();
             blendShapeNum = blendshapes.Count;
             // 表情のメッシュのみtrueにする
-            isOpenBlendShapes = (objName == "Body");
+            isOpenBlendShapes = obj.Equals(faceMeshObj);
         }
 
         /// <summary>
