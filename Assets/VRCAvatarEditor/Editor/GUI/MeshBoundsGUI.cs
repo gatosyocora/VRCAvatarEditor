@@ -11,24 +11,19 @@ namespace VRCAvatarEditor
         private VRCAvatarEditor.Avatar avatar;
 
         public List<SkinnedMeshRenderer> targetRenderers;
-        private List<SkinnedMeshRenderer> exclusions = new List<SkinnedMeshRenderer>();
+        private List<SkinnedMeshRenderer> exclusions;
 
         public void Initialize(ref VRCAvatarEditor.Avatar avatar)
         {
             this.avatar = avatar;
+            exclusions = new List<SkinnedMeshRenderer>();
+            targetRenderers = MeshBounds.GetSkinnedMeshRenderersWithoutExclusions(
+                                    avatar.descriptor.gameObject,
+                                    exclusions);
         }
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
         {
-
-            // TODO: UIの見直し
-            if (targetRenderers == null && avatar != null)
-            {
-                targetRenderers = MeshBounds.GetSkinnedMeshRenderersWithoutExclusions(
-                                    avatar.descriptor.gameObject,
-                                    exclusions);
-            }
-
             EditorGUILayout.LabelField("Bounds", EditorStyles.boldLabel);
 
             EditorGUILayout.Space();
@@ -131,5 +126,21 @@ namespace VRCAvatarEditor
         public void LoadSettingData(SettingData settingAsset) { }
         public void SaveSettingData(ref SettingData settingAsset) { }
         public void Dispose() { }
+
+        /// <summary>
+        /// BoundsサイズをSceneViewに表示する
+        /// </summary>
+        /// <param name="renderer"></param>
+        public void DrawBoundsGizmo()
+        {
+            if (targetRenderers == null) return;
+
+            foreach (var renderer in targetRenderers)
+            {
+                var bounds = renderer.bounds;
+                Handles.color = Color.white;
+                Handles.DrawWireCube(bounds.center, bounds.size);
+            }
+        }
     }
 }

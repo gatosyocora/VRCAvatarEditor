@@ -88,17 +88,6 @@ namespace VRCAvatarEditor
         }
 
         /// <summary>
-        /// BoundsサイズをSceneViewに表示する
-        /// </summary>
-        /// <param name="renderer"></param>
-        public static void DrawBoundsGizmo(SkinnedMeshRenderer renderer)
-        {
-            var bounds = renderer.bounds;
-            Handles.color = Color.white;
-            Handles.DrawWireCube(bounds.center, bounds.size);
-        }
-
-        /// <summary>
         /// Boundsの値をPrefabの状態に戻す
         /// </summary>
         /// <param name="renderers"></param>

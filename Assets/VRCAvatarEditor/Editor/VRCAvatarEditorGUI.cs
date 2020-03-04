@@ -152,7 +152,6 @@ namespace VRCAvatarEditor
             animationsGUI.Initialize(ref edittingAvatar, saveFolder);
             avatarInfoGUI.Initialize(ref edittingAvatar);
             probeAnchorGUI.Initialize(ref originalAvatar);
-            meshBoundsGUI.Initialize(ref originalAvatar);
 
             LoadSettingDataFromScriptableObject();
 
@@ -375,12 +374,9 @@ namespace VRCAvatarEditor
         {
             if (currentTool == ToolFunc.Bounds)
             {
-                if (meshBoundsGUI != null && meshBoundsGUI.targetRenderers != null)
+                if (meshBoundsGUI != null)
                 {
-                    foreach (var renderer in meshBoundsGUI.targetRenderers)
-                    {
-                        MeshBounds.DrawBoundsGizmo(renderer);
-                    }
+                    meshBoundsGUI.DrawBoundsGizmo();
                 }
             }
 
@@ -541,10 +537,12 @@ namespace VRCAvatarEditor
             probeAnchorGUI.SettingForProbeSetter();
             ApplySettingsToEditorGUI();
 
+            var targetAvatarObj = targetAvatarDescriptor.gameObject;
+            targetAvatarObj.SetActive(true);
+
             animationsGUI.Initialize(ref edittingAvatar, saveFolder);
             avatarInfoGUI.Initialize(ref edittingAvatar);
-
-            meshBoundsGUI.targetRenderers = null;
+            meshBoundsGUI.Initialize(ref edittingAvatar);
         }
 
         #region General Functions
