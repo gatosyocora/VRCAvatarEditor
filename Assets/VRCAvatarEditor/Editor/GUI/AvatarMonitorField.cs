@@ -13,7 +13,7 @@ public class AvatarMonitorField : IDisposable
     private GameObject lightObj;
     private Camera camera;
     private RenderTexture renderTexture;
-    private int width, height;
+    private int monitorSize;
     private Material textureMat;
 
     private VRC_AvatarDescriptor descriptor;
@@ -27,10 +27,9 @@ public class AvatarMonitorField : IDisposable
     private float defaultZoomDist = 1.0f;
     private float faceZoomDist = 0.5f;
 
-    public AvatarMonitorField(int width, int height)
+    public AvatarMonitorField()
     {
-        this.width = width;
-        this.height = height;
+        this.monitorSize = 0;
         this.textureMat = CreateGammaMaterial();
 
         scene = EditorSceneManager.NewPreviewScene();
@@ -45,9 +44,6 @@ public class AvatarMonitorField : IDisposable
         camera.clearFlags = CameraClearFlags.SolidColor;
         SetAvatarCamBgColor(Color.black);
 
-        renderTexture = new RenderTexture(width, height, 32);
-        camera.targetTexture = renderTexture;
-
         lightObj = new GameObject("Directional Light", typeof(Light));
         lightObj.transform.rotation = Quaternion.Euler(50, -30, 0);
         AddGameObject(lightObj);
@@ -61,9 +57,14 @@ public class AvatarMonitorField : IDisposable
 
     }
 
-    public bool Render(bool isGammaCorrection = true)
+    public bool Render(int monitorSize, bool isGammaCorrection = true)
     {
-        rect = GUILayoutUtility.GetRect(width, height);
+        if (monitorSize != this.monitorSize)
+        {
+            ResizeMonitor(monitorSize);
+        }
+
+        rect = GUILayoutUtility.GetRect(monitorSize, monitorSize);
 
         var e = Event.current;
 
@@ -214,6 +215,14 @@ public class AvatarMonitorField : IDisposable
     {
         Shader gammaShader = Resources.Load<Shader>("Gamma");
         return new Material(gammaShader);
+    }
+
+    private void ResizeMonitor(int monitorSize)
+    {
+        this.monitorSize = monitorSize;
+
+        renderTexture = new RenderTexture(monitorSize, monitorSize, 32);
+        camera.targetTexture = renderTexture;
     }
 
     public void Dispose()

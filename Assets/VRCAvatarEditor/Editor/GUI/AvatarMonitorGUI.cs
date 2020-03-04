@@ -54,7 +54,7 @@ namespace VRCAvatarEditor
 
             upDownTexture = Resources.Load<Texture>("Icon/UpDown");
 
-            avatarMonitorField = new AvatarMonitorField(256, 256);
+            avatarMonitorField = new AvatarMonitorField();
 
             MoveAvatarCam += avatarMonitorField.MoveAvatarCam;
         }
@@ -80,7 +80,7 @@ namespace VRCAvatarEditor
                     {
                         GUILayout.FlexibleSpace();
 
-                        if (avatarMonitorField.Render())
+                        if (avatarMonitorField.Render(monitorSize))
                         {
                             return true;
                         }
