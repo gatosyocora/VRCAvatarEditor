@@ -33,6 +33,7 @@ namespace VRCAvatarEditor
 
         private VRC_AvatarDescriptor targetAvatarDescriptor;
         private VRCAvatarEditor.Avatar edittingAvatar = null;
+        private VRCAvatarEditor.Avatar originalAvatar = null;
 
         private string editorFolderPath;
 
@@ -150,9 +151,8 @@ namespace VRCAvatarEditor
             avatarMonitorGUI.Initialize(currentTool);
             animationsGUI.Initialize(ref edittingAvatar, saveFolder);
             avatarInfoGUI.Initialize(ref edittingAvatar);
-            probeAnchorGUI.Initialize(ref edittingAvatar);
-            meshBoundsGUI.Initialize(ref edittingAvatar);
-            shaderGUI.Initialize(ref edittingAvatar);
+            probeAnchorGUI.Initialize(ref originalAvatar);
+            meshBoundsGUI.Initialize(ref originalAvatar);
 
             LoadSettingDataFromScriptableObject();
 
@@ -222,7 +222,6 @@ namespace VRCAvatarEditor
                             // アバター変更時の処理
                             if (targetAvatarDescriptor != null)
                             {
-                                meshBoundsGUI.targetRenderers = null;
                                 OnChangedAvatar();
                             }
                         }
@@ -525,16 +524,24 @@ namespace VRCAvatarEditor
             {
                 avatarMonitorGUI.MoveAvatarCam(false);
             }
+
+            if (currentTool == ToolFunc.Shader)
+            {
+                shaderGUI.Initialize(ref edittingAvatar);
+            }
         }
 
         private void OnChangedAvatar()
         {
             edittingAvatar = avatarMonitorGUI.SetAvatarPreview(targetAvatarDescriptor);
+            originalAvatar = new Avatar(targetAvatarDescriptor);
             probeAnchorGUI.SettingForProbeSetter();
             ApplySettingsToEditorGUI();
 
             animationsGUI.Initialize(ref edittingAvatar, saveFolder);
             avatarInfoGUI.Initialize(ref edittingAvatar);
+
+            meshBoundsGUI.targetRenderers = null;
         }
 
         #region General Functions
