@@ -33,12 +33,6 @@ namespace VRCAvatarEditor
 
                 // アップロード状態
                 EditorGUILayout.LabelField("Status", (string.IsNullOrEmpty(avatar.avatarId)) ? "New Avatar" : "Uploaded Avatar");
-                avatar.animator.runtimeAnimatorController = EditorGUILayout.ObjectField(
-                    "Animator",
-                    avatar.animator.runtimeAnimatorController,
-                    typeof(AnimatorOverrideController),
-                    true
-                ) as RuntimeAnimatorController;
 
                 // AnimatorOverrideController
                 using (var check = new EditorGUI.ChangeCheckScope())
