@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.Linq;
 
 // Copyright (c) 2019 gatosyocora
 
@@ -224,6 +225,18 @@ namespace VRCAvatarEditor
         {
             var paramList = GetAnimationParamaters(clip);
             ApplyAnimationProperties(paramList, ref avatar);
+        }
+
+        public static void ApplyBlendShapeContains(AnimationClip clip, VRCAvatarEditor.Avatar avatar)
+        {
+            var paramList = GetAnimationParamaters(clip);
+            foreach (var skinnedMesh in avatar.skinnedMeshList) {
+                foreach (var blendShape in skinnedMesh.blendshapes) {
+                    blendShape.isContains = paramList.Any(
+                        animParam => animParam.objPath == skinnedMesh.objName && animParam.blendShapeName == blendShape.name
+                        );
+                }
+            }
         }
 
         public static void SetToDefaultFaceEmotion(ref VRCAvatarEditor.Avatar avatar)
