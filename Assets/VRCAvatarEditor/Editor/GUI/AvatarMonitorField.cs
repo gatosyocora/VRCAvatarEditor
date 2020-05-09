@@ -225,6 +225,12 @@ public class AvatarMonitorField : IDisposable
         camera.targetTexture = renderTexture;
     }
 
+    public float GetNormalizedMonitorHeight()
+    {
+        if (cameraObj == null || descriptor == null) return 1f;
+        return cameraObj.transform.position.y / (descriptor.ViewPosition.y * 1.1f);
+    }
+
     public void Dispose()
     {
         camera.targetTexture = null;

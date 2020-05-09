@@ -16,9 +16,6 @@ namespace VRCAvatarEditor
 
         private static readonly int CAMERA_ROTATE_ANGLE = 30;
         
-        private float cameraHeight = 1;
-        private float maxCamHeight = 1;
-        private float minCamHeight = 0;
         private float camPosZ;
 
         private float zoomLevel = 1.0f;
@@ -146,10 +143,10 @@ namespace VRCAvatarEditor
                     GUILayout.FlexibleSpace();
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
-                        cameraHeight = GatoGUILayout.VerticalSlider(upDownTexture, 30f, 150f, cameraHeight, minCamHeight, maxCamHeight);
+                        var normalizedCameraHeight = GatoGUILayout.VerticalSlider(upDownTexture, 30f, 150f, avatarMonitorField.GetNormalizedMonitorHeight(), 0, 1);
                         if (check.changed)
                         {
-                            avatarMonitorField.MoveAvatarCamHeight(cameraHeight);
+                            avatarMonitorField.MoveAvatarCamHeight(normalizedCameraHeight);
                             return true;
                         }
                     }
