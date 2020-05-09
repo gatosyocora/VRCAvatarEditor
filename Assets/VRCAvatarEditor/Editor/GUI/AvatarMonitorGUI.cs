@@ -157,9 +157,15 @@ namespace VRCAvatarEditor
         public void DrawSettingsGUI()
         {
             EditorGUILayout.LabelField("AvatarMonitor", EditorStyles.boldLabel);
-            defaultZoomDist = EditorGUILayout.FloatField("Default Camera Distance", defaultZoomDist);
-            faceZoomDist = EditorGUILayout.FloatField("Face Camera Distance", faceZoomDist);
-            zoomStepDist = EditorGUILayout.FloatField("Camera Zoom Step Distance", zoomStepDist);
+            using (var check = new EditorGUI.ChangeCheckScope())
+            {
+                defaultZoomDist = EditorGUILayout.FloatField("Default Camera Distance", defaultZoomDist);
+                faceZoomDist = EditorGUILayout.FloatField("Face Camera Distance", faceZoomDist);
+                zoomStepDist = EditorGUILayout.FloatField("Camera Zoom Step Distance", zoomStepDist);
+
+                if (check.changed)
+                    avatarMonitorField.SetZoomParameters(defaultZoomDist, faceZoomDist, zoomStepDist);
+            }
 
             EditorGUILayout.Space();
             isGammaCorrection = EditorGUILayout.ToggleLeft("ガンマ補正", isGammaCorrection);
