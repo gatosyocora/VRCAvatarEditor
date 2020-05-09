@@ -32,9 +32,9 @@ namespace VRCAvatarEditor
             Custom
         }
 
-        private float defaultZoomDist = 1.0f;
-        private float faceZoomDist = 0.5f;
-        private float zoomStepDist = 0.25f;
+        private float defaultZoomDist = 0.5f;
+        private float faceZoomDist = 0.1f;
+        private float zoomStepDist = 0.1f;
 
         private Color monitorBgColor = new Color(0.95f, 0.95f, 0.95f, 1);
 
@@ -215,6 +215,7 @@ namespace VRCAvatarEditor
             {
                 monitorSize = (int)settingAsset.monitorSize;
             }
+            avatarMonitorField.SetZoomParameters(defaultZoomDist, faceZoomDist, zoomStepDist);
         }
 
         public void SaveSettingData(ref SettingData settingAsset)

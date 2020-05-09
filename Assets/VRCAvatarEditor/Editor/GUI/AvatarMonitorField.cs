@@ -22,11 +22,6 @@ public class AvatarMonitorField : IDisposable
 
     private Rect rect;
 
-    private float zoomLevel = 1.0f;
-    private float zoomStepDist = 0.25f;
-    private float defaultZoomDist = 1.0f;
-    private float faceZoomDist = 0.5f;
-
     private float mainOrthographicSize;
     private float subOrthographicSize;
     private float defaultOrthographicSize = 0.5f;
@@ -252,6 +247,13 @@ public class AvatarMonitorField : IDisposable
     public float GetNormalizedSubOrthographicSize()
     {
         return subOrthographicSize / orthographicsStep;
+    }
+
+    public void SetZoomParameters(float defaultZoomValue, float faceZoomValue, float zoomStepValue)
+    {
+        defaultOrthographicSize = defaultZoomValue;
+        faceOrthographicSize = faceZoomValue;
+        orthographicsStep = zoomStepValue;
     }
 
     public void Dispose()
