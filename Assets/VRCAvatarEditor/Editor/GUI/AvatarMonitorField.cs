@@ -27,6 +27,8 @@ public class AvatarMonitorField : IDisposable
     private float defaultZoomDist = 1.0f;
     private float faceZoomDist = 0.5f;
 
+    private float mainOrthographicSize;
+    private float subOrthographicSize;
     private float defaultOrthographicSize = 0.5f;
     private float faceOrthographicSize = 0.1f;
     private float orthographicsStep = 0.1f;
@@ -35,6 +37,9 @@ public class AvatarMonitorField : IDisposable
     {
         this.monitorSize = 0;
         this.textureMat = CreateGammaMaterial();
+
+        this.mainOrthographicSize = defaultOrthographicSize;
+        this.subOrthographicSize = 0f;
 
         scene = EditorSceneManager.NewPreviewScene();
         cameraObj = new GameObject("Camera", typeof(Camera));
@@ -144,9 +149,24 @@ public class AvatarMonitorField : IDisposable
     {
         if (camera == null || delta == Vector2.zero) return;
 
-        var newOrthographicsSize = camera.orthographicSize + (delta.y / Mathf.Abs(delta.y)) * orthographicsStep;
-        if (newOrthographicsSize > 0)
-            camera.orthographicSize = newOrthographicsSize;
+        var newMainOrthographicsSize = mainOrthographicSize + (delta.y / Mathf.Abs(delta.y)) * orthographicsStep;
+        if (newMainOrthographicsSize - orthographicsStep > 0)
+        {
+            camera.orthographicSize = newMainOrthographicsSize - subOrthographicSize;
+            mainOrthographicSize = newMainOrthographicsSize;
+        }
+    }
+
+    /// <summary>
+    /// AvatarCamをズームさせる（スライダー）
+    /// </summary>
+    /// <param name="delta"></param>
+    public void ZoomAvatarCam(float level)
+    {
+        if (camera == null) return;
+        var newSubOrthographicsSize = orthographicsStep * level;
+        camera.orthographicSize = mainOrthographicSize - newSubOrthographicsSize;
+        subOrthographicSize = newSubOrthographicsSize;
     }
 
     /// <summary>
@@ -159,21 +179,27 @@ public class AvatarMonitorField : IDisposable
         // 顔にあわせる
         if (setToFace)
         {
-            camera.orthographicSize = faceOrthographicSize;
+            mainOrthographicSize = faceOrthographicSize;
         }
         else
         {
-            camera.orthographicSize = defaultOrthographicSize;
+            mainOrthographicSize = defaultOrthographicSize;
         }
         var nowPos = camera.transform.position;
         camera.transform.position = new Vector3(nowPos.x, descriptor.ViewPosition.y, nowPos.z);
         cameraObj.transform.rotation = Quaternion.Euler(0, 180, 0);
+        mainOrthographicSize = defaultOrthographicSize;
+        subOrthographicSize = 0f;
+        camera.orthographicSize = mainOrthographicSize;
     }
 
     public void ResetCameraTransform()
     {
         cameraObj.transform.position = new Vector3(0, 1, 1);
         cameraObj.transform.rotation = Quaternion.Euler(0, 180, 0);
+        mainOrthographicSize = defaultOrthographicSize;
+        subOrthographicSize = 0f;
+        camera.orthographicSize = mainOrthographicSize;
     }
 
     /// <summary>
@@ -186,16 +212,6 @@ public class AvatarMonitorField : IDisposable
         var y = Mathf.Lerp(0, descriptor.ViewPosition.y * 1.1f, value);
         var nowCamPos = camera.transform.position;
         camera.transform.position = new Vector3(nowCamPos.x, y, nowCamPos.z);
-    }
-
-    /// <summary>
-    /// AvatarCamをズームさせる（スライダー）
-    /// </summary>
-    /// <param name="delta"></param>
-    public void ZoomAvatarCam(float level)
-    {
-        if (camera == null) return;
-        camera.transform.Translate(new Vector3(0, 0, -zoomStepDist * (1 - level)));
     }
 
     public void RotateCamera(int angleY)
@@ -232,6 +248,11 @@ public class AvatarMonitorField : IDisposable
     {
         if (cameraObj == null || descriptor == null) return 1f;
         return cameraObj.transform.position.y / (descriptor.ViewPosition.y * 1.1f);
+    }
+
+    public float GetNormalizedSubOrthographicSize()
+    {
+        return subOrthographicSize / orthographicsStep;
     }
 
     public void Dispose()

@@ -18,8 +18,6 @@ namespace VRCAvatarEditor
         
         private float camPosZ;
 
-        private float zoomLevel = 1.0f;
-
         private Light sceneLight;
         private bool isLightPressing = false;
 
@@ -110,7 +108,7 @@ namespace VRCAvatarEditor
                     using (new GUILayout.HorizontalScope())
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
-                        zoomLevel = EditorGUILayout.Slider(zoomLevel, 0f, 1f);
+                        var zoomLevel = EditorGUILayout.Slider(avatarMonitorField.GetNormalizedSubOrthographicSize(), 0f, 1f);
 
                         if (check.changed)
                         {
