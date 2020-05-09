@@ -29,6 +29,7 @@ public class AvatarMonitorField : IDisposable
 
     private float defaultOrthographicSize = 0.5f;
     private float faceOrthographicSize = 0.1f;
+    private float orthographicsStep = 0.1f;
 
     public AvatarMonitorField()
     {
@@ -143,7 +144,7 @@ public class AvatarMonitorField : IDisposable
     {
         if (camera == null || delta == Vector2.zero) return;
 
-        var newOrthographicsSize = camera.orthographicSize + (delta.y / Mathf.Abs(delta.y)) * 0.1f;
+        var newOrthographicsSize = camera.orthographicSize + (delta.y / Mathf.Abs(delta.y)) * orthographicsStep;
         if (newOrthographicsSize > 0)
             camera.orthographicSize = newOrthographicsSize;
     }
