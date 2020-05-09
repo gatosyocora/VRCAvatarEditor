@@ -173,7 +173,7 @@ namespace VRCAvatarEditor
                     {
                         EditorGUILayout.HelpBox("Not Setting Custom " + kind + " Anims", MessageType.Warning);
 
-                        if (GUILayout.Button("Create New Custom "+kind+"Anims Controller"))
+                        if (GUILayout.Button("Create New Custom"+kind+"Anims Controller"))
                         {
                             var fileName = "CO_" + originalAvatar.animator.gameObject.name + ".overrideController";
                             saveFolderPath = "Assets/" + originalAvatar.animator.gameObject.name + "/";
