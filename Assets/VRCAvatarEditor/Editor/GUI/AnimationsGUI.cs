@@ -173,24 +173,31 @@ namespace VRCAvatarEditor
                     {
                         EditorGUILayout.HelpBox("Not Setting Custom " + kind + " Anims", MessageType.Warning);
 
-                        if (_tab == Tab.Standing)
+                        if (GUILayout.Button("Create New Custom "+kind+"Anims Controller"))
                         {
-                            if (GUILayout.Button("Auto Setting"))
+                            var fileName = "CO_" + originalAvatar.animator.gameObject.name + ".overrideController";
+                            saveFolderPath = "Assets/" + originalAvatar.animator.gameObject.name + "/";
+                            var fullFolderPath = Path.GetFullPath(saveFolderPath);
+                            if (!Directory.Exists(fullFolderPath)) 
                             {
-                                var fileName = "CO_" + originalAvatar.animator.gameObject.name + ".overrideController";
-                                saveFolderPath = "Assets/" + originalAvatar.animator.gameObject.name + "/";
-                                var fullFolderPath = Path.GetFullPath(saveFolderPath);
-                                if (!Directory.Exists(fullFolderPath)) 
-                                {
-                                    Directory.CreateDirectory(fullFolderPath);
-                                    AssetDatabase.Refresh();
-                                }
-                                var createdCustomOverrideController = InstantiateVrcCustomOverideController(saveFolderPath + fileName);
+                                Directory.CreateDirectory(fullFolderPath);
+                                AssetDatabase.Refresh();
+                            }
+                            var createdCustomOverrideController = InstantiateVrcCustomOverideController(saveFolderPath + fileName);
+
+                            if (_tab == Tab.Standing)
+                            {
                                 originalAvatar.descriptor.CustomStandingAnims = createdCustomOverrideController;
                                 editAvatar.descriptor.CustomStandingAnims = createdCustomOverrideController;
-                                originalAvatar.LoadAvatarInfo();
-                                editAvatar.LoadAvatarInfo();
                             }
+                            else
+                            {
+                                originalAvatar.descriptor.CustomSittingAnims = createdCustomOverrideController;
+                                editAvatar.descriptor.CustomSittingAnims = createdCustomOverrideController;
+                            }
+
+                            originalAvatar.LoadAvatarInfo();
+                            editAvatar.LoadAvatarInfo();
                         }
                     }
                 }
