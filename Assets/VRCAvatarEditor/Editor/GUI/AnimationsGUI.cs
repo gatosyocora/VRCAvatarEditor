@@ -199,6 +199,21 @@ namespace VRCAvatarEditor
                             originalAvatar.LoadAvatarInfo();
                             editAvatar.LoadAvatarInfo();
                         }
+
+                        if (_tab == Tab.Sitting)
+                        {
+                            using (new EditorGUI.DisabledGroupScope(editAvatar.standingAnimController == null))
+                            {
+                                if (GUILayout.Button("Set to same as CustomStandingAnims"))
+                                {
+                                    var customStandingAnimsController = originalAvatar.descriptor.CustomStandingAnims;
+                                    originalAvatar.descriptor.CustomSittingAnims = customStandingAnimsController;
+                                    editAvatar.descriptor.CustomSittingAnims = customStandingAnimsController;
+                                    originalAvatar.LoadAvatarInfo();
+                                    editAvatar.LoadAvatarInfo();
+                                }
+                            }
+                        }
                     }
                 }
             }
