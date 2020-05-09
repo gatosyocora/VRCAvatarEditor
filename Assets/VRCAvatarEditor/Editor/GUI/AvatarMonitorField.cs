@@ -82,7 +82,7 @@ public class AvatarMonitorField : IDisposable
             }
             else if (e.type == EventType.ScrollWheel)
             {
-                ZoomAvatarCam(e.delta, zoomLevel);
+                ZoomAvatarCam(e.delta);
                 return true;
             }
         }
@@ -139,7 +139,7 @@ public class AvatarMonitorField : IDisposable
     /// AvatarCamをズームさせる(マウスホイール)
     /// </summary>
     /// <param name="delta"></param>
-    private void ZoomAvatarCam(Vector2 delta, float level)
+    private void ZoomAvatarCam(Vector2 delta)
     {
         if (camera == null || delta == Vector2.zero) return;
 
@@ -165,7 +165,6 @@ public class AvatarMonitorField : IDisposable
         var nowPos = camera.transform.position;
         camera.transform.position = new Vector3(nowPos.x, descriptor.ViewPosition.y, nowPos.z);
         cameraObj.transform.rotation = Quaternion.Euler(0, 180, 0);
-        zoomLevel = 1;
     }
 
     public void ResetCameraTransform()
