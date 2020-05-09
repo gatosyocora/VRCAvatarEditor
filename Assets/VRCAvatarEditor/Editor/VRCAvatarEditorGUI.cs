@@ -350,6 +350,7 @@ namespace VRCAvatarEditor
                         if (GUILayout.Button("Reset Pose"))
                         {
                             HumanoidPose.ResetPose(edittingAvatar.descriptor.gameObject);
+                            HumanoidPose.ResetPose(originalAvatar.descriptor.gameObject);
                         }
 
                         // アップロード
