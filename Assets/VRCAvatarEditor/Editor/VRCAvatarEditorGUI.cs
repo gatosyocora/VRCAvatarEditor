@@ -540,6 +540,7 @@ namespace VRCAvatarEditor
             var targetAvatarObj = targetAvatarDescriptor.gameObject;
             targetAvatarObj.SetActive(true);
 
+            avatarMonitorGUI.MoveAvatarCam(false);
             animationsGUI.Initialize(ref edittingAvatar, saveFolder);
             avatarInfoGUI.Initialize(ref edittingAvatar);
             meshBoundsGUI.Initialize(ref originalAvatar);
