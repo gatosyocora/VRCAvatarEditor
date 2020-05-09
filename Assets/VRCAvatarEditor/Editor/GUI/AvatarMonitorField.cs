@@ -188,7 +188,6 @@ public class AvatarMonitorField : IDisposable
         var nowPos = camera.transform.position;
         camera.transform.position = new Vector3(nowPos.x, descriptor.ViewPosition.y, nowPos.z);
         cameraObj.transform.rotation = Quaternion.Euler(0, 180, 0);
-        mainOrthographicSize = defaultOrthographicSize;
         subOrthographicSize = 0f;
         camera.orthographicSize = mainOrthographicSize;
     }
