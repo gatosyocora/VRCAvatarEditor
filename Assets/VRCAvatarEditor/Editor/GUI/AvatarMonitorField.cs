@@ -143,7 +143,9 @@ public class AvatarMonitorField : IDisposable
     {
         if (camera == null || delta == Vector2.zero) return;
 
-        camera.orthographicSize += (delta.y / Mathf.Abs(delta.y)) * 0.1f;
+        var newOrthographicsSize = camera.orthographicSize + (delta.y / Mathf.Abs(delta.y)) * 0.1f;
+        if (newOrthographicsSize > 0)
+            camera.orthographicSize = newOrthographicsSize;
     }
 
     /// <summary>
