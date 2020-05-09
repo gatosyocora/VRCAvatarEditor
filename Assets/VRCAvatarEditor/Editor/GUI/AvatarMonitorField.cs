@@ -27,6 +27,9 @@ public class AvatarMonitorField : IDisposable
     private float defaultZoomDist = 1.0f;
     private float faceZoomDist = 0.5f;
 
+    private float defaultOrthographicSize = 0.5f;
+    private float faceOrthographicSize = 0.1f;
+
     public AvatarMonitorField()
     {
         this.monitorSize = 0;
@@ -37,6 +40,8 @@ public class AvatarMonitorField : IDisposable
         AddGameObject(cameraObj);
         camera = cameraObj.GetComponent<Camera>();
         camera.cameraType = CameraType.Preview;
+        camera.orthographic = true;
+        camera.orthographicSize = defaultOrthographicSize;
         camera.forceIntoRenderTexture = true;
         camera.scene = scene;
         camera.enabled = false;
@@ -138,11 +143,7 @@ public class AvatarMonitorField : IDisposable
     {
         if (camera == null || delta == Vector2.zero) return;
 
-        cameraObj.transform.Translate(new Vector3(
-            0, 
-            0, 
-            (float)(-(delta.y / Mathf.Abs(delta.y)) * zoomStepDist))
-        );
+        camera.orthographicSize += (delta.y / Mathf.Abs(delta.y)) * 0.1f;
     }
 
     /// <summary>
@@ -155,14 +156,14 @@ public class AvatarMonitorField : IDisposable
         // 顔にあわせる
         if (setToFace)
         {
-            camera.transform.position = new Vector3(0, descriptor.ViewPosition.y, faceZoomDist);
-            cameraObj.transform.rotation = Quaternion.Euler(0, 180, 0);
+            camera.orthographicSize = faceOrthographicSize;
         }
         else
         {
-            camera.transform.position = new Vector3(0, descriptor.ViewPosition.y, defaultZoomDist);
-
+            camera.orthographicSize = defaultOrthographicSize;
         }
+        var nowPos = camera.transform.position;
+        camera.transform.position = new Vector3(nowPos.x, descriptor.ViewPosition.y, nowPos.z);
         cameraObj.transform.rotation = Quaternion.Euler(0, 180, 0);
         zoomLevel = 1;
     }
