@@ -7,7 +7,8 @@ namespace VRCAvatarEditor
 {
     public class AnimationsGUI : Editor, IVRCAvatarEditorGUI
     {
-        private VRCAvatarEditor.Avatar avatar;
+        private VRCAvatarEditor.Avatar editAvatar;
+        private VRCAvatarEditor.Avatar originalAvatar;
 
         public static readonly string[] HANDANIMS = { "FIST", "FINGERPOINT", "ROCKNROLL", "HANDOPEN", "THUMBSUP", "VICTORY", "HANDGUN" };
         public static readonly string[] EMOTEANIMS = { "EMOTE1", "EMOTE2", "EMOTE3", "EMOTE4", "EMOTE5", "EMOTE6", "EMOTE7", "EMOTE8" };
@@ -47,9 +48,10 @@ namespace VRCAvatarEditor
 
         private string saveFolderPath;
 
-        public void Initialize(ref VRCAvatarEditor.Avatar avatar, string saveFolderPath)
+        public void Initialize(ref VRCAvatarEditor.Avatar editAvatar, VRCAvatarEditor.Avatar originalAvatar, string saveFolderPath)
         {
-            this.avatar = avatar;
+            this.editAvatar = editAvatar;
+            this.originalAvatar = originalAvatar;
             UpdateSaveFolderPath(saveFolderPath);
         }
 
@@ -68,12 +70,14 @@ namespace VRCAvatarEditor
                 if (_tab == Tab.Standing)
                 {
                     kind = "Standing";
-                    controller = avatar.standingAnimController;
+                    if (originalAvatar != null)
+                        controller = originalAvatar.standingAnimController;
                 }
                 else
                 {
                     kind = "Sitting";
-                    controller = avatar.sittingAnimController;
+                    if (originalAvatar != null)
+                        controller = originalAvatar.sittingAnimController;
                 }
 
                 titleText = kind + " Animations";
@@ -128,7 +132,7 @@ namespace VRCAvatarEditor
                                 {
                                     if (GUILayout.Button("Edit", GUILayout.Width(50)))
                                     {
-                                        FaceEmotion.ApplyAnimationProperties(controller[handAnim], ref avatar);
+                                        FaceEmotion.ApplyAnimationProperties(controller[handAnim], ref editAvatar);
                                     }
                                 }
                             }
@@ -161,7 +165,7 @@ namespace VRCAvatarEditor
                 }
                 else
                 {
-                    if (avatar.descriptor == null)
+                    if (editAvatar.descriptor == null)
                     {
                         EditorGUILayout.HelpBox("Not Setting Avatar", MessageType.Warning);
                     }
@@ -173,16 +177,19 @@ namespace VRCAvatarEditor
                         {
                             if (GUILayout.Button("Auto Setting"))
                             {
-                                var fileName = "CO_" + avatar.animator.gameObject.name + ".overrideController";
-                                saveFolderPath = "Assets/" + avatar.animator.gameObject.name + "/";
+                                var fileName = "CO_" + originalAvatar.animator.gameObject.name + ".overrideController";
+                                saveFolderPath = "Assets/" + originalAvatar.animator.gameObject.name + "/";
                                 var fullFolderPath = Path.GetFullPath(saveFolderPath);
                                 if (!Directory.Exists(fullFolderPath)) 
                                 {
                                     Directory.CreateDirectory(fullFolderPath);
                                     AssetDatabase.Refresh();
                                 }
-                                avatar.descriptor.CustomStandingAnims = InstantiateVrcCustomOverideController(saveFolderPath + fileName);
-                                avatar.LoadAvatarInfo();
+                                var createdCustomOverrideController = InstantiateVrcCustomOverideController(saveFolderPath + fileName);
+                                originalAvatar.descriptor.CustomStandingAnims = createdCustomOverrideController;
+                                editAvatar.descriptor.CustomStandingAnims = createdCustomOverrideController;
+                                originalAvatar.LoadAvatarInfo();
+                                editAvatar.LoadAvatarInfo();
                             }
                         }
                     }
