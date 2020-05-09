@@ -228,9 +228,11 @@ namespace VRCAvatarEditor
             ApplyAnimationProperties(paramList, ref avatar);
         }
 
-        public static void SetToDefaultFaceEmotion(ref VRCAvatarEditor.Avatar avatar)
+        public static void SetToDefaultFaceEmotion(ref VRCAvatarEditor.Avatar editAvatar, VRCAvatarEditor.Avatar originalAvatar)
         {
-            avatar.defaultFaceEmotion = GetAvatarFaceParamaters(avatar.skinnedMeshList);
+            var defaultFaceEmotion = GetAvatarFaceParamaters(editAvatar.skinnedMeshList);
+            editAvatar.defaultFaceEmotion = defaultFaceEmotion;
+            ApplyAnimationProperties(defaultFaceEmotion, ref originalAvatar);
         }
 
         public static void ResetToDefaultFaceEmotion(ref VRCAvatarEditor.Avatar avatar)

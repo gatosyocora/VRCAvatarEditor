@@ -9,7 +9,8 @@ namespace VRCAvatarEditor
 {
     public class FaceEmotionGUI : Editor, IVRCAvatarEditorGUI
     {
-        private VRCAvatarEditor.Avatar avatar;
+        private VRCAvatarEditor.Avatar editAvatar;
+        private VRCAvatarEditor.Avatar originalAvatar;
         private VRCAvatarEditorGUI parentWindow;
 
         private static readonly string DEFAULT_ANIM_NAME = "faceAnim";
@@ -30,9 +31,10 @@ namespace VRCAvatarEditor
 
         private string animName;
 
-        public void Initialize(ref VRCAvatarEditor.Avatar avatar, string saveFolderPath, EditorWindow window)
+        public void Initialize(ref VRCAvatarEditor.Avatar editAvatar, VRCAvatarEditor.Avatar originalAvatar, string saveFolderPath, EditorWindow window)
         {
-            this.avatar = avatar;
+            this.editAvatar = editAvatar;
+            this.originalAvatar = originalAvatar;
             animName = DEFAULT_ANIM_NAME;
             this.parentWindow = window as VRCAvatarEditorGUI;
         }
@@ -43,7 +45,7 @@ namespace VRCAvatarEditor
 
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
             {
-                using (new EditorGUI.DisabledScope(avatar.descriptor == null))
+                using (new EditorGUI.DisabledScope(editAvatar.descriptor == null))
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     GUILayout.FlexibleSpace();
@@ -60,17 +62,17 @@ namespace VRCAvatarEditor
                                 "現在の表情をデフォルトに設定しますか", 
                                 "OK", "Cancel"))
                         {
-                            FaceEmotion.SetToDefaultFaceEmotion(ref avatar);
+                            FaceEmotion.SetToDefaultFaceEmotion(ref editAvatar, originalAvatar);
                         }
                     }
 
                     if (GUILayout.Button("Reset To Default"))
                     {
-                        FaceEmotion.ResetToDefaultFaceEmotion(ref avatar);
+                        FaceEmotion.ResetToDefaultFaceEmotion(ref editAvatar);
                     }
                 }
 
-                if (avatar.skinnedMeshList != null)
+                if (editAvatar.skinnedMeshList != null)
                 {
                     BlendShapeListGUI();
                 }
@@ -79,14 +81,14 @@ namespace VRCAvatarEditor
 
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    EditorGUILayout.LabelField("AnimClipSaveFolder", avatar.animSavedFolderPath);
+                    EditorGUILayout.LabelField("AnimClipSaveFolder", originalAvatar.animSavedFolderPath);
 
                     if (GUILayout.Button("Select Folder", GUILayout.Width(100)))
                     {
-                        avatar.animSavedFolderPath = EditorUtility.OpenFolderPanel("Select saved folder", avatar.animSavedFolderPath, string.Empty);
-                        avatar.animSavedFolderPath = FileUtil.GetProjectRelativePath(avatar.animSavedFolderPath) + "/";
-                        if (avatar.animSavedFolderPath == "/") avatar.animSavedFolderPath = "Assets/";
-                        parentWindow.animationsGUI.UpdateSaveFolderPath(avatar.animSavedFolderPath);
+                        originalAvatar.animSavedFolderPath = EditorUtility.OpenFolderPanel("Select saved folder", originalAvatar.animSavedFolderPath, string.Empty);
+                        originalAvatar.animSavedFolderPath = FileUtil.GetProjectRelativePath(originalAvatar.animSavedFolderPath) + "/";
+                        if (originalAvatar.animSavedFolderPath == "/") originalAvatar.animSavedFolderPath = "Assets/";
+                        parentWindow.animationsGUI.UpdateSaveFolderPath(originalAvatar.animSavedFolderPath);
                     }
 
                 }
@@ -100,18 +102,19 @@ namespace VRCAvatarEditor
                     {
                         if (GUILayout.Button("Create AnimFile"))
                         {
-                            var animController = avatar.standingAnimController;
+                            var animController = originalAvatar.standingAnimController;
 
-                            var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, avatar.animSavedFolderPath, ref avatar, ref blendshapeExclusions, avatar.descriptor.gameObject);
+                            var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, originalAvatar.animSavedFolderPath, ref editAvatar, ref blendshapeExclusions, editAvatar.descriptor.gameObject);
                             if (selectedHandAnim != HandPose.HandPoseType.None)
                             {
                                 HandPose.AddHandPoseAnimationKeysFromOriginClip(ref createdAnimClip, selectedHandAnim);
                                 animController[AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]] = createdAnimClip;
 
-                                FaceEmotion.ResetToDefaultFaceEmotion(ref avatar);
+                                FaceEmotion.ResetToDefaultFaceEmotion(ref editAvatar);
                             }
 
-                            avatar.standingAnimController = animController;
+                            originalAvatar.standingAnimController = animController;
+                            editAvatar.standingAnimController = animController;
                         }
                     }
                 }
@@ -165,7 +168,7 @@ namespace VRCAvatarEditor
 
         public void Dispose() 
         {
-            FaceEmotion.ResetToDefaultFaceEmotion(ref avatar);
+            FaceEmotion.ResetToDefaultFaceEmotion(ref editAvatar);
         }
 
         private void BlendShapeListGUI()
@@ -174,7 +177,7 @@ namespace VRCAvatarEditor
             using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos))
             {
                 scrollPos = scrollView.scrollPosition;
-                foreach (var skinnedMesh in avatar.skinnedMeshList)
+                foreach (var skinnedMesh in editAvatar.skinnedMeshList)
                 {
                     skinnedMesh.isOpenBlendShapes = EditorGUILayout.Foldout(skinnedMesh.isOpenBlendShapes, skinnedMesh.obj.name);
                     if (skinnedMesh.isOpenBlendShapes)
@@ -230,7 +233,7 @@ namespace VRCAvatarEditor
 
         public void OnLoadedAnimationProperties()
         {
-            FaceEmotion.ApplyAnimationProperties(ScriptableSingleton<SendData>.instance.loadingProperties, ref avatar);
+            FaceEmotion.ApplyAnimationProperties(ScriptableSingleton<SendData>.instance.loadingProperties, ref editAvatar);
         }
     }
 }

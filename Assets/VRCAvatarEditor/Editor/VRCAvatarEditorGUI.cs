@@ -506,7 +506,7 @@ namespace VRCAvatarEditor
         {
             if (currentTool == ToolFunc.表情設定)
             {
-                faceEmotionGUI.Initialize(ref edittingAvatar, saveFolder, this);
+                faceEmotionGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder, this);
 
                 if (edittingAvatar.skinnedMeshList != null)
                 {
