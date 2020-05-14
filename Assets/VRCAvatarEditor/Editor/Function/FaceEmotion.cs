@@ -210,6 +210,7 @@ namespace VRCAvatarEditor
             for (int skinnedMeshIndex = 0; skinnedMeshIndex < avatar.skinnedMeshList.Count; skinnedMeshIndex++) {
                 var mesh = avatar.skinnedMeshList[skinnedMeshIndex].mesh;
                 var renderer = avatar.skinnedMeshList[skinnedMeshIndex].renderer;
+                var blendshapes = avatar.skinnedMeshList[skinnedMeshIndex].blendshapes;
 
                 if (renderer == null) continue;
 
@@ -217,6 +218,7 @@ namespace VRCAvatarEditor
                     var index = mesh.GetBlendShapeIndex(animProperty.blendShapeName);
                     if (index >= 0) {
                         renderer.SetBlendShapeWeight(index, animProperty.value);
+                        blendshapes[index].isContains = true;
                     }
                 }
             }
