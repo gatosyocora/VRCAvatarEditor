@@ -28,8 +28,7 @@ namespace VRCAvatarEditor
         {
             if (originHandType == HandPoseType.None) return false;
 
-            string handPoseAnimPath = "HandPoseAnimation/"+HAND_ORIGIN_ANIM_FILE_NAMES[(int)originHandType-1];
-            AnimationClip originClip = Resources.Load<AnimationClip>(handPoseAnimPath);
+            AnimationClip originClip = GetHandAnimationClip(originHandType);
 
             CopyAnimationKeysFromOriginClip(originClip, targetClip);
 
@@ -43,6 +42,14 @@ namespace VRCAvatarEditor
         {
             foreach (var binding in AnimationUtility.GetCurveBindings(originClip))
                 AnimationUtility.SetEditorCurve(targetClip, binding, AnimationUtility.GetEditorCurve(originClip, binding));
+        }
+
+        public static AnimationClip GetHandAnimationClip(HandPoseType originHandType)
+        {
+            if (originHandType == HandPoseType.None) return null;
+
+            string handPoseAnimPath = "HandPoseAnimation/" + HAND_ORIGIN_ANIM_FILE_NAMES[(int)originHandType - 1];
+            return Resources.Load<AnimationClip>(handPoseAnimPath);
         }
     }
 

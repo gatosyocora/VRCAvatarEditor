@@ -109,18 +109,19 @@ namespace VRCAvatarEditor
                     if (!showEmoteAnimations)
                     {
                         AnimationClip anim;
-                        foreach (var handAnim in HANDANIMS)
+                        for (int i = 0; i < HANDANIMS.Length; i++)
                         {
-                            if (handAnim == controller[handAnim].name)
+                            var handPoseName = HANDANIMS[i];
+                            if (handPoseName == controller[handPoseName].name)
                                 anim = null;
                             else
-                                anim = controller[handAnim];
+                                anim = controller[handPoseName];
 
                             using (new EditorGUILayout.HorizontalScope(GUILayout.Width(350)))
                             {
-                                GUILayout.Label(handAnim, GUILayout.Width(90));
+                                GUILayout.Label((i+1)+":"+handPoseName, GUILayout.Width(100));
 
-                                controller[handAnim] = EditorGUILayout.ObjectField(
+                                controller[handPoseName] = EditorGUILayout.ObjectField(
                                     string.Empty,
                                     anim,
                                     typeof(AnimationClip),
@@ -132,7 +133,7 @@ namespace VRCAvatarEditor
                                 {
                                     if (GUILayout.Button("Edit", GUILayout.Width(50)))
                                     {
-                                        FaceEmotion.ApplyAnimationProperties(controller[handAnim], ref editAvatar);
+                                        FaceEmotion.ApplyAnimationProperties(controller[handPoseName], ref editAvatar);
                                     }
                                 }
                             }

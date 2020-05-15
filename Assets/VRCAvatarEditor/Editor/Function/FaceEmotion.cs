@@ -281,6 +281,15 @@ namespace VRCAvatarEditor
 
             return animParamList;
         }
+
+        /// <summary>
+        /// originClipに設定されたAnimationKeyをすべてtargetclipにコピーする
+        /// </summary>
+        public static void CopyAnimationKeysFromOriginClip(AnimationClip originClip, AnimationClip targetClip)
+        {
+            foreach (var binding in AnimationUtility.GetCurveBindings(originClip))
+                AnimationUtility.SetEditorCurve(targetClip, binding, AnimationUtility.GetEditorCurve(originClip, binding));
+        }
     }
 }
 

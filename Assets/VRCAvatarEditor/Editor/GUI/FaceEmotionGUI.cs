@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Linq;
 using VRCAvatarEditor;
+using System;
 
 namespace VRCAvatarEditor
 {
@@ -30,6 +31,8 @@ namespace VRCAvatarEditor
         private bool isOpeningBlendShapeExclusionList = false;
 
         private string animName;
+
+        private AnimationClip handPoseAnim;
 
         public void Initialize(ref VRCAvatarEditor.Avatar editAvatar, VRCAvatarEditor.Avatar originalAvatar, string saveFolderPath, EditorWindow window)
         {
@@ -95,27 +98,43 @@ namespace VRCAvatarEditor
 
                 EditorGUILayout.Space();
 
-                using (new EditorGUILayout.HorizontalScope())
+                using (var check = new EditorGUI.ChangeCheckScope())
                 {
-                    selectedHandAnim = (HandPose.HandPoseType)EditorGUILayout.EnumPopup("HandPose", selectedHandAnim);
-                    using (new EditorGUI.DisabledGroupScope(selectedHandAnim == HandPose.HandPoseType.None))
+                    selectedHandAnim = (HandPose.HandPoseType)Enum.ToObject(typeof(HandPose.HandPoseType), EditorGUILayout.Popup(
+                        "Set Index(仮名)",
+                        (int)selectedHandAnim, 
+                        Enum.GetNames(typeof(HandPose.HandPoseType)).Select((x, index) => index + ":"+x).ToArray()));
+
+                    if (check.changed)
                     {
-                        if (GUILayout.Button("Create AnimFile"))
+                        handPoseAnim = HandPose.GetHandAnimationClip(selectedHandAnim);
+                    }
+                }
+
+                handPoseAnim = EditorGUILayout.ObjectField("HandPose AnimClip", handPoseAnim, typeof(AnimationClip), true) as AnimationClip;
+
+                EditorGUILayout.Space();
+
+                using (new EditorGUI.DisabledGroupScope(
+                            selectedHandAnim == HandPose.HandPoseType.None ||
+                            handPoseAnim == null))
+                {
+                    if (GUILayout.Button("Create AnimFile"))
+                    {
+                        var animController = originalAvatar.standingAnimController;
+
+                        var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, originalAvatar.animSavedFolderPath, ref editAvatar, ref blendshapeExclusions, editAvatar.descriptor.gameObject);
+                        if (selectedHandAnim != HandPose.HandPoseType.None)
                         {
-                            var animController = originalAvatar.standingAnimController;
+                            //HandPose.AddHandPoseAnimationKeysFromOriginClip(ref createdAnimClip, selectedHandAnim);
+                            FaceEmotion.CopyAnimationKeysFromOriginClip(createdAnimClip, handPoseAnim);
+                            animController[AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]] = createdAnimClip;
 
-                            var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, originalAvatar.animSavedFolderPath, ref editAvatar, ref blendshapeExclusions, editAvatar.descriptor.gameObject);
-                            if (selectedHandAnim != HandPose.HandPoseType.None)
-                            {
-                                HandPose.AddHandPoseAnimationKeysFromOriginClip(ref createdAnimClip, selectedHandAnim);
-                                animController[AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]] = createdAnimClip;
-
-                                FaceEmotion.ResetToDefaultFaceEmotion(ref editAvatar);
-                            }
-
-                            originalAvatar.standingAnimController = animController;
-                            editAvatar.standingAnimController = animController;
+                            FaceEmotion.ResetToDefaultFaceEmotion(ref editAvatar);
                         }
+
+                        originalAvatar.standingAnimController = animController;
+                        editAvatar.standingAnimController = animController;
                     }
                 }
 
