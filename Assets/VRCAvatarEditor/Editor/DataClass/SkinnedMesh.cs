@@ -17,7 +17,7 @@ namespace VRCAvatarEditor
         public int blendShapeNum;
         public bool isOpenBlendShapes;
         public List<BlendShape> blendshapes;
-        public List<BlendShape> blendshapes_origin = null;
+        public List<BlendShape> blendshapes_origin = null;　// null: blendshapesは未ソート
         public bool isContainsAll = true;
 
         public class BlendShape
@@ -51,17 +51,13 @@ namespace VRCAvatarEditor
         /// 特定のSkinnedMeshRendererが持つBlendShapeのリストを取得する
         /// </summary>
         /// <param name="skinnedMesh"></param>
-        public List<BlendShape> GetBlendShapes(SkinnedMeshRenderer skinnedMesh)
+        public List<BlendShape> GetBlendShapes()
         {
             List<BlendShape> blendshapes = new List<BlendShape>();
-            var mesh = skinnedMesh.sharedMesh;
-            blendShapeNum = mesh.blendShapeCount;
-            if (blendShapeNum > 0)
+            
+            for (int blendShapeIndex = 0; blendShapeIndex < mesh.blendShapeCount; blendShapeIndex++)
             {
-                for (int i = 0; i < blendShapeNum; i++)
-                {
-                    blendshapes.Add(new BlendShape(i, mesh.GetBlendShapeName(i), true));
-                }
+                blendshapes.Add(new BlendShape(blendShapeIndex, mesh.GetBlendShapeName(blendShapeIndex), true));
             }
 
             return blendshapes;
@@ -73,9 +69,9 @@ namespace VRCAvatarEditor
         /// <param name="exclusionWords"></param>
         public void SetExclusionBlendShapesByContains(List<string> exclusionWords)
         {
-            for (int i = 0; i < blendShapeNum; i++)
+            for (int blendShapeIndex = 0; blendShapeIndex < blendShapeNum; blendShapeIndex++)
             {
-                blendshapes[i].isExclusion = false;
+                blendshapes[blendShapeIndex].isExclusion = false;
 
                 // 除外するキーかどうか調べる
                 foreach (var exclusionWord in exclusionWords)
@@ -83,7 +79,7 @@ namespace VRCAvatarEditor
                     if (exclusionWord == "") continue;
                     if ((blendshapes[blendShapeIndex].name.ToLower()).Contains(exclusionWord.ToLower()))
                     {
-                        blendshapes[i].isExclusion = true;
+                        blendshapes[blendShapeIndex].isExclusion = true;
                         break;
                     }
                 }
@@ -93,11 +89,11 @@ namespace VRCAvatarEditor
         /// <summary>
         /// blendshapesを昇順に並べ替える
         /// </summary>
-        public void SortBlendShapes()
+        public void SortBlendShapesToAscending()
         {
             if (blendShapeNum <= 1) return;
 
-            // 元のやつをコピーしておく
+            // 初期状態の並び順に戻すことがあるので初期状態のやつをコピーしておく
             if (blendshapes_origin == null)
                 blendshapes_origin = new List<BlendShape>(blendshapes);
 
