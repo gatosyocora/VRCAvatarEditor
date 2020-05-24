@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.Linq;
 
 // Copyright (c) 2019 gatosyocora
 
@@ -113,7 +114,7 @@ namespace VRCAvatarEditor
             foreach (var skinnedMesh in avatar.skinnedMeshList)
             {
                 if (!skinnedMesh.isOpenBlendShapes) continue;
-                
+
                 foreach (var blendshape in skinnedMesh.blendshapes)
                     if (blendshape.isContains)
                         SetBlendShapeMinValue(ref skinnedMesh.renderer, blendshape.id);
@@ -131,7 +132,7 @@ namespace VRCAvatarEditor
             {
                 var mesh = renderer.sharedMesh;
                 if (mesh == null) return false;
-                
+
                 for (int frameIndex = 0; frameIndex < mesh.GetBlendShapeFrameCount(id); frameIndex++)
                     maxValue = Mathf.Max(maxValue, mesh.GetBlendShapeFrameWeight(id, frameIndex));
 
@@ -186,9 +187,9 @@ namespace VRCAvatarEditor
         /// <param name="sendData"></param>
         /// <param name="preWindow"></param>
         public static void LoadAnimationProperties(FaceEmotionGUI faceEmotionGUI, VRCAvatarEditorGUI editorGUI) {
-            
+
             string animFilePath = EditorUtility.OpenFilePanel("Select Loading Animation File", "Assets", "anim");
-                    
+
             if (animFilePath == "") return;
 
             animFilePath = FileUtil.GetProjectRelativePath(animFilePath);
@@ -205,7 +206,7 @@ namespace VRCAvatarEditor
         /// </summary>
         /// <param name="animProperties"></param>
         /// <param name="skinnedMeshes"></param>
-        public static void ApplyAnimationProperties(List<AnimParam> animProperties, ref VRCAvatarEditor.Avatar avatar) 
+        public static void ApplyAnimationProperties(List<AnimParam> animProperties, ref VRCAvatarEditor.Avatar avatar)
         {
             for (int skinnedMeshIndex = 0; skinnedMeshIndex < avatar.skinnedMeshList.Count; skinnedMeshIndex++) {
                 var mesh = avatar.skinnedMeshList[skinnedMeshIndex].mesh;
@@ -228,6 +229,18 @@ namespace VRCAvatarEditor
         {
             var paramList = GetAnimationParamaters(clip);
             ApplyAnimationProperties(paramList, ref avatar);
+        }
+
+        public static void ApplyBlendShapeContains(AnimationClip clip, VRCAvatarEditor.Avatar avatar)
+        {
+            var paramList = GetAnimationParamaters(clip);
+            foreach (var skinnedMesh in avatar.skinnedMeshList) {
+                foreach (var blendShape in skinnedMesh.blendshapes) {
+                    blendShape.isContains = paramList.Any(
+                        animParam => animParam.objPath == skinnedMesh.objName && animParam.blendShapeName == blendShape.name
+                        );
+                }
+            }
         }
 
         public static void SetToDefaultFaceEmotion(ref VRCAvatarEditor.Avatar editAvatar, VRCAvatarEditor.Avatar originalAvatar)
@@ -292,4 +305,3 @@ namespace VRCAvatarEditor
         }
     }
 }
-

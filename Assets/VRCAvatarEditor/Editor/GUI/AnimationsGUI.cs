@@ -17,7 +17,8 @@ namespace VRCAvatarEditor
         string titleText;
         AnimatorOverrideController controller;
         private bool showEmoteAnimations = false;
-        
+        private bool applyBlendShapeContains = true;
+
         private Tab _tab = Tab.Standing;
 
         private enum Tab
@@ -133,7 +134,11 @@ namespace VRCAvatarEditor
                                 {
                                     if (GUILayout.Button("Edit", GUILayout.Width(50)))
                                     {
-                                        FaceEmotion.ApplyAnimationProperties(controller[handPoseName], ref editAvatar);
+                                        FaceEmotion.ApplyAnimationProperties(controller[handAnim], ref avatar);
+                                        if (applyBlendShapeContains)
+                                        {
+                                            FaceEmotion.ApplyBlendShapeContains(controller[handAnim], avatar);
+                                        }
                                     }
                                 }
                             }
@@ -179,7 +184,7 @@ namespace VRCAvatarEditor
                             var fileName = "CO_" + originalAvatar.animator.gameObject.name + ".overrideController";
                             saveFolderPath = "Assets/" + originalAvatar.animator.gameObject.name + "/";
                             var fullFolderPath = Path.GetFullPath(saveFolderPath);
-                            if (!Directory.Exists(fullFolderPath)) 
+                            if (!Directory.Exists(fullFolderPath))
                             {
                                 Directory.CreateDirectory(fullFolderPath);
                                 AssetDatabase.Refresh();
@@ -217,6 +222,8 @@ namespace VRCAvatarEditor
                         }
                     }
                 }
+
+                applyBlendShapeContains = EditorGUILayout.ToggleLeft("Edit時にシェイプの有無を反映", applyBlendShapeContains);
             }
             return false;
         }
@@ -248,4 +255,3 @@ namespace VRCAvatarEditor
         }
     }
 }
-
