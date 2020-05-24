@@ -192,7 +192,7 @@ namespace VRCAvatarEditor
 
         public void ResetCameraTransform()
         {
-            cameraObj.transform.position = new Vector3(0, 1, 1);
+            cameraObj.transform.position = new Vector3(0, descriptor.ViewPosition.y, 1);
             cameraObj.transform.rotation = Quaternion.Euler(0, 180, 0);
             mainOrthographicSize = defaultOrthographicSize;
             subOrthographicSize = 0f;
