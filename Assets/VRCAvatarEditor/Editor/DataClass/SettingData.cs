@@ -16,8 +16,6 @@ namespace VRCAvatarEditor
         public bool isGammaCorrection = true;
         public Color monitorBgColor = new Color(0.95f, 0.95f, 0.95f, 1);
 
-        public bool isActiveOnlySelectedAvatar = true;
-
         public FaceEmotionGUI.SortType selectedSortType = FaceEmotionGUI.SortType.UnSort;
         public List<string> blendshapeExclusions = new List<string> { "vrc.blink_", "vrc.lowerlid_", "mmd" };
 

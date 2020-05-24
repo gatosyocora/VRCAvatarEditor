@@ -114,7 +114,6 @@ namespace VRCAvatarEditor
 
         #region Changeable Parameters from Setting
 
-        private bool isActiveOnlySelectedAvatar = true;
         private LayoutType layoutType = LayoutType.Default;
 
         #endregion
@@ -487,7 +486,6 @@ namespace VRCAvatarEditor
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Other", EditorStyles.boldLabel);
-            isActiveOnlySelectedAvatar = EditorGUILayout.ToggleLeft("選択中のアバターだけActiveにする", isActiveOnlySelectedAvatar);
 
             layoutType = (LayoutType)EditorGUILayout.EnumPopup("レイアウト", layoutType);
 
@@ -561,7 +559,6 @@ namespace VRCAvatarEditor
             if (settingAsset == null)
                 settingAsset = Resources.Load<SettingData>("DefaultSettingData");
             
-            isActiveOnlySelectedAvatar = settingAsset.isActiveOnlySelectedAvatar;
             layoutType = settingAsset.layoutType;
 
             avatarMonitorGUI.LoadSettingData(settingAsset);
@@ -586,7 +583,6 @@ namespace VRCAvatarEditor
 
             faceEmotionGUI.SaveSettingData(ref settingAsset);
 
-            settingAsset.isActiveOnlySelectedAvatar = isActiveOnlySelectedAvatar;
             settingAsset.layoutType = layoutType;
 
             if (newCreated)
