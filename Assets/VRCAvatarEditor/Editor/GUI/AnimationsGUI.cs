@@ -17,7 +17,6 @@ namespace VRCAvatarEditor
         string titleText;
         AnimatorOverrideController controller;
         private bool showEmoteAnimations = false;
-        private bool applyBlendShapeContains = true;
 
         private Tab _tab = Tab.Standing;
 
@@ -134,11 +133,7 @@ namespace VRCAvatarEditor
                                 {
                                     if (GUILayout.Button("Edit", GUILayout.Width(50)))
                                     {
-                                        FaceEmotion.ApplyAnimationProperties(controller[handAnim], ref avatar);
-                                        if (applyBlendShapeContains)
-                                        {
-                                            FaceEmotion.ApplyBlendShapeContains(controller[handAnim], avatar);
-                                        }
+                                        FaceEmotion.ApplyAnimationProperties(controller[handPoseName], ref editAvatar);
                                     }
                                 }
                             }
@@ -222,8 +217,6 @@ namespace VRCAvatarEditor
                         }
                     }
                 }
-
-                applyBlendShapeContains = EditorGUILayout.ToggleLeft("Edit時にシェイプの有無を反映", applyBlendShapeContains);
             }
             return false;
         }
