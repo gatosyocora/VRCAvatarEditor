@@ -184,8 +184,7 @@ namespace VRCAvatarEditor
             {
                 mainOrthographicSize = defaultOrthographicSize;
             }
-            var nowPos = camera.transform.position;
-            camera.transform.position = new Vector3(nowPos.x, descriptor.ViewPosition.y, nowPos.z);
+            camera.transform.position = new Vector3(0, descriptor.ViewPosition.y, 1);
             cameraObj.transform.rotation = Quaternion.Euler(0, 180, 0);
             subOrthographicSize = 0f;
             camera.orthographicSize = mainOrthographicSize;
