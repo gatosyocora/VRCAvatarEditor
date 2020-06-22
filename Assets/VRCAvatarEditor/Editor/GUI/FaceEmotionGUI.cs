@@ -15,7 +15,7 @@ namespace VRCAvatarEditor
         private VRCAvatarEditorGUI parentWindow;
 
         private static readonly string DEFAULT_ANIM_NAME = "faceAnim";
-        private HandPose.HandPoseType selectedHandAnim = HandPose.HandPoseType.None;
+        private HandPose.HandPoseType selectedHandAnim = HandPose.HandPoseType.NoSelection;
 
         private Vector2 scrollPos = Vector2.zero;
 
@@ -101,7 +101,7 @@ namespace VRCAvatarEditor
                 using (var check = new EditorGUI.ChangeCheckScope())
                 {
                     selectedHandAnim = (HandPose.HandPoseType)Enum.ToObject(typeof(HandPose.HandPoseType), EditorGUILayout.Popup(
-                        "Set Index(仮名)",
+                        "AnimationOverride",
                         (int)selectedHandAnim, 
                         Enum.GetNames(typeof(HandPose.HandPoseType)).Select((x, index) => index + ":"+x).ToArray()));
 
@@ -116,7 +116,7 @@ namespace VRCAvatarEditor
                 EditorGUILayout.Space();
 
                 using (new EditorGUI.DisabledGroupScope(
-                            selectedHandAnim == HandPose.HandPoseType.None ||
+                            selectedHandAnim == HandPose.HandPoseType.NoSelection ||
                             handPoseAnim == null))
                 {
                     if (GUILayout.Button("Create AnimFile"))
@@ -124,7 +124,7 @@ namespace VRCAvatarEditor
                         var animController = originalAvatar.standingAnimController;
 
                         var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, originalAvatar.animSavedFolderPath, ref editAvatar, ref blendshapeExclusions, editAvatar.descriptor.gameObject);
-                        if (selectedHandAnim != HandPose.HandPoseType.None)
+                        if (selectedHandAnim != HandPose.HandPoseType.NoSelection)
                         {
                             //HandPose.AddHandPoseAnimationKeysFromOriginClip(ref createdAnimClip, selectedHandAnim);
                             FaceEmotion.CopyAnimationKeysFromOriginClip(createdAnimClip, handPoseAnim);

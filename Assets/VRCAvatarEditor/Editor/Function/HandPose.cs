@@ -11,7 +11,7 @@ namespace VRCAvatarEditor
 
         public enum HandPoseType
         {
-            None,
+            NoSelection,
             FIST,
             FINGERPOINT,
             ROCKNROLL,
@@ -26,7 +26,7 @@ namespace VRCAvatarEditor
         /// </summary>
         public static bool AddHandPoseAnimationKeysFromOriginClip(ref AnimationClip targetClip, HandPoseType originHandType)
         {
-            if (originHandType == HandPoseType.None) return false;
+            if (originHandType == HandPoseType.NoSelection) return false;
 
             AnimationClip originClip = GetHandAnimationClip(originHandType);
 
@@ -46,7 +46,7 @@ namespace VRCAvatarEditor
 
         public static AnimationClip GetHandAnimationClip(HandPoseType originHandType)
         {
-            if (originHandType == HandPoseType.None) return null;
+            if (originHandType == HandPoseType.NoSelection) return null;
 
             string handPoseAnimPath = "HandPoseAnimation/" + HAND_ORIGIN_ANIM_FILE_NAMES[(int)originHandType - 1];
             return Resources.Load<AnimationClip>(handPoseAnimPath);
