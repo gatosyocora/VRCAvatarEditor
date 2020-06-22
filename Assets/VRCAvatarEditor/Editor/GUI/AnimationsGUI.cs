@@ -9,6 +9,7 @@ namespace VRCAvatarEditor
     {
         private VRCAvatarEditor.Avatar editAvatar;
         private VRCAvatarEditor.Avatar originalAvatar;
+        private VRCAvatarEditorGUI vrcAvatarEditorGUI;
 
         public static readonly string[] HANDANIMS = { "FIST", "FINGERPOINT", "ROCKNROLL", "HANDOPEN", "THUMBSUP", "VICTORY", "HANDGUN" };
         public static readonly string[] EMOTEANIMS = { "EMOTE1", "EMOTE2", "EMOTE3", "EMOTE4", "EMOTE5", "EMOTE6", "EMOTE7", "EMOTE8" };
@@ -48,10 +49,14 @@ namespace VRCAvatarEditor
 
         private string saveFolderPath;
 
-        public void Initialize(ref VRCAvatarEditor.Avatar editAvatar, VRCAvatarEditor.Avatar originalAvatar, string saveFolderPath)
+        public void Initialize(ref VRCAvatarEditor.Avatar editAvatar,
+                               VRCAvatarEditor.Avatar originalAvatar,
+                               string saveFolderPath,
+                               VRCAvatarEditorGUI vrcAvatarEditorGUI)
         {
             this.editAvatar = editAvatar;
             this.originalAvatar = originalAvatar;
+            this.vrcAvatarEditorGUI = vrcAvatarEditorGUI;
             UpdateSaveFolderPath(saveFolderPath);
         }
 
@@ -133,6 +138,11 @@ namespace VRCAvatarEditor
                                 {
                                     if (GUILayout.Button("Edit", GUILayout.Width(50)))
                                     {
+                                        if (vrcAvatarEditorGUI.currentTool != VRCAvatarEditorGUI.ToolFunc.表情設定)
+                                        {
+                                            vrcAvatarEditorGUI.currentTool = VRCAvatarEditorGUI.ToolFunc.表情設定;
+                                            vrcAvatarEditorGUI.TabChanged();
+                                        }
                                         FaceEmotion.ApplyAnimationProperties(controller[handPoseName], ref editAvatar);
                                     }
                                 }

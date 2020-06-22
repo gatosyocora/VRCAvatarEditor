@@ -48,7 +48,7 @@ namespace VRCAvatarEditor
             Shader,
         }
 
-        private ToolFunc currentTool = ToolFunc.アバター情報;
+        public ToolFunc currentTool = ToolFunc.アバター情報;
 
         private static class ToolTab
         {
@@ -148,7 +148,7 @@ namespace VRCAvatarEditor
             shaderGUI = ScriptableObject.CreateInstance<ShaderGUI>();
 
             avatarMonitorGUI.Initialize(currentTool);
-            animationsGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder);
+            animationsGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder, this);
             avatarInfoGUI.Initialize(ref edittingAvatar);
             probeAnchorGUI.Initialize(ref originalAvatar);
 
@@ -501,7 +501,7 @@ namespace VRCAvatarEditor
 
         }
 
-        private void TabChanged()
+        public void TabChanged()
         {
             if (currentTool == ToolFunc.表情設定)
             {
@@ -540,7 +540,7 @@ namespace VRCAvatarEditor
             targetAvatarObj.SetActive(true);
 
             avatarMonitorGUI.MoveAvatarCam(false);
-            animationsGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder);
+            animationsGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder, this);
             avatarInfoGUI.Initialize(ref edittingAvatar);
             meshBoundsGUI.Initialize(ref originalAvatar);
 
