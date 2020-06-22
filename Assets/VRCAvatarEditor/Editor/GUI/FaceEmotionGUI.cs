@@ -151,6 +151,7 @@ namespace VRCAvatarEditor
                         {
                             HandPose.AddHandPoseAnimationKeysFromOriginClip(createdAnimClip, handPoseAnim);
                             animController[AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]] = createdAnimClip;
+                            EditorUtility.SetDirty(animController);
 
                             FaceEmotion.ResetToDefaultFaceEmotion(ref editAvatar);
                         }
