@@ -28,7 +28,11 @@ namespace VRCAvatarEditor
                 {
                     avatar.sex = (VRC_AvatarDescriptor.AnimationSet)EditorGUILayout.EnumPopup("Gender", avatar.sex);
 
-                    if (check.changed) avatar.descriptor.Animations = avatar.sex;
+                    if (check.changed)
+                    {
+                        avatar.descriptor.Animations = avatar.sex;
+                        EditorUtility.SetDirty(avatar.descriptor);
+                    }
                 }
 
                 // アップロード状態
@@ -54,6 +58,7 @@ namespace VRCAvatarEditor
                     {
                         avatar.descriptor.CustomStandingAnims = avatar.standingAnimController;
                         avatar.descriptor.CustomSittingAnims = avatar.sittingAnimController;
+                        EditorUtility.SetDirty(avatar.descriptor);
 
                         avatar.SetAnimSavedFolderPath();
                     }
@@ -73,7 +78,10 @@ namespace VRCAvatarEditor
                     ) as SkinnedMeshRenderer;
 
                     if (check.changed)
+                    {
                         avatar.descriptor.VisemeSkinnedMesh = avatar.faceMesh;
+                        EditorUtility.SetDirty(avatar.descriptor);
+                    }
                 }
 
                 EditorGUILayout.Space();
@@ -86,6 +94,7 @@ namespace VRCAvatarEditor
                     if (check.changed)
                     {
                         avatar.descriptor.ViewPosition = avatar.eyePos;
+                        EditorUtility.SetDirty(avatar.descriptor);
                     }
                 }
                 /*
@@ -146,6 +155,7 @@ namespace VRCAvatarEditor
                     if (GUILayout.Button("シェイプキーによるリップシンクを自動設定する"))
                     {
                         avatar.SetLipSyncToViseme();
+                        EditorUtility.SetDirty(avatar.descriptor);
                     }
                 }
 

@@ -149,7 +149,7 @@ namespace VRCAvatarEditor
 
             avatarMonitorGUI.Initialize(currentTool);
             animationsGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder, this);
-            avatarInfoGUI.Initialize(ref edittingAvatar);
+            avatarInfoGUI.Initialize(ref originalAvatar);
             probeAnchorGUI.Initialize(ref originalAvatar);
 
             LoadSettingDataFromScriptableObject();
@@ -541,7 +541,7 @@ namespace VRCAvatarEditor
 
             avatarMonitorGUI.MoveAvatarCam(false);
             animationsGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder, this);
-            avatarInfoGUI.Initialize(ref edittingAvatar);
+            avatarInfoGUI.Initialize(ref originalAvatar);
             meshBoundsGUI.Initialize(ref originalAvatar);
 
             currentTool = ToolFunc.アバター情報;
