@@ -111,7 +111,10 @@ namespace VRCAvatarEditor
                     }
                 }
 
-                handPoseAnim = EditorGUILayout.ObjectField("HandPose AnimClip", handPoseAnim, typeof(AnimationClip), true) as AnimationClip;
+                using (new EditorGUI.DisabledGroupScope(selectedHandAnim == HandPose.HandPoseType.NoSelection))
+                {
+                    handPoseAnim = EditorGUILayout.ObjectField("HandPose AnimClip", handPoseAnim, typeof(AnimationClip), true) as AnimationClip;
+                }
 
                 EditorGUILayout.Space();
 
