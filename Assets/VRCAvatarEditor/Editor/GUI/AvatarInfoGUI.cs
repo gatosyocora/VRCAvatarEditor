@@ -21,7 +21,7 @@ namespace VRCAvatarEditor
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
         {
-            if (avatar.descriptor != null)
+            if (avatar != null && avatar.descriptor != null)
             {
                 // 性別
                 using (var check = new EditorGUI.ChangeCheckScope())
