@@ -126,8 +126,7 @@ namespace VRCAvatarEditor
                         var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, originalAvatar.animSavedFolderPath, ref editAvatar, ref blendshapeExclusions, editAvatar.descriptor.gameObject);
                         if (selectedHandAnim != HandPose.HandPoseType.NoSelection)
                         {
-                            //HandPose.AddHandPoseAnimationKeysFromOriginClip(ref createdAnimClip, selectedHandAnim);
-                            FaceEmotion.CopyAnimationKeysFromOriginClip(createdAnimClip, handPoseAnim);
+                            HandPose.AddHandPoseAnimationKeysFromOriginClip(createdAnimClip, handPoseAnim);
                             animController[AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]] = createdAnimClip;
 
                             FaceEmotion.ResetToDefaultFaceEmotion(ref editAvatar);

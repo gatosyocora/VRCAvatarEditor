@@ -36,6 +36,24 @@ namespace VRCAvatarEditor
         }
 
         /// <summary>
+        /// 特定のAnimationファイルの手に関するAnimationキー全てをコピーする
+        /// </summary>
+        public static bool AddHandPoseAnimationKeysFromOriginClip(AnimationClip targetClip, AnimationClip handAnimationClip)
+        {
+            foreach (var binding in AnimationUtility.GetCurveBindings(handAnimationClip))
+            {
+                // 手を動かすKey以外は追加しない
+                var propertyName = binding.propertyName;
+                if (!propertyName.EndsWith("Spread") &&
+                    !propertyName.EndsWith("Streatched")) continue;
+
+                AnimationUtility.SetEditorCurve(targetClip, binding, AnimationUtility.GetEditorCurve(handAnimationClip, binding));
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// originClipに設定されたAnimationKeyをすべてtargetclipにコピーする
         /// </summary>
         public static void CopyAnimationKeysFromOriginClip(AnimationClip originClip, AnimationClip targetClip)
