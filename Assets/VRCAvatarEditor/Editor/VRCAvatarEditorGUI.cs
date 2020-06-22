@@ -533,7 +533,6 @@ namespace VRCAvatarEditor
         {
             edittingAvatar = avatarMonitorGUI.SetAvatarPreview(targetAvatarDescriptor);
             originalAvatar = new Avatar(targetAvatarDescriptor);
-            probeAnchorGUI.SettingForProbeSetter();
             ApplySettingsToEditorGUI();
 
             var targetAvatarObj = targetAvatarDescriptor.gameObject;
@@ -543,6 +542,7 @@ namespace VRCAvatarEditor
             animationsGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder, this);
             avatarInfoGUI.Initialize(ref originalAvatar);
             meshBoundsGUI.Initialize(ref originalAvatar);
+            probeAnchorGUI.Initialize(ref originalAvatar);
 
             currentTool = ToolFunc.アバター情報;
         }

@@ -23,6 +23,7 @@ namespace VRCAvatarEditor
         public void Initialize(ref VRCAvatarEditor.Avatar avatar)
         {
             this.avatar = avatar;
+            SettingForProbeSetter();
         }
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
