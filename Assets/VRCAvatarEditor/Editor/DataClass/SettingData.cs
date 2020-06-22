@@ -18,6 +18,7 @@ namespace VRCAvatarEditor
 
         public FaceEmotionGUI.SortType selectedSortType = FaceEmotionGUI.SortType.UnSort;
         public List<string> blendshapeExclusions = new List<string> { "vrc.blink_", "vrc.lowerlid_", "mmd" };
+        public bool usePreviousAnimationOnHandAnimation = false;
 
         public VRCAvatarEditorGUI.LayoutType layoutType = VRCAvatarEditorGUI.LayoutType.Default;
 

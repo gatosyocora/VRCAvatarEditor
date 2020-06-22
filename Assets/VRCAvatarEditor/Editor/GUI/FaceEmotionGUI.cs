@@ -34,6 +34,8 @@ namespace VRCAvatarEditor
 
         private AnimationClip handPoseAnim;
 
+        private bool usePreviousAnimationOnHandAnimation;
+
         public void Initialize(ref VRCAvatarEditor.Avatar editAvatar, VRCAvatarEditor.Avatar originalAvatar, string saveFolderPath, EditorWindow window)
         {
             this.editAvatar = editAvatar;
@@ -107,7 +109,25 @@ namespace VRCAvatarEditor
 
                     if (check.changed)
                     {
-                        handPoseAnim = HandPose.GetHandAnimationClip(selectedHandAnim);
+                        if (usePreviousAnimationOnHandAnimation)
+                        {
+                            var animController = originalAvatar.standingAnimController;
+                            var previousAnimation = animController[AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]];
+
+                            // 未設定でなければ以前設定されていたものをHandPoseAnimationとして使う
+                            if (previousAnimation != null && previousAnimation.name != AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1])
+                            {
+                                handPoseAnim = previousAnimation;
+                            }
+                            else
+                            {
+                                handPoseAnim = HandPose.GetHandAnimationClip(selectedHandAnim);
+                            }
+                        }
+                        else
+                        {
+                            handPoseAnim = HandPose.GetHandAnimationClip(selectedHandAnim);
+                        }
                     }
                 }
 
@@ -173,18 +193,22 @@ namespace VRCAvatarEditor
                         blendshapeExclusions.Add(string.Empty);
                 }
             }
+
+            usePreviousAnimationOnHandAnimation = EditorGUILayout.ToggleLeft("Use Previous Animation On HandAnimation", usePreviousAnimationOnHandAnimation);
         }
 
         public void LoadSettingData(SettingData settingAsset)
         {
             selectedSortType = settingAsset.selectedSortType;
             blendshapeExclusions = new List<string>(settingAsset.blendshapeExclusions);
+            usePreviousAnimationOnHandAnimation = settingAsset.usePreviousAnimationOnHandAnimation;
         }
 
         public void SaveSettingData(ref SettingData settingAsset)
         {
             settingAsset.selectedSortType = selectedSortType;
             settingAsset.blendshapeExclusions = new List<string>(blendshapeExclusions);
+            settingAsset.usePreviousAnimationOnHandAnimation = usePreviousAnimationOnHandAnimation;
         }
 
         public void Dispose() 
