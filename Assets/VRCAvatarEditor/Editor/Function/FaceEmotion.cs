@@ -100,8 +100,12 @@ namespace VRCAvatarEditor
             var skinnedMeshes = parentObj.GetComponentsInChildren<SkinnedMeshRenderer>();
 
             foreach (var skinnedMesh in skinnedMeshes)
+            {
+                if (skinnedMesh is null || skinnedMesh.sharedMesh is null) continue;
+
                 if (skinnedMesh.sharedMesh.blendShapeCount > 0)
                     skinnedMeshList.Add(new SkinnedMesh(skinnedMesh, faceMeshObj));
+            }
 
             return skinnedMeshList;
         }
