@@ -184,9 +184,21 @@ namespace VRCAvatarEditor
         {
             using (new EditorGUILayout.HorizontalScope())
             {
+
+                GUILayout.FlexibleSpace();
+
+                using (new EditorGUI.DisabledGroupScope(originalAvatar is null))
+                {
+                    if (GUILayout.Button("Reload Avatar"))
+                    {
+                        OnChangedAvatar();
+                    }
+                }
+
+                EditorGUILayout.Space();
+
                 var toolInfoButtonText = (!isShowingToolInfo) ? "ToolInfo" : "Close";
                 var settingButtonText = (!isShowingSetting) ? "Setting" : "Close";
-                GUILayout.FlexibleSpace();
                 if (GUILayout.Button(toolInfoButtonText, GUILayout.MinWidth(50)))
                 {
                     isShowingToolInfo = !isShowingToolInfo;
