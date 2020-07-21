@@ -45,7 +45,7 @@ namespace VRCAvatarEditor
                 // 手を動かすKey以外は追加しない
                 var propertyName = binding.propertyName;
                 if (!propertyName.EndsWith("Spread") &&
-                    !propertyName.EndsWith("Streatched")) continue;
+                    !propertyName.EndsWith("Stretched")) continue;
 
                 AnimationUtility.SetEditorCurve(targetClip, binding, AnimationUtility.GetEditorCurve(handAnimationClip, binding));
             }
