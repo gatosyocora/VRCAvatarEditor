@@ -184,14 +184,16 @@ namespace VRCAvatarEditor
         {
             using (new EditorGUILayout.HorizontalScope())
             {
+                var toolInfoButtonText = (!isShowingToolInfo) ? "ToolInfo" : "Close";
+                var settingButtonText = (!isShowingSetting) ? "Setting" : "Close";
                 GUILayout.FlexibleSpace();
-                if (GUILayout.Button("ToolInfo", GUILayout.MinWidth(50)))
+                if (GUILayout.Button(toolInfoButtonText, GUILayout.MinWidth(50)))
                 {
                     isShowingToolInfo = !isShowingToolInfo;
                     isShowingSetting = false;
                 }
 
-                if (GUILayout.Button("Setting", GUILayout.MinWidth(50)))
+                if (GUILayout.Button(settingButtonText, GUILayout.MinWidth(50)))
                 {
                     isShowingSetting = !isShowingSetting;
                     isShowingToolInfo = false;
