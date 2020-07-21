@@ -36,7 +36,7 @@ namespace VRCAvatarEditor
                                 using (new EditorGUILayout.HorizontalScope())
                                 {
                                     EditorGUILayout.LabelField(mat.shader.name);
-                                    EditorGUILayout.LabelField("(" + mat.name + ")");
+                                    EditorGUILayout.LabelField("(" + mat.name + ".mat)");
                                     if (GUILayout.Button("Select"))
                                     {
                                         Selection.activeObject = mat;
