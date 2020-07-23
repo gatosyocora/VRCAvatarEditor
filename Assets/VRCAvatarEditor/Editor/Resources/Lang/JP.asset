@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92599070e19982d438288df185044c49, type: 3}
   m_Name: JP
   m_EditorClassIdentifier: 
-  reset: "\u53D6\u308A\u6D88\u3057"
+  reset: "\u521D\u671F\u5024\u306B\u623B\u3059"
   open: "\u958B\u304F"
   close: "\u9589\u3058\u308B"
   edit: "\u7DE8\u96C6"
