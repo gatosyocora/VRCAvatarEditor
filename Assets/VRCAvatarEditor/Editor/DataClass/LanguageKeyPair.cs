@@ -119,4 +119,5 @@ public class LanguageKeyPair : ScriptableObject
     // Other
     public string otherLabel;
     public string layoutTypeLabel;
+    public string languageLabel;
 }

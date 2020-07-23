@@ -115,6 +115,7 @@ namespace VRCAvatarEditor
         #region Changeable Parameters from Setting
 
         private LayoutType layoutType = LayoutType.Default;
+        private string language = "EN";
 
         #endregion
 
@@ -135,7 +136,6 @@ namespace VRCAvatarEditor
 
             saveFolder = "Assets/";
 
-            LocalizeText.instance.LoadLanguage("JP");
 
             licenseText = GetFileTexts(editorFolderPath + LICENSE_FILE_NAME);
             readmeText = GetFileTexts(editorFolderPath + README_FILE_NAME);
@@ -505,6 +505,19 @@ namespace VRCAvatarEditor
 
             layoutType = (LayoutType)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.layoutTypeLabel, layoutType);
 
+            var languagePacks = GetLanguagePacks();
+            var index = Array.IndexOf(languagePacks, language);
+            using (var check = new EditorGUI.ChangeCheckScope())
+            {
+                index = EditorGUILayout.Popup(LocalizeText.instance.langPair.languageLabel, index, languagePacks);
+                if (check.changed)
+                {
+                    language = languagePacks[index];
+                }
+            }
+
+            EditorGUILayout.Space();
+
             if (GUILayout.Button(LocalizeText.instance.langPair.saveSettingButtonText))
             {
                 SaveSettingDataToScriptableObject();
@@ -563,6 +576,13 @@ namespace VRCAvatarEditor
             currentTool = ToolFunc.アバター情報;
         }
 
+        private string[] GetLanguagePacks()
+        {
+            return Directory.GetFiles($"{editorFolderPath}Resources/Lang", "*.asset")
+                        .Select(f => Path.GetFileNameWithoutExtension(f))
+                        .ToArray();
+        }
+
         #region General Functions
 
         /// <summary>
@@ -576,6 +596,8 @@ namespace VRCAvatarEditor
                 settingAsset = Resources.Load<SettingData>("DefaultSettingData");
             
             layoutType = settingAsset.layoutType;
+            language = settingAsset.language;
+            LocalizeText.instance.LoadLanguage(language);
 
             avatarMonitorGUI.LoadSettingData(settingAsset);
             faceEmotionGUI.LoadSettingData(settingAsset);
@@ -600,6 +622,7 @@ namespace VRCAvatarEditor
             faceEmotionGUI.SaveSettingData(ref settingAsset);
 
             settingAsset.layoutType = layoutType;
+            settingAsset.language = language;
 
             if (newCreated)
             {
@@ -634,8 +657,9 @@ namespace VRCAvatarEditor
         /// </summary>
         private void ApplySettingsToEditorGUI()
         {
-            if (edittingAvatar.descriptor == null) return;
+            LocalizeText.instance.LoadLanguage(language);
 
+            if (edittingAvatar.descriptor == null) return;
 
             foreach (var skinnedMesh in edittingAvatar.skinnedMeshList)
             {

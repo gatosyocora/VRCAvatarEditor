@@ -12,94 +12,96 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92599070e19982d438288df185044c49, type: 3}
   m_Name: EN
   m_EditorClassIdentifier: 
-  reset: 
-  open: 
-  close: 
-  edit: 
-  selectFolder: 
-  selectFolderDialogMessageText: 
-  exclusions: 
-  select: 
-  ok: 
-  cancel: 
-  add: 
-  remove: 
-  avatarLabel: 
-  reloadAvatarButtonText: 
-  toolInfoButtonText: 
-  settingButtonText: 
-  resetPoseButtonText: 
-  uploadAvatarButtonText: 
-  avatarInfoTitle: 
-  faceEmotionTitle: 
-  probeAnchorTitle: 
-  boundsTitle: 
-  shaderTitle: 
-  standingTabText: 
-  sittingTabText: 
-  emoteButtonText: 
-  faceAndHandButtonText: 
-  standingTitle: 
-  sittingTitle: 
-  noAvatarMessageText: 
-  noCustomStandingAnimsMessageText: 
-  noCustomSittingAnimsMessageText: 
-  createCustomStandingAnimsButtonText: 
-  createCustomSittingAnimsButtonText: 
-  setToSameAsCustomStandingAnimsButtonText: 
-  genderLabel: 
-  uploadStatusLabel: 
-  newAvatarText: 
-  uploadedAvatarText: 
-  customStandingAnimsLabel: 
-  customSittingAnimsLabel: 
-  triangleCountLabel: 
-  faceMeshLabel: 
-  viewPositionLabel: 
-  lipSyncWarningMessageText: 
-  lipSyncTypeLabel: 
-  lipSyncBlendShapesLabel: 
-  lipSyncBlendShapesAutoDetectButtonText: 
-  loadAnimationButtonText: 
-  setToDefaultButtonText: 
-  resetToDefaultButtonText: 
-  toggleAllLabel: 
-  minButtonText: 
-  maxButtonText: 
-  animClipFileNameLabel: 
-  animClipSaveFolderLabel: 
-  animationOverrideLabel: 
-  handPoseAnimClipLabel: 
-  createAnimFileButtonText: 
-  setToDefaultDialogTitleText: 
-  setToDefaultDialogMessageText: 
-  setToSkinnedMeshRendererLabel: 
-  setToMeshRendererLabel: 
-  targetPositionLabel: 
-  rendererListLabel: 
-  probeAnchorMessageText: 
-  setProbeAnchorButtonText: 
-  resetToBoundsToPrefabButtonText: 
-  childObjectsLabel: 
-  setBoundsButtonText: 
-  versionLabel: 
-  openOnlineManualButtonText: 
-  functionsLabel: 
-  readmeLabel: 
-  licenseLabel: 
-  usingSoftwareLicenseLabel: 
-  settingPageMessageText: 
-  saveSettingButtonText: 
-  changeDefaultSettingButtonText: 
-  defaultCameraDistanceLabel: 
-  faceCameraDistanceLabel: 
-  cameraZoomStepDistanceLabel: 
-  gammaCorrectionLabel: 
-  monitorBackgroundColorLabel: 
-  monitorSizeTypeLabel: 
-  monitorSizeLabel: 
-  sortTypeLabel: 
-  blendShapeExclusionsLabel: 
-  usePreviousAnimationOnHandAnimationLabel: 
-  otherLabel: 
-  layoutTypeLabel: 
+  reset: Reset
+  open: Open
+  close: Close
+  edit: Edit
+  selectFolder: Select Folder
+  selectFolderDialogMessageText: Select Folder
+  exclusions: Exclusions
+  select: Select
+  ok: ok
+  cancel: cancel
+  add: Add
+  remove: Remove
+  avatarLabel: Avatar
+  reloadAvatarButtonText: Reload Avatar
+  toolInfoButtonText: ToolInfo
+  settingButtonText: Setting
+  resetPoseButtonText: Reset Pose
+  uploadAvatarButtonText: Upload Avatar
+  avatarInfoTitle: AvatarInfo
+  faceEmotionTitle: FaceEmotion
+  probeAnchorTitle: ProbeAnchor
+  boundsTitle: Bounds
+  shaderTitle: Shader
+  standingTabText: Standing
+  sittingTabText: Sitting
+  emoteButtonText: Emote
+  faceAndHandButtonText: Face&Hand
+  standingTitle: StandingAnims
+  sittingTitle: SittingAnims
+  noAvatarMessageText: Select No Avatar
+  noCustomStandingAnimsMessageText: Set to No CustomStandingAnims
+  noCustomSittingAnimsMessageText: Set to No CustomSittingAnims
+  createCustomStandingAnimsButtonText: Create CustomStandingAnims
+  createCustomSittingAnimsButtonText: Create CustomSittingAnims
+  setToSameAsCustomStandingAnimsButtonText: Set to same as CustomStandingAnims
+  genderLabel: Gender
+  uploadStatusLabel: Upload Status
+  newAvatarText: New Avatar
+  uploadedAvatarText: Uploaded Avatar
+  customStandingAnimsLabel: CustomStandingAnims
+  customSittingAnimsLabel: CustomSittingAnims
+  triangleCountLabel: TriangleCount
+  faceMeshLabel: FaceMesh
+  viewPositionLabel: View Position
+  lipSyncWarningMessageText: LipSync may not be set correctly
+  lipSyncTypeLabel: LipSync Type
+  lipSyncBlendShapesLabel: LipSync BlendShapes
+  lipSyncBlendShapesAutoDetectButtonText: Auto Detect BlendShapes for LipSync
+  loadAnimationButtonText: Load Animation
+  setToDefaultButtonText: Set to Default
+  resetToDefaultButtonText: Reset to Default
+  toggleAllLabel: ToggleAll
+  minButtonText: Min
+  maxButtonText: Max
+  animClipFileNameLabel: AnimClip FileName
+  animClipSaveFolderLabel: AnimClip SaveFolder
+  animationOverrideLabel: AnimationOverride
+  handPoseAnimClipLabel: HandPose AnimClip
+  createAnimFileButtonText: Create AnimFile
+  setToDefaultDialogTitleText: Default FaceEmotion Setting
+  setToDefaultDialogMessageText: Would you like to default your current FaceEmotion?
+  setToSkinnedMeshRendererLabel: Set to SkinnedMeshRenderer
+  setToMeshRendererLabel: Set to MeshRenderer
+  targetPositionLabel: Target Position
+  rendererListLabel: RendererList
+  probeAnchorMessageText: The Probe Anchor of the checked mesh is set
+  setProbeAnchorButtonText: Set ProbeAnchor
+  resetToBoundsToPrefabButtonText: Reset to Bounds to Prefab
+  childObjectsLabel: Parent of objects set bounds
+  setBoundsButtonText: Set Bounds
+  versionLabel: Version
+  openOnlineManualButtonText: Open OnlineManual
+  functionsLabel: Functions
+  readmeLabel: Readme
+  licenseLabel: Lisence
+  usingSoftwareLicenseLabel: Using Software License
+  settingPageMessageText: The setting will be applied after the change is made and
+    until the window is closed. "Save Setting" will be applied after next time
+  saveSettingButtonText: Save Setting
+  changeDefaultSettingButtonText: Dafault Setting
+  defaultCameraDistanceLabel: Default Camera Distance
+  faceCameraDistanceLabel: Face Camera Distance
+  cameraZoomStepDistanceLabel: Camera Zoom Step Distance
+  gammaCorrectionLabel: Gamma Correction
+  monitorBackgroundColorLabel: Monitor BackgroundColor
+  monitorSizeTypeLabel: MonitorSize
+  monitorSizeLabel: CustomSize
+  sortTypeLabel: SortType
+  blendShapeExclusionsLabel: BlensShape Exclusions
+  usePreviousAnimationOnHandAnimationLabel: Use Previous Animation On HandAnimation
+  otherLabel: Other
+  layoutTypeLabel: LayoutType
+  languageLabel: Language

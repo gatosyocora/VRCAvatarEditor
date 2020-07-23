@@ -21,6 +21,7 @@ namespace VRCAvatarEditor
         public bool usePreviousAnimationOnHandAnimation = false;
 
         public VRCAvatarEditorGUI.LayoutType layoutType = VRCAvatarEditorGUI.LayoutType.Default;
+        public string language = "EN";
 
         public AvatarMonitorGUI.MonitorSize monitorSizeType = AvatarMonitorGUI.MonitorSize.Small;
         public int monitorSize = 0;
