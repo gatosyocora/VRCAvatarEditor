@@ -148,7 +148,7 @@ namespace VRCAvatarEditor
             shaderGUI = ScriptableObject.CreateInstance<ShaderGUI>();
 
             avatarMonitorGUI.Initialize(currentTool);
-            animationsGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder, this);
+            animationsGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder, this, faceEmotionGUI);
             avatarInfoGUI.Initialize(ref originalAvatar);
             probeAnchorGUI.Initialize(ref originalAvatar);
 
@@ -553,7 +553,7 @@ namespace VRCAvatarEditor
             targetAvatarObj.SetActive(true);
 
             avatarMonitorGUI.MoveAvatarCam(false);
-            animationsGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder, this);
+            animationsGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder, this, faceEmotionGUI);
             avatarInfoGUI.Initialize(ref originalAvatar);
             meshBoundsGUI.Initialize(ref originalAvatar);
             probeAnchorGUI.Initialize(ref originalAvatar);

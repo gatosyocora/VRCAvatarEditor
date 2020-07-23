@@ -2,6 +2,7 @@
 using UnityEditor;
 using System.Linq;
 using System.IO;
+using System;
 
 namespace VRCAvatarEditor
 {
@@ -10,6 +11,7 @@ namespace VRCAvatarEditor
         private VRCAvatarEditor.Avatar editAvatar;
         private VRCAvatarEditor.Avatar originalAvatar;
         private VRCAvatarEditorGUI vrcAvatarEditorGUI;
+        private FaceEmotionGUI faceEmotionGUI;
 
         public static readonly string[] HANDANIMS = { "FIST", "FINGERPOINT", "ROCKNROLL", "HANDOPEN", "THUMBSUP", "VICTORY", "HANDGUN" };
         public static readonly string[] EMOTEANIMS = { "EMOTE1", "EMOTE2", "EMOTE3", "EMOTE4", "EMOTE5", "EMOTE6", "EMOTE7", "EMOTE8" };
@@ -52,11 +54,13 @@ namespace VRCAvatarEditor
         public void Initialize(ref VRCAvatarEditor.Avatar editAvatar,
                                VRCAvatarEditor.Avatar originalAvatar,
                                string saveFolderPath,
-                               VRCAvatarEditorGUI vrcAvatarEditorGUI)
+                               VRCAvatarEditorGUI vrcAvatarEditorGUI,
+                               FaceEmotionGUI faceEmotionGUI)
         {
             this.editAvatar = editAvatar;
             this.originalAvatar = originalAvatar;
             this.vrcAvatarEditorGUI = vrcAvatarEditorGUI;
+            this.faceEmotionGUI = faceEmotionGUI;
             UpdateSaveFolderPath(saveFolderPath);
         }
 
@@ -144,6 +148,9 @@ namespace VRCAvatarEditor
                                             vrcAvatarEditorGUI.TabChanged();
                                         }
                                         FaceEmotion.ApplyAnimationProperties(controller[handPoseName], ref editAvatar);
+                                        faceEmotionGUI.ChangeSaveAnimationState(controller[handPoseName].name,
+                                            (HandPose.HandPoseType)Enum.ToObject(typeof(HandPose.HandPoseType), i + 1),
+                                            controller[handPoseName]);
                                     }
                                 }
                             }

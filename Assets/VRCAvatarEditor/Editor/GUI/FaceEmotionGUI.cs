@@ -74,6 +74,7 @@ namespace VRCAvatarEditor
                     if (GUILayout.Button("Reset To Default"))
                     {
                         FaceEmotion.ResetToDefaultFaceEmotion(ref editAvatar);
+                        ChangeSaveAnimationState();
                     }
                 }
 
@@ -109,25 +110,7 @@ namespace VRCAvatarEditor
 
                     if (check.changed)
                     {
-                        if (usePreviousAnimationOnHandAnimation)
-                        {
-                            var animController = originalAvatar.standingAnimController;
-                            var previousAnimation = animController[AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]];
-
-                            // 未設定でなければ以前設定されていたものをHandPoseAnimationとして使う
-                            if (previousAnimation != null && previousAnimation.name != AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1])
-                            {
-                                handPoseAnim = previousAnimation;
-                            }
-                            else
-                            {
-                                handPoseAnim = HandPose.GetHandAnimationClip(selectedHandAnim);
-                            }
-                        }
-                        else
-                        {
-                            handPoseAnim = HandPose.GetHandAnimationClip(selectedHandAnim);
-                        }
+                        ChangeSelectionHandAnimation();
                     }
                 }
 
@@ -280,6 +263,42 @@ namespace VRCAvatarEditor
         public void OnLoadedAnimationProperties()
         {
             FaceEmotion.ApplyAnimationProperties(ScriptableSingleton<SendData>.instance.loadingProperties, ref editAvatar);
+            ChangeSaveAnimationState();
+        }
+
+        public void ChangeSaveAnimationState(
+                string animName = "", 
+                HandPose.HandPoseType selectedHandAnim = HandPose.HandPoseType.NoSelection,
+                AnimationClip handPoseAnim = null)
+        {
+            this.animName = animName;
+            this.selectedHandAnim = selectedHandAnim;
+            if (handPoseAnim is null)
+                handPoseAnim = HandPose.GetHandAnimationClip(selectedHandAnim);
+            this.handPoseAnim = handPoseAnim;
+        }
+
+        private void ChangeSelectionHandAnimation()
+        {
+            if (usePreviousAnimationOnHandAnimation)
+            {
+                var animController = originalAvatar.standingAnimController;
+                var previousAnimation = animController[AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]];
+
+                // 未設定でなければ以前設定されていたものをHandPoseAnimationとして使う
+                if (previousAnimation != null && previousAnimation.name != AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1])
+                {
+                    handPoseAnim = previousAnimation;
+                }
+                else
+                {
+                    handPoseAnim = HandPose.GetHandAnimationClip(selectedHandAnim);
+                }
+            }
+            else
+            {
+                handPoseAnim = HandPose.GetHandAnimationClip(selectedHandAnim);
+            }
         }
     }
 }
