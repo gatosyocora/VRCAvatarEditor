@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -90,8 +91,8 @@ namespace VRCAvatarEditor
                     if (GUILayout.Button(LocalizeText.instance.langPair.selectFolder, GUILayout.Width(100)))
                     {
                         originalAvatar.animSavedFolderPath = EditorUtility.OpenFolderPanel(LocalizeText.instance.langPair.selectFolderDialogMessageText, originalAvatar.animSavedFolderPath, string.Empty);
-                        originalAvatar.animSavedFolderPath = FileUtil.GetProjectRelativePath(originalAvatar.animSavedFolderPath) + "/";
-                        if (originalAvatar.animSavedFolderPath == "/") originalAvatar.animSavedFolderPath = "Assets/";
+                        originalAvatar.animSavedFolderPath = $"{FileUtil.GetProjectRelativePath(originalAvatar.animSavedFolderPath)}{Path.DirectorySeparatorChar}";
+                        if (originalAvatar.animSavedFolderPath == $"{Path.DirectorySeparatorChar}") originalAvatar.animSavedFolderPath = $"Assets{Path.DirectorySeparatorChar}";
                         parentWindow.animationsGUI.UpdateSaveFolderPath(originalAvatar.animSavedFolderPath);
                     }
 

@@ -51,7 +51,7 @@ namespace VRCAvatarEditor
             lipSyncStyle = VRC_AvatarDescriptor.LipSyncStyle.Default;
             faceShapeKeyEnum = null;
             skinnedMeshList = null;
-            animSavedFolderPath = "Assets/";
+            animSavedFolderPath = $"Assets{Path.DirectorySeparatorChar}";
         }
 
         public Avatar(VRC_AvatarDescriptor descriptor) : this()
@@ -155,7 +155,7 @@ namespace VRCAvatarEditor
             if (standingAnimController != null)
             {
                 var assetPath = AssetDatabase.GetAssetPath(standingAnimController);
-                animSavedFolderPath = Path.GetDirectoryName(assetPath) + "/";
+                animSavedFolderPath = $"{Path.GetDirectoryName(assetPath)}{Path.DirectorySeparatorChar}";
             }
         }
     }
