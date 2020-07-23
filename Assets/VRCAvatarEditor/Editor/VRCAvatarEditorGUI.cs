@@ -66,6 +66,7 @@ namespace VRCAvatarEditor
         private const string LICENSE_FILE_NAME = "LICENSE.txt";
         private const string README_FILE_NAME = "README.txt";
         private const string USING_SOFTWARE_FILE_NAME = "USING_SOFTWARE_LICENSES.txt";
+        private const string LANG_ASSET_FOLDER_PATH = "Editor/Resources/Lang";
         private readonly string[] TOOL_FUNCS = { "Avatar Monitor", "SunLight Rotator", "FaceEmotion Creator", "HandPose Adder", "ProbeAnchor Setter", "MeshBounds Setter", "Shader Checker", "HumanoidPose Resetter" };
         private string licenseText;
         private string readmeText;
@@ -112,7 +113,9 @@ namespace VRCAvatarEditor
             edittingAvatar = new Avatar();
             
             var editorScriptPath = AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this));
-            editorFolderPath = Path.GetDirectoryName(editorScriptPath).Replace("Editor/", string.Empty) + "/";
+            Debug.Log(Path.GetDirectoryName(editorScriptPath));
+            editorFolderPath = Path.GetDirectoryName(editorScriptPath);
+            editorFolderPath = editorFolderPath.Substring(0, editorFolderPath.LastIndexOf(Path.DirectorySeparatorChar) + 1);
 
             saveFolder = "Assets/";
 
@@ -558,7 +561,7 @@ namespace VRCAvatarEditor
 
         private string[] GetLanguagePacks()
         {
-            return Directory.GetFiles($"{editorFolderPath}Resources/Lang", "*.asset")
+            return Directory.GetFiles($"{editorFolderPath}{LANG_ASSET_FOLDER_PATH}", "*.asset")
                         .Select(f => Path.GetFileNameWithoutExtension(f))
                         .ToArray();
         }
