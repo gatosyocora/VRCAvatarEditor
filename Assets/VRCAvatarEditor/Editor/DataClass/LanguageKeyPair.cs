@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
+﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "VRCAvatarEditor/LanguageData")]
 public class LanguageKeyPair : ScriptableObject

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -54,7 +52,7 @@ namespace VRCAvatarEditor
         public List<BlendShape> GetBlendShapes()
         {
             List<BlendShape> blendshapes = new List<BlendShape>();
-            
+
             for (int blendShapeIndex = 0; blendShapeIndex < mesh.blendShapeCount; blendShapeIndex++)
             {
                 blendshapes.Add(new BlendShape(blendShapeIndex, mesh.GetBlendShapeName(blendShapeIndex), true));

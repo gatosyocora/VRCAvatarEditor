@@ -1,11 +1,10 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
-using VRCSDK2;
-using System;
-using VRC.Core;
-using UnityEditor;
 using System.IO;
+using UnityEditor;
+using UnityEngine;
+using VRC.Core;
+using VRCSDK2;
 
 namespace VRCAvatarEditor
 {
@@ -104,7 +103,7 @@ namespace VRCAvatarEditor
             lipSyncStyle = descriptor.lipSync;
 
             skinnedMeshList = FaceEmotion.GetSkinnedMeshListOfBlendShape(avatarObj, faceMesh.gameObject);
-            
+
             skinnedMeshRendererList = GatoUtility.GetSkinnedMeshList(avatarObj);
             meshRendererList = GatoUtility.GetMeshList(avatarObj);
 

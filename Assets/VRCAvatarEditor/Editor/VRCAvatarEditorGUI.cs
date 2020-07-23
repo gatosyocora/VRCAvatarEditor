@@ -1,11 +1,10 @@
-﻿using UnityEngine;
-using UnityEditor;
-using VRCSDK2;
-using System.Linq;
+﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
-using System;
-using VRCAvatarEditor;
+using UnityEditor;
+using UnityEngine;
+using VRCSDK2;
 
 // Copyright (c) 2019 gatosyocora
 
@@ -51,7 +50,7 @@ namespace VRCAvatarEditor
         public ToolFunc currentTool = ToolFunc.AvatarInfo;
 
         private GUILayoutOption[][] layoutOptions
-                        = new GUILayoutOption[][] 
+                        = new GUILayoutOption[][]
                             {
                                 new GUILayoutOption[]{ GUILayout.MinWidth(350), GUILayout.MaxHeight(270) },
                                 new GUILayoutOption[]{ GUILayout.Height(200)}
@@ -111,7 +110,7 @@ namespace VRCAvatarEditor
         private void OnEnable()
         {
             edittingAvatar = new Avatar();
-            
+
             var editorScriptPath = AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this));
             editorFolderPath = Path.GetDirectoryName(editorScriptPath);
             editorFolderPath = editorFolderPath.Substring(0, editorFolderPath.LastIndexOf(Path.DirectorySeparatorChar) + 1);
@@ -166,7 +165,7 @@ namespace VRCAvatarEditor
 
         private void OnGUI()
         {
-            using (new EditorGUILayout.HorizontalScope(GUILayout.Height(EditorGUIUtility.singleLineHeight*1.5f)))
+            using (new EditorGUILayout.HorizontalScope(GUILayout.Height(EditorGUIUtility.singleLineHeight * 1.5f)))
             {
 
                 GUILayout.FlexibleSpace();
@@ -267,7 +266,7 @@ namespace VRCAvatarEditor
                             else if (currentTool == ToolFunc.ProbeAnchor)
                             {
                                 // Probe Anchor設定
-                               probeAnchorGUI.DrawGUI(null);
+                                probeAnchorGUI.DrawGUI(null);
                             }
                             else if (currentTool == ToolFunc.Bounds)
                             {
@@ -384,7 +383,7 @@ namespace VRCAvatarEditor
 
         private void ToolInfoGUI()
         {
-            EditorGUILayout.LabelField("VRC Avatar Editor",EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("VRC Avatar Editor", EditorStyles.boldLabel);
             EditorGUILayout.LabelField(LocalizeText.instance.langPair.versionLabel, TOOL_VERSION);
 
             EditorGUILayout.Space();
@@ -410,9 +409,9 @@ namespace VRCAvatarEditor
             {
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    EditorGUILayout.LabelField("Twitter", "@"+TWITTER_ID, GUILayout.Width(300));
+                    EditorGUILayout.LabelField("Twitter", "@" + TWITTER_ID, GUILayout.Width(300));
                     if (GUILayout.Button(LocalizeText.instance.langPair.open, GUILayout.Width(50)))
-                        Application.OpenURL("https://twitter.com/"+ TWITTER_ID);
+                        Application.OpenURL("https://twitter.com/" + TWITTER_ID);
                     GUILayout.FlexibleSpace();
                 }
                 EditorGUILayout.LabelField("Discord", DISCORD_ID);
@@ -426,7 +425,7 @@ namespace VRCAvatarEditor
             }
 
             EditorGUILayout.Space();
-            
+
             isShowingReadme = EditorGUILayout.Foldout(isShowingReadme, LocalizeText.instance.langPair.readmeLabel);
 
             if (isShowingReadme)
@@ -442,7 +441,7 @@ namespace VRCAvatarEditor
             }
 
 
-            isShowingLicense =  EditorGUILayout.Foldout(isShowingLicense, LocalizeText.instance.langPair.licenseLabel);
+            isShowingLicense = EditorGUILayout.Foldout(isShowingLicense, LocalizeText.instance.langPair.licenseLabel);
 
             if (isShowingLicense)
             {
@@ -576,7 +575,7 @@ namespace VRCAvatarEditor
 
             if (settingAsset == null)
                 settingAsset = Resources.Load<SettingData>("DefaultSettingData");
-            
+
             layoutType = settingAsset.layoutType;
             language = settingAsset.language;
             LocalizeText.instance.LoadLanguage(language);
@@ -674,7 +673,7 @@ namespace VRCAvatarEditor
             catch (Exception e)
             {
                 // 改行コード
-                text += "読み込みに失敗しました:"+e.Message;
+                text += "読み込みに失敗しました:" + e.Message;
             }
 
             return text;
@@ -729,7 +728,7 @@ namespace VRCAvatarEditor
             var dotChar = '.';
             var zero = '0';
             var versions = sdkVersion.Split(dotChar);
-            var version = 
+            var version =
                     versions[0].PadLeft(4, zero) + dotChar +
                     versions[1].PadLeft(2, zero) + dotChar +
                     versions[2].PadLeft(2, zero);

@@ -27,16 +27,16 @@ namespace VRCAvatarEditor
                 if (renderer == null) continue;
 
                 boneTrans = renderer.rootBone.transform;
-                var  scale = GetScale(boneTrans);
+                var scale = GetScale(boneTrans);
 
                 var center = avatarBounds.center - boneTrans.position;
                 center = Quaternion.Inverse(boneTrans.rotation) * center;
                 center = new Vector3(center.x / scale.x,
                                         center.y / scale.y,
                                         center.z / scale.z);
-                
+
                 var size = Quaternion.Inverse(renderer.rootBone.transform.rotation) * avatarBounds.size;
-                size = new Vector3( size.x / scale.x,
+                size = new Vector3(size.x / scale.x,
                                     size.y / scale.y,
                                     size.z / scale.z);
                 renderer.localBounds = new Bounds(center, size);
@@ -124,7 +124,7 @@ namespace VRCAvatarEditor
         {
             var scale = Vector3.one;
 
-            while(true)
+            while (true)
             {
                 scale.Scale(transform.localScale);
                 transform = transform.parent;

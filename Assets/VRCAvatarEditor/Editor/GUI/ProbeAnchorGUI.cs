@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using UnityEditor;
-using VRCAvatarEditor;
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace VRCAvatarEditor
 {

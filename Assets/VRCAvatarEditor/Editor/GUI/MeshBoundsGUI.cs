@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
-using VRCAvatarEditor;
 using System.Linq;
+using UnityEditor;
+using UnityEngine;
 
 namespace VRCAvatarEditor
 {

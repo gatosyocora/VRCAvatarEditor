@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
 using UnityEditor;
-using System;
+using UnityEngine;
 using VRCSDK2;
 
 namespace VRCAvatarEditor
@@ -9,13 +9,13 @@ namespace VRCAvatarEditor
     {
         private VRCAvatarEditor.Avatar avatar;
         private VRCAvatarEditorGUI.ToolFunc currentTool;
-            
+
         private RenderTexture avatarCamTexture;
         private bool isGammaCorrection = true;
         private GameObject avatarCam = null;
 
         private static readonly int CAMERA_ROTATE_ANGLE = 30;
-        
+
         private float camPosZ;
 
         private Light sceneLight;

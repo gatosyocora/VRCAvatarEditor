@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
-using System.Linq;
+using UnityEngine;
 
 // Copyright (c) 2019 gatosyocora
 
@@ -190,7 +189,8 @@ namespace VRCAvatarEditor
         /// </summary>
         /// <param name="sendData"></param>
         /// <param name="preWindow"></param>
-        public static void LoadAnimationProperties(FaceEmotionGUI faceEmotionGUI, VRCAvatarEditorGUI editorGUI) {
+        public static void LoadAnimationProperties(FaceEmotionGUI faceEmotionGUI, VRCAvatarEditorGUI editorGUI)
+        {
 
             string animFilePath = EditorUtility.OpenFilePanel("Select Loading Animation File", "Assets", "anim");
 
@@ -212,7 +212,8 @@ namespace VRCAvatarEditor
         /// <param name="skinnedMeshes"></param>
         public static void ApplyAnimationProperties(List<AnimParam> animProperties, ref VRCAvatarEditor.Avatar avatar)
         {
-            for (int skinnedMeshIndex = 0; skinnedMeshIndex < avatar.skinnedMeshList.Count; skinnedMeshIndex++) {
+            for (int skinnedMeshIndex = 0; skinnedMeshIndex < avatar.skinnedMeshList.Count; skinnedMeshIndex++)
+            {
                 var mesh = avatar.skinnedMeshList[skinnedMeshIndex].mesh;
                 var renderer = avatar.skinnedMeshList[skinnedMeshIndex].renderer;
                 var blendshapes = avatar.skinnedMeshList[skinnedMeshIndex].blendshapes;
@@ -231,9 +232,11 @@ namespace VRCAvatarEditor
 
                 // アニメーションファイルに含まれるものだけ値を変更して
                 // 適用させるチェックマークにチェックをいれる
-                foreach (var animProperty in animProperties) {
+                foreach (var animProperty in animProperties)
+                {
                     var index = mesh.GetBlendShapeIndex(animProperty.blendShapeName);
-                    if (index >= 0) {
+                    if (index >= 0)
+                    {
                         renderer.SetBlendShapeWeight(index, animProperty.value);
                         blendshapes[index].isContains = true;
                     }

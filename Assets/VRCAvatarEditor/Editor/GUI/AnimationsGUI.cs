@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using UnityEditor;
-using System.Linq;
+﻿using System;
 using System.IO;
-using System;
+using UnityEditor;
+using UnityEngine;
 
 namespace VRCAvatarEditor
 {
@@ -105,7 +104,7 @@ namespace VRCAvatarEditor
 
                             using (new EditorGUILayout.HorizontalScope(GUILayout.Width(350)))
                             {
-                                GUILayout.Label((i+1)+":"+handPoseName, GUILayout.Width(100));
+                                GUILayout.Label((i + 1) + ":" + handPoseName, GUILayout.Width(100));
 
                                 controller[handPoseName] = EditorGUILayout.ObjectField(
                                     string.Empty,
@@ -247,7 +246,7 @@ namespace VRCAvatarEditor
             return overrideController;
         }
 
-        public void UpdateSaveFolderPath (string saveFolderPath)
+        public void UpdateSaveFolderPath(string saveFolderPath)
         {
             this.saveFolderPath = saveFolderPath;
         }

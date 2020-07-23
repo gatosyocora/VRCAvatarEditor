@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using VRCAvatarEditor;
 using UnityEditor;
 
 namespace VRCAvatarEditor

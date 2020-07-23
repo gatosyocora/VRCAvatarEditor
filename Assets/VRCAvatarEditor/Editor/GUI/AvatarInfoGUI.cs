@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-using VRCSDK2;
-using UnityEditor;
-using System;
+﻿using System;
 using System.Linq;
+using UnityEditor;
+using UnityEngine;
+using VRCSDK2;
 
 namespace VRCAvatarEditor
 {
@@ -204,7 +204,7 @@ namespace VRCAvatarEditor
                                 .Where(x => x.boneIndex0 == leftEyeBoneIndex ||
                                             x.boneIndex1 == leftEyeBoneIndex ||
                                             x.boneIndex2 == leftEyeBoneIndex ||
-                                            x.boneIndex3 == leftEyeBoneIndex )
+                                            x.boneIndex3 == leftEyeBoneIndex)
                                 .ToArray();
 
             // ローカル座標に変換

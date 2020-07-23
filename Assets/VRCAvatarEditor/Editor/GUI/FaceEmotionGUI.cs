@@ -1,10 +1,8 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
 using System.Linq;
-using VRCAvatarEditor;
-using System;
+using UnityEditor;
+using UnityEngine;
 
 namespace VRCAvatarEditor
 {
@@ -105,8 +103,8 @@ namespace VRCAvatarEditor
                 {
                     selectedHandAnim = (HandPose.HandPoseType)Enum.ToObject(typeof(HandPose.HandPoseType), EditorGUILayout.Popup(
                         LocalizeText.instance.langPair.animationOverrideLabel,
-                        (int)selectedHandAnim, 
-                        Enum.GetNames(typeof(HandPose.HandPoseType)).Select((x, index) => index + ":"+x).ToArray()));
+                        (int)selectedHandAnim,
+                        Enum.GetNames(typeof(HandPose.HandPoseType)).Select((x, index) => index + ":" + x).ToArray()));
 
                     if (check.changed)
                     {
@@ -195,7 +193,7 @@ namespace VRCAvatarEditor
             settingAsset.usePreviousAnimationOnHandAnimation = usePreviousAnimationOnHandAnimation;
         }
 
-        public void Dispose() 
+        public void Dispose()
         {
             FaceEmotion.ResetToDefaultFaceEmotion(ref editAvatar);
         }
@@ -267,7 +265,7 @@ namespace VRCAvatarEditor
         }
 
         public void ChangeSaveAnimationState(
-                string animName = "", 
+                string animName = "",
                 HandPose.HandPoseType selectedHandAnim = HandPose.HandPoseType.NoSelection,
                 AnimationClip handPoseAnim = null)
         {
