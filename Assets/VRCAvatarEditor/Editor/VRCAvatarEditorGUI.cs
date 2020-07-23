@@ -113,7 +113,6 @@ namespace VRCAvatarEditor
             edittingAvatar = new Avatar();
             
             var editorScriptPath = AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this));
-            Debug.Log(Path.GetDirectoryName(editorScriptPath));
             editorFolderPath = Path.GetDirectoryName(editorScriptPath);
             editorFolderPath = editorFolderPath.Substring(0, editorFolderPath.LastIndexOf(Path.DirectorySeparatorChar) + 1);
 
