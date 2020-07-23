@@ -28,7 +28,7 @@ namespace VRCAvatarEditor
         {
             Small = 256,
             Mediam = 512,
-            Lerge = 768,
+            Large = 768,
             Custom
         }
 
