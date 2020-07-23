@@ -26,7 +26,7 @@ namespace VRCAvatarEditor
                 // 性別
                 using (var check = new EditorGUI.ChangeCheckScope())
                 {
-                    avatar.sex = (VRC_AvatarDescriptor.AnimationSet)EditorGUILayout.EnumPopup("Gender", avatar.sex);
+                    avatar.sex = (VRC_AvatarDescriptor.AnimationSet)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.genderLabel, avatar.sex);
 
                     if (check.changed)
                     {
@@ -36,19 +36,22 @@ namespace VRCAvatarEditor
                 }
 
                 // アップロード状態
-                EditorGUILayout.LabelField("Status", (string.IsNullOrEmpty(avatar.avatarId)) ? "New Avatar" : "Uploaded Avatar");
+                EditorGUILayout.LabelField(LocalizeText.instance.langPair.uploadStatusLabel,
+                    (string.IsNullOrEmpty(avatar.avatarId)) ?
+                        LocalizeText.instance.langPair.newAvatarText :
+                        LocalizeText.instance.langPair.uploadedAvatarText);
 
                 // AnimatorOverrideController
                 using (var check = new EditorGUI.ChangeCheckScope())
                 {
                     avatar.standingAnimController = EditorGUILayout.ObjectField(
-                        "Standing Animations",
+                        LocalizeText.instance.langPair.customStandingAnimsLabel,
                         avatar.standingAnimController,
                         typeof(AnimatorOverrideController),
                         true
                     ) as AnimatorOverrideController;
                     avatar.sittingAnimController = EditorGUILayout.ObjectField(
-                        "Sitting Animations",
+                        LocalizeText.instance.langPair.customSittingAnimsLabel,
                         avatar.sittingAnimController,
                         typeof(AnimatorOverrideController),
                         true
@@ -65,13 +68,13 @@ namespace VRCAvatarEditor
                 }
 
                 // ポリゴン数
-                EditorGUILayout.LabelField("Triangles", avatar.triangleCount + "(" + (avatar.triangleCount + avatar.triangleCountInactive) + ")");
+                EditorGUILayout.LabelField(LocalizeText.instance.langPair.triangleCountLabel, avatar.triangleCount + "(" + (avatar.triangleCount + avatar.triangleCountInactive) + ")");
 
                 // faceMesh
                 using (var check = new EditorGUI.ChangeCheckScope())
                 {
                     avatar.faceMesh = EditorGUILayout.ObjectField(
-                        "Face Mesh",
+                        LocalizeText.instance.langPair.faceMeshLabel,
                         avatar.faceMesh,
                         typeof(SkinnedMeshRenderer),
                         true
@@ -89,7 +92,7 @@ namespace VRCAvatarEditor
                 // View Position
                 using (var check = new EditorGUI.ChangeCheckScope())
                 {
-                    avatar.eyePos = EditorGUILayout.Vector3Field("View Position", avatar.eyePos);
+                    avatar.eyePos = EditorGUILayout.Vector3Field(LocalizeText.instance.langPair.viewPositionLabel, avatar.eyePos);
 
                     if (check.changed)
                     {
@@ -122,10 +125,9 @@ namespace VRCAvatarEditor
                 EditorGUILayout.Space();
 
                 // リップシンク
-                string lipSyncWarningMessage = "リップシンクが正しく設定されていない可能性があります";
                 using (var check = new EditorGUI.ChangeCheckScope())
                 {
-                    avatar.lipSyncStyle = (VRC_AvatarDescriptor.LipSyncStyle)EditorGUILayout.EnumPopup("LipSync", avatar.lipSyncStyle);
+                    avatar.lipSyncStyle = (VRC_AvatarDescriptor.LipSyncStyle)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.lipSyncTypeLabel, avatar.lipSyncStyle);
 
                     if (check.changed) avatar.descriptor.lipSync = avatar.lipSyncStyle;
                 }
@@ -133,7 +135,7 @@ namespace VRCAvatarEditor
                 {
                     if (avatar.faceMesh != null)
                     {
-                        isOpeningLipSync = EditorGUILayout.Foldout(isOpeningLipSync, "ShapeKeys");
+                        isOpeningLipSync = EditorGUILayout.Foldout(isOpeningLipSync, LocalizeText.instance.langPair.lipSyncBlendShapesLabel);
                         if (isOpeningLipSync)
                         {
                             using (new EditorGUI.IndentLevelScope())
@@ -151,8 +153,8 @@ namespace VRCAvatarEditor
                 }
                 if (avatar.lipSyncStyle != VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape || avatar.faceMesh == null)
                 {
-                    EditorGUILayout.HelpBox(lipSyncWarningMessage, MessageType.Warning);
-                    if (GUILayout.Button("シェイプキーによるリップシンクを自動設定する"))
+                    EditorGUILayout.HelpBox(LocalizeText.instance.langPair.lipSyncWarningMessageText, MessageType.Warning);
+                    if (GUILayout.Button(LocalizeText.instance.langPair.lipSyncBlendShapesAutoDetectButtonText))
                     {
                         avatar.SetLipSyncToViseme();
                         EditorUtility.SetDirty(avatar.descriptor);

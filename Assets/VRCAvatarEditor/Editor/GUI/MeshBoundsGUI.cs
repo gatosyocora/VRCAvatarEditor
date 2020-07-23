@@ -24,7 +24,7 @@ namespace VRCAvatarEditor
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
         {
-            EditorGUILayout.LabelField("Bounds", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField(LocalizeText.instance.langPair.boundsTitle, EditorStyles.boldLabel);
 
             EditorGUILayout.Space();
 
@@ -32,7 +32,7 @@ namespace VRCAvatarEditor
             {
                 GUILayout.FlexibleSpace();
 
-                if (GUILayout.Button("Reset Bounds to Prefab"))
+                if (GUILayout.Button(LocalizeText.instance.langPair.resetToBoundsToPrefabButtonText))
                 {
                     MeshBounds.RevertBoundsToPrefab(targetRenderers);
                 }
@@ -42,14 +42,14 @@ namespace VRCAvatarEditor
 
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
             {
-                EditorGUILayout.LabelField("Exclusions");
+                EditorGUILayout.LabelField(LocalizeText.instance.langPair.exclusions);
 
                 using (new EditorGUI.IndentLevelScope())
                 {
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
                         var parentObject = EditorGUILayout.ObjectField(
-                            "Child objects",
+                            LocalizeText.instance.langPair.childObjectsLabel,
                             null,
                             typeof(GameObject),
                             true
@@ -115,7 +115,7 @@ namespace VRCAvatarEditor
                 }
             }
 
-            if (GUILayout.Button("Set Bounds"))
+            if (GUILayout.Button(LocalizeText.instance.langPair.setBoundsButtonText))
             {
                 MeshBounds.BoundsSetter(targetRenderers);
             }

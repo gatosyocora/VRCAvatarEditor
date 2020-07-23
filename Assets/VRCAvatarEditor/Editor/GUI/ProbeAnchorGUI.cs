@@ -28,21 +28,21 @@ namespace VRCAvatarEditor
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
         {
-            EditorGUILayout.LabelField("Probe Anchor", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField(LocalizeText.instance.langPair.probeAnchorTitle, EditorStyles.boldLabel);
 
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
             {
                 // 設定するRendererの選択
-                isGettingSkinnedMeshRenderer = EditorGUILayout.Toggle("Set To SkinnedMeshRenderer", isGettingSkinnedMeshRenderer);
-                isGettingMeshRenderer = EditorGUILayout.Toggle("Set To MeshRenderer", isGettingMeshRenderer);
+                isGettingSkinnedMeshRenderer = EditorGUILayout.Toggle(LocalizeText.instance.langPair.setToSkinnedMeshRendererLabel, isGettingSkinnedMeshRenderer);
+                isGettingMeshRenderer = EditorGUILayout.Toggle(LocalizeText.instance.langPair.setToMeshRendererLabel, isGettingMeshRenderer);
 
                 // ライティングの計算の基準とする位置を選択
-                targetPos = (ProbeAnchor.TARGETPOS)EditorGUILayout.EnumPopup("TargetPosition", targetPos);
+                targetPos = (ProbeAnchor.TARGETPOS)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.targetPositionLabel, targetPos);
 
                 // Rendererの一覧を表示
                 if (avatar != null && avatar.descriptor != null)
                 {
-                    isOpeningRendererList = EditorGUILayout.Foldout(isOpeningRendererList, "Renderer List");
+                    isOpeningRendererList = EditorGUILayout.Foldout(isOpeningRendererList, LocalizeText.instance.langPair.rendererListLabel);
 
                     if (isOpeningRendererList)
                     {
@@ -63,7 +63,7 @@ namespace VRCAvatarEditor
                                         using (new GUILayout.HorizontalScope())
                                         {
                                             isSettingToSkinnedMesh[index] = EditorGUILayout.Toggle(skinnedMesh.gameObject.name, isSettingToSkinnedMesh[index]);
-                                            if (GUILayout.Button("Select"))
+                                            if (GUILayout.Button(LocalizeText.instance.langPair.select))
                                                 Selection.activeGameObject = skinnedMesh.gameObject;
                                         }
 
@@ -82,7 +82,7 @@ namespace VRCAvatarEditor
                                         using (new GUILayout.HorizontalScope())
                                         {
                                             isSettingToMesh[index] = EditorGUILayout.Toggle(mesh.gameObject.name, isSettingToMesh[index]);
-                                            if (GUILayout.Button("Select"))
+                                            if (GUILayout.Button(LocalizeText.instance.langPair.select))
                                                 Selection.activeGameObject = mesh.gameObject;
                                         }
 
@@ -92,13 +92,13 @@ namespace VRCAvatarEditor
                                 }
                             }
 
-                            EditorGUILayout.HelpBox("チェックがついているメッシュのProbeAnchorが設定されます", MessageType.Info);
+                            EditorGUILayout.HelpBox(LocalizeText.instance.langPair.probeAnchorMessageText, MessageType.Info);
                         }
                     }
                 }
             }
 
-            if (GUILayout.Button("Set ProbeAnchor"))
+            if (GUILayout.Button(LocalizeText.instance.langPair.setProbeAnchorButtonText))
             {
                 GameObject anchorTarget = null;
                 var result = ProbeAnchor.CreateAndSetProbeAnchorObject(avatar.descriptor.gameObject, targetPos, ref anchorTarget);

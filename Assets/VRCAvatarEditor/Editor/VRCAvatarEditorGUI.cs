@@ -59,7 +59,7 @@ namespace VRCAvatarEditor
                 {
                     if (_tabToggles == null)
                     {
-                        _tabToggles = System.Enum.GetNames(typeof(ToolFunc)).Select(x => new GUIContent(x)).ToArray();
+                        _tabToggles = Enum.GetNames(typeof(ToolFunc)).Select(x => new GUIContent(x)).ToArray();
                     }
                     return _tabToggles;
                 }
@@ -135,6 +135,8 @@ namespace VRCAvatarEditor
 
             saveFolder = "Assets/";
 
+            LocalizeText.instance.LoadLanguage("JP");
+
             licenseText = GetFileTexts(editorFolderPath + LICENSE_FILE_NAME);
             readmeText = GetFileTexts(editorFolderPath + README_FILE_NAME);
             usingSoftwareLicenseText = GetFileTexts(editorFolderPath + USING_SOFTWARE_FILE_NAME);
@@ -189,7 +191,7 @@ namespace VRCAvatarEditor
 
                 using (new EditorGUI.DisabledGroupScope(originalAvatar is null))
                 {
-                    if (GUILayout.Button("Reload Avatar"))
+                    if (GUILayout.Button(LocalizeText.instance.langPair.reloadAvatarButtonText))
                     {
                         OnChangedAvatar();
                     }
@@ -197,8 +199,8 @@ namespace VRCAvatarEditor
 
                 EditorGUILayout.Space();
 
-                var toolInfoButtonText = (!isShowingToolInfo) ? "ToolInfo" : "Close";
-                var settingButtonText = (!isShowingSetting) ? "Setting" : "Close";
+                var toolInfoButtonText = (!isShowingToolInfo) ? LocalizeText.instance.langPair.toolInfoButtonText : LocalizeText.instance.langPair.close;
+                var settingButtonText = (!isShowingSetting) ? LocalizeText.instance.langPair.settingButtonText : LocalizeText.instance.langPair.close;
                 if (GUILayout.Button(toolInfoButtonText, GUILayout.MinWidth(50)))
                 {
                     isShowingToolInfo = !isShowingToolInfo;
@@ -223,7 +225,7 @@ namespace VRCAvatarEditor
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
                         targetAvatarDescriptor = EditorGUILayout.ObjectField(
-                            "Avatar",
+                            LocalizeText.instance.langPair.avatarLabel,
                             targetAvatarDescriptor,
                             typeof(VRC_AvatarDescriptor),
                             allowSceneObjects: true
@@ -360,14 +362,14 @@ namespace VRCAvatarEditor
                         EditorGUILayout.Space();
 
                         // ポーズ修正
-                        if (GUILayout.Button("Reset Pose"))
+                        if (GUILayout.Button(LocalizeText.instance.langPair.resetPoseButtonText))
                         {
                             HumanoidPose.ResetPose(edittingAvatar.descriptor.gameObject);
                             HumanoidPose.ResetPose(originalAvatar.descriptor.gameObject);
                         }
 
                         // アップロード
-                        if (GUILayout.Button("Upload Avatar"))
+                        if (GUILayout.Button(LocalizeText.instance.langPair.uploadAvatarButtonText))
                         {
                             UploadAvatar(newSDKUI);
                         }
@@ -401,16 +403,16 @@ namespace VRCAvatarEditor
         private void ToolInfoGUI()
         {
             EditorGUILayout.LabelField("VRC Avatar Editor",EditorStyles.boldLabel);
-            EditorGUILayout.LabelField("Version", TOOL_VERSION);
+            EditorGUILayout.LabelField(LocalizeText.instance.langPair.versionLabel, TOOL_VERSION);
 
             EditorGUILayout.Space();
 
-            if (GUILayout.Button("オンラインマニュアル"))
+            if (GUILayout.Button(LocalizeText.instance.langPair.openOnlineManualButtonText))
                 Application.OpenURL(MANUAL_URL);
 
             EditorGUILayout.Space();
 
-            EditorGUILayout.LabelField("Functions");
+            EditorGUILayout.LabelField(LocalizeText.instance.langPair.functionsLabel);
             using (new EditorGUI.IndentLevelScope())
             {
                 foreach (var toolFunc in TOOL_FUNCS)
@@ -427,7 +429,7 @@ namespace VRCAvatarEditor
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     EditorGUILayout.LabelField("Twitter", "@"+TWITTER_ID, GUILayout.Width(300));
-                    if (GUILayout.Button("Open", GUILayout.Width(50)))
+                    if (GUILayout.Button(LocalizeText.instance.langPair.open, GUILayout.Width(50)))
                         Application.OpenURL("https://twitter.com/"+ TWITTER_ID);
                     GUILayout.FlexibleSpace();
                 }
@@ -435,7 +437,7 @@ namespace VRCAvatarEditor
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     EditorGUILayout.LabelField("Booth", BOOTH_URL, GUILayout.Width(300));
-                    if (GUILayout.Button("Open", GUILayout.Width(50)))
+                    if (GUILayout.Button(LocalizeText.instance.langPair.open, GUILayout.Width(50)))
                         Application.OpenURL(BOOTH_ITEM_URL);
                     GUILayout.FlexibleSpace();
                 }
@@ -443,7 +445,7 @@ namespace VRCAvatarEditor
 
             EditorGUILayout.Space();
             
-            isShowingReadme = EditorGUILayout.Foldout(isShowingReadme, "This Tool's Readme");
+            isShowingReadme = EditorGUILayout.Foldout(isShowingReadme, LocalizeText.instance.langPair.readmeLabel);
 
             if (isShowingReadme)
             {
@@ -458,7 +460,7 @@ namespace VRCAvatarEditor
             }
 
 
-            isShowingLicense =  EditorGUILayout.Foldout(isShowingLicense, "This Tool's License");
+            isShowingLicense =  EditorGUILayout.Foldout(isShowingLicense, LocalizeText.instance.langPair.licenseLabel);
 
             if (isShowingLicense)
             {
@@ -472,7 +474,7 @@ namespace VRCAvatarEditor
                 EditorGUILayout.EndScrollView();
             }
 
-            isShowingUsingSoftwareLicense = EditorGUILayout.Foldout(isShowingUsingSoftwareLicense, "Using Software License");
+            isShowingUsingSoftwareLicense = EditorGUILayout.Foldout(isShowingUsingSoftwareLicense, LocalizeText.instance.langPair.usingSoftwareLicenseLabel);
 
             if (isShowingUsingSoftwareLicense)
             {
@@ -490,7 +492,7 @@ namespace VRCAvatarEditor
         private void SettingGUI()
         {
 
-            EditorGUILayout.HelpBox("設定は変更後からウィンドウを閉じるまで適用されます。「Save Setting」で次回以降も適用されます", MessageType.Info);
+            EditorGUILayout.HelpBox(LocalizeText.instance.langPair.settingPageMessageText, MessageType.Info);
 
             avatarMonitorGUI.DrawSettingsGUI();
 
@@ -499,15 +501,15 @@ namespace VRCAvatarEditor
             faceEmotionGUI.DrawSettingsGUI();
 
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Other", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField(LocalizeText.instance.langPair.otherLabel, EditorStyles.boldLabel);
 
-            layoutType = (LayoutType)EditorGUILayout.EnumPopup("レイアウト", layoutType);
+            layoutType = (LayoutType)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.layoutTypeLabel, layoutType);
 
-            if (GUILayout.Button("Save Setting"))
+            if (GUILayout.Button(LocalizeText.instance.langPair.saveSettingButtonText))
             {
                 SaveSettingDataToScriptableObject();
             }
-            if (GUILayout.Button("Default Setting"))
+            if (GUILayout.Button(LocalizeText.instance.langPair.changeDefaultSettingButtonText))
             {
                 DeleteMySettingData();
                 LoadSettingDataFromScriptableObject();

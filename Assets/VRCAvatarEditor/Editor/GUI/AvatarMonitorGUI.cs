@@ -92,7 +92,7 @@ namespace VRCAvatarEditor
                             return true;
                         }
 
-                        if (GUILayout.Button("Reset"))
+                        if (GUILayout.Button(LocalizeText.instance.langPair.reset))
                         {
                             avatarMonitorField.ResetCameraTransform();
                             return true;
@@ -159,25 +159,25 @@ namespace VRCAvatarEditor
             EditorGUILayout.LabelField("AvatarMonitor", EditorStyles.boldLabel);
             using (var check = new EditorGUI.ChangeCheckScope())
             {
-                defaultZoomDist = EditorGUILayout.FloatField("Default Camera Distance", defaultZoomDist);
-                faceZoomDist = EditorGUILayout.FloatField("Face Camera Distance", faceZoomDist);
-                zoomStepDist = EditorGUILayout.FloatField("Camera Zoom Step Distance", zoomStepDist);
+                defaultZoomDist = EditorGUILayout.FloatField(LocalizeText.instance.langPair.defaultCameraDistanceLabel, defaultZoomDist);
+                faceZoomDist = EditorGUILayout.FloatField(LocalizeText.instance.langPair.faceCameraDistanceLabel, faceZoomDist);
+                zoomStepDist = EditorGUILayout.FloatField(LocalizeText.instance.langPair.cameraZoomStepDistanceLabel, zoomStepDist);
 
                 if (check.changed)
                     avatarMonitorField.SetZoomParameters(defaultZoomDist, faceZoomDist, zoomStepDist);
             }
 
             EditorGUILayout.Space();
-            isGammaCorrection = EditorGUILayout.ToggleLeft("ガンマ補正", isGammaCorrection);
+            isGammaCorrection = EditorGUILayout.ToggleLeft(LocalizeText.instance.langPair.gammaCorrectionLabel, isGammaCorrection);
 
             using (var check = new EditorGUI.ChangeCheckScope())
             {
-                monitorBgColor = EditorGUILayout.ColorField("モニター背景色", monitorBgColor);
+                monitorBgColor = EditorGUILayout.ColorField(LocalizeText.instance.langPair.monitorBackgroundColorLabel, monitorBgColor);
                 if (check.changed) avatarMonitorField.SetAvatarCamBgColor(monitorBgColor);
             }
             using (var check = new EditorGUI.ChangeCheckScope())
             {
-                sizeType = (MonitorSize)EditorGUILayout.EnumPopup("Monitor Size", sizeType);
+                sizeType = (MonitorSize)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.monitorSizeTypeLabel, sizeType);
                 if (check.changed && sizeType != MonitorSize.Custom)
                 {
                     monitorSize = (int)sizeType;
@@ -185,7 +185,7 @@ namespace VRCAvatarEditor
             }
             using (new EditorGUI.DisabledGroupScope(sizeType != MonitorSize.Custom))
             {
-                monitorSize = EditorGUILayout.IntField("Size", monitorSize);
+                monitorSize = EditorGUILayout.IntField(LocalizeText.instance.langPair.monitorSizeLabel, monitorSize);
             }
         }
 

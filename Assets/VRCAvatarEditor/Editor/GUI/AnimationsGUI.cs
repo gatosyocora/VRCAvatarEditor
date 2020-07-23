@@ -16,7 +16,6 @@ namespace VRCAvatarEditor
         public static readonly string[] HANDANIMS = { "FIST", "FINGERPOINT", "ROCKNROLL", "HANDOPEN", "THUMBSUP", "VICTORY", "HANDGUN" };
         public static readonly string[] EMOTEANIMS = { "EMOTE1", "EMOTE2", "EMOTE3", "EMOTE4", "EMOTE5", "EMOTE6", "EMOTE7", "EMOTE8" };
 
-        private string kind;
         string titleText;
         AnimatorOverrideController controller;
         private bool showEmoteAnimations = false;
@@ -78,18 +77,16 @@ namespace VRCAvatarEditor
                 }
                 if (_tab == Tab.Standing)
                 {
-                    kind = "Standing";
+                    titleText = LocalizeText.instance.langPair.standingTabText;
                     if (originalAvatar != null)
                         controller = originalAvatar.standingAnimController;
                 }
                 else
                 {
-                    kind = "Sitting";
+                    titleText = LocalizeText.instance.langPair.sittingTabText;
                     if (originalAvatar != null)
                         controller = originalAvatar.sittingAnimController;
                 }
-
-                titleText = kind + " Animations";
 
                 using (new EditorGUILayout.HorizontalScope())
                 {
@@ -98,11 +95,11 @@ namespace VRCAvatarEditor
                     string btnText;
                     if (!showEmoteAnimations)
                     {
-                        btnText = "Emote";
+                        btnText = LocalizeText.instance.langPair.emoteButtonText;
                     }
                     else
                     {
-                        btnText = "Face&Hand";
+                        btnText = LocalizeText.instance.langPair.faceAndHandButtonText;
                     }
 
                     if (GUILayout.Button(btnText))
@@ -140,7 +137,7 @@ namespace VRCAvatarEditor
 
                                 using (new EditorGUI.DisabledGroupScope(anim == null))
                                 {
-                                    if (GUILayout.Button("Edit", GUILayout.Width(50)))
+                                    if (GUILayout.Button(LocalizeText.instance.langPair.edit, GUILayout.Width(50)))
                                     {
                                         if (vrcAvatarEditorGUI.currentTool != VRCAvatarEditorGUI.ToolFunc.表情設定)
                                         {
@@ -185,13 +182,24 @@ namespace VRCAvatarEditor
                 {
                     if (editAvatar.descriptor == null)
                     {
-                        EditorGUILayout.HelpBox("Not Setting Avatar", MessageType.Warning);
+                        EditorGUILayout.HelpBox(LocalizeText.instance.langPair.noAvatarMessageText, MessageType.Warning);
                     }
                     else
                     {
-                        EditorGUILayout.HelpBox("Not Setting Custom " + kind + " Anims", MessageType.Warning);
+                        string notSettingMessage, createMessage;
+                        if (_tab == Tab.Standing)
+                        {
+                            notSettingMessage = LocalizeText.instance.langPair.noCustomStandingAnimsMessageText;
+                            createMessage = LocalizeText.instance.langPair.createCustomStandingAnimsButtonText;
+                        }
+                        else
+                        {
+                            notSettingMessage = LocalizeText.instance.langPair.noCustomSittingAnimsMessageText;
+                            createMessage = LocalizeText.instance.langPair.createCustomSittingAnimsButtonText;
+                        }
+                        EditorGUILayout.HelpBox(notSettingMessage, MessageType.Warning);
 
-                        if (GUILayout.Button("Create New Custom"+kind+"Anims Controller"))
+                        if (GUILayout.Button(createMessage))
                         {
                             var fileName = "CO_" + originalAvatar.animator.gameObject.name + ".overrideController";
                             saveFolderPath = "Assets/" + originalAvatar.animator.gameObject.name + "/";
@@ -222,7 +230,7 @@ namespace VRCAvatarEditor
                         {
                             using (new EditorGUI.DisabledGroupScope(editAvatar.standingAnimController == null))
                             {
-                                if (GUILayout.Button("Set to same as CustomStandingAnims"))
+                                if (GUILayout.Button(LocalizeText.instance.langPair.setToSameAsCustomStandingAnimsButtonText))
                                 {
                                     var customStandingAnimsController = originalAvatar.descriptor.CustomStandingAnims;
                                     originalAvatar.descriptor.CustomSittingAnims = customStandingAnimsController;

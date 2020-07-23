@@ -46,7 +46,7 @@ namespace VRCAvatarEditor
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
         {
-            EditorGUILayout.LabelField("表情設定", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField(LocalizeText.instance.langPair.faceEmotionTitle, EditorStyles.boldLabel);
 
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
             {
@@ -55,23 +55,23 @@ namespace VRCAvatarEditor
                 {
                     GUILayout.FlexibleSpace();
 
-                    if (GUILayout.Button("Load Animation"))
+                    if (GUILayout.Button(LocalizeText.instance.langPair.loadAnimationButtonText))
                     {
                         FaceEmotion.LoadAnimationProperties(this, parentWindow);
                     }
 
-                    if (GUILayout.Button("Set To Default"))
+                    if (GUILayout.Button(LocalizeText.instance.langPair.setToDefaultButtonText))
                     {
                         if (EditorUtility.DisplayDialog(
-                                "Default FaceEmotion Setting", 
-                                "現在の表情をデフォルトに設定しますか", 
-                                "OK", "Cancel"))
+                                LocalizeText.instance.langPair.setToDefaultDialogTitleText,
+                                LocalizeText.instance.langPair.setToDefaultDialogMessageText,
+                                LocalizeText.instance.langPair.ok, LocalizeText.instance.langPair.cancel))
                         {
                             FaceEmotion.SetToDefaultFaceEmotion(ref editAvatar, originalAvatar);
                         }
                     }
 
-                    if (GUILayout.Button("Reset To Default"))
+                    if (GUILayout.Button(LocalizeText.instance.langPair.resetToDefaultButtonText))
                     {
                         FaceEmotion.ResetToDefaultFaceEmotion(ref editAvatar);
                         ChangeSaveAnimationState();
@@ -83,15 +83,15 @@ namespace VRCAvatarEditor
                     BlendShapeListGUI();
                 }
 
-                animName = EditorGUILayout.TextField("AnimClipFileName", animName);
+                animName = EditorGUILayout.TextField(LocalizeText.instance.langPair.animClipFileNameLabel, animName);
 
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    EditorGUILayout.LabelField("AnimClipSaveFolder", originalAvatar.animSavedFolderPath);
+                    EditorGUILayout.LabelField(LocalizeText.instance.langPair.animClipSaveFolderLabel, originalAvatar.animSavedFolderPath);
 
-                    if (GUILayout.Button("Select Folder", GUILayout.Width(100)))
+                    if (GUILayout.Button(LocalizeText.instance.langPair.selectFolder, GUILayout.Width(100)))
                     {
-                        originalAvatar.animSavedFolderPath = EditorUtility.OpenFolderPanel("Select saved folder", originalAvatar.animSavedFolderPath, string.Empty);
+                        originalAvatar.animSavedFolderPath = EditorUtility.OpenFolderPanel(LocalizeText.instance.langPair.selectFolderDialogMessageText, originalAvatar.animSavedFolderPath, string.Empty);
                         originalAvatar.animSavedFolderPath = FileUtil.GetProjectRelativePath(originalAvatar.animSavedFolderPath) + "/";
                         if (originalAvatar.animSavedFolderPath == "/") originalAvatar.animSavedFolderPath = "Assets/";
                         parentWindow.animationsGUI.UpdateSaveFolderPath(originalAvatar.animSavedFolderPath);
@@ -104,7 +104,7 @@ namespace VRCAvatarEditor
                 using (var check = new EditorGUI.ChangeCheckScope())
                 {
                     selectedHandAnim = (HandPose.HandPoseType)Enum.ToObject(typeof(HandPose.HandPoseType), EditorGUILayout.Popup(
-                        "AnimationOverride",
+                        LocalizeText.instance.langPair.animationOverrideLabel,
                         (int)selectedHandAnim, 
                         Enum.GetNames(typeof(HandPose.HandPoseType)).Select((x, index) => index + ":"+x).ToArray()));
 
@@ -116,7 +116,7 @@ namespace VRCAvatarEditor
 
                 using (new EditorGUI.DisabledGroupScope(selectedHandAnim == HandPose.HandPoseType.NoSelection))
                 {
-                    handPoseAnim = EditorGUILayout.ObjectField("HandPose AnimClip", handPoseAnim, typeof(AnimationClip), true) as AnimationClip;
+                    handPoseAnim = EditorGUILayout.ObjectField(LocalizeText.instance.langPair.handPoseAnimClipLabel, handPoseAnim, typeof(AnimationClip), true) as AnimationClip;
                 }
 
                 EditorGUILayout.Space();
@@ -125,7 +125,7 @@ namespace VRCAvatarEditor
                             selectedHandAnim == HandPose.HandPoseType.NoSelection ||
                             handPoseAnim == null))
                 {
-                    if (GUILayout.Button("Create AnimFile"))
+                    if (GUILayout.Button(LocalizeText.instance.langPair.createAnimFileButtonText))
                     {
                         var animController = originalAvatar.standingAnimController;
 
@@ -153,9 +153,9 @@ namespace VRCAvatarEditor
         {
             EditorGUILayout.LabelField("FaceEmotion Creator", EditorStyles.boldLabel);
 
-            selectedSortType = (SortType)EditorGUILayout.EnumPopup("SortType", selectedSortType);
+            selectedSortType = (SortType)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.sortTypeLabel, selectedSortType);
 
-            isOpeningBlendShapeExclusionList = EditorGUILayout.Foldout(isOpeningBlendShapeExclusionList, "Blendshape Exclusions");
+            isOpeningBlendShapeExclusionList = EditorGUILayout.Foldout(isOpeningBlendShapeExclusionList, LocalizeText.instance.langPair.blendShapeExclusionsLabel);
             if (isOpeningBlendShapeExclusionList)
             {
                 using (new EditorGUI.IndentLevelScope())
@@ -165,7 +165,7 @@ namespace VRCAvatarEditor
                         using (new GUILayout.HorizontalScope())
                         {
                             blendshapeExclusions[i] = EditorGUILayout.TextField(blendshapeExclusions[i]);
-                            if (GUILayout.Button("Remove"))
+                            if (GUILayout.Button(LocalizeText.instance.langPair.remove))
                                 blendshapeExclusions.RemoveAt(i);
                         }
                     }
@@ -173,12 +173,12 @@ namespace VRCAvatarEditor
 
                 using (new GUILayout.HorizontalScope())
                 {
-                    if (GUILayout.Button("Add"))
+                    if (GUILayout.Button(LocalizeText.instance.langPair.add))
                         blendshapeExclusions.Add(string.Empty);
                 }
             }
 
-            usePreviousAnimationOnHandAnimation = EditorGUILayout.ToggleLeft("Use Previous Animation On HandAnimation", usePreviousAnimationOnHandAnimation);
+            usePreviousAnimationOnHandAnimation = EditorGUILayout.ToggleLeft(LocalizeText.instance.langPair.usePreviousAnimationOnHandAnimationLabel, usePreviousAnimationOnHandAnimation);
         }
 
         public void LoadSettingData(SettingData settingAsset)
@@ -223,7 +223,7 @@ namespace VRCAvatarEditor
                                         FaceEmotion.SetContainsAll(skinnedMesh.isContainsAll, ref skinnedMesh.blendshapes);
                                     }
                                 }
-                                EditorGUILayout.LabelField("Toggle All", GUILayout.Height(20));
+                                EditorGUILayout.LabelField(LocalizeText.instance.langPair.toggleAllLabel, GUILayout.Height(20));
                             }
 
                             foreach (var blendshape in skinnedMesh.blendshapes)
@@ -243,11 +243,11 @@ namespace VRCAvatarEditor
                                                 skinnedMesh.renderer.SetBlendShapeWeight(blendshape.id, value);
                                         }
 
-                                        if (GUILayout.Button("Min", GUILayout.MaxWidth(50)))
+                                        if (GUILayout.Button(LocalizeText.instance.langPair.minButtonText, GUILayout.MaxWidth(50)))
                                         {
                                             FaceEmotion.SetBlendShapeMinValue(ref skinnedMesh.renderer, blendshape.id);
                                         }
-                                        if (GUILayout.Button("Max", GUILayout.MaxWidth(50)))
+                                        if (GUILayout.Button(LocalizeText.instance.langPair.maxButtonText, GUILayout.MaxWidth(50)))
                                         {
                                             FaceEmotion.SetBlendShapeMaxValue(ref skinnedMesh.renderer, blendshape.id);
                                         }

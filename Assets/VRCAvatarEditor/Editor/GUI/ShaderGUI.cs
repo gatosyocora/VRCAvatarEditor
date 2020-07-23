@@ -17,7 +17,7 @@ namespace VRCAvatarEditor
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
         {
-            EditorGUILayout.LabelField("Shader", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField(LocalizeText.instance.langPair.shaderTitle, EditorStyles.boldLabel);
 
             using (new EditorGUILayout.VerticalScope())
             {
@@ -37,7 +37,7 @@ namespace VRCAvatarEditor
                                 {
                                     EditorGUILayout.LabelField(mat.shader.name);
                                     EditorGUILayout.LabelField("(" + mat.name + ".mat)");
-                                    if (GUILayout.Button("Select"))
+                                    if (GUILayout.Button(LocalizeText.instance.langPair.select))
                                     {
                                         Selection.activeObject = mat;
                                     }
