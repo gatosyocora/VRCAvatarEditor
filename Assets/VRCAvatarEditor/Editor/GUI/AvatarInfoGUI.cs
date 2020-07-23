@@ -21,143 +21,148 @@ namespace VRCAvatarEditor
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
         {
+            EditorGUILayout.LabelField(LocalizeText.instance.langPair.avatarInfoTitle, EditorStyles.boldLabel);
+
             if (avatar != null && avatar.descriptor != null)
             {
-                // 性別
-                using (var check = new EditorGUI.ChangeCheckScope())
+                using (new EditorGUILayout.VerticalScope(GUI.skin.box))
                 {
-                    avatar.sex = (VRC_AvatarDescriptor.AnimationSet)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.genderLabel, avatar.sex);
-
-                    if (check.changed)
+                    // 性別
+                    using (var check = new EditorGUI.ChangeCheckScope())
                     {
-                        avatar.descriptor.Animations = avatar.sex;
-                        EditorUtility.SetDirty(avatar.descriptor);
-                    }
-                }
+                        avatar.sex = (VRC_AvatarDescriptor.AnimationSet)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.genderLabel, avatar.sex);
 
-                // アップロード状態
-                EditorGUILayout.LabelField(LocalizeText.instance.langPair.uploadStatusLabel,
-                    (string.IsNullOrEmpty(avatar.avatarId)) ?
-                        LocalizeText.instance.langPair.newAvatarText :
-                        LocalizeText.instance.langPair.uploadedAvatarText);
-
-                // AnimatorOverrideController
-                using (var check = new EditorGUI.ChangeCheckScope())
-                {
-                    avatar.standingAnimController = EditorGUILayout.ObjectField(
-                        LocalizeText.instance.langPair.customStandingAnimsLabel,
-                        avatar.standingAnimController,
-                        typeof(AnimatorOverrideController),
-                        true
-                    ) as AnimatorOverrideController;
-                    avatar.sittingAnimController = EditorGUILayout.ObjectField(
-                        LocalizeText.instance.langPair.customSittingAnimsLabel,
-                        avatar.sittingAnimController,
-                        typeof(AnimatorOverrideController),
-                        true
-                    ) as AnimatorOverrideController;
-
-                    if (check.changed)
-                    {
-                        avatar.descriptor.CustomStandingAnims = avatar.standingAnimController;
-                        avatar.descriptor.CustomSittingAnims = avatar.sittingAnimController;
-                        EditorUtility.SetDirty(avatar.descriptor);
-
-                        avatar.SetAnimSavedFolderPath();
-                    }
-                }
-
-                // ポリゴン数
-                EditorGUILayout.LabelField(LocalizeText.instance.langPair.triangleCountLabel, avatar.triangleCount + "(" + (avatar.triangleCount + avatar.triangleCountInactive) + ")");
-
-                // faceMesh
-                using (var check = new EditorGUI.ChangeCheckScope())
-                {
-                    avatar.faceMesh = EditorGUILayout.ObjectField(
-                        LocalizeText.instance.langPair.faceMeshLabel,
-                        avatar.faceMesh,
-                        typeof(SkinnedMeshRenderer),
-                        true
-                    ) as SkinnedMeshRenderer;
-
-                    if (check.changed)
-                    {
-                        avatar.descriptor.VisemeSkinnedMesh = avatar.faceMesh;
-                        EditorUtility.SetDirty(avatar.descriptor);
-                    }
-                }
-
-                EditorGUILayout.Space();
-
-                // View Position
-                using (var check = new EditorGUI.ChangeCheckScope())
-                {
-                    avatar.eyePos = EditorGUILayout.Vector3Field(LocalizeText.instance.langPair.viewPositionLabel, avatar.eyePos);
-
-                    if (check.changed)
-                    {
-                        avatar.descriptor.ViewPosition = avatar.eyePos;
-                        EditorUtility.SetDirty(avatar.descriptor);
-                    }
-                }
-                /*
-                using (new EditorGUILayout.HorizontalScope())
-                using (new EditorGUI.DisabledGroupScope(avatar.faceMesh == null))
-                {
-                    GUILayout.FlexibleSpace();
-                    if (GUILayout.Button("Auto Setting"))
-                    {
-                        avatar.eyePos = CalcAvatarViewPosition(avatar);
-                        avatar.descriptor.ViewPosition = avatar.eyePos;
-                    }
-
-                    if (GUILayout.Button("Revert to Prefab"))
-                    {
-                        avatar.eyePos = RevertEyePosToPrefab(avatar.descriptor);
-                    }
-                }
-                if (avatar.faceMesh == null)
-                {
-                    EditorGUILayout.HelpBox("ViewPositionを自動設定するためにはFaceMeshを設定する必要があります", MessageType.Warning);
-                }
-                */
-
-                EditorGUILayout.Space();
-
-                // リップシンク
-                using (var check = new EditorGUI.ChangeCheckScope())
-                {
-                    avatar.lipSyncStyle = (VRC_AvatarDescriptor.LipSyncStyle)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.lipSyncTypeLabel, avatar.lipSyncStyle);
-
-                    if (check.changed) avatar.descriptor.lipSync = avatar.lipSyncStyle;
-                }
-                if (avatar.lipSyncStyle == VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape)
-                {
-                    if (avatar.faceMesh != null)
-                    {
-                        isOpeningLipSync = EditorGUILayout.Foldout(isOpeningLipSync, LocalizeText.instance.langPair.lipSyncBlendShapesLabel);
-                        if (isOpeningLipSync)
+                        if (check.changed)
                         {
-                            using (new EditorGUI.IndentLevelScope())
-                            using (var scrollView = new EditorGUILayout.ScrollViewScope(lipSyncScrollPos))
-                            {
-                                lipSyncScrollPos = scrollView.scrollPosition;
+                            avatar.descriptor.Animations = avatar.sex;
+                            EditorUtility.SetDirty(avatar.descriptor);
+                        }
+                    }
 
-                                for (int visemeIndex = 0; visemeIndex < LIPSYNC_SHYPEKEY_NUM; visemeIndex++)
+                    // アップロード状態
+                    EditorGUILayout.LabelField(LocalizeText.instance.langPair.uploadStatusLabel,
+                        (string.IsNullOrEmpty(avatar.avatarId)) ?
+                            LocalizeText.instance.langPair.newAvatarText :
+                            LocalizeText.instance.langPair.uploadedAvatarText);
+
+                    // AnimatorOverrideController
+                    using (var check = new EditorGUI.ChangeCheckScope())
+                    {
+                        avatar.standingAnimController = EditorGUILayout.ObjectField(
+                            LocalizeText.instance.langPair.customStandingAnimsLabel,
+                            avatar.standingAnimController,
+                            typeof(AnimatorOverrideController),
+                            true
+                        ) as AnimatorOverrideController;
+                        avatar.sittingAnimController = EditorGUILayout.ObjectField(
+                            LocalizeText.instance.langPair.customSittingAnimsLabel,
+                            avatar.sittingAnimController,
+                            typeof(AnimatorOverrideController),
+                            true
+                        ) as AnimatorOverrideController;
+
+                        if (check.changed)
+                        {
+                            avatar.descriptor.CustomStandingAnims = avatar.standingAnimController;
+                            avatar.descriptor.CustomSittingAnims = avatar.sittingAnimController;
+                            EditorUtility.SetDirty(avatar.descriptor);
+
+                            avatar.SetAnimSavedFolderPath();
+                        }
+                    }
+
+                    // ポリゴン数
+                    EditorGUILayout.LabelField(LocalizeText.instance.langPair.triangleCountLabel, avatar.triangleCount + "(" + (avatar.triangleCount + avatar.triangleCountInactive) + ")");
+
+                    // faceMesh
+                    using (var check = new EditorGUI.ChangeCheckScope())
+                    {
+                        avatar.faceMesh = EditorGUILayout.ObjectField(
+                            LocalizeText.instance.langPair.faceMeshLabel,
+                            avatar.faceMesh,
+                            typeof(SkinnedMeshRenderer),
+                            true
+                        ) as SkinnedMeshRenderer;
+
+                        if (check.changed)
+                        {
+                            avatar.descriptor.VisemeSkinnedMesh = avatar.faceMesh;
+                            EditorUtility.SetDirty(avatar.descriptor);
+                        }
+                    }
+
+                    EditorGUILayout.Space();
+
+                    // View Position
+                    using (var check = new EditorGUI.ChangeCheckScope())
+                    {
+                        avatar.eyePos = EditorGUILayout.Vector3Field(LocalizeText.instance.langPair.viewPositionLabel, avatar.eyePos);
+
+                        if (check.changed)
+                        {
+                            avatar.descriptor.ViewPosition = avatar.eyePos;
+                            EditorUtility.SetDirty(avatar.descriptor);
+                        }
+                    }
+                    /*
+                    using (new EditorGUILayout.HorizontalScope())
+                    using (new EditorGUI.DisabledGroupScope(avatar.faceMesh == null))
+                    {
+                        GUILayout.FlexibleSpace();
+                        if (GUILayout.Button("Auto Setting"))
+                        {
+                            avatar.eyePos = CalcAvatarViewPosition(avatar);
+                            avatar.descriptor.ViewPosition = avatar.eyePos;
+                        }
+
+                        if (GUILayout.Button("Revert to Prefab"))
+                        {
+                            avatar.eyePos = RevertEyePosToPrefab(avatar.descriptor);
+                        }
+                    }
+                    if (avatar.faceMesh == null)
+                    {
+                        EditorGUILayout.HelpBox("ViewPositionを自動設定するためにはFaceMeshを設定する必要があります", MessageType.Warning);
+                    }
+                    */
+
+                    EditorGUILayout.Space();
+
+                    // リップシンク
+                    using (var check = new EditorGUI.ChangeCheckScope())
+                    {
+                        avatar.lipSyncStyle = (VRC_AvatarDescriptor.LipSyncStyle)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.lipSyncTypeLabel, avatar.lipSyncStyle);
+
+                        if (check.changed) avatar.descriptor.lipSync = avatar.lipSyncStyle;
+                    }
+                    if (avatar.lipSyncStyle == VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape)
+                    {
+                        if (avatar.faceMesh != null)
+                        {
+                            isOpeningLipSync = EditorGUILayout.Foldout(isOpeningLipSync, LocalizeText.instance.langPair.lipSyncBlendShapesLabel);
+                            if (isOpeningLipSync)
+                            {
+                                using (new EditorGUI.IndentLevelScope())
+                                using (var scrollView = new EditorGUILayout.ScrollViewScope(lipSyncScrollPos))
                                 {
-                                    EditorGUILayout.LabelField("Viseme:" + Enum.GetName(typeof(VRC_AvatarDescriptor.Viseme), visemeIndex), avatar.descriptor.VisemeBlendShapes[visemeIndex]);
+                                    lipSyncScrollPos = scrollView.scrollPosition;
+
+                                    for (int visemeIndex = 0; visemeIndex < LIPSYNC_SHYPEKEY_NUM; visemeIndex++)
+                                    {
+                                        EditorGUILayout.LabelField("Viseme:" + Enum.GetName(typeof(VRC_AvatarDescriptor.Viseme), visemeIndex), avatar.descriptor.VisemeBlendShapes[visemeIndex]);
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                if (avatar.lipSyncStyle != VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape || avatar.faceMesh == null)
-                {
-                    EditorGUILayout.HelpBox(LocalizeText.instance.langPair.lipSyncWarningMessageText, MessageType.Warning);
-                    if (GUILayout.Button(LocalizeText.instance.langPair.lipSyncBlendShapesAutoDetectButtonText))
+                    if (avatar.lipSyncStyle != VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape || avatar.faceMesh == null)
                     {
-                        avatar.SetLipSyncToViseme();
-                        EditorUtility.SetDirty(avatar.descriptor);
+                        EditorGUILayout.HelpBox(LocalizeText.instance.langPair.lipSyncWarningMessageText, MessageType.Warning);
+                        if (GUILayout.Button(LocalizeText.instance.langPair.lipSyncBlendShapesAutoDetectButtonText))
+                        {
+                            avatar.SetLipSyncToViseme();
+                            EditorUtility.SetDirty(avatar.descriptor);
+                        }
                     }
                 }
 

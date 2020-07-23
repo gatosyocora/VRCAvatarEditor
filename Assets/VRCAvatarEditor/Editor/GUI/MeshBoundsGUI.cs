@@ -26,22 +26,20 @@ namespace VRCAvatarEditor
         {
             EditorGUILayout.LabelField(LocalizeText.instance.langPair.boundsTitle, EditorStyles.boldLabel);
 
-            EditorGUILayout.Space();
-
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                GUILayout.FlexibleSpace();
-
-                if (GUILayout.Button(LocalizeText.instance.langPair.resetToBoundsToPrefabButtonText))
-                {
-                    MeshBounds.RevertBoundsToPrefab(targetRenderers);
-                }
-            }
-
-            EditorGUILayout.Space();
-
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
             {
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    GUILayout.FlexibleSpace();
+
+                    if (GUILayout.Button(LocalizeText.instance.langPair.resetToBoundsToPrefabButtonText))
+                    {
+                        MeshBounds.RevertBoundsToPrefab(targetRenderers);
+                    }
+                }
+
+                EditorGUILayout.Space();
+
                 EditorGUILayout.LabelField(LocalizeText.instance.langPair.exclusions);
 
                 using (new EditorGUI.IndentLevelScope())

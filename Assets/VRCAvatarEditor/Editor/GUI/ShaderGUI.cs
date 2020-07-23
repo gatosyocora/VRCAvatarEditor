@@ -19,7 +19,7 @@ namespace VRCAvatarEditor
         {
             EditorGUILayout.LabelField(LocalizeText.instance.langPair.shaderTitle, EditorStyles.boldLabel);
 
-            using (new EditorGUILayout.VerticalScope())
+            using (new EditorGUILayout.VerticalScope(GUI.skin.box))
             {
                 using (var scrollView = new EditorGUILayout.ScrollViewScope(leftScrollPosShader))
                 {

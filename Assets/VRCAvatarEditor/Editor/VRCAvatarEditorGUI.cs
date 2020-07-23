@@ -72,7 +72,7 @@ namespace VRCAvatarEditor
         private string readmeText;
         private string usingSoftwareLicenseText;
         private bool isShowingLicense = false;
-        private bool isShowingReadme = false;
+        private bool isShowingReadme = true;
         private bool isShowingUsingSoftwareLicense = false;
 
         private Vector2 licenseScrollPos = Vector2.zero;
@@ -166,7 +166,7 @@ namespace VRCAvatarEditor
 
         private void OnGUI()
         {
-            using (new EditorGUILayout.HorizontalScope())
+            using (new EditorGUILayout.HorizontalScope(GUILayout.Height(EditorGUIUtility.singleLineHeight*1.5f)))
             {
 
                 GUILayout.FlexibleSpace();
