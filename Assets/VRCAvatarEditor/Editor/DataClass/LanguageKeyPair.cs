@@ -7,15 +7,21 @@ using UnityEditor;
 public class LanguageKeyPair : ScriptableObject
 {
     [Header("General")]
-    public string avatar;
     public string reset;
+    public string open;
     public string close;
     public string edit;
     public string selectFolder;
+    public string selectFolderDialogMessageText;
     public string exclusions;
     public string select;
+    public string ok;
+    public string cancel;
+    public string add;
+    public string remove;
 
     [Header("VRCAvatarEditorGUI")]
+    public string avatarLabel;
     public string reloadAvatarButtonText;
     public string toolInfoButtonText;
     public string settingButtonText;
@@ -36,7 +42,12 @@ public class LanguageKeyPair : ScriptableObject
     public string faceAndHandButtonText;
     public string standingTitle;
     public string sittingTitle;
-    public string noAvatarMessage;
+    public string noAvatarMessageText;
+    public string noCustomStandingAnimsMessageText;
+    public string noCustomSittingAnimsMessageText;
+    public string createCustomStandingAnimsButtonText;
+    public string createCustomSittingAnimsButtonText;
+    public string setToSameAsCustomStandingAnimsButtonText;
 
     [Header("AvatarInfoGUI")]
     public string genderLabel;
@@ -48,8 +59,10 @@ public class LanguageKeyPair : ScriptableObject
     public string triangleCountLabel;
     public string faceMeshLabel;
     public string viewPositionLabel;
+    public string lipSyncWarningMessageText;
     public string lipSyncTypeLabel;
     public string lipSyncBlendShapesLabel;
+    public string lipSyncBlendShapesAutoDetectButtonText;
 
     [Header("FaceEmotionGUI")]
     public string loadAnimationButtonText;
@@ -63,12 +76,15 @@ public class LanguageKeyPair : ScriptableObject
     public string animationOverrideLabel;
     public string handPoseAnimClipLabel;
     public string createAnimFileButtonText;
+    public string setToDefaultDialogTitleText;
+    public string setToDefaultDialogMessageText;
 
     [Header("ProbeAnchorGUI")]
     public string setToSkinnedMeshRendererLabel;
     public string setToMeshRendererLabel;
     public string targetPositionLabel;
     public string rendererListLabel;
+    public string probeAnchorMessageText;
     public string setProbeAnchorButtonText;
 
     [Header("BoundsGUI")]
@@ -101,5 +117,6 @@ public class LanguageKeyPair : ScriptableObject
     public string blendShapeExclusionsLabel;
     public string usePreviousAnimationOnHandAnimationLabel;
     // Other
+    public string otherLabel;
     public string layoutTypeLabel;
 }

@@ -12,77 +12,95 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92599070e19982d438288df185044c49, type: 3}
   m_Name: JP
   m_EditorClassIdentifier: 
-  avatar: 
-  reset: 
-  close: 
-  edit: 
-  selectFolder: 
-  exclusions: 
-  select: 
-  reloadAvatarButtonText: 
-  toolInfoButtonText: 
-  settingButtonText: 
-  resetPoseButtonText: 
-  uploadAvatarButtonText: 
-  avatarInfoTitle: 
-  faceEmotionTitle: 
-  probeAnchorTitle: 
-  boundsTitle: 
-  shaderTitle: 
-  standingTabText: 
-  sittingTabText: 
-  emoteButtonText: 
-  faceAndHandButtonText: 
-  standingTitle: 
-  sittingTitle: 
-  noAvatarMessage: 
-  genderLabel: 
-  statusLabel: 
-  newAvatarText: 
-  uploadedAvatarText: 
-  customStandingAnimsLabel: 
-  customSittingAnimsLabel: 
-  triangleCountLabel: 
-  faceMeshLabel: 
-  viewPositionLabel: 
-  lipSyncLabel: 
-  blendShapesLabel: 
-  loadAnimationButtonText: 
-  setToDefaultButtonText: 
-  resetToDefaultButtonText: 
-  toggleAllLabel: 
-  minButtonText: 
-  maxButtonText: 
-  animClipFileNameLabel: 
-  animClipSaveFolderLabel: 
-  animationOverrideLabel: 
-  handPoseAnimClipLabel: 
-  createAnimFileButtonText: 
-  setToSkinnedMeshRendererLabel: 
-  setToMeshRendererLabel: 
-  targetPositionLabel: 
-  rendererListLabel: 
-  setProbeAnchorButtonText: 
-  resetToBoundsToPrefabButtonText: 
-  childObjectsLabel: 
-  setBoundsButtonText: 
-  versionLabel: 
-  openOnlineManualButtonText: 
-  functionsLabel: 
-  readmeLabel: 
-  licenseLabel: 
-  usingSoftwareLicenseLabel: 
-  settingPageMessageText: 
-  saveSettingButtonText: 
-  changeDefaultSettingButtonText: 
-  defaultCameraDistanceLabel: 
-  faceCameraDistanceLabel: 
-  cameraZoomStepDistanceLabel: 
-  gammaCorrectionLabel: 
-  monitorBackgroundColorLabel: 
-  monitorSizeTypeLabel: 
-  monitorSizeLabel: 
-  sortTypeLabel: 
-  blendShapeExclusionsLabel: 
-  usePreviousAnimationOnHandAnimationLabel: 
-  layoutTypeLabel: 
+  reset: "\u53D6\u308A\u6D88\u3057"
+  open: "\u958B\u304F"
+  close: "\u9589\u3058\u308B"
+  edit: "\u7DE8\u96C6"
+  selectFolder: "\u30D5\u30A9\u30EB\u30C0\u9078\u629E"
+  selectFolderDialogMessageText: "\u4FDD\u5B58\u3059\u308B\u30D5\u30A9\u30EB\u30C0\u3092\u9078\u629E"
+  exclusions: "\u9664\u5916"
+  select: "\u9078\u629E"
+  ok: "\u306F\u3044"
+  cancel: "\u53D6\u308A\u6D88\u3057"
+  add: "\u8FFD\u52A0"
+  remove: "\u524A\u9664"
+  avatarLabel: "\u30A2\u30D0\u30BF\u30FC"
+  reloadAvatarButtonText: "\u30A2\u30D0\u30BF\u30FC\u518D\u8AAD\u307F\u8FBC\u307F"
+  toolInfoButtonText: "\u30C4\u30FC\u30EB\u60C5\u5831"
+  settingButtonText: "\u8A2D\u5B9A"
+  resetPoseButtonText: "\u30DD\u30FC\u30BA\u3092\u30EA\u30BB\u30C3\u30C8"
+  uploadAvatarButtonText: "\u30A2\u30D0\u30BF\u30FC\u3092\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9"
+  avatarInfoTitle: "\u30A2\u30D0\u30BF\u30FC\u60C5\u5831"
+  faceEmotionTitle: "\u8868\u60C5"
+  probeAnchorTitle: "\u5149\u306E\u5F53\u305F\u308A\u65B9"
+  boundsTitle: "\u30E1\u30C3\u30B7\u30E5\u306E\u63CF\u753B\u7BC4\u56F2"
+  shaderTitle: "\u30B7\u30A7\u30FC\u30C0\u30FC"
+  standingTabText: "\u7ACB\u3061"
+  sittingTabText: "\u5EA7\u308A"
+  emoteButtonText: "\u30A8\u30E2\u30FC\u30C8"
+  faceAndHandButtonText: "\u8868\u60C5\u3068\u624B"
+  standingTitle: "\u7ACB\u3061\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3"
+  sittingTitle: "\u5EA7\u308A\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3"
+  noAvatarMessageText: "\u30A2\u30D0\u30BF\u30FC\u304C\u8A2D\u5B9A\u3055\u308C\u3066\u3044\u307E\u305B\u3093"
+  noCustomStandingAnimsMessageText: "\u7ACB\u3061\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3\u304C\u8A2D\u5B9A\u3055\u308C\u3066\u3044\u307E\u305B\u3093"
+  noCustomSittingAnimsMessageText: "\u5EA7\u308A\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3\u304C\u8A2D\u5B9A\u3055\u308C\u3066\u3044\u307E\u305B\u3093"
+  createCustomStandingAnimsButtonText: "\u7ACB\u3061\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3\u3092\u4F5C\u6210"
+  createCustomSittingAnimsButtonText: "\u5EA7\u308A\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3\u3092\u4F5C\u6210"
+  setToSameAsCustomStandingAnimsButtonText: "\u7ACB\u3061\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3\u3068\u540C\u3058\u3082\u306E\u3092\u8A2D\u5B9A"
+  genderLabel: "\u6027\u5225"
+  uploadStatusLabel: "\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u72B6\u614B"
+  newAvatarText: "\u672A\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9"
+  uploadedAvatarText: "\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u6E08\u307F"
+  customStandingAnimsLabel: "\u7ACB\u3061\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3"
+  customSittingAnimsLabel: "\u5EA7\u308A\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3"
+  triangleCountLabel: "\u30DD\u30EA\u30B4\u30F3\u6570"
+  faceMeshLabel: "\u9854\u306E\u30E1\u30C3\u30B7\u30E5\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8"
+  viewPositionLabel: "\u8996\u70B9\u306E\u4F4D\u7F6E"
+  lipSyncWarningMessageText: "\u30EA\u30C3\u30D7\u30B7\u30F3\u30AF\u304C\u6B63\u3057\u304F\u8A2D\u5B9A\u3055\u308C\u3066\u3044\u306A\u3044\u53EF\u80FD\u6027\u304C\u3042\u308A\u307E\u3059"
+  lipSyncTypeLabel: "\u53E3\u3092\u52D5\u304B\u3059\u65B9\u6CD5"
+  lipSyncBlendShapesLabel: "\u53E3\u3092\u52D5\u304B\u3059\u305F\u3081\u306EBlendShape"
+  lipSyncBlendShapesAutoDetectButtonText: "\u30B7\u30A7\u30A4\u30D7\u30AD\u30FC\u306B\u3088\u308B\u30EA\u30C3\u30D7\u30B7\u30F3\u30AF\u3092\u81EA\u52D5\u8A2D\u5B9A\u3059\u308B"
+  loadAnimationButtonText: "\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3\u8AAD\u307F\u8FBC\u307F"
+  setToDefaultButtonText: "\u30C7\u30D5\u30A9\u30EB\u30C8\u8868\u60C5\u3092\u5909\u66F4"
+  resetToDefaultButtonText: "\u30C7\u30D5\u30A9\u30EB\u30C8\u8868\u60C5\u306B\u623B\u3059"
+  toggleAllLabel: "\u3059\u3079\u3066\u5207\u308A\u66FF\u3048"
+  minButtonText: "\u6700\u5C0F\u5024"
+  maxButtonText: "\u6700\u5927\u5024"
+  animClipFileNameLabel: "\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3\u30D5\u30A1\u30A4\u30EB\u540D"
+  animClipSaveFolderLabel: "\u4FDD\u5B58\u5148\u30D5\u30A9\u30EB\u30C0\u306E\u30D1\u30B9"
+  animationOverrideLabel: "\u8A2D\u5B9A\u3059\u308B\u5834\u6240"
+  handPoseAnimClipLabel: "\u624B\u306E\u5F62\u3068\u3057\u3066\u4F7F\u3046\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3"
+  createAnimFileButtonText: "\u8868\u60C5\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3\u3092\u4F5C\u6210"
+  setToDefaultDialogTitleText: "\u30C7\u30D5\u30A9\u30EB\u30C8\u8868\u60C5\u8A2D\u5B9A"
+  setToDefaultDialogMessageText: "\u73FE\u5728\u306E\u8868\u60C5\u3092\u30C7\u30D5\u30A9\u30EB\u30C8\u306B\u8A2D\u5B9A\u3057\u307E\u3059\u304B"
+  setToSkinnedMeshRendererLabel: "SkinnedMeshRenderer\u306E\u5024\u3092\u5909\u66F4"
+  setToMeshRendererLabel: "MeshRenderer\u306E\u5024\u3092\u5909\u66F4"
+  targetPositionLabel: "\u5149\u306E\u5F53\u305F\u308A\u65B9\u306E\u8A08\u7B97\u306B\u4F7F\u3046\u5834\u6240"
+  rendererListLabel: "\u9069\u7528\u3059\u308B\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8"
+  probeAnchorMessageText: "\u30C1\u30A7\u30C3\u30AF\u304C\u3064\u3044\u3066\u3044\u308B\u30E1\u30C3\u30B7\u30E5\u306EProbeAnchor\u304C\u8A2D\u5B9A\u3055\u308C\u307E\u3059"
+  setProbeAnchorButtonText: "\u5149\u306E\u5F53\u305F\u308A\u65B9\u306E\u5909\u66F4\u3092\u9069\u7528"
+  resetToBoundsToPrefabButtonText: "\u63CF\u753B\u7BC4\u56F2\u306E\u8A2D\u5B9A\u3092Prefab\u306E\u72B6\u614B\u306B\u623B\u3059"
+  childObjectsLabel: "\u8A2D\u5B9A\u3092\u3059\u308B\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8\u3089\u306E\u89AA\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8"
+  setBoundsButtonText: "\u63CF\u753B\u7BC4\u56F2\u306E\u8A2D\u5B9A\u3092\u81EA\u52D5\u5909\u66F4"
+  versionLabel: "\u30D0\u30FC\u30B8\u30E7\u30F3"
+  openOnlineManualButtonText: "\u30AA\u30F3\u30E9\u30A4\u30F3\u30DE\u30CB\u30E5\u30A2\u30EB\u3092\u958B\u304F"
+  functionsLabel: "\u6A5F\u80FD\u4E00\u89A7"
+  readmeLabel: "\u308A\u30FC\u3069\u307F\u30FC"
+  licenseLabel: "\u30E9\u30A4\u30BB\u30F3\u30B9"
+  usingSoftwareLicenseLabel: "\u4F7F\u7528\u3057\u3066\u3044\u308B\u30BD\u30D5\u30C8\u30A6\u30A7\u30A2\u306E\u30E9\u30A4\u30BB\u30F3\u30B9"
+  settingPageMessageText: "\u8A2D\u5B9A\u306F\u5909\u66F4\u5F8C\u304B\u3089\u30A6\u30A3\u30F3\u30C9\u30A6\u3092\u9589\u3058\u308B\u307E\u3067\u9069\u7528\u3055\u308C\u307E\u3059\u3002\u300CSave
+    Setting\u300D\u3067\u6B21\u56DE\u4EE5\u964D\u3082\u9069\u7528\u3055\u308C\u307E\u3059"
+  saveSettingButtonText: "\u8A2D\u5B9A\u3092\u4FDD\u5B58"
+  changeDefaultSettingButtonText: "\u521D\u671F\u8A2D\u5B9A\u306B\u623B\u3059"
+  defaultCameraDistanceLabel: "\u901A\u5E38\u306E\u30AB\u30E1\u30E9\u8DDD\u96E2"
+  faceCameraDistanceLabel: "\u8868\u60C5\u4F5C\u6210\u6642\u306E\u30AB\u30E1\u30E9\u8DDD\u96E2"
+  cameraZoomStepDistanceLabel: "\u30AB\u30E1\u30E9\u62E1\u5927\u6642\u306E\u5909\u66F4\u8DDD\u96E2"
+  gammaCorrectionLabel: "\u30AC\u30F3\u30DE\u88DC\u6B63"
+  monitorBackgroundColorLabel: "\u30E2\u30CB\u30BF\u30FC\u80CC\u666F\u8272"
+  monitorSizeTypeLabel: "\u30E2\u30CB\u30BF\u30FC\u306E\u5927\u304D\u3055"
+  monitorSizeLabel: "\u8A73\u7D30\u306A\u5927\u304D\u3055"
+  sortTypeLabel: "BlendShape\u306E\u30BD\u30FC\u30C8\u9806"
+  blendShapeExclusionsLabel: "\u4F5C\u6210\u3055\u308C\u308BAnimation\u306B\u542B\u3081\u306A\u3044BlendShape"
+  usePreviousAnimationOnHandAnimationLabel: "\u624B\u306E\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3\u3068\u3057\u3066\u4EE5\u524D\u306E\u3082\u306E\u3092\u4F7F\u7528\u3059\u308B"
+  otherLabel: "\u305D\u306E\u4ED6"
+  layoutTypeLabel: "\u30EC\u30A4\u30A2\u30A6\u30C8"
