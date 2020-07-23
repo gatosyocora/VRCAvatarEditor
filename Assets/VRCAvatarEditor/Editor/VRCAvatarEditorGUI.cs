@@ -41,34 +41,14 @@ namespace VRCAvatarEditor
 
         public enum ToolFunc
         {
-            アバター情報,
-            表情設定,
+            AvatarInfo,
+            FaceEmotion,
             ProbeAnchor,
             Bounds,
             Shader,
         }
 
-        public ToolFunc currentTool = ToolFunc.アバター情報;
-
-        private static class ToolTab
-        {
-            private static GUIContent[] _tabToggles = null;
-            public static GUIContent[] TabToggles
-            {
-                get
-                {
-                    if (_tabToggles == null)
-                    {
-                        _tabToggles = Enum.GetNames(typeof(ToolFunc)).Select(x => new GUIContent(x)).ToArray();
-                    }
-                    return _tabToggles;
-                }
-            }
-
-            public static readonly GUIStyle TabButtonStyle = "LargeButton";
-
-            public static readonly GUI.ToolbarButtonSize TabButtonSize = GUI.ToolbarButtonSize.Fixed;
-        }
+        public ToolFunc currentTool = ToolFunc.AvatarInfo;
 
         private GUILayoutOption[][] layoutOptions
                         = new GUILayoutOption[][] 
@@ -262,7 +242,7 @@ namespace VRCAvatarEditor
                                 {
                                     GUILayout.FlexibleSpace();
                                     // タブを描画する
-                                    currentTool = (ToolFunc)GUILayout.Toolbar((int)currentTool, ToolTab.TabToggles, ToolTab.TabButtonStyle, ToolTab.TabButtonSize);
+                                    currentTool = (ToolFunc)GUILayout.Toolbar((int)currentTool, LocalizeText.instance.toolTabTexts, "LargeButton", GUI.ToolbarButtonSize.Fixed);
                                     GUILayout.FlexibleSpace();
 
                                     if (check.changed)
@@ -272,12 +252,12 @@ namespace VRCAvatarEditor
                                 }
                             }
 
-                            if (currentTool == ToolFunc.アバター情報)
+                            if (currentTool == ToolFunc.AvatarInfo)
                             {
                                 // アバター情報
                                 avatarInfoGUI.DrawGUI(null);
                             }
-                            else if (currentTool == ToolFunc.表情設定)
+                            else if (currentTool == ToolFunc.FaceEmotion)
                             {
                                 // 表情設定
                                 faceEmotionGUI.DrawGUI(null);
@@ -314,7 +294,7 @@ namespace VRCAvatarEditor
                                         using (var check = new EditorGUI.ChangeCheckScope())
                                         {
                                             // タブを描画する
-                                            currentTool = (ToolFunc)GUILayout.Toolbar((int)currentTool, ToolTab.TabToggles, ToolTab.TabButtonStyle, ToolTab.TabButtonSize);
+                                            currentTool = (ToolFunc)GUILayout.Toolbar((int)currentTool, LocalizeText.instance.toolTabTexts, "LargeButton", GUI.ToolbarButtonSize.Fixed);
 
                                             if (check.changed)
                                             {
@@ -323,7 +303,7 @@ namespace VRCAvatarEditor
                                         }
                                     }
 
-                                    if (currentTool == ToolFunc.アバター情報)
+                                    if (currentTool == ToolFunc.AvatarInfo)
                                     {
                                         using (new EditorGUILayout.HorizontalScope())
                                         {
@@ -335,7 +315,7 @@ namespace VRCAvatarEditor
                                         avatarInfoGUI.DrawGUI(null);
 
                                     }
-                                    else if (currentTool == ToolFunc.表情設定)
+                                    else if (currentTool == ToolFunc.FaceEmotion)
                                     {
                                         // 表情設定
                                         faceEmotionGUI.DrawGUI(null);
@@ -532,7 +512,7 @@ namespace VRCAvatarEditor
 
         public void TabChanged()
         {
-            if (currentTool == ToolFunc.表情設定)
+            if (currentTool == ToolFunc.FaceEmotion)
             {
                 faceEmotionGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder, this);
 
@@ -573,7 +553,7 @@ namespace VRCAvatarEditor
             meshBoundsGUI.Initialize(ref originalAvatar);
             probeAnchorGUI.Initialize(ref originalAvatar);
 
-            currentTool = ToolFunc.アバター情報;
+            currentTool = ToolFunc.AvatarInfo;
         }
 
         private string[] GetLanguagePacks()

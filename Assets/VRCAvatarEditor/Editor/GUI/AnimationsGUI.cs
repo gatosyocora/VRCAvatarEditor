@@ -28,26 +28,6 @@ namespace VRCAvatarEditor
             Sitting,
         }
 
-        private static class Styles
-        {
-            private static GUIContent[] _tabToggles = null;
-            public static GUIContent[] TabToggles
-            {
-                get
-                {
-                    if (_tabToggles == null)
-                    {
-                        _tabToggles = System.Enum.GetNames(typeof(Tab)).Select(x => new GUIContent(x)).ToArray();
-                    }
-                    return _tabToggles;
-                }
-            }
-
-            public static readonly GUIStyle TabButtonStyle = "LargeButton";
-
-            public static readonly GUI.ToolbarButtonSize TabButtonSize = GUI.ToolbarButtonSize.Fixed;
-        }
-
         private string saveFolderPath;
 
         public void Initialize(ref VRCAvatarEditor.Avatar editAvatar,
@@ -72,7 +52,7 @@ namespace VRCAvatarEditor
                 {
                     GUILayout.FlexibleSpace();
                     // タブを描画する
-                    _tab = (Tab)GUILayout.Toolbar((int)_tab, Styles.TabToggles, Styles.TabButtonStyle, Styles.TabButtonSize);
+                    _tab = (Tab)GUILayout.Toolbar((int)_tab, LocalizeText.instance.animationTabTexts, "LargeButton", GUI.ToolbarButtonSize.Fixed);
                     GUILayout.FlexibleSpace();
                 }
                 if (_tab == Tab.Standing)
@@ -139,9 +119,9 @@ namespace VRCAvatarEditor
                                 {
                                     if (GUILayout.Button(LocalizeText.instance.langPair.edit, GUILayout.Width(50)))
                                     {
-                                        if (vrcAvatarEditorGUI.currentTool != VRCAvatarEditorGUI.ToolFunc.表情設定)
+                                        if (vrcAvatarEditorGUI.currentTool != VRCAvatarEditorGUI.ToolFunc.FaceEmotion)
                                         {
-                                            vrcAvatarEditorGUI.currentTool = VRCAvatarEditorGUI.ToolFunc.表情設定;
+                                            vrcAvatarEditorGUI.currentTool = VRCAvatarEditorGUI.ToolFunc.FaceEmotion;
                                             vrcAvatarEditorGUI.TabChanged();
                                         }
                                         FaceEmotion.ApplyAnimationProperties(controller[handPoseName], ref editAvatar);
