@@ -118,7 +118,7 @@ namespace VRCAvatarEditor
                     handPoseAnim = EditorGUILayout.ObjectField(LocalizeText.instance.langPair.handPoseAnimClipLabel, handPoseAnim, typeof(AnimationClip), true) as AnimationClip;
                 }
 
-                EditorGUILayout.Space();
+                GUILayout.Space(20);
 
                 using (new EditorGUI.DisabledGroupScope(
                             selectedHandAnim == HandPose.HandPoseType.NoSelection ||
