@@ -219,6 +219,18 @@ namespace VRCAvatarEditor
 
                 if (renderer == null) continue;
 
+                // 一旦すべてリセットする
+                for (int i = 0; i < avatar.defaultFaceEmotion.Count; i++)
+                {
+                    var defaultAnimProperty = avatar.defaultFaceEmotion[i];
+                    var index = mesh.GetBlendShapeIndex(defaultAnimProperty.blendShapeName);
+                    if (index < 0) continue;
+                    renderer.SetBlendShapeWeight(index, defaultAnimProperty.value);
+                    blendshapes[index].isContains = false;
+                }
+
+                // アニメーションファイルに含まれるものだけ値を変更して
+                // 適用させるチェックマークにチェックをいれる
                 foreach (var animProperty in animProperties) {
                     var index = mesh.GetBlendShapeIndex(animProperty.blendShapeName);
                     if (index >= 0) {
