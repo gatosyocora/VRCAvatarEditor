@@ -48,6 +48,11 @@ namespace VRCAvatarEditor
             UpdateSaveFolderPath(saveFolderPath);
 
             errorStyle.normal.textColor = Color.red;
+
+            if (editAvatar != null && editAvatar.standingAnimController != null)
+            {
+                ValidateAnimatorOverrideController(editAvatar.animator, editAvatar.standingAnimController);
+            }
         }
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
@@ -262,6 +267,22 @@ namespace VRCAvatarEditor
         public void UpdateSaveFolderPath(string saveFolderPath)
         {
             this.saveFolderPath = saveFolderPath;
+        }
+
+        private void ValidateAnimatorOverrideController(Animator animator, AnimatorOverrideController controller)
+        {
+            for (int i = 0; i < HANDANIMS.Length; i++)
+            {
+                var clip = controller[HANDANIMS[i]];
+                if (clip.name == HANDANIMS[i])
+                {
+                    pathMissing[i] = false;
+                }
+                else
+                {
+                    pathMissing[i] = !GatoUtility.ValidateMissingPathInAnimationClip(editAvatar.animator, clip);
+                }
+            }
         }
     }
 }

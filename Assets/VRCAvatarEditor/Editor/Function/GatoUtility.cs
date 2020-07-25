@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 public static class GatoUtility
@@ -117,5 +118,21 @@ public static class GatoUtility
         materials = materials.Distinct().ToList<Material>();
 
         return materials;
+    }
+
+    /// <summary>
+    /// AnimationClipにMissingなパスが含まれていないことを検証する
+    /// </summary>
+    /// <param name="animator">AnimationClipを設定するAnimator</param>
+    /// <param name="clip">検証するAnimationClip</param>
+    /// <returns>Missingなパスが含まれていないか</returns>
+    public static bool ValidateMissingPathInAnimationClip(Animator animator, AnimationClip clip)
+    {
+        var transform = animator.transform;
+        foreach (var animationPath in AnimationUtility.GetCurveBindings(clip).Select(p => p.path))
+        {
+            if (transform.Find(animationPath) is null) return false;
+        }
+        return true;
     }
 }
