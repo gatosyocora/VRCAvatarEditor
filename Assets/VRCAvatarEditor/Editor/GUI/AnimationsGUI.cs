@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,6 +15,11 @@ namespace VRCAvatarEditor
 
         public static readonly string[] HANDANIMS = { "FIST", "FINGERPOINT", "ROCKNROLL", "HANDOPEN", "THUMBSUP", "VICTORY", "HANDGUN" };
         public static readonly string[] EMOTEANIMS = { "EMOTE1", "EMOTE2", "EMOTE3", "EMOTE4", "EMOTE5", "EMOTE6", "EMOTE7", "EMOTE8" };
+
+        private bool[] pathMissing = new bool[7];
+
+        private GUIStyle normalStyle = new GUIStyle();
+        private GUIStyle errorStyle = new GUIStyle();
 
         string titleText;
         AnimatorOverrideController controller;
@@ -40,6 +46,8 @@ namespace VRCAvatarEditor
             this.vrcAvatarEditorGUI = vrcAvatarEditorGUI;
             this.faceEmotionGUI = faceEmotionGUI;
             UpdateSaveFolderPath(saveFolderPath);
+
+            errorStyle.normal.textColor = Color.red;
         }
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
@@ -104,7 +112,7 @@ namespace VRCAvatarEditor
 
                             using (new EditorGUILayout.HorizontalScope(GUILayout.Width(350)))
                             {
-                                GUILayout.Label((i + 1) + ":" + handPoseName, GUILayout.Width(100));
+                                GUILayout.Label((i + 1) + ":" + handPoseName, (pathMissing[i]) ? errorStyle : normalStyle, GUILayout.Width(100));
 
                                 controller[handPoseName] = EditorGUILayout.ObjectField(
                                     string.Empty,
@@ -220,6 +228,11 @@ namespace VRCAvatarEditor
                             }
                         }
                     }
+                }
+
+                if (pathMissing.Any(x => x))
+                {
+                    EditorGUILayout.HelpBox("Exist Missing Path in AnimationClip", MessageType.Warning);
                 }
             }
             return false;
