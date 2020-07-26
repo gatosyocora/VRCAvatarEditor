@@ -25,6 +25,7 @@ MonoBehaviour:
   add: Add
   remove: Remove
   autoFix: Auto Fix
+  toggleAll: Toggle All
   avatarLabel: Avatar
   reloadAvatarButtonText: Reload Avatar
   toolInfoButtonText: ToolInfo
@@ -86,6 +87,12 @@ MonoBehaviour:
   resetToBoundsToPrefabButtonText: Reset to Bounds to Prefab
   childObjectsLabel: Parent of objects set bounds
   setBoundsButtonText: Set Bounds
+  duplicateSelectedButtonText: Duplicate selected
+  optimizeSelectedButtonText: Optimize selected
+  useInspectorMessageText: Material property can edit in inspector
+  replaceShaderButtonText: Replace Shader
+  noSelectionText: No Selection
+  multipleText: Multiple Shaders
   versionLabel: Version
   openOnlineManualButtonText: Open OnlineManual
   functionsLabel: Functions
