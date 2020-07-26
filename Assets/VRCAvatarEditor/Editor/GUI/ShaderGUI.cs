@@ -42,6 +42,7 @@ namespace VRCAvatarEditor
                                     var newMat = GatoUtility.DuplicateMaterial(mat);
                                     MaterialEdit.ReplaceMaterial(edittingAvatar, mat, newMat);
                                     MaterialEdit.ReplaceMaterial(originalAvatar, mat, newMat);
+                                    Repaint();
                                 }
                                 if (GUILayout.Button(LocalizeText.instance.langPair.select))
                                 {
