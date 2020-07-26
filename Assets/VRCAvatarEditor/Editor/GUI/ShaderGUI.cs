@@ -19,6 +19,7 @@ namespace VRCAvatarEditor
         private int shaderKindIndex = -1;
 
         private bool[] isTargets;
+        private bool toggleAll = true;
 
         private Vector2 leftScrollPosShader = Vector2.zero;
 
@@ -49,6 +50,18 @@ namespace VRCAvatarEditor
             {
                 using (new EditorGUILayout.HorizontalScope())
                 {
+                    using (var check = new EditorGUI.ChangeCheckScope())
+                    {
+                        toggleAll = EditorGUILayout.ToggleLeft("ToggleAll", toggleAll);
+                        if (check.changed)
+                        {
+                            isTargets = Enumerable.Range(0, edittingAvatar.materials.Length).Select(b => toggleAll).ToArray();
+                            currentShaderKindName = GetShaderKindName(edittingAvatar.materials.Where((v, index) => isTargets[index]));
+                            shaderKindIndex = Array.IndexOf(shaderKindNames, currentShaderKindName);
+                            Repaint();
+                        }
+                    }
+
                     GUILayout.FlexibleSpace();
 
                     if (GUILayout.Button("Duplicate selected"))
