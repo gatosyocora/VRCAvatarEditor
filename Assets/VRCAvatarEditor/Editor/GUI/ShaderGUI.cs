@@ -35,6 +35,7 @@ namespace VRCAvatarEditor
             shaderKindNames = shaderKindGroups.Select(s => s.Key).ToArray();
             shaderKindIndex = Array.IndexOf(shaderKindNames, currentShaderKindName);
 
+            // すべてtrueで初期化したnew bool[edittingAvatar.materials.Length]
             isTargets = Enumerable.Range(0, edittingAvatar.materials.Length).Select(b => true).ToArray();
         }
 
@@ -176,6 +177,11 @@ namespace VRCAvatarEditor
         public void SaveSettingData(ref SettingData settingAsset) { }
         public void Dispose() { }
 
+        /// <summary>
+        /// 一番多いShaderの種類を取得する
+        /// </summary>
+        /// <param name="materials"></param>
+        /// <returns></returns>
         private string GetShaderKindName(IEnumerable<Material> materials)
             => materials
                 .GroupBy(m => m.shader.name.Split('/').First())
