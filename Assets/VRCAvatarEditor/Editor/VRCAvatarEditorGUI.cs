@@ -140,10 +140,16 @@ namespace VRCAvatarEditor
             // Windowを開いたときにオブジェクトが選択されていればそれをアバターとして設定する
             if (Selection.gameObjects.Length == 1)
             {
-                targetAvatarDescriptor = Selection.gameObjects[0].GetComponent<VRC_AvatarDescriptor>();
-                if (targetAvatarDescriptor != null)
+                var selectionTransform = Selection.gameObjects.Single().transform;
+                while (selectionTransform != null)
                 {
-                    OnChangedAvatar();
+                    targetAvatarDescriptor = selectionTransform.GetComponent<VRC_AvatarDescriptor>();
+                    if (targetAvatarDescriptor != null)
+                    {
+                        OnChangedAvatar();
+                        break;
+                    }
+                    selectionTransform = selectionTransform.parent;
                 }
             }
 
