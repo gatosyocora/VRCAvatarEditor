@@ -24,6 +24,7 @@ namespace VRCAvatarEditor
         private Vector2 leftScrollPosShader = Vector2.zero;
 
         private readonly static string MULTIPLE = "**Multiple Shaders**";
+        private readonly static string NOSELECTION = "-No Selection-";
 
         public void Initialize(ref VRCAvatarEditor.Avatar edittingAvatar, VRCAvatarEditor.Avatar originalAvatar)
         {
@@ -157,7 +158,7 @@ namespace VRCAvatarEditor
                     GUILayout.Label("=>");
                     shaderKindIndex = EditorGUILayout.Popup(shaderKindIndex, shaderKindNames);
 
-                    using (new EditorGUI.DisabledGroupScope(shaderKindIndex == -1 || currentShaderKindName == shaderKindNames[shaderKindIndex]))
+                    using (new EditorGUI.DisabledGroupScope(shaderKindIndex == -1 || currentShaderKindName == NOSELECTION || currentShaderKindName == shaderKindNames[shaderKindIndex]))
                     {
                         if (GUILayout.Button("Replace Shader"))
                         {
@@ -205,9 +206,14 @@ namespace VRCAvatarEditor
         {
             var shaderKinds = materials.GroupBy(m => m.shader.name.Split('/').First());
 
-            if (shaderKinds.Count() == 1)
+            var count = shaderKinds.Count();
+            if (count == 1)
             {
                 return shaderKinds.Single().Key;
+            }
+            else if (count == 0)
+            {
+                return NOSELECTION;
             }
             else
             {
