@@ -239,11 +239,11 @@ namespace VRCAvatarEditor
 
                 if (pathMissing.Any(x => x))
                 {
-                    var warningMessage = (failedAutoFixMissingPath) ? "Failed Auto Fix. Please Fix manually or Recreate AnimationClip." : "Exist Missing Path in AnimationClip";
+                    var warningMessage = (failedAutoFixMissingPath) ? LocalizeText.instance.langPair.failAutoFixMissingPathMessageText : LocalizeText.instance.langPair.existMissingPathMessageText;
                     EditorGUILayout.HelpBox(warningMessage, MessageType.Warning);
                     using (new EditorGUI.DisabledGroupScope(failedAutoFixMissingPath))
                     {
-                        if (GUILayout.Button("AutoFix"))
+                        if (GUILayout.Button(LocalizeText.instance.langPair.autoFix))
                         {
                             failedAutoFixMissingPath = false;
                             for (int i = 0; i < pathMissing.Length; i++)

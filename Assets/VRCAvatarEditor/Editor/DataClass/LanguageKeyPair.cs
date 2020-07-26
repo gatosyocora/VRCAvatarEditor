@@ -16,6 +16,7 @@ public class LanguageKeyPair : ScriptableObject
     public string cancel;
     public string add;
     public string remove;
+    public string autoFix;
 
     [Header("VRCAvatarEditorGUI")]
     public string avatarLabel;
@@ -45,6 +46,8 @@ public class LanguageKeyPair : ScriptableObject
     public string createCustomStandingAnimsButtonText;
     public string createCustomSittingAnimsButtonText;
     public string setToSameAsCustomStandingAnimsButtonText;
+    public string existMissingPathMessageText;
+    public string failAutoFixMissingPathMessageText;
 
     [Header("AvatarInfoGUI")]
     public string genderLabel;
