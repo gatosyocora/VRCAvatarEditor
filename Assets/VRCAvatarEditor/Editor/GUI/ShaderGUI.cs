@@ -22,6 +22,8 @@ namespace VRCAvatarEditor
 
         private Vector2 leftScrollPosShader = Vector2.zero;
 
+        private readonly static string MULTIPLE = "**Multiple Shaders**";
+
         public void Initialize(ref VRCAvatarEditor.Avatar edittingAvatar, VRCAvatarEditor.Avatar originalAvatar)
         {
             this.edittingAvatar = edittingAvatar;
@@ -142,7 +144,7 @@ namespace VRCAvatarEditor
                     GUILayout.Label("=>");
                     shaderKindIndex = EditorGUILayout.Popup(shaderKindIndex, shaderKindNames);
 
-                    using (new EditorGUI.DisabledGroupScope(currentShaderKindName == shaderKindNames[shaderKindIndex]))
+                    using (new EditorGUI.DisabledGroupScope(shaderKindIndex == -1 || currentShaderKindName == shaderKindNames[shaderKindIndex]))
                     {
                         if (GUILayout.Button("Replace Shader"))
                         {
@@ -182,14 +184,22 @@ namespace VRCAvatarEditor
         public void Dispose() { }
 
         /// <summary>
-        /// 一番多いShaderの種類を取得する
+        /// 共通するShaderの種類を取得する。異なるものが含まれている場合はそれを示す文字列を返す
         /// </summary>
         /// <param name="materials"></param>
         /// <returns></returns>
         private string GetShaderKindName(IEnumerable<Material> materials)
-            => materials
-                .GroupBy(m => m.shader.name.Split('/').First())
-                .OrderByDescending(x => x.Count())
-                .First().Key;
+        {
+            var shaderKinds = materials.GroupBy(m => m.shader.name.Split('/').First());
+
+            if (shaderKinds.Count() == 1)
+            {
+                return shaderKinds.Single().Key;
+            }
+            else
+            {
+                return MULTIPLE;
+            }
+        }
     }
 }
