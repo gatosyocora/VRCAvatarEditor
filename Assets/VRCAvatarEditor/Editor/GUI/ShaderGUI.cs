@@ -39,7 +39,9 @@ namespace VRCAvatarEditor
                                 EditorGUILayout.LabelField(mat.shader.name);
                                 if (GUILayout.Button("Duplicate"))
                                 {
-                                    DuplicateAndReplaceMaterial(mat);
+                                    var newMat = GatoUtility.DuplicateMaterial(mat);
+                                    MaterialEdit.ReplaceMaterial(edittingAvatar, mat, newMat);
+                                    MaterialEdit.ReplaceMaterial(originalAvatar, mat, newMat);
                                 }
                                 if (GUILayout.Button(LocalizeText.instance.langPair.select))
                                 {
@@ -57,24 +59,5 @@ namespace VRCAvatarEditor
         public void LoadSettingData(SettingData settingAsset) { }
         public void SaveSettingData(ref SettingData settingAsset) { }
         public void Dispose() { }
-
-        private void DuplicateAndReplaceMaterial(Material srcMaterial)
-        {
-            // 複製
-            var originalPath = AssetDatabase.GetAssetPath(srcMaterial);
-            var newPath = AssetDatabase.GenerateUniqueAssetPath(originalPath);
-            AssetDatabase.CopyAsset(originalPath, newPath);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-
-            // 置き換え
-            var newMat = AssetDatabase.LoadAssetAtPath<Material>(newPath);
-            GatoUtility.ReplaceMaterial(edittingAvatar.animator.gameObject, srcMaterial, newMat);
-            GatoUtility.ReplaceMaterial(originalAvatar.animator.gameObject, srcMaterial, newMat);
-            var index = Array.IndexOf(edittingAvatar.materials, srcMaterial);
-            if (index == -1) return;
-            edittingAvatar.materials[index] = newMat;
-            originalAvatar.materials[index] = newMat;
-        }
     }
 }

@@ -182,6 +182,21 @@ public static class GatoUtility
     }
 
     /// <summary>
+    /// Materialを複製する
+    /// </summary>
+    /// <param name="srcMaterial">複製するMaterial</param>
+    /// <returns>複製されたMaterial</returns>
+    public static Material DuplicateMaterial(Material srcMaterial)
+    {
+        var originalPath = AssetDatabase.GetAssetPath(srcMaterial);
+        var newPath = AssetDatabase.GenerateUniqueAssetPath(originalPath);
+        AssetDatabase.CopyAsset(originalPath, newPath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        return AssetDatabase.LoadAssetAtPath<Material>(newPath);
+    }
+
+    /// <summary>
     /// Materialを置き換える
     /// </summary>
     /// <param name="rootObject">ルートオブジェクト</param>
