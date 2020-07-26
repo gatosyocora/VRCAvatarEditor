@@ -12,6 +12,7 @@ namespace VRCAvatarEditor
         private VRCAvatarEditor.Avatar editAvatar;
         private VRCAvatarEditor.Avatar originalAvatar;
         private VRCAvatarEditorGUI parentWindow;
+        private AnimationsGUI animationsGUI;
 
         private static readonly string DEFAULT_ANIM_NAME = "faceAnim";
         private HandPose.HandPoseType selectedHandAnim = HandPose.HandPoseType.NoSelection;
@@ -35,12 +36,13 @@ namespace VRCAvatarEditor
 
         private bool usePreviousAnimationOnHandAnimation;
 
-        public void Initialize(ref VRCAvatarEditor.Avatar editAvatar, VRCAvatarEditor.Avatar originalAvatar, string saveFolderPath, EditorWindow window)
+        public void Initialize(ref VRCAvatarEditor.Avatar editAvatar, VRCAvatarEditor.Avatar originalAvatar, string saveFolderPath, EditorWindow window, AnimationsGUI animationsGUI)
         {
             this.editAvatar = editAvatar;
             this.originalAvatar = originalAvatar;
             animName = DEFAULT_ANIM_NAME;
             this.parentWindow = window as VRCAvatarEditorGUI;
+            this.animationsGUI = animationsGUI;
         }
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
@@ -140,6 +142,8 @@ namespace VRCAvatarEditor
 
                         originalAvatar.standingAnimController = animController;
                         editAvatar.standingAnimController = animController;
+
+                        animationsGUI.ResetPathMissing(AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]);
                     }
                 }
 

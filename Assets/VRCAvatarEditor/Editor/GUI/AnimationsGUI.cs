@@ -303,5 +303,13 @@ namespace VRCAvatarEditor
                 }
             }
         }
+
+        public void ResetPathMissing(string HandAnimName)
+        {
+            var index = Array.IndexOf(HANDANIMS, HandAnimName);
+            if (index == -1) return;
+            pathMissing[index] = false;
+            failedAutoFixMissingPath = false;
+        }
     }
 }
