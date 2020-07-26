@@ -103,6 +103,7 @@ namespace VRCAvatarEditor
                         MaterialEdit.ReplaceMaterial(originalAvatar, srcMaterials[i], newMaterials[i]);
                         MaterialEdit.ReplaceMaterial(edittingAvatar, srcMaterials[i], newMaterials[i]);
                     }
+                    Undo.SetCurrentGroupName("Replace All Materials");
                 }
                 using (new EditorGUILayout.HorizontalScope())
                 {
@@ -113,7 +114,6 @@ namespace VRCAvatarEditor
                     if (GUILayout.Button("Replace Shader"))
                     {
                         var group = shaderKindGroups[shaderKindIndex];
-                        Debug.Log($"{group.Key}: {group.Count()}");
                         if (group.Count() == 1)
                         {
                             var dstShader = group.Single();
