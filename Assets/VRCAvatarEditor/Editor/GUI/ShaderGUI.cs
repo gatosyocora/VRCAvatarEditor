@@ -72,7 +72,7 @@ namespace VRCAvatarEditor
                                     MaterialEdit.ReplaceMaterial(originalAvatar, mat, newMat);
                                     Repaint();
                                 }
-                                if (GUILayout.Button(LocalizeText.instance.langPair.select))
+                                if (GUILayout.Button(LocalizeText.instance.langPair.edit))
                                 {
                                     Selection.activeObject = mat;
                                 }
