@@ -12,6 +12,10 @@ namespace VRCAvatarEditor
 
         private Shader[] customShaders;
         private string[] customShaderNames;
+        private IGrouping<string, Shader>[] shaderKindGroups;
+        private string[] shaderKindNames;
+        private string currentShaderKindName;
+        private int shaderKindIndex = -1;
 
         private Vector2 leftScrollPosShader = Vector2.zero;
 
@@ -21,6 +25,15 @@ namespace VRCAvatarEditor
             this.originalAvatar = originalAvatar;
             customShaders = GatoUtility.LoadShadersInProject();
             customShaderNames = customShaders.Select(s => s.name).ToArray();
+            shaderKindGroups = customShaders
+                                    .GroupBy(s => s.name.Split('/').First())
+                                    .ToArray();
+            currentShaderKindName = edittingAvatar.materials
+                                        .GroupBy(m => m.shader.name.Split('/').First())
+                                        .OrderByDescending(x => x.Count())
+                                        .First().Key;
+            shaderKindNames = shaderKindGroups.Select(s => s.Key).ToArray();
+            shaderKindIndex = Array.IndexOf(shaderKindNames, currentShaderKindName);
         }
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
@@ -89,6 +102,58 @@ namespace VRCAvatarEditor
                     {
                         MaterialEdit.ReplaceMaterial(originalAvatar, srcMaterials[i], newMaterials[i]);
                         MaterialEdit.ReplaceMaterial(edittingAvatar, srcMaterials[i], newMaterials[i]);
+                    }
+                }
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    EditorGUILayout.LabelField(currentShaderKindName);
+                    GUILayout.Label("=>");
+                    shaderKindIndex = EditorGUILayout.Popup(shaderKindIndex, shaderKindNames);
+
+                    if (GUILayout.Button("Replace Shader"))
+                    {
+                        var group = shaderKindGroups[shaderKindIndex];
+                        Debug.Log($"{group.Key}: {group.Count()}");
+                        if (group.Count() == 1)
+                        {
+                            var dstShader = group.Single();
+                            foreach (var mat in edittingAvatar.materials)
+                            {
+                                mat.shader = dstShader;
+                            }
+                        }
+                        else
+                        {
+                            var dstShaderGroup = shaderKindGroups[shaderKindIndex].Select(s => s).ToArray();
+                            foreach (var mat in edittingAvatar.materials)
+                            {
+                                var srcShaderType = MaterialEdit.GetShaderType(mat);
+                                var dstShaders = dstShaderGroup.Select((s, i) => new { Value = s, Index = i, Type = MaterialEdit.GetShaderType(s) });
+                                int sameTypeCount = dstShaders.Where(s => s.Type == srcShaderType).Count();
+                                int dstShaderIndex = -1;
+                                // ShaderTypeが一致するShaderが1つだけあった
+                                if (sameTypeCount == 1)
+                                {
+                                    dstShaderIndex = dstShaders.Where(s => s.Type == srcShaderType).Single().Index;
+                                }
+                                // ShaderTypeが一致するShaderが見つからなかった
+                                else if (sameTypeCount == 0)
+                                {
+                                    // OpaqueのShaderにする（とりあえず一番最初）。
+                                    // Opaqueがない場合とりあえずその種類で一番最初のShader
+                                    dstShaderIndex = dstShaders
+                                                        .Where(s => s.Type == MaterialEdit.ShaderType.Opaque)
+                                                        .FirstOrDefault().Index;
+                                }
+                                // ShaderTypeが一致するShaderが複数見つかった
+                                else
+                                {
+                                    // とりあえずShaderTypeが同じShaderの中の一番最初のShaderにする
+                                    dstShaderIndex = dstShaders.Where(s => s.Type == srcShaderType).First().Index;
+                                }
+                                mat.shader = dstShaderGroup[dstShaderIndex];
+                            }
+                        }
                     }
                 }
             }
