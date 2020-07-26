@@ -23,8 +23,8 @@ namespace VRCAvatarEditor
 
         private Vector2 leftScrollPosShader = Vector2.zero;
 
-        private readonly static string MULTIPLE = "**Multiple Shaders**";
-        private readonly static string NOSELECTION = "-No Selection-";
+        private readonly static string MULTIPLE = $"**<{nameof(MULTIPLE)}>**";
+        private readonly static string NOSELECTION = $"--<{nameof(NOSELECTION)}>--";
 
         public void Initialize(ref VRCAvatarEditor.Avatar edittingAvatar, VRCAvatarEditor.Avatar originalAvatar)
         {
@@ -53,7 +53,7 @@ namespace VRCAvatarEditor
                 {
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
-                        toggleAll = EditorGUILayout.ToggleLeft("ToggleAll", toggleAll);
+                        toggleAll = EditorGUILayout.ToggleLeft(LocalizeText.instance.langPair.toggleAll, toggleAll);
                         if (check.changed)
                         {
                             isTargets = Enumerable.Range(0, edittingAvatar.materials.Length).Select(b => toggleAll).ToArray();
@@ -65,7 +65,7 @@ namespace VRCAvatarEditor
 
                     GUILayout.FlexibleSpace();
 
-                    if (GUILayout.Button("Duplicate selected"))
+                    if (GUILayout.Button(LocalizeText.instance.langPair.duplicateSelectedButtonText))
                     {
                         Undo.RegisterCompleteObjectUndo(originalAvatar.animator.gameObject, "Replace All Materials");
                         var srcMaterials = edittingAvatar.materials.Where((v, i) => isTargets[i]).ToArray();
@@ -78,7 +78,7 @@ namespace VRCAvatarEditor
                         Undo.SetCurrentGroupName("Replace All Materials");
                         Repaint();
                     }
-                    if (GUILayout.Button("Optimize selected"))
+                    if (GUILayout.Button(LocalizeText.instance.langPair.optimizeSelectedButtonText))
                     {
                         foreach (var mat in edittingAvatar.materials.Where((v, i) => isTargets[i]).ToArray())
                         {
@@ -148,19 +148,19 @@ namespace VRCAvatarEditor
 
                 EditorGUILayout.Space();
 
-                EditorGUILayout.HelpBox("Material property can edit in inspector", MessageType.Info);
+                EditorGUILayout.HelpBox(LocalizeText.instance.langPair.useInspectorMessageText, MessageType.Info);
 
                 EditorGUILayout.Space();
 
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    EditorGUILayout.LabelField(currentShaderKindName);
+                    EditorGUILayout.LabelField(LocalizeIfNeeded(currentShaderKindName));
                     GUILayout.Label("=>");
                     shaderKindIndex = EditorGUILayout.Popup(shaderKindIndex, shaderKindNames);
 
                     using (new EditorGUI.DisabledGroupScope(shaderKindIndex == -1 || currentShaderKindName == NOSELECTION || currentShaderKindName == shaderKindNames[shaderKindIndex]))
                     {
-                        if (GUILayout.Button("Replace Shader"))
+                        if (GUILayout.Button(LocalizeText.instance.langPair.replaceShaderButtonText))
                         {
                             var materials = edittingAvatar.materials.Where((v, i) => isTargets[i]).ToArray();
                             var group = shaderKindGroups[shaderKindIndex];
@@ -218,6 +218,22 @@ namespace VRCAvatarEditor
             else
             {
                 return MULTIPLE;
+            }
+        }
+
+        private string LocalizeIfNeeded(string shaderKindName)
+        {
+            if (shaderKindName.Contains($"<{nameof(NOSELECTION)}>"))
+            {
+                return shaderKindName.Replace($"<{nameof(NOSELECTION)}>", LocalizeText.instance.langPair.noSelectionText);
+            }
+            else if (shaderKindName.Contains($"<{nameof(MULTIPLE)}>"))
+            {
+                return shaderKindName.Replace($"<{nameof(MULTIPLE)}>", LocalizeText.instance.langPair.multipleText);
+            }
+            else
+            {
+                return shaderKindName;
             }
         }
     }

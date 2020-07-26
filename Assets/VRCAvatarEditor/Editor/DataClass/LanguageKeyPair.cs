@@ -17,6 +17,7 @@ public class LanguageKeyPair : ScriptableObject
     public string add;
     public string remove;
     public string autoFix;
+    public string toggleAll;
 
     [Header("VRCAvatarEditorGUI")]
     public string avatarLabel;
@@ -91,6 +92,14 @@ public class LanguageKeyPair : ScriptableObject
     public string resetToBoundsToPrefabButtonText;
     public string childObjectsLabel;
     public string setBoundsButtonText;
+
+    [Header("ShaderGUI")]
+    public string duplicateSelectedButtonText;
+    public string optimizeSelectedButtonText;
+    public string useInspectorMessageText;
+    public string replaceShaderButtonText;
+    public string noSelectionText;
+    public string multipleText;
 
     [Header("AppInfoGUI")]
     public string versionLabel;
