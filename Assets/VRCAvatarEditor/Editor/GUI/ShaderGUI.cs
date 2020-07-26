@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -30,10 +31,7 @@ namespace VRCAvatarEditor
             shaderKindGroups = customShaders
                                     .GroupBy(s => s.name.Split('/').First())
                                     .ToArray();
-            currentShaderKindName = edittingAvatar.materials
-                                        .GroupBy(m => m.shader.name.Split('/').First())
-                                        .OrderByDescending(x => x.Count())
-                                        .First().Key;
+            currentShaderKindName = GetShaderKindName(edittingAvatar.materials);
             shaderKindNames = shaderKindGroups.Select(s => s.Key).ToArray();
             shaderKindIndex = Array.IndexOf(shaderKindNames, currentShaderKindName);
 
@@ -86,7 +84,16 @@ namespace VRCAvatarEditor
 
                             using (new EditorGUILayout.HorizontalScope())
                             {
-                                isTargets[i] = EditorGUILayout.ToggleLeft(string.Empty, isTargets[i], GUILayout.Width(30f));
+                                using (var check = new EditorGUI.ChangeCheckScope())
+                                {
+                                    isTargets[i] = EditorGUILayout.ToggleLeft(string.Empty, isTargets[i], GUILayout.Width(30f));
+                                    if (check.changed)
+                                    {
+                                        currentShaderKindName = GetShaderKindName(edittingAvatar.materials.Where((v, index) => isTargets[index]));
+                                        shaderKindIndex = Array.IndexOf(shaderKindNames, currentShaderKindName);
+                                        Repaint();
+                                    }
+                                }
 
                                 using (var check = new EditorGUI.ChangeCheckScope())
                                 {
@@ -130,28 +137,33 @@ namespace VRCAvatarEditor
                     GUILayout.Label("=>");
                     shaderKindIndex = EditorGUILayout.Popup(shaderKindIndex, shaderKindNames);
 
-                    if (GUILayout.Button("Replace Shader"))
+                    using (new EditorGUI.DisabledGroupScope(currentShaderKindName == shaderKindNames[shaderKindIndex]))
                     {
-                        var group = shaderKindGroups[shaderKindIndex];
-                        if (group.Count() == 1)
+                        if (GUILayout.Button("Replace Shader"))
                         {
-                            var dstShader = group.Single();
-                            foreach (var mat in edittingAvatar.materials)
+                            var materials = edittingAvatar.materials.Where((v, i) => isTargets[i]).ToArray();
+                            var group = shaderKindGroups[shaderKindIndex];
+                            if (group.Count() == 1)
                             {
-                                mat.shader = dstShader;
+                                var dstShader = group.Single();
+                                foreach (var mat in materials)
+                                {
+                                    mat.shader = dstShader;
+                                }
                             }
-                        }
-                        else
-                        {
-                            var dstShaderGroup = shaderKindGroups[shaderKindIndex].Select(s => s).ToArray();
-                            foreach (var mat in edittingAvatar.materials)
+                            else
                             {
-                                var dstShader = MaterialEdit.CalculateSimilarShader(dstShaderGroup, mat.shader);
-                                mat.shader = dstShader;
+                                var dstShaderGroup = shaderKindGroups[shaderKindIndex].Select(s => s).ToArray();
+                                foreach (var mat in materials)
+                                {
+                                    var dstShader = MaterialEdit.CalculateSimilarShader(dstShaderGroup, mat.shader);
+                                    mat.shader = dstShader;
+                                }
                             }
+
+                            Repaint();
                         }
                     }
-                    Repaint();
                 }
             }
             return false;
@@ -161,5 +173,11 @@ namespace VRCAvatarEditor
         public void LoadSettingData(SettingData settingAsset) { }
         public void SaveSettingData(ref SettingData settingAsset) { }
         public void Dispose() { }
+
+        private string GetShaderKindName(IEnumerable<Material> materials)
+            => materials
+                .GroupBy(m => m.shader.name.Split('/').First())
+                .OrderByDescending(x => x.Count())
+                .First().Key;
     }
 }
