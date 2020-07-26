@@ -124,6 +124,8 @@ namespace VRCAvatarEditor
                                     {
                                         MaterialEdit.ReplaceMaterial(edittingAvatar, mat, material);
                                         MaterialEdit.ReplaceMaterial(originalAvatar, mat, material);
+                                        currentShaderKindName = GetShaderKindName(edittingAvatar.materials.Where((v, index) => isTargets[index]));
+                                        shaderKindIndex = Array.IndexOf(shaderKindNames, currentShaderKindName);
                                         Repaint();
                                     }
                                 }
@@ -135,6 +137,9 @@ namespace VRCAvatarEditor
                                     if (check.changed)
                                     {
                                         mat.shader = customShaders[shaderIndex];
+                                        currentShaderKindName = GetShaderKindName(edittingAvatar.materials.Where((v, index) => isTargets[index]));
+                                        shaderKindIndex = Array.IndexOf(shaderKindNames, currentShaderKindName);
+                                        Repaint();
                                     }
                                 }
                                 if (GUILayout.Button(LocalizeText.instance.langPair.edit))
