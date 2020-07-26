@@ -93,18 +93,31 @@ namespace VRCAvatarEditor
                         }
                     }
                 }
-                if (GUILayout.Button("All Duplicate"))
+                using (new EditorGUILayout.HorizontalScope())
                 {
-                    Undo.RegisterCompleteObjectUndo(originalAvatar.animator.gameObject, "Replace All Materials");
-                    var srcMaterials = edittingAvatar.materials;
-                    var newMaterials = GatoUtility.DuplicateMaterials(srcMaterials);
-                    for (int i = 0; i < newMaterials.Length; i++)
+                    if (GUILayout.Button("All Duplicate"))
                     {
-                        MaterialEdit.ReplaceMaterial(originalAvatar, srcMaterials[i], newMaterials[i]);
-                        MaterialEdit.ReplaceMaterial(edittingAvatar, srcMaterials[i], newMaterials[i]);
+                        Undo.RegisterCompleteObjectUndo(originalAvatar.animator.gameObject, "Replace All Materials");
+                        var srcMaterials = edittingAvatar.materials;
+                        var newMaterials = GatoUtility.DuplicateMaterials(srcMaterials);
+                        for (int i = 0; i < newMaterials.Length; i++)
+                        {
+                            MaterialEdit.ReplaceMaterial(originalAvatar, srcMaterials[i], newMaterials[i]);
+                            MaterialEdit.ReplaceMaterial(edittingAvatar, srcMaterials[i], newMaterials[i]);
+                        }
+                        Undo.SetCurrentGroupName("Replace All Materials");
                     }
-                    Undo.SetCurrentGroupName("Replace All Materials");
+                    if (GUILayout.Button("All Optimize"))
+                    {
+                        foreach (var mat in edittingAvatar.materials)
+                        {
+                            MaterialEdit.DeleteUnusedProperties(mat, AssetDatabase.GetAssetPath(mat));
+                        }
+                    }
                 }
+
+                EditorGUILayout.Space();
+
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     EditorGUILayout.LabelField(currentShaderKindName);
