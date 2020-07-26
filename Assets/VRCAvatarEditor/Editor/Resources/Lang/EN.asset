@@ -24,6 +24,7 @@ MonoBehaviour:
   cancel: cancel
   add: Add
   remove: Remove
+  autoFix: Auto Fix
   avatarLabel: Avatar
   reloadAvatarButtonText: Reload Avatar
   toolInfoButtonText: ToolInfo
@@ -47,6 +48,9 @@ MonoBehaviour:
   createCustomStandingAnimsButtonText: Create CustomStandingAnims
   createCustomSittingAnimsButtonText: Create CustomSittingAnims
   setToSameAsCustomStandingAnimsButtonText: Set to same as CustomStandingAnims
+  existMissingPathMessageText: Exist Missing Path in AnimationClip
+  failAutoFixMissingPathMessageText: Failed Auto Fix. Please Fix manually or Recreate
+    AnimationClip.
   genderLabel: Gender
   uploadStatusLabel: Upload Status
   newAvatarText: New Avatar
