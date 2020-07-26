@@ -61,6 +61,7 @@ namespace VRCAvatarEditor
                             MaterialEdit.ReplaceMaterial(edittingAvatar, srcMaterials[i], newMaterials[i]);
                         }
                         Undo.SetCurrentGroupName("Replace All Materials");
+                        Repaint();
                     }
                     if (GUILayout.Button("Optimize selected"))
                     {
@@ -150,6 +151,7 @@ namespace VRCAvatarEditor
                             }
                         }
                     }
+                    Repaint();
                 }
             }
             return false;
