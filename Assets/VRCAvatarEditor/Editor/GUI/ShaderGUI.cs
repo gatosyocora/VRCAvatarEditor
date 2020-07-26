@@ -52,6 +52,17 @@ namespace VRCAvatarEditor
                         }
                     }
                 }
+                if (GUILayout.Button("All Duplicate"))
+                {
+                    Undo.RegisterCompleteObjectUndo(originalAvatar.animator.gameObject, "Replace All Materials");
+                    var srcMaterials = edittingAvatar.materials;
+                    var newMaterials = GatoUtility.DuplicateMaterials(srcMaterials);
+                    for (int i = 0; i < newMaterials.Length; i++)
+                    {
+                        MaterialEdit.ReplaceMaterial(originalAvatar, srcMaterials[i], newMaterials[i]);
+                        MaterialEdit.ReplaceMaterial(edittingAvatar, srcMaterials[i], newMaterials[i]);
+                    }
+                }
             }
             return false;
         }
