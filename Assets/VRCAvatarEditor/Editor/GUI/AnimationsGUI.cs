@@ -21,6 +21,8 @@ namespace VRCAvatarEditor
         private GUIStyle normalStyle = new GUIStyle();
         private GUIStyle errorStyle = new GUIStyle();
 
+        private bool failedAutoFixMissingPath = false;
+
         string titleText;
         AnimatorOverrideController controller;
         private bool showEmoteAnimations = false;
@@ -237,15 +239,22 @@ namespace VRCAvatarEditor
 
                 if (pathMissing.Any(x => x))
                 {
-                    EditorGUILayout.HelpBox("Exist Missing Path in AnimationClip", MessageType.Warning);
-                    if (GUILayout.Button("AutoFix"))
+                    var warningMessage = (failedAutoFixMissingPath) ? "Failed Auto Fix. Please Fix manually or Recreate AnimationClip." : "Exist Missing Path in AnimationClip";
+                    EditorGUILayout.HelpBox(warningMessage, MessageType.Warning);
+                    using (new EditorGUI.DisabledGroupScope(failedAutoFixMissingPath))
                     {
-                        for (int i = 0; i < pathMissing.Length; i++)
+                        if (GUILayout.Button("AutoFix"))
                         {
-                            if (!pathMissing[i]) continue;
-                            pathMissing[i] = !GatoUtility.TryFixMissingPathInAnimationClip(
-                                                editAvatar.animator, 
-                                                editAvatar.standingAnimController[HANDANIMS[i]]);
+                            failedAutoFixMissingPath = false;
+                            for (int i = 0; i < pathMissing.Length; i++)
+                            {
+                                if (!pathMissing[i]) continue;
+                                var result = GatoUtility.TryFixMissingPathInAnimationClip(
+                                                    editAvatar.animator,
+                                                    editAvatar.standingAnimController[HANDANIMS[i]]);
+                                pathMissing[i] = !result;
+                                failedAutoFixMissingPath = !result;
+                            }
                         }
                     }
                 }
