@@ -112,13 +112,6 @@ namespace VRCAvatarEditor
                                         mat.shader = customShaders[shaderIndex];
                                     }
                                 }
-                                if (GUILayout.Button("Duplicate"))
-                                {
-                                    var newMat = GatoUtility.DuplicateMaterial(mat);
-                                    MaterialEdit.ReplaceMaterial(edittingAvatar, mat, newMat);
-                                    MaterialEdit.ReplaceMaterial(originalAvatar, mat, newMat);
-                                    Repaint();
-                                }
                                 if (GUILayout.Button(LocalizeText.instance.langPair.edit))
                                 {
                                     Selection.activeObject = mat;
