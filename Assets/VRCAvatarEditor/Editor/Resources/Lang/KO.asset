@@ -1,0 +1,140 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92599070e19982d438288df185044c49, type: 3}
+  m_Name: KO
+  m_EditorClassIdentifier: 
+  reset: "\uCD08\uAE30 \uAC12\uC73C\uB85C \uBCF5\uC6D0"
+  open: "\uC5F4\uAE30"
+  close: "\uB2EB\uAE30"
+  edit: "\uD3B8\uC9D1"
+  selectFolder: "\uD3F4\uB354 \uC120\uD0DD"
+  selectFolderDialogMessageText: "\uC800\uC7A5\uD560 \uD3F4\uB354\uB97C \uC120\uD0DD"
+  exclusions: "\uC81C\uC678"
+  select: "\uC120\uD0DD"
+  ok: "\uD655\uC778"
+  cancel: "\uCDE8\uC18C"
+  add: "\uCD94\uAC00"
+  remove: "\uC0AD\uC81C"
+  autoFix: "\uC790\uB3D9 \uC218\uC815"
+  toggleAll: "\uBAA8\uB4E0 \uC804\uD658"
+  avatarLabel: "\uC544\uBC14\uD0C0"
+  reloadAvatarButtonText: "\uC544\uBC14\uD0C0 \uB2E4\uC2DC\uB85C\uB4DC"
+  toolInfoButtonText: "\uB3C4\uAD6C \uC815\uBCF4"
+  settingButtonText: "\uC124\uC815"
+  resetPoseButtonText: "\uD3EC\uC988\uB97C \uC7AC\uC124\uC815"
+  uploadAvatarButtonText: "\uC544\uBC14\uD0C0\uB97C \uC5C5\uB85C\uB4DC"
+  avatarInfoTitle: "\uC544\uBC14\uD0C0 \uC815\uBCF4"
+  faceEmotionTitle: "\uD45C\uC815"
+  probeAnchorTitle: "\uBE5B\uC758 \uB2F9 \uBC29\uBC95"
+  boundsTitle: "\uBA54\uC26C\uB97C \uADF8\uB9AC\uB294 \uBC94\uC704"
+  shaderTitle: "\uC250\uC774\uB354"
+  standingTabText: "\uC11C\uC788\uC744"
+  sittingTabText: "\uC549\uC544\uC788\uC744"
+  emoteButtonText: "\uAC10\uC815 \uD45C\uD604"
+  faceAndHandButtonText: "\uD45C\uC815\uACFC \uC190"
+  standingTitle: "\uC11C\uC788\uC744 \uB54C\uC758 \uC560\uB2C8\uBA54\uC774\uC158"
+  sittingTitle: "\uC549\uC544\uC788\uC744 \uB54C\uC758 \uC560\uB2C8\uBA54\uC774\uC158"
+  noAvatarMessageText: "\uC544\uBC14\uD0C0\uAC00 \uC124\uC815\uB418\uC5B4 \uC788\uC9C0
+    \uC54A\uC2B5\uB2C8\uB2E4"
+  noCustomStandingAnimsMessageText: "\uC11C\uC788\uC744 \uB54C\uC758 \uC560\uB2C8\uBA54\uC774\uC158\uC774
+    \uC124\uC815\uB418\uC5B4 \uC788\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4"
+  noCustomSittingAnimsMessageText: "\uC549\uC544\uC788\uC744 \uB54C\uC758 \uC560\uB2C8\uBA54\uC774\uC158\uC774
+    \uC124\uC815\uB418\uC5B4 \uC788\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4"
+  createCustomStandingAnimsButtonText: "\uC11C\uC788\uC744 \uB54C\uC758 \uC560\uB2C8\uBA54\uC774\uC158\uC744
+    \uB9CC\uB4E4"
+  createCustomSittingAnimsButtonText: "\uC549\uC544\uC788\uC744 \uB54C\uC758 \uC560\uB2C8\uBA54\uC774\uC158\uC744
+    \uB9CC\uB4E4"
+  setToSameAsCustomStandingAnimsButtonText: "\uC11C\uC788\uC744 \uB54C\uC758 \uC560\uB2C8\uBA54\uC774\uC158\uACFC
+    \uB3D9\uC77C\uD558\uAC8C \uC124\uC815"
+  existMissingPathMessageText: "AnimationClip\uC5D0 Missing \uACBD\uB85C\uAC00 \uD3EC\uD568\uB418\uC5B4
+    \uC788\uC2B5\uB2C8\uB2E4"
+  failAutoFixMissingPathMessageText: "\uC790\uB3D9 \uC218\uC815\uC5D0 \uC2E4\uD328\uD588\uC2B5\uB2C8\uB2E4.
+    \uC218\uB3D9\uC73C\uB85C \uC218\uC815\uD558\uAC70\uB098 AnimationClip\uB97C \uB2E4\uC2DC
+    \uC791\uC131\uD558\uC2ED\uC2DC\uC624"
+  genderLabel: "\uC131\uBCC4"
+  uploadStatusLabel: "\uC5C5\uB85C\uB4DC \uC0C1\uD0DC"
+  newAvatarText: "\uBBF8 \uC5C5\uB85C\uB4DC"
+  uploadedAvatarText: "\uC5C5\uB85C\uB4DC \uB41C"
+  customStandingAnimsLabel: "\uC11C\uC788\uC744 \uB54C\uC758 \uC560\uB2C8\uBA54\uC774\uC158"
+  customSittingAnimsLabel: "\uC549\uC544\uC788\uC744 \uB54C\uC758 \uC560\uB2C8\uBA54\uC774\uC158"
+  triangleCountLabel: "\uD3F4\uB9AC\uACE4 \uC218"
+  faceMeshLabel: "\uC5BC\uAD74\uC758 \uBA54\uC26C \uAC1C\uCCB4"
+  viewPositionLabel: "\uC2DC\uC810\uC758 \uC704\uCE58"
+  lipSyncWarningMessageText: "\uB9BD\uC2F1\uD06C\uAC00 \uC81C\uB300\uB85C \uC124\uC815\uB418\uC5B4
+    \uC788\uC9C0 \uC54A\uC744 \uC218 \uC788\uC2B5\uB2C8\uB2E4"
+  lipSyncTypeLabel: "\uC785\uC744 \uC6C0\uC9C1\uC774\uB294 \uBC29\uBC95"
+  lipSyncBlendShapesLabel: "\uC785\uC744 \uC6C0\uC9C1\uC774\uAE30\uC704\uD55C BlendShape"
+  lipSyncBlendShapesAutoDetectButtonText: "\uBAA8\uC591 \uD0A4\uB97C \uC0AC\uC6A9\uD55C
+    \uB9BD\uC2F1\uD06C\uB97C \uC790\uB3D9 \uC124\uC815"
+  loadAnimationButtonText: "\uC560\uB2C8\uBA54\uC774\uC158\uB85C\uB4DC"
+  setToDefaultButtonText: "\uAE30\uBCF8 \uD45C\uC815\uC744 \uBCC0\uACBD"
+  resetToDefaultButtonText: "\uAE30\uBCF8 \uD45C\uC815 \uCDE8\uC18C"
+  toggleAllLabel: "\uBAA8\uB4E0 \uC804\uD658"
+  minButtonText: "\uCD5C\uC18C"
+  maxButtonText: "\uCD5C\uB300"
+  animClipFileNameLabel: "\uC560\uB2C8\uBA54\uC774\uC158 \uD30C\uC77C \uC774\uB984"
+  animClipSaveFolderLabel: "\uC800\uC7A5\uD560 \uD3F4\uB354\uC758 \uACBD\uB85C"
+  animationOverrideLabel: "\uC124\uC815 \uC704\uCE58"
+  handPoseAnimClipLabel: "\uC190 \uBAA8\uC591\uC758 \uC560\uB2C8\uBA54\uC774\uC158"
+  createAnimFileButtonText: "\uD45C\uC815 \uC560\uB2C8\uBA54\uC774\uC158\uC744 \uB9CC\uB4E4"
+  setToDefaultDialogTitleText: "\uAE30\uBCF8 \uD45C\uC815 \uC124\uC815"
+  setToDefaultDialogMessageText: "\uD604\uC7AC \uD45C\uC815\uC744 \uAE30\uBCF8\uAC12\uC73C\uB85C
+    \uC124\uC815 \uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C"
+  setToSkinnedMeshRendererLabel: "SkinnedMeshRenderer \uAC12\uC744 \uBCC0\uACBD"
+  setToMeshRendererLabel: "MeshRenderer \uAC12\uC744 \uBCC0\uACBD"
+  targetPositionLabel: "\uBE5B\uC758 \uB2F9 \uBC29\uBC95\uC758 \uACC4\uC0B0\uC5D0
+    \uC0AC\uC6A9\uD558\uB294 \uC7A5\uC18C"
+  rendererListLabel: "\uC801\uC6A9 \uD560 \uAC1C\uCCB4"
+  probeAnchorMessageText: "\uCCB4\uD06C\uAC00 \uBD99\uC5B4\uC788\uB294 \uBA54\uC26C
+    ProbeAnchor\uAC00 \uC124\uC815\uB429\uB2C8\uB2E4"
+  setProbeAnchorButtonText: "\uBE5B\uC758 \uB2F9 \uBC29\uBC95\uC758 \uBCC0\uACBD\uC744
+    \uC801\uC6A9"
+  resetToBoundsToPrefabButtonText: "\uADF8\uB9AC\uAE30 \uBC94\uC704 \uC124\uC815\uC744
+    Prefab\uC758 \uC0C1\uD0DC\uB85C \uBCF5\uC6D0"
+  childObjectsLabel: "\uC81C\uC678 \uAC1D\uCCB4\uB4E4\uC758 \uBD80\uBAA8 \uAC1D\uCCB4"
+  setBoundsButtonText: "\uADF8\uB9AC\uAE30 \uC601\uC5ED\uC758 \uC124\uC815\uC744 \uC790\uB3D9
+    \uBCC0\uACBD"
+  duplicateSelectedButtonText: "\uC120\uD0DD \uBB3C\uC744 \uBCF5\uC81C"
+  optimizeSelectedButtonText: "\uC120\uD0DD \uBB3C\uC744 \uCD5C\uC801\uD654"
+  useInspectorMessageText: "\uC7AC\uC9C8 \uC18D\uC131\uC740 Inspector\uC5D0\uC11C
+    \uBCC0\uACBD\uD558\uC2ED\uC2DC\uC624"
+  replaceShaderButtonText: "\uC170\uC774\uB354 \uBCC0\uACBD"
+  noSelectionText: "\uC120\uD0DD\uB418\uC9C0 \uC54A\uC74C"
+  multipleText: "\uC5EC\uB7EC \uC250\uC774\uB354"
+  versionLabel: "\uBC84\uC804"
+  openOnlineManualButtonText: "\uC628\uB77C\uC778 \uC124\uBA85\uC11C \uC5F4\uAE30"
+  functionsLabel: "\uAE30\uB2A5 \uBAA9\uB85D"
+  readmeLabel: "\uC8FC\uC758 \uC0AC\uD56D"
+  licenseLabel: "\uB77C\uC774\uC13C\uC2A4"
+  usingSoftwareLicenseLabel: "\uC0AC\uC6A9\uD558\uB294 \uC18C\uD504\uD2B8\uC6E8\uC5B4\uC758
+    \uB77C\uC774\uC13C\uC2A4"
+  settingPageMessageText: "\uC124\uC815 \uBCC0\uACBD \uD6C4\uC5D0\uC11C \uCC3D\uC744
+    \uB2EB\uC744 \uB54C\uAE4C\uC9C0 \uC801\uC6A9\uB429\uB2C8\uB2E4. \"\uC124\uC815
+    \uC800\uC7A5\"\uC5D0\uC11C \uB2E4\uC74C\uBC88\uC5D0\uB3C4 \uC801\uC6A9\uB429\uB2C8\uB2E4"
+  saveSettingButtonText: "\uC124\uC815\uC744 \uC800\uC7A5"
+  changeDefaultSettingButtonText: "\uAE30\uBCF8 \uC124\uC815\uC73C\uB85C \uB418\uB3CC\uB9AC\uAE30"
+  defaultCameraDistanceLabel: "\uC77C\uBC18 \uCE74\uBA54\uB77C \uAC70\uB9AC"
+  faceCameraDistanceLabel: "\uD45C\uC815 \uC791\uC131\uC2DC \uCE74\uBA54\uB77C \uAC70\uB9AC"
+  cameraZoomStepDistanceLabel: "\uCE74\uBA54\uB77C \uD655\uB300\uC2DC \uBCC0\uACBD\uD558\uB294
+    \uAC70\uB9AC"
+  gammaCorrectionLabel: "\uAC10\uB9C8 \uBCF4\uC815"
+  monitorBackgroundColorLabel: "\uBAA8\uB2C8\uD130 \uBC30\uACBD\uC0C9"
+  monitorSizeTypeLabel: "\uBAA8\uB2C8\uD130 \uD06C\uAE30"
+  monitorSizeLabel: "\uC790\uC138\uD55C \uD06C\uAE30"
+  sortTypeLabel: "BlendShape\uC758 \uC815\uB82C \uC21C\uC11C"
+  blendShapeExclusionsLabel: "Animation\uC5D0 \uD3EC\uD568\uB418\uC9C0 \uC54A\uC740
+    BlendShape"
+  usePreviousAnimationOnHandAnimationLabel: "\uC190\uC758 \uC560\uB2C8\uBA54\uC774\uC158\uC73C\uB85C
+    \uC774\uC804\uC758 \uAC83\uC744 \uC0AC\uC6A9\uD558\uB294"
+  otherLabel: "\uAE30\uD0C0"
+  layoutTypeLabel: "\uB808\uC774\uC544\uC6C3"
+  languageLabel: "\uC5B8\uC5B4"
