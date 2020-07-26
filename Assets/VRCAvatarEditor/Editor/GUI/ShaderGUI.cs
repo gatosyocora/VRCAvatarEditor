@@ -23,23 +23,20 @@ namespace VRCAvatarEditor
                 using (var scrollView = new EditorGUILayout.ScrollViewScope(leftScrollPosShader))
                 {
                     leftScrollPosShader = scrollView.scrollPosition;
-                    using (new EditorGUI.IndentLevelScope())
+                    if (avatar.materials != null)
                     {
-                        if (avatar.materials != null)
+                        foreach (var mat in avatar.materials)
                         {
-                            foreach (var mat in avatar.materials)
-                            {
-                                if (mat == null) continue;
-                                if (mat.shader == null) continue;
+                            if (mat == null) continue;
+                            if (mat.shader == null) continue;
 
-                                using (new EditorGUILayout.HorizontalScope())
+                            using (new EditorGUILayout.HorizontalScope())
+                            {
+                                EditorGUILayout.LabelField("" + mat.name + ".mat", GUILayout.Width(200f));
+                                EditorGUILayout.LabelField(mat.shader.name);
+                                if (GUILayout.Button(LocalizeText.instance.langPair.select))
                                 {
-                                    EditorGUILayout.LabelField(mat.shader.name);
-                                    EditorGUILayout.LabelField("(" + mat.name + ".mat)");
-                                    if (GUILayout.Button(LocalizeText.instance.langPair.select))
-                                    {
-                                        Selection.activeObject = mat;
-                                    }
+                                    Selection.activeObject = mat;
                                 }
                             }
                         }
