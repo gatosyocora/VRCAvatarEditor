@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,12 +10,17 @@ namespace VRCAvatarEditor
         private VRCAvatarEditor.Avatar edittingAvatar;
         private VRCAvatarEditor.Avatar originalAvatar;
 
+        private Shader[] customShaders;
+        private string[] customShaderNames;
+
         private Vector2 leftScrollPosShader = Vector2.zero;
 
         public void Initialize(ref VRCAvatarEditor.Avatar edittingAvatar, VRCAvatarEditor.Avatar originalAvatar)
         {
             this.edittingAvatar = edittingAvatar;
             this.originalAvatar = originalAvatar;
+            customShaders = GatoUtility.LoadShadersInProject();
+            customShaderNames = customShaders.Select(s => s.name).ToArray();
         }
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
@@ -36,7 +42,15 @@ namespace VRCAvatarEditor
                             using (new EditorGUILayout.HorizontalScope())
                             {
                                 EditorGUILayout.LabelField("" + mat.name + ".mat", GUILayout.Width(200f));
-                                EditorGUILayout.LabelField(mat.shader.name);
+                                int shaderIndex = Array.IndexOf(customShaders, mat.shader);
+                                using (var check = new EditorGUI.ChangeCheckScope())
+                                {
+                                    shaderIndex = EditorGUILayout.Popup(shaderIndex, customShaderNames);
+                                    if (check.changed)
+                                    {
+                                        mat.shader = customShaders[shaderIndex];
+                                    }
+                                }
                                 if (GUILayout.Button("Duplicate"))
                                 {
                                     var newMat = GatoUtility.DuplicateMaterial(mat);
