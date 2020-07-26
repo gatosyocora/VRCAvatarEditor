@@ -247,6 +247,7 @@ public static class GatoUtility
         }
     }
 
+    // TODO: builtinShaderの取得がうまくできていない
     public static Shader[] LoadShadersInProject()
     {
         var shaderList = new List<Shader>();
