@@ -93,7 +93,7 @@ public static class GatoUtility
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
-    public static List<Material> GetMaterials(GameObject obj)
+    public static Material[] GetMaterials(GameObject obj)
     {
         var materials = new List<Material>();
 
@@ -118,7 +118,7 @@ public static class GatoUtility
 
         materials = materials.Distinct().ToList<Material>();
 
-        return materials;
+        return materials.ToArray();
     }
 
     /// <summary>

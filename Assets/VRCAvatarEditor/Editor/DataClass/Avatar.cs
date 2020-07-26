@@ -20,7 +20,7 @@ namespace VRCAvatarEditor
         public int overridesNum { get; set; }
         public SkinnedMeshRenderer faceMesh { get; set; }
         public List<string> lipSyncShapeKeyNames;
-        public List<Material> materials { get; set; }
+        public Material[] materials { get; set; }
         public int triangleCount { get; set; }
         public int triangleCountInactive { get; set; }
         public VRC_AvatarDescriptor.LipSyncStyle lipSyncStyle { get; set; }
