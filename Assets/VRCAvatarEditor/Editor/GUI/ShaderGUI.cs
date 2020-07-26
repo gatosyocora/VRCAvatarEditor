@@ -17,6 +17,8 @@ namespace VRCAvatarEditor
         private string currentShaderKindName;
         private int shaderKindIndex = -1;
 
+        private bool[] isTargets;
+
         private Vector2 leftScrollPosShader = Vector2.zero;
 
         public void Initialize(ref VRCAvatarEditor.Avatar edittingAvatar, VRCAvatarEditor.Avatar originalAvatar)
@@ -34,6 +36,8 @@ namespace VRCAvatarEditor
                                         .First().Key;
             shaderKindNames = shaderKindGroups.Select(s => s.Key).ToArray();
             shaderKindIndex = Array.IndexOf(shaderKindNames, currentShaderKindName);
+
+            isTargets = Enumerable.Range(0, edittingAvatar.materials.Length).Select(b => true).ToArray();
         }
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
@@ -42,17 +46,47 @@ namespace VRCAvatarEditor
 
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
             {
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    GUILayout.FlexibleSpace();
+
+                    if (GUILayout.Button("Duplicate selected"))
+                    {
+                        Undo.RegisterCompleteObjectUndo(originalAvatar.animator.gameObject, "Replace All Materials");
+                        var srcMaterials = edittingAvatar.materials.Where((v, i) => isTargets[i]).ToArray();
+                        var newMaterials = GatoUtility.DuplicateMaterials(srcMaterials);
+                        for (int i = 0; i < newMaterials.Length; i++)
+                        {
+                            MaterialEdit.ReplaceMaterial(originalAvatar, srcMaterials[i], newMaterials[i]);
+                            MaterialEdit.ReplaceMaterial(edittingAvatar, srcMaterials[i], newMaterials[i]);
+                        }
+                        Undo.SetCurrentGroupName("Replace All Materials");
+                    }
+                    if (GUILayout.Button("Optimize selected"))
+                    {
+                        foreach (var mat in edittingAvatar.materials.Where((v, i) => isTargets[i]).ToArray())
+                        {
+                            MaterialEdit.DeleteUnusedProperties(mat, AssetDatabase.GetAssetPath(mat));
+                        }
+                    }
+                }
+
+                EditorGUILayout.Space();
+
                 using (var scrollView = new EditorGUILayout.ScrollViewScope(leftScrollPosShader))
                 {
                     leftScrollPosShader = scrollView.scrollPosition;
                     if (edittingAvatar.materials != null)
                     {
-                        foreach (var mat in edittingAvatar.materials)
+                        for (int i = 0; i < edittingAvatar.materials.Length; i++)
                         {
+                            var mat = edittingAvatar.materials[i];
                             if (mat is null || mat.shader is null) continue;
 
                             using (new EditorGUILayout.HorizontalScope())
                             {
+                                isTargets[i] = EditorGUILayout.ToggleLeft(string.Empty, isTargets[i], GUILayout.Width(30f));
+
                                 using (var check = new EditorGUI.ChangeCheckScope())
                                 {
                                     var material = EditorGUILayout.ObjectField(
@@ -90,28 +124,6 @@ namespace VRCAvatarEditor
                                     Selection.activeObject = mat;
                                 }
                             }
-                        }
-                    }
-                }
-                using (new EditorGUILayout.HorizontalScope())
-                {
-                    if (GUILayout.Button("All Duplicate"))
-                    {
-                        Undo.RegisterCompleteObjectUndo(originalAvatar.animator.gameObject, "Replace All Materials");
-                        var srcMaterials = edittingAvatar.materials;
-                        var newMaterials = GatoUtility.DuplicateMaterials(srcMaterials);
-                        for (int i = 0; i < newMaterials.Length; i++)
-                        {
-                            MaterialEdit.ReplaceMaterial(originalAvatar, srcMaterials[i], newMaterials[i]);
-                            MaterialEdit.ReplaceMaterial(edittingAvatar, srcMaterials[i], newMaterials[i]);
-                        }
-                        Undo.SetCurrentGroupName("Replace All Materials");
-                    }
-                    if (GUILayout.Button("All Optimize"))
-                    {
-                        foreach (var mat in edittingAvatar.materials)
-                        {
-                            MaterialEdit.DeleteUnusedProperties(mat, AssetDatabase.GetAssetPath(mat));
                         }
                     }
                 }
