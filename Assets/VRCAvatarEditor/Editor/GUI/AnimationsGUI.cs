@@ -299,7 +299,7 @@ namespace VRCAvatarEditor
                 }
                 else
                 {
-                    pathMissing[i] = !GatoUtility.ValidateMissingPathInAnimationClip(editAvatar.animator, clip);
+                    pathMissing[i] = !GatoUtility.ValidateMissingPathInAnimationClip(animator, clip);
                 }
             }
         }
