@@ -161,6 +161,8 @@ namespace VRCAvatarEditor
                                 }
                             }
 
+                            currentShaderKindName = shaderKindNames[shaderKindIndex];
+
                             Repaint();
                         }
                     }
