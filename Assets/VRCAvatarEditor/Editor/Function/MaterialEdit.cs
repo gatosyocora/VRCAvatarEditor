@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -130,6 +131,36 @@ namespace VRCAvatarEditor
 					mat.SetVector(property.name, property.vectorValue);
 					break;
 			}
+		}
+
+		public static Shader CalculateSimilarShader(IList<Shader> shaders, Shader srcShader)
+		{
+			var srcShaderType = GetShaderType(srcShader);
+
+			var dstShaders = shaders.Select((s, i) => new { Value = s, Index = i, Type = GetShaderType(s) });
+			int sameTypeCount = dstShaders.Where(s => s.Type == srcShaderType).Count();
+			int dstShaderIndex = -1;
+			// ShaderTypeが一致するShaderが1つだけあった
+			if (sameTypeCount == 1)
+			{
+				dstShaderIndex = dstShaders.Where(s => s.Type == srcShaderType).Single().Index;
+			}
+			// ShaderTypeが一致するShaderが見つからなかった
+			else if (sameTypeCount == 0)
+			{
+				// OpaqueのShaderにする（とりあえず一番最初）。
+				// Opaqueがない場合とりあえずその種類で一番最初のShader
+				dstShaderIndex = dstShaders
+									.Where(s => s.Type == ShaderType.Opaque)
+									.FirstOrDefault().Index;
+			}
+			// ShaderTypeが一致するShaderが複数見つかった
+			else
+			{
+				// とりあえずShaderTypeが同じShaderの中の一番名前が短いShaderにする
+				dstShaderIndex = dstShaders.Where(s => s.Type == srcShaderType).OrderBy(s => s.Value.name).First().Index;
+			}
+			return shaders[dstShaderIndex];
 		}
 	}
 }

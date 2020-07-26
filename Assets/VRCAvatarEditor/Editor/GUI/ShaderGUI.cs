@@ -140,31 +140,8 @@ namespace VRCAvatarEditor
                             var dstShaderGroup = shaderKindGroups[shaderKindIndex].Select(s => s).ToArray();
                             foreach (var mat in edittingAvatar.materials)
                             {
-                                var srcShaderType = MaterialEdit.GetShaderType(mat);
-                                var dstShaders = dstShaderGroup.Select((s, i) => new { Value = s, Index = i, Type = MaterialEdit.GetShaderType(s) });
-                                int sameTypeCount = dstShaders.Where(s => s.Type == srcShaderType).Count();
-                                int dstShaderIndex = -1;
-                                // ShaderTypeが一致するShaderが1つだけあった
-                                if (sameTypeCount == 1)
-                                {
-                                    dstShaderIndex = dstShaders.Where(s => s.Type == srcShaderType).Single().Index;
-                                }
-                                // ShaderTypeが一致するShaderが見つからなかった
-                                else if (sameTypeCount == 0)
-                                {
-                                    // OpaqueのShaderにする（とりあえず一番最初）。
-                                    // Opaqueがない場合とりあえずその種類で一番最初のShader
-                                    dstShaderIndex = dstShaders
-                                                        .Where(s => s.Type == MaterialEdit.ShaderType.Opaque)
-                                                        .FirstOrDefault().Index;
-                                }
-                                // ShaderTypeが一致するShaderが複数見つかった
-                                else
-                                {
-                                    // とりあえずShaderTypeが同じShaderの中の一番最初のShaderにする
-                                    dstShaderIndex = dstShaders.Where(s => s.Type == srcShaderType).First().Index;
-                                }
-                                mat.shader = dstShaderGroup[dstShaderIndex];
+                                var dstShader = MaterialEdit.CalculateSimilarShader(dstShaderGroup, mat.shader);
+                                mat.shader = dstShader;
                             }
                         }
                     }
