@@ -158,7 +158,7 @@ namespace VRCAvatarEditor
 			else
 			{
 				// とりあえずShaderTypeが同じShaderの中の一番名前が短いShaderにする
-				dstShaderIndex = dstShaders.Where(s => s.Type == srcShaderType).OrderBy(s => s.Value.name).First().Index;
+				dstShaderIndex = dstShaders.Where(s => s.Type == srcShaderType).OrderBy(s => s.Value.name.Count()).First().Index;
 			}
 			return shaders[dstShaderIndex];
 		}
