@@ -238,6 +238,16 @@ namespace VRCAvatarEditor
                 if (pathMissing.Any(x => x))
                 {
                     EditorGUILayout.HelpBox("Exist Missing Path in AnimationClip", MessageType.Warning);
+                    if (GUILayout.Button("AutoFix"))
+                    {
+                        for (int i = 0; i < pathMissing.Length; i++)
+                        {
+                            if (!pathMissing[i]) continue;
+                            pathMissing[i] = !GatoUtility.TryFixMissingPathInAnimationClip(
+                                                editAvatar.animator, 
+                                                editAvatar.standingAnimController[HANDANIMS[i]]);
+                        }
+                    }
                 }
             }
             return false;

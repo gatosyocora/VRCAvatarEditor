@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -134,5 +135,48 @@ public static class GatoUtility
             if (transform.Find(animationPath) is null) return false;
         }
         return true;
+    }
+
+    /// <summary>
+    /// Missingなパスを自動修正する（対象オブジェクトと同じ名前のオブジェクトが複数あった場合, 自動修正に失敗する）
+    /// </summary>
+    /// <param name="animator">clipを設定するAnimator</param>
+    /// <param name="clip">Missingなパスを含むAnimationClip</param>
+    /// <returns>Missingなパスを含まないか</returns>
+    public static bool TryFixMissingPathInAnimationClip(Animator animator, AnimationClip clip)
+    {
+        var result = true;
+        var rootTransform = animator.transform;
+        foreach (var binding in AnimationUtility.GetCurveBindings(clip))
+        {
+            // MissingなPathを含むbindingに対してのみおこなう
+            var animationPath = binding.path;
+            if (rootTransform.Find(animationPath) != null) continue;
+
+            var targetObjectName = Path.GetFileName(animationPath);
+            // 特定の名前を持つ子オブジェクトの一覧を取得
+            var targetTransforms = rootTransform.GetComponentsInChildren<Transform>()
+                                        .Where(t => t.name == targetObjectName);
+
+            // 1つだけ見つかったときのみ自動修正
+            if (targetTransforms.Count() == 1)
+            {
+                var targetTransform = targetTransforms.Single();
+                var newBinding = new EditorCurveBinding
+                {
+                    path = AnimationUtility.CalculateTransformPath(targetTransforms.Single(), rootTransform),
+                    propertyName = binding.propertyName,
+                    type = binding.type
+                };
+                // Pathを再設定
+                var curve = AnimationUtility.GetEditorCurve(clip, binding);
+                AnimationUtility.SetEditorCurve(clip, binding, null);
+                AnimationUtility.SetEditorCurve(clip, newBinding, curve);
+                continue;
+            }
+            result = false;
+        }
+        // いずれかのBindingでMissingなパスが修正できなかった場合, falseになる
+        return result;
     }
 }
