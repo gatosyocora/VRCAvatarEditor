@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public static class GatoUtility
 {
@@ -178,5 +179,26 @@ public static class GatoUtility
         }
         // いずれかのBindingでMissingなパスが修正できなかった場合, falseになる
         return result;
+    }
+
+    /// <summary>
+    /// Materialを置き換える
+    /// </summary>
+    /// <param name="rootObject">ルートオブジェクト</param>
+    /// <param name="srcMaterial">変更前のMaterial</param>
+    /// <param name="dstMaterial">変更後のMaterial</param>
+    public static void ReplaceMaterial(GameObject rootObject, Material srcMaterial, Material dstMaterial)
+    {
+        foreach (var renderer in rootObject.GetComponentsInChildren<Renderer>().ToArray())
+        {
+            var materials = renderer.sharedMaterials;
+            for (int i = 0; i < materials.Length; i++)
+            {
+                if (renderer.sharedMaterials[i] != srcMaterial) continue;
+
+                materials[i] = dstMaterial;
+            }
+            renderer.sharedMaterials = materials;
+        }
     }
 }

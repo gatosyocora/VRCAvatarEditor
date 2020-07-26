@@ -535,7 +535,7 @@ namespace VRCAvatarEditor
 
             if (currentTool == ToolFunc.Shader)
             {
-                shaderGUI.Initialize(ref edittingAvatar);
+                shaderGUI.Initialize(ref edittingAvatar, originalAvatar);
             }
         }
 
