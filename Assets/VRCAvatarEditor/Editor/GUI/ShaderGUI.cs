@@ -36,12 +36,26 @@ namespace VRCAvatarEditor
                     {
                         foreach (var mat in edittingAvatar.materials)
                         {
-                            if (mat == null) continue;
-                            if (mat.shader == null) continue;
+                            if (mat is null || mat.shader is null) continue;
 
                             using (new EditorGUILayout.HorizontalScope())
                             {
-                                EditorGUILayout.LabelField("" + mat.name + ".mat", GUILayout.Width(200f));
+                                using (var check = new EditorGUI.ChangeCheckScope())
+                                {
+                                    var material = EditorGUILayout.ObjectField(
+                                                        string.Empty,
+                                                        mat,
+                                                        typeof(Material),
+                                                        true,
+                                                        GUILayout.Width(200f)) as Material;
+                                    if (check.changed && material != null)
+                                    {
+                                        MaterialEdit.ReplaceMaterial(edittingAvatar, mat, material);
+                                        MaterialEdit.ReplaceMaterial(originalAvatar, mat, material);
+                                        Repaint();
+                                    }
+                                }
+
                                 int shaderIndex = Array.IndexOf(customShaders, mat.shader);
                                 using (var check = new EditorGUI.ChangeCheckScope())
                                 {
