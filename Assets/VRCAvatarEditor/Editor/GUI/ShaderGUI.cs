@@ -132,6 +132,10 @@ namespace VRCAvatarEditor
 
                 EditorGUILayout.Space();
 
+                EditorGUILayout.HelpBox("Material property can edit in inspector", MessageType.Info);
+
+                EditorGUILayout.Space();
+
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     EditorGUILayout.LabelField(currentShaderKindName);
