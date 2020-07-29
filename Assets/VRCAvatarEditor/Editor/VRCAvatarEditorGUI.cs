@@ -175,6 +175,12 @@ namespace VRCAvatarEditor
 
         private void OnGUI()
         {
+            if (LocalizeText.instance.langPair is null)
+            {
+                EditorGUILayout.LabelField("Now Loading...");
+                return;
+            }
+
             using (new EditorGUILayout.HorizontalScope(GUILayout.Height(EditorGUIUtility.singleLineHeight * 1.5f)))
             {
 

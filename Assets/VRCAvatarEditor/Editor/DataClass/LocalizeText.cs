@@ -28,6 +28,7 @@ namespace VRCAvatarEditor
         public async void LoadLanguage(string lang)
         {
             var jsonData = await LoadJsonDataFromGoogleSpreadSheetAsync(lang);
+            if (langPair is null) langPair = CreateInstance<LanguageKeyPair>();
             JsonUtility.FromJsonOverwrite(jsonData, langPair);
             Debug.Log($"[VRCAvatarEditor] Loaded LanguagePack {lang}.");
             toolTabTexts = new string[]
