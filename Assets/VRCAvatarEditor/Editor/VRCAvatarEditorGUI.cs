@@ -176,7 +176,7 @@ namespace VRCAvatarEditor
         {
             if (LocalizeText.instance.langPair is null)
             {
-                EditorGUILayout.LabelField("Now Loading...");
+                DrawNowLoading();
                 return;
             }
 
@@ -769,6 +769,25 @@ namespace VRCAvatarEditor
         public static void CheckForUpdates()
         {
             Application.OpenURL(BOOTH_ITEM_URL);
+        }
+
+        private void DrawNowLoading()
+        {
+            using (new EditorGUILayout.VerticalScope())
+            {
+                GUILayout.FlexibleSpace();
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    GUILayout.FlexibleSpace();
+                    var style = new GUIStyle(GUI.skin.label)
+                    {
+                        wordWrap = true
+                    };
+                    EditorGUILayout.LabelField("Now Loading...", style);
+                    GUILayout.FlexibleSpace();
+                }
+                GUILayout.FlexibleSpace();
+            }
         }
     }
 
