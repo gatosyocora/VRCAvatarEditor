@@ -586,16 +586,11 @@ namespace VRCAvatarEditor
         /// </summary>
         private void LoadSettingDataFromScriptableObject()
         {
-            var settingAsset = Resources.Load<SettingData>("CustomSettingData");
+            layoutType = EditorSetting.instance.Data.layoutType;
+            language = EditorSetting.instance.Data.language;
 
-            if (settingAsset == null)
-                settingAsset = Resources.Load<SettingData>("DefaultSettingData");
-
-            layoutType = settingAsset.layoutType;
-            language = settingAsset.language;
-
-            avatarMonitorGUI.LoadSettingData(settingAsset);
-            faceEmotionGUI.LoadSettingData(settingAsset);
+            avatarMonitorGUI.LoadSettingData(EditorSetting.instance.Data);
+            faceEmotionGUI.LoadSettingData(EditorSetting.instance.Data);
         }
 
         /// <summary>

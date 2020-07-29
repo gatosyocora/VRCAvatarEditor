@@ -22,7 +22,7 @@ namespace VRCAvatarEditor
         public void OnEnable()
         {
             LoadLanguageTypes();
-            LoadLanguage("EN");
+            LoadLanguage(EditorSetting.instance.Data.language);
         }
 
         public async void LoadLanguage(string lang)
