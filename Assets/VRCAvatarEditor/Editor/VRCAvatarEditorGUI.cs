@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Networking;
 using VRCSDK2;
 
 // Copyright (c) 2019 gatosyocora
@@ -500,6 +504,7 @@ namespace VRCAvatarEditor
                 if (check.changed)
                 {
                     language = languagePacks[index];
+                    LocalizeText.instance.LoadLanguage(language);
                 }
             }
 
@@ -584,7 +589,6 @@ namespace VRCAvatarEditor
 
             layoutType = settingAsset.layoutType;
             language = settingAsset.language;
-            LocalizeText.instance.LoadLanguage(language);
 
             avatarMonitorGUI.LoadSettingData(settingAsset);
             faceEmotionGUI.LoadSettingData(settingAsset);
@@ -644,8 +648,6 @@ namespace VRCAvatarEditor
         /// </summary>
         private void ApplySettingsToEditorGUI()
         {
-            LocalizeText.instance.LoadLanguage(language);
-
             if (edittingAvatar.descriptor == null) return;
 
             foreach (var skinnedMesh in edittingAvatar.skinnedMeshList)
