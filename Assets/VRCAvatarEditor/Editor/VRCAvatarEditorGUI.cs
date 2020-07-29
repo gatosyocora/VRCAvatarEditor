@@ -771,6 +771,7 @@ namespace VRCAvatarEditor
             Application.OpenURL(BOOTH_ITEM_URL);
         }
 
+        // TODO: NowLoadingをもう少しいい感じにする
         private void DrawNowLoading()
         {
             using (new EditorGUILayout.VerticalScope())

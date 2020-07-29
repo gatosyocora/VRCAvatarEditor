@@ -27,6 +27,8 @@ namespace VRCAvatarEditor
 
         public void OnEnable()
         {
+            // TODO: Localの言語パックが選択されている場合Error
+            // この時点ではeditorFolderPathが得られないから取得できない？
             LoadLanguageTypesFromRemote();
             LoadLanguage(EditorSetting.instance.Data.language);
         }
@@ -63,13 +65,18 @@ namespace VRCAvatarEditor
             langPair = Resources.Load<LanguageKeyPair>($"Lang/{lang}");
         }
 
+        // TODO: 通信できないまたは失敗したときの処理
         private async Task LoadLanguagePackFromRemote(string lang)
         {
             var jsonData = await LoadJsonDataFromGoogleSpreadSheetAsync(lang);
+            // 場合によってはローカルの言語パックを上書きしてしまうため新しくつくる
+            // ScriptableObject内ではFromJsonOverwriteじゃないとうまくいかない
             langPair = CreateInstance<LanguageKeyPair>();
             JsonUtility.FromJsonOverwrite(jsonData, langPair);
         }
 
+
+        // TODO: 通信できないまたは失敗したときの処理
         public async void LoadLanguageTypesFromRemote()
         {
             var jsonText = await LoadJsonDataFromGoogleSpreadSheetAsync("Types");
@@ -88,6 +95,7 @@ namespace VRCAvatarEditor
             Debug.Log($"[VRCAvatarEditor] available language {string.Join(", ", langs)}");
         }
 
+        // TODO: 通信できないまたは失敗したときの処理
         public static async Task<string> LoadJsonDataFromGoogleSpreadSheetAsync(string sheetName)
         {
             var request = UnityWebRequest.Get($"{SPREAD_SHEET_API_URL}?sheetName={sheetName}");
