@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
@@ -12,11 +14,14 @@ namespace VRCAvatarEditor
         
         public LanguageKeyPair langPair { get; private set; }
 
+        public string[] langs { get; set; }
+
         public string[] toolTabTexts { get; private set; }
         public string[] animationTabTexts { get; private set; }
 
         public void OnEnable()
         {
+            LoadLanguageTypes();
             LoadLanguage("EN");
         }
 
@@ -38,6 +43,14 @@ namespace VRCAvatarEditor
                 langPair.standingTabText,
                 langPair.sittingTabText
             };
+        }
+
+        public async void LoadLanguageTypes()
+        {
+            var jsonText = await LoadJsonDataFromGoogleSpreadSheetAsync("Types");
+            var matches = Regex.Matches(jsonText, "\"[a-zA-Z]+\"?");
+            langs = matches.Cast<Match>().Select(m => m.Value).Select(v => v.Replace("\"", string.Empty)).ToArray();
+            Debug.Log($"[VRCAvatarEditor] usable language {string.Join(", ", langs)}");
         }
 
         public static async Task<string> LoadJsonDataFromGoogleSpreadSheetAsync(string sheetName)

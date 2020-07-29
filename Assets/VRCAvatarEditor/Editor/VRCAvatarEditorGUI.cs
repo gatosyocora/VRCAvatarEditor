@@ -570,9 +570,7 @@ namespace VRCAvatarEditor
 
         private string[] GetLanguagePacks()
         {
-            return Directory.GetFiles($"{editorFolderPath}{LANG_ASSET_FOLDER_PATH}", "*.asset")
-                        .Select(f => Path.GetFileNameWithoutExtension(f))
-                        .ToArray();
+            return LocalizeText.instance.langs;
         }
 
         #region General Functions
