@@ -14,7 +14,7 @@ namespace VRCAvatarEditor
         
         public LanguageKeyPair langPair { get; private set; }
 
-        public string[] langs { get; set; }
+        public string[] langs { get; private set; }
 
         public string[] toolTabTexts { get; private set; }
         public string[] animationTabTexts { get; private set; }
