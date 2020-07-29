@@ -69,7 +69,6 @@ namespace VRCAvatarEditor
         private const string LICENSE_FILE_NAME = "LICENSE.txt";
         private const string README_FILE_NAME = "README.txt";
         private const string USING_SOFTWARE_FILE_NAME = "USING_SOFTWARE_LICENSES.txt";
-        private const string LANG_ASSET_FOLDER_PATH = "Editor/Resources/Lang";
         private readonly string[] TOOL_FUNCS = { "Avatar Monitor", "SunLight Rotator", "FaceEmotion Creator", "HandPose Adder", "ProbeAnchor Setter", "MeshBounds Setter", "Shader Checker", "HumanoidPose Resetter" };
         private string licenseText;
         private string readmeText;
@@ -511,6 +510,7 @@ namespace VRCAvatarEditor
                 {
                     language = languagePacks[index];
                     LocalizeText.instance.LoadLanguage(language);
+                    Repaint();
                 }
             }
 
@@ -586,6 +586,8 @@ namespace VRCAvatarEditor
         /// </summary>
         private void LoadSettingDataFromScriptableObject()
         {
+            LocalizeText.instance.LoadLanguageTypesFromLocal(editorFolderPath);
+
             layoutType = EditorSetting.instance.Data.layoutType;
             language = EditorSetting.instance.Data.language;
 
