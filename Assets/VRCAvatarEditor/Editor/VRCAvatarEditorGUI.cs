@@ -509,7 +509,8 @@ namespace VRCAvatarEditor
                 if (check.changed)
                 {
                     language = languagePacks[index];
-                    LocalizeText.instance.LoadLanguage(language);
+                    // TODO: 失敗している場合はBaseが入っているので表示もそうしないといけない
+                    _ = LocalizeText.instance.LoadLanguage(language);
                     Repaint();
                 }
             }
@@ -587,6 +588,11 @@ namespace VRCAvatarEditor
         private void LoadSettingDataFromScriptableObject()
         {
             LocalizeText.instance.LoadLanguageTypesFromLocal(editorFolderPath);
+            if (string.IsNullOrEmpty(language) || EditorSetting.instance.Data.language != LocalizeText.instance.langPair.name)
+            {
+                // awaitするとUIスレッドが止まっておかしくなるのでawaitしない
+                _ = LocalizeText.instance.LoadLanguage(EditorSetting.instance.Data.language);
+            }
 
             layoutType = EditorSetting.instance.Data.layoutType;
             language = EditorSetting.instance.Data.language;

@@ -14,6 +14,7 @@ namespace VRCAvatarEditor
     {
         private readonly static string SPREAD_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbw-TO0isxWGraxcYj66BTG0KHfWqvf1NScNh7gOd7Ku6cHfDavo/exec";
         private readonly static string LANG_ASSET_FOLDER_PATH = "Editor/Resources/Lang";
+        private readonly static string BASE_LANGUAGE_PACK = "Base";
 
         public LanguageKeyPair langPair { get; private set; }
 
@@ -25,26 +26,32 @@ namespace VRCAvatarEditor
         public string[] toolTabTexts { get; private set; }
         public string[] animationTabTexts { get; private set; }
 
-        public void OnEnable()
+        public async void OnEnable()
         {
-            // TODO: Localの言語パックが選択されている場合Error
-            // この時点ではeditorFolderPathが得られないから取得できない？
-            LoadLanguageTypesFromRemote();
-            LoadLanguage(EditorSetting.instance.Data.language);
+            // UIがおかしくなるのを防止するために一度ローカルのデフォルトを読み込んでおく
+            _ = LoadLanguage(BASE_LANGUAGE_PACK);
+
+            await LoadLanguageTypesFromRemote();
+            await LoadLanguage(EditorSetting.instance.Data.language, true);
         }
 
-        public async void LoadLanguage(string lang)
+        public async Task LoadLanguage(string lang, bool fromRemote = false)
         {
-            if (localLangs.Contains(lang))
+            if (ExistLanguagePackInLocal(lang) && !fromRemote)
             {
                 LoadLanguagePackFromLocal(lang);
             }
-            else if (remoteLangs.Contains(lang))
+            else if (ExistLanguagePackInRemote(lang))
             {
                 await LoadLanguagePackFromRemote(lang);
             }
+            else
+            {
+                LoadLanguagePackFromLocal(BASE_LANGUAGE_PACK);
+            }
 
             Debug.Log($"[VRCAvatarEditor] Loaded LanguagePack {lang}.");
+
             toolTabTexts = new string[]
             {
                 langPair.avatarInfoTitle,
@@ -65,25 +72,23 @@ namespace VRCAvatarEditor
             langPair = Resources.Load<LanguageKeyPair>($"Lang/{lang}");
         }
 
-        // TODO: 通信できないまたは失敗したときの処理
         private async Task LoadLanguagePackFromRemote(string lang)
         {
             var jsonData = await LoadJsonDataFromGoogleSpreadSheetAsync(lang);
+
+            // エラーやうまく取得できなかった場合
+            // ローカルにあるBaseという名前の言語パックを使う
+            if (string.IsNullOrEmpty(jsonData))
+            {
+                LoadLanguagePackFromLocal(BASE_LANGUAGE_PACK);
+                return;
+            }
+
             // 場合によってはローカルの言語パックを上書きしてしまうため新しくつくる
             // ScriptableObject内ではFromJsonOverwriteじゃないとうまくいかない
             langPair = CreateInstance<LanguageKeyPair>();
+            langPair.name = lang;
             JsonUtility.FromJsonOverwrite(jsonData, langPair);
-        }
-
-
-        // TODO: 通信できないまたは失敗したときの処理
-        public async void LoadLanguageTypesFromRemote()
-        {
-            var jsonText = await LoadJsonDataFromGoogleSpreadSheetAsync("Types");
-            var matches = Regex.Matches(jsonText, "\"[a-zA-Z]+\"?");
-            remoteLangs = matches.Cast<Match>().Select(m => m.Value).Select(v => v.Replace("\"", string.Empty)).ToArray();
-            langs = remoteLangs.Concat(localLangs).Distinct().ToArray();
-            Debug.Log($"[VRCAvatarEditor] available language {string.Join(", ", langs)}");
         }
 
         public void LoadLanguageTypesFromLocal(string editorFolderPath)
@@ -91,24 +96,64 @@ namespace VRCAvatarEditor
             localLangs = Directory.GetFiles($"{editorFolderPath}{LANG_ASSET_FOLDER_PATH}", "*.asset")
                             .Select(f => Path.GetFileNameWithoutExtension(f))
                             .ToArray();
-            langs = remoteLangs.Concat(localLangs).Distinct().ToArray();
+            if (remoteLangs != null)
+            {
+                langs = remoteLangs.Concat(localLangs).Distinct().ToArray();
+            }
+            else
+            {
+                langs = localLangs;
+            }
             Debug.Log($"[VRCAvatarEditor] available language {string.Join(", ", langs)}");
         }
 
-        // TODO: 通信できないまたは失敗したときの処理
-        public static async Task<string> LoadJsonDataFromGoogleSpreadSheetAsync(string sheetName)
+        private async Task LoadLanguageTypesFromRemote()
+        {
+            var jsonData = await LoadJsonDataFromGoogleSpreadSheetAsync("Types");
+
+            // エラーやうまく取得できなかった場合はremoteLangsは空配列になる
+            remoteLangs = Regex.Matches(jsonData, "\"[a-zA-Z]+\"?")
+                            .Cast<Match>()
+                            .Select(m => m.Value.Replace("\"", string.Empty))
+                            .ToArray();
+
+            if (localLangs != null)
+            {
+                langs = remoteLangs.Concat(localLangs).Distinct().ToArray();
+            }
+            else
+            {
+                langs = remoteLangs;
+            }
+            Debug.Log($"[VRCAvatarEditor] available language {string.Join(", ", langs)}");
+        }
+
+
+        private static async Task<string> LoadJsonDataFromGoogleSpreadSheetAsync(string sheetName)
         {
             var request = UnityWebRequest.Get($"{SPREAD_SHEET_API_URL}?sheetName={sheetName}");
             await request.SendWebRequest();
 
             if (request.isNetworkError || request.isHttpError)
             {
-                throw new Exception(request.error);
+                // エラーの場合は空文字を返す
+                Debug.LogError(request.error);
+                return string.Empty;
             }
             else
             {
                 return request.downloadHandler.text;
             }
+        }
+
+        public bool ExistLanguagePackInLocal(string lang)
+        {
+            return localLangs != null && localLangs.Contains(lang);
+        }
+
+        private bool ExistLanguagePackInRemote(string lang)
+        {
+            return remoteLangs != null && remoteLangs.Contains(lang);
         }
     }
 }
