@@ -32,6 +32,11 @@ MonoBehaviour:
   settingButtonText: Setting
   resetPoseButtonText: Reset Pose
   uploadAvatarButtonText: Upload Avatar
+  localIsLatestMessageText: VRCAvatarEditor <LocalVersion> is latest.
+  remoteIsLatestMessageText: 'Avalable new Version (Current: <LocalVersion>, Latest:
+    <remoteVersion>).'
+  downloadLatestButtonText: Download latest
+  checkVersionDialogTitle: Check version
   avatarInfoTitle: AvatarInfo
   faceEmotionTitle: FaceEmotion
   probeAnchorTitle: ProbeAnchor

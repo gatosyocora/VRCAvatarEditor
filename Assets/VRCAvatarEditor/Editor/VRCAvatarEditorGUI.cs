@@ -775,11 +775,15 @@ namespace VRCAvatarEditor
         [MenuItem("VRCAvatarEditor/Check for Updates")]
         public static async void CheckForUpdates()
         {
-            var latestVersion = await GetLatestVersionFromRemote();
-            var isLatest = IsLatestVersion(TOOL_VERSION, latestVersion);
-            var message = (isLatest) ? $"VRCAvatarEditor {TOOL_VERSION} は最新です" : $"最新バージョンがあります(現在: {TOOL_VERSION}, 最新: {latestVersion})";
-            var okText = (isLatest) ? "OK" : "ダウンロードする";
-            if (EditorUtility.DisplayDialog("バージョン確認", message, okText) && !isLatest) 
+            var remoteVersion = await GetLatestVersionFromRemote();
+            var isLatest = IsLatestVersion(TOOL_VERSION, remoteVersion);
+            var message = (isLatest) ? 
+                            LocalizeText.instance.langPair.localIsLatestMessageText.Replace("<LocalVersion>", TOOL_VERSION) :
+                            LocalizeText.instance.langPair.localIsLatestMessageText.Replace("<LocalVersion>", TOOL_VERSION).Replace("<RemoteVersion>", remoteVersion);
+            var okText = (isLatest) ? 
+                            LocalizeText.instance.langPair.ok :
+                            LocalizeText.instance.langPair.downloadLatestButtonText;
+            if (EditorUtility.DisplayDialog(LocalizeText.instance.langPair.checkVersionDialogTitle, message, okText) && !isLatest) 
             {
                 Application.OpenURL(BOOTH_ITEM_URL);
             }

@@ -27,6 +27,12 @@ public class LanguageKeyPair : ScriptableObject
     public string resetPoseButtonText;
     public string uploadAvatarButtonText;
 
+    [Header("VersionCheckGUI")]
+    public string localIsLatestMessageText;
+    public string remoteIsLatestMessageText;
+    public string downloadLatestButtonText;
+    public string checkVersionDialogTitle;
+
     [Header("Tab")]
     public string avatarInfoTitle;
     public string faceEmotionTitle;
