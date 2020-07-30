@@ -16,12 +16,13 @@ namespace VRCAvatarEditor
 {
     public class VRCAvatarEditorGUI : EditorWindow
     {
-        private const string TOOL_VERSION = "beta v0.5";
+        private const string TOOL_VERSION = "v0.5";
         private const string TWITTER_ID = "gatosyocora";
         private const string DISCORD_ID = "gatosyocora#9575";
         private const string MANUAL_URL = "https://docs.google.com/document/d/1DU7mP5PTvERqHzZiiCBJ9ep5CilQ1iaXC_3IoiuPEgA/edit?usp=sharing";
         private const string BOOTH_URL = "gatosyocora.booth.pm";
         private const string BOOTH_ITEM_URL = "https://booth.pm/ja/items/1258744";
+        private static readonly string GITHUB_LATEST_RELEASE_API_URL = "https://api.github.com/repos/gatosyocora/VRCAvatarEditor/releases/latest";
 
         private AvatarMonitorGUI avatarMonitorGUI;
         public AnimationsGUI animationsGUI;
@@ -772,9 +773,16 @@ namespace VRCAvatarEditor
         #endregion
 
         [MenuItem("VRCAvatarEditor/Check for Updates")]
-        public static void CheckForUpdates()
+        public static async void CheckForUpdates()
         {
-            Application.OpenURL(BOOTH_ITEM_URL);
+            var latestVersion = await GetLatestVersionFromRemote();
+            var isLatest = (TOOL_VERSION == latestVersion);
+            var message = (isLatest) ? $"VRCAvatarEditor {TOOL_VERSION} は最新です" : $"最新バージョンがあります(現在: {TOOL_VERSION}, 最新: {latestVersion})";
+            var okText = (isLatest) ? "OK" : "ダウンロードする";
+            if (EditorUtility.DisplayDialog("バージョン確認", message, okText) && !isLatest) 
+            {
+                Application.OpenURL(BOOTH_ITEM_URL);
+            }
         }
 
         // TODO: NowLoadingをもう少しいい感じにする
@@ -796,6 +804,27 @@ namespace VRCAvatarEditor
                 GUILayout.FlexibleSpace();
             }
         }
+
+        private static async Task<string> GetLatestVersionFromRemote()
+        {
+            var request = UnityWebRequest.Get(GITHUB_LATEST_RELEASE_API_URL);
+            await request.SendWebRequest();
+
+            if (request.isNetworkError || request.isHttpError)
+            {
+                Debug.LogError(request.error);
+                return string.Empty;
+            }
+            else
+            {
+                var jsonData = request.downloadHandler.text;
+                return JsonUtility.FromJson<GitHubData>(jsonData)?.tag_name ?? string.Empty;
+            }
+        }
     }
 
+    public class GitHubData
+    {
+        public string tag_name;
+    }
 }
