@@ -776,7 +776,7 @@ namespace VRCAvatarEditor
         public static async void CheckForUpdates()
         {
             var latestVersion = await GetLatestVersionFromRemote();
-            var isLatest = (TOOL_VERSION == latestVersion);
+            var isLatest = IsLatestVersion(TOOL_VERSION, latestVersion);
             var message = (isLatest) ? $"VRCAvatarEditor {TOOL_VERSION} は最新です" : $"最新バージョンがあります(現在: {TOOL_VERSION}, 最新: {latestVersion})";
             var okText = (isLatest) ? "OK" : "ダウンロードする";
             if (EditorUtility.DisplayDialog("バージョン確認", message, okText) && !isLatest) 
@@ -820,6 +820,43 @@ namespace VRCAvatarEditor
                 var jsonData = request.downloadHandler.text;
                 return JsonUtility.FromJson<GitHubData>(jsonData)?.tag_name ?? string.Empty;
             }
+        }
+
+        private static bool IsLatestVersion(string local, string remote)
+        {
+            var localVersion = local.Substring(1).Split('.').Select(x => int.Parse(x)).ToArray();
+            var remoteVersion = remote.Substring(1).Split('.').Select(x => int.Parse(x)).ToArray();
+            
+            // サイズを合わせる
+            if (localVersion.Length < remoteVersion.Length)
+            {
+                localVersion = Enumerable.Range(0, remoteVersion.Length)
+                                    .Select(i =>
+                                    {
+                                        if (i < localVersion.Length) return localVersion[i];
+                                        else return 0;
+                                    })
+                                    .ToArray();
+            }
+            else if (localVersion.Length > remoteVersion.Length)
+            {
+                remoteVersion = Enumerable.Range(0, localVersion.Length)
+                                    .Select(i =>
+                                    {
+                                        if (i < remoteVersion.Length) return remoteVersion[i];
+                                        else return 0;
+                                    })
+                                    .ToArray();
+            }
+
+            for (int index = 0; index < localVersion.Length; index++)
+            {
+                var l = localVersion[index];
+                var r = remoteVersion[index];
+                if (l < r) return false;
+                if (l > r) return true;
+            }
+            return true;
         }
     }
 
