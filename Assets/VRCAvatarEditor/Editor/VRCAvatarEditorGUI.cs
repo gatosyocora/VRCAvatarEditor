@@ -588,6 +588,8 @@ namespace VRCAvatarEditor
         /// </summary>
         private void LoadSettingDataFromScriptableObject()
         {
+            EditorSetting.instance.LoadSettingData();
+
             LocalizeText.instance.LoadLanguageTypesFromLocal(editorFolderPath);
             if (string.IsNullOrEmpty(language) || EditorSetting.instance.Data.language != LocalizeText.instance.langPair.name)
             {

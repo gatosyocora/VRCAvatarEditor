@@ -13,20 +13,20 @@ namespace VRCAvatarEditor
         {
             get
             {
-                if (_data is null) _data = LoadSettingData();
+                if (_data is null) LoadSettingData();
                 return _data;
             }
             private set => _data = value;
         }
 
-        private static SettingData LoadSettingData()
+        public void LoadSettingData()
         {
             var settingAsset = Resources.Load<SettingData>("CustomSettingData");
 
             if (settingAsset == null)
                 settingAsset = Resources.Load<SettingData>("DefaultSettingData");
 
-            return settingAsset;
+            _data = settingAsset;
         }
     }
 }
