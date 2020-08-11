@@ -26,7 +26,7 @@ namespace VRCAvatarEditor
         private readonly static string MULTIPLE = $"**<{nameof(MULTIPLE)}>**";
         private readonly static string NOSELECTION = $"--<{nameof(NOSELECTION)}>--";
 
-        public void Initialize(ref VRCAvatarEditor.Avatar edittingAvatar, VRCAvatarEditor.Avatar originalAvatar)
+        public void Initialize(VRCAvatarEditor.Avatar edittingAvatar, VRCAvatarEditor.Avatar originalAvatar)
         {
             this.edittingAvatar = edittingAvatar;
             this.originalAvatar = originalAvatar;

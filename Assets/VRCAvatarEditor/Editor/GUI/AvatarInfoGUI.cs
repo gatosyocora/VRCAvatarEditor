@@ -14,7 +14,7 @@ namespace VRCAvatarEditor
         private Vector2 lipSyncScrollPos = Vector2.zero;
         private const int LIPSYNC_SHYPEKEY_NUM = 15;
 
-        public void Initialize(ref VRCAvatarEditor.Avatar avatar)
+        public void Initialize(VRCAvatarEditor.Avatar avatar)
         {
             this.avatar = avatar;
         }

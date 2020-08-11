@@ -12,7 +12,7 @@ namespace VRCAvatarEditor
         public List<SkinnedMeshRenderer> targetRenderers;
         private List<SkinnedMeshRenderer> exclusions;
 
-        public void Initialize(ref VRCAvatarEditor.Avatar avatar)
+        public void Initialize(VRCAvatarEditor.Avatar avatar)
         {
             this.avatar = avatar;
             exclusions = new List<SkinnedMeshRenderer>();

@@ -143,9 +143,9 @@ namespace VRCAvatarEditor
             toolGUIs.Add(ToolFunc.Shader, shaderGUI);
 
             avatarMonitorGUI.Initialize(currentTool);
-            animationsGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder, this, faceEmotionGUI);
-            avatarInfoGUI.Initialize(ref originalAvatar);
-            probeAnchorGUI.Initialize(ref originalAvatar);
+            animationsGUI.Initialize(edittingAvatar, originalAvatar, saveFolder, this, faceEmotionGUI);
+            avatarInfoGUI.Initialize(originalAvatar);
+            probeAnchorGUI.Initialize(originalAvatar);
 
             selectedToolGUI = avatarInfoGUI;
             currentTool = ToolFunc.AvatarInfo;
@@ -506,7 +506,7 @@ namespace VRCAvatarEditor
 
             if (currentTool == ToolFunc.FaceEmotion)
             {
-                faceEmotionGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder, this, animationsGUI);
+                faceEmotionGUI.Initialize(edittingAvatar, originalAvatar, saveFolder, this, animationsGUI);
 
                 if (edittingAvatar.skinnedMeshList != null)
                 {
@@ -526,7 +526,7 @@ namespace VRCAvatarEditor
 
             if (currentTool == ToolFunc.Shader)
             {
-                shaderGUI.Initialize(ref edittingAvatar, originalAvatar);
+                shaderGUI.Initialize(edittingAvatar, originalAvatar);
             }
         }
 
@@ -540,10 +540,10 @@ namespace VRCAvatarEditor
             targetAvatarObj.SetActive(true);
 
             avatarMonitorGUI.MoveAvatarCam(false);
-            animationsGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder, this, faceEmotionGUI);
-            avatarInfoGUI.Initialize(ref originalAvatar);
-            meshBoundsGUI.Initialize(ref originalAvatar);
-            probeAnchorGUI.Initialize(ref originalAvatar);
+            animationsGUI.Initialize(edittingAvatar, originalAvatar, saveFolder, this, faceEmotionGUI);
+            avatarInfoGUI.Initialize(originalAvatar);
+            meshBoundsGUI.Initialize(originalAvatar);
+            probeAnchorGUI.Initialize(originalAvatar);
 
             currentTool = ToolFunc.AvatarInfo;
         }

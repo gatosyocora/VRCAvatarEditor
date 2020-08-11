@@ -36,7 +36,7 @@ namespace VRCAvatarEditor
 
         private bool usePreviousAnimationOnHandAnimation;
 
-        public void Initialize(ref VRCAvatarEditor.Avatar editAvatar, VRCAvatarEditor.Avatar originalAvatar, string saveFolderPath, EditorWindow window, AnimationsGUI animationsGUI)
+        public void Initialize(VRCAvatarEditor.Avatar editAvatar, VRCAvatarEditor.Avatar originalAvatar, string saveFolderPath, EditorWindow window, AnimationsGUI animationsGUI)
         {
             this.editAvatar = editAvatar;
             this.originalAvatar = originalAvatar;

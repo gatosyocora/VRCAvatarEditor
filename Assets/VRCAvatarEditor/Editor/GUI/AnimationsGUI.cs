@@ -38,7 +38,7 @@ namespace VRCAvatarEditor
 
         private string saveFolderPath;
 
-        public void Initialize(ref VRCAvatarEditor.Avatar editAvatar,
+        public void Initialize(VRCAvatarEditor.Avatar editAvatar,
                                VRCAvatarEditor.Avatar originalAvatar,
                                string saveFolderPath,
                                VRCAvatarEditorGUI vrcAvatarEditorGUI,
