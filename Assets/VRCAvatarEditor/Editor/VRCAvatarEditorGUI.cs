@@ -31,6 +31,8 @@ namespace VRCAvatarEditor
         private ProbeAnchorGUI probeAnchorGUI;
         private MeshBoundsGUI meshBoundsGUI;
         private ShaderGUI shaderGUI;
+        private IVRCAvatarEditorGUI selectedToolGUI;
+        private Dictionary<ToolFunc, IVRCAvatarEditorGUI> toolGUIs = new Dictionary<ToolFunc, IVRCAvatarEditorGUI>();
 
         private bool newSDKUI;
         private bool needRepaint = false;
@@ -52,7 +54,7 @@ namespace VRCAvatarEditor
             Shader,
         }
 
-        public ToolFunc currentTool = ToolFunc.AvatarInfo;
+        public ToolFunc currentTool;
 
         private GUILayoutOption[][] layoutOptions
                         = new GUILayoutOption[][]
@@ -134,10 +136,19 @@ namespace VRCAvatarEditor
             meshBoundsGUI = ScriptableObject.CreateInstance<MeshBoundsGUI>();
             shaderGUI = ScriptableObject.CreateInstance<ShaderGUI>();
 
+            toolGUIs.Add(ToolFunc.AvatarInfo, avatarInfoGUI);
+            toolGUIs.Add(ToolFunc.FaceEmotion, faceEmotionGUI);
+            toolGUIs.Add(ToolFunc.ProbeAnchor, probeAnchorGUI);
+            toolGUIs.Add(ToolFunc.Bounds, meshBoundsGUI);
+            toolGUIs.Add(ToolFunc.Shader, shaderGUI);
+
             avatarMonitorGUI.Initialize(currentTool);
             animationsGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder, this, faceEmotionGUI);
             avatarInfoGUI.Initialize(ref originalAvatar);
             probeAnchorGUI.Initialize(ref originalAvatar);
+
+            selectedToolGUI = avatarInfoGUI;
+            currentTool = ToolFunc.AvatarInfo;
 
             LoadSettingDataFromScriptableObject();
 
@@ -246,54 +257,19 @@ namespace VRCAvatarEditor
                             using (new EditorGUILayout.HorizontalScope())
                             {
                                 needRepaint = avatarMonitorGUI.DrawGUI(null);
-                                if (needRepaint) Repaint();
-
-                                if (!needRepaint)
-                                    animationsGUI.DrawGUI(layoutOptions[0]);
-                            }
-
-                            // 各種機能
-                            using (new EditorGUILayout.HorizontalScope())
-                            {
-                                using (var check = new EditorGUI.ChangeCheckScope())
+                                if (needRepaint)
                                 {
-                                    GUILayout.FlexibleSpace();
-                                    // タブを描画する
-                                    currentTool = (ToolFunc)GUILayout.Toolbar((int)currentTool, LocalizeText.instance.toolTabTexts, "LargeButton", GUI.ToolbarButtonSize.Fixed);
-                                    GUILayout.FlexibleSpace();
-
-                                    if (check.changed)
-                                    {
-                                        TabChanged();
-                                    }
+                                    Repaint();
+                                }
+                                else
+                                {
+                                    animationsGUI.DrawGUI(layoutOptions[0]);
                                 }
                             }
 
-                            if (currentTool == ToolFunc.AvatarInfo)
-                            {
-                                // アバター情報
-                                avatarInfoGUI.DrawGUI(null);
-                            }
-                            else if (currentTool == ToolFunc.FaceEmotion)
-                            {
-                                // 表情設定
-                                faceEmotionGUI.DrawGUI(null);
-                            }
-                            else if (currentTool == ToolFunc.ProbeAnchor)
-                            {
-                                // Probe Anchor設定
-                                probeAnchorGUI.DrawGUI(null);
-                            }
-                            else if (currentTool == ToolFunc.Bounds)
-                            {
-                                // Bounds設定
-                                meshBoundsGUI.DrawGUI(null);
-                            }
-                            else if (currentTool == ToolFunc.Shader)
-                            {
-                                // Shader設定
-                                shaderGUI.DrawGUI(null);
-                            }
+                            DrawToolSwitchTab();
+
+                            selectedToolGUI.DrawGUI(null);
                         }
                         // LayoutType: Half
                         else
@@ -305,20 +281,7 @@ namespace VRCAvatarEditor
 
                                 using (new EditorGUILayout.VerticalScope())
                                 {
-                                    // 各種機能
-                                    using (new EditorGUILayout.HorizontalScope())
-                                    {
-                                        using (var check = new EditorGUI.ChangeCheckScope())
-                                        {
-                                            // タブを描画する
-                                            currentTool = (ToolFunc)GUILayout.Toolbar((int)currentTool, LocalizeText.instance.toolTabTexts, "LargeButton", GUI.ToolbarButtonSize.Fixed);
-
-                                            if (check.changed)
-                                            {
-                                                TabChanged();
-                                            }
-                                        }
-                                    }
+                                    DrawToolSwitchTab();
 
                                     if (currentTool == ToolFunc.AvatarInfo)
                                     {
@@ -332,25 +295,9 @@ namespace VRCAvatarEditor
                                         avatarInfoGUI.DrawGUI(null);
 
                                     }
-                                    else if (currentTool == ToolFunc.FaceEmotion)
+                                    else
                                     {
-                                        // 表情設定
-                                        faceEmotionGUI.DrawGUI(null);
-                                    }
-                                    else if (currentTool == ToolFunc.ProbeAnchor)
-                                    {
-                                        // Probe Anchor設定
-                                        probeAnchorGUI.DrawGUI(null);
-                                    }
-                                    else if (currentTool == ToolFunc.Bounds)
-                                    {
-                                        // Bounds設定
-                                        meshBoundsGUI.DrawGUI(null);
-                                    }
-                                    else if (currentTool == ToolFunc.Shader)
-                                    {
-                                        // Shader設定
-                                        shaderGUI.DrawGUI(null);
+                                        selectedToolGUI.DrawGUI(null);
                                     }
                                 }
                             }
@@ -530,8 +477,29 @@ namespace VRCAvatarEditor
 
         }
 
+        private void DrawToolSwitchTab()
+        {
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                using (var check = new EditorGUI.ChangeCheckScope())
+                {
+                    GUILayout.FlexibleSpace();
+                    // タブを描画する
+                    currentTool = (ToolFunc)GUILayout.Toolbar((int)currentTool, LocalizeText.instance.toolTabTexts, "LargeButton", GUI.ToolbarButtonSize.Fixed);
+                    GUILayout.FlexibleSpace();
+
+                    if (check.changed)
+                    {
+                        TabChanged();
+                    }
+                }
+            }
+        }
+
         public void TabChanged()
         {
+            selectedToolGUI = toolGUIs[currentTool];
+
             if (currentTool == ToolFunc.FaceEmotion)
             {
                 faceEmotionGUI.Initialize(ref edittingAvatar, originalAvatar, saveFolder, this, animationsGUI);
