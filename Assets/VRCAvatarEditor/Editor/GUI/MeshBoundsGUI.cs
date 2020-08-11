@@ -2,17 +2,18 @@
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using Avatar = VRCAvatarEditor.Avatar;
 
 namespace VRCAvatarEditor
 {
     public class MeshBoundsGUI : Editor, IVRCAvatarEditorGUI
     {
-        private VRCAvatarEditor.Avatar avatar;
+        private Avatar avatar;
 
         public List<SkinnedMeshRenderer> targetRenderers;
         private List<SkinnedMeshRenderer> exclusions;
 
-        public void Initialize(VRCAvatarEditor.Avatar avatar)
+        public void Initialize(Avatar avatar)
         {
             this.avatar = avatar;
             exclusions = new List<SkinnedMeshRenderer>();

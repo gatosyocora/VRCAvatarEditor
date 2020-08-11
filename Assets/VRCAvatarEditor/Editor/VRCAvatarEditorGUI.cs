@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using VRCAvatarEditor.Utilitys;
 using VRCSDK2;
+using Avatar = VRCAvatarEditor.Avatar;
 
 // Copyright (c) 2019 gatosyocora
 
@@ -38,8 +39,8 @@ namespace VRCAvatarEditor
         private bool needRepaint = false;
 
         private VRC_AvatarDescriptor targetAvatarDescriptor;
-        private VRCAvatarEditor.Avatar edittingAvatar = null;
-        private VRCAvatarEditor.Avatar originalAvatar = null;
+        private Avatar edittingAvatar = null;
+        private Avatar originalAvatar = null;
 
         private string editorFolderPath;
 

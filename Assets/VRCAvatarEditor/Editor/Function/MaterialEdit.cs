@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using Avatar = VRCAvatarEditor.Avatar;
 
 namespace VRCAvatarEditor
 {
@@ -24,7 +25,7 @@ namespace VRCAvatarEditor
         /// <param name="avatar">Materialを置き換えるアバター</param>
         /// <param name="srcMaterial">変更前のMaterial</param>
         /// <param name="dstMaterial">変更後のMaterial</param>
-        public static void ReplaceMaterial(VRCAvatarEditor.Avatar avatar, Material srcMaterial, Material dstMaterial)
+        public static void ReplaceMaterial(Avatar avatar, Material srcMaterial, Material dstMaterial)
         {
             GatoUtility.ReplaceMaterial(avatar.animator.gameObject, srcMaterial, dstMaterial);
             var index = Array.IndexOf(avatar.materials, srcMaterial);

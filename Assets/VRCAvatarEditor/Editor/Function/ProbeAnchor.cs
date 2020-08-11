@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Avatar = VRCAvatarEditor.Avatar;
 
 // Copyright (c) 2019 gatosyocora
 
@@ -65,7 +66,7 @@ namespace VRCAvatarEditor
             return true;
         }
 
-        public static void SetProbeAnchorToSkinnedMeshRenderers(ref GameObject anchorTargetObj, ref VRCAvatarEditor.Avatar avatar, ref bool[] isSettingToSkinnedMesh)
+        public static void SetProbeAnchorToSkinnedMeshRenderers(ref GameObject anchorTargetObj, ref Avatar avatar, ref bool[] isSettingToSkinnedMesh)
         {
             List<SkinnedMeshRenderer> skinnedMeshRendererList = avatar.skinnedMeshRendererList;
 
@@ -78,7 +79,7 @@ namespace VRCAvatarEditor
             }
         }
 
-        public static void SetProbeAnchorToMeshRenderers(ref GameObject anchorTargetObj, ref VRCAvatarEditor.Avatar avatar, ref bool[] isSettingToMesh)
+        public static void SetProbeAnchorToMeshRenderers(ref GameObject anchorTargetObj, ref Avatar avatar, ref bool[] isSettingToMesh)
         {
             List<MeshRenderer> meshRendererList = avatar.meshRendererList;
 
