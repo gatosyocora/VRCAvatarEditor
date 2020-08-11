@@ -64,5 +64,17 @@ namespace VRCAvatarEditor.Utilitys
 
             return newVersion.CompareTo(version) <= 0;
         }
+
+        public static void UploadAvatar(bool newSDKUI)
+        {
+            if (newSDKUI)
+            {
+                EditorApplication.ExecuteMenuItem("VRChat SDK/Show Control Panel");
+            }
+            else
+            {
+                EditorApplication.ExecuteMenuItem("VRChat SDK/Show Build Control Panel");
+            }
+        }
     }
 }

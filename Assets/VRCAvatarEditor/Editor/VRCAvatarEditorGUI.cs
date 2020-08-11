@@ -316,7 +316,7 @@ namespace VRCAvatarEditor
                         // アップロード
                         if (GUILayout.Button(LocalizeText.instance.langPair.uploadAvatarButtonText))
                         {
-                            UploadAvatar(newSDKUI);
+                            VRCSDKUtility.UploadAvatar(newSDKUI);
                         }
                     }
                 }
@@ -633,18 +633,6 @@ namespace VRCAvatarEditor
                     skinnedMesh.SortBlendShapesToAscending();
                 else
                     skinnedMesh.ResetDefaultSort();
-            }
-        }
-
-        private void UploadAvatar(bool newSDKUI)
-        {
-            if (newSDKUI)
-            {
-                EditorApplication.ExecuteMenuItem("VRChat SDK/Show Control Panel");
-            }
-            else
-            {
-                EditorApplication.ExecuteMenuItem("VRChat SDK/Show Build Control Panel");
             }
         }
 
