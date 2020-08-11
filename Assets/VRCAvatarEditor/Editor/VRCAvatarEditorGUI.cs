@@ -125,9 +125,9 @@ namespace VRCAvatarEditor
             saveFolder = "Assets/";
 
 
-            licenseText = GetFileTexts(editorFolderPath + LICENSE_FILE_NAME);
-            readmeText = GetFileTexts(editorFolderPath + README_FILE_NAME);
-            usingSoftwareLicenseText = GetFileTexts(editorFolderPath + USING_SOFTWARE_FILE_NAME);
+            licenseText = FileUtility.GetFileTexts(editorFolderPath + LICENSE_FILE_NAME);
+            readmeText = FileUtility.GetFileTexts(editorFolderPath + README_FILE_NAME);
+            usingSoftwareLicenseText = FileUtility.GetFileTexts(editorFolderPath + USING_SOFTWARE_FILE_NAME);
 
             avatarMonitorGUI = ScriptableObject.CreateInstance<AvatarMonitorGUI>();
             animationsGUI = ScriptableObject.CreateInstance<AnimationsGUI>();
@@ -169,7 +169,7 @@ namespace VRCAvatarEditor
                 }
             }
 
-            newSDKUI = IsNewSDKUI();
+            newSDKUI = VRCSDKUtility.IsNewSDKUI();
 
             SceneView.onSceneGUIDelegate += OnSceneGUI;
         }
@@ -450,7 +450,7 @@ namespace VRCAvatarEditor
 
             layoutType = (LayoutType)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.layoutTypeLabel, layoutType);
 
-            var languagePacks = GetLanguagePacks();
+            var languagePacks = LocalizeText.instance.langs;
             var index = Array.IndexOf(languagePacks, language);
             using (var check = new EditorGUI.ChangeCheckScope())
             {
@@ -545,11 +545,6 @@ namespace VRCAvatarEditor
             currentTool = ToolFunc.AvatarInfo;
         }
 
-        private string[] GetLanguagePacks()
-        {
-            return LocalizeText.instance.langs;
-        }
-
         #region General Functions
 
         /// <summary>
@@ -639,89 +634,6 @@ namespace VRCAvatarEditor
                 else
                     skinnedMesh.ResetDefaultSort();
             }
-        }
-
-        /// <summary>
-        /// pathのファイル内容を取得する
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        private string GetFileTexts(string path)
-        {
-            string text = string.Empty;
-            var fi = new FileInfo(path);
-            try
-            {
-                using (StreamReader sr = new StreamReader(fi.OpenRead(), Encoding.UTF8))
-                {
-                    text += sr.ReadToEnd();
-                }
-            }
-            catch (Exception e)
-            {
-                // 改行コード
-                text += "読み込みに失敗しました:" + e.Message;
-            }
-
-            return text;
-        }
-
-        /// <summary>
-        /// VRCSDKのバージョンを取得する
-        /// </summary>
-        /// <returns></returns>
-        private string GetVRCSDKVersion()
-        {
-            string path = GetVRCSDKFilePath("version");
-            return GetFileTexts(path);
-        }
-
-        /// <summary>
-        /// VRCSDKに含まれるファイルを取得する
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        public static string GetVRCSDKFilePath(string fileName)
-        {
-            // VRCSDKフォルダが移動されている可能性があるため対象ファイルを探す
-            var guids = AssetDatabase.FindAssets(fileName, null);
-            string path = string.Empty;
-            bool couldFindFile = false;
-            foreach (var guid in guids)
-            {
-                path = AssetDatabase.GUIDToAssetPath(guid);
-                if (path.Contains("VRCSDK/"))
-                {
-                    couldFindFile = true;
-                    break;
-                }
-            }
-            if (couldFindFile)
-                return path;
-            else
-                return string.Empty;
-        }
-
-        /// <summary>
-        /// VRCSDKが新しいUIかどうか
-        /// </summary>
-        /// <returns></returns>
-        private bool IsNewSDKUI()
-        {
-            var sdkVersion = GetVRCSDKVersion();
-            // 新UI以降のバージョンにはファイルが存在するため何かしらは返ってくる
-            if (string.IsNullOrEmpty(sdkVersion)) return false;
-
-            var dotChar = '.';
-            var zero = '0';
-            var versions = sdkVersion.Split(dotChar);
-            var version =
-                    versions[0].PadLeft(4, zero) + dotChar +
-                    versions[1].PadLeft(2, zero) + dotChar +
-                    versions[2].PadLeft(2, zero);
-            var newVersion = "2019.08.23";
-
-            return newVersion.CompareTo(version) <= 0;
         }
 
         private void UploadAvatar(bool newSDKUI)

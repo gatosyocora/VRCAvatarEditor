@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using VRCAvatarEditor.Utilitys;
 
 namespace VRCAvatarEditor
 {
@@ -274,7 +275,7 @@ namespace VRCAvatarEditor
         /// <returns></returns>
         private AnimatorOverrideController InstantiateVrcCustomOverideController(string newFilePath)
         {
-            string path = VRCAvatarEditorGUI.GetVRCSDKFilePath("CustomOverrideEmpty");
+            string path = VRCSDKUtility.GetVRCSDKFilePath("CustomOverrideEmpty");
 
             newFilePath = AssetDatabase.GenerateUniqueAssetPath(newFilePath);
             AssetDatabase.CopyAsset(path, newFilePath);
