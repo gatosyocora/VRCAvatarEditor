@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
+using VRCAvatarEditor.Utilitys;
 using VRCSDK2;
 
 // Copyright (c) 2019 gatosyocora
@@ -745,8 +746,8 @@ namespace VRCAvatarEditor
         [MenuItem("VRCAvatarEditor/Check for Updates")]
         public static async void CheckForUpdates()
         {
-            var remoteVersion = await GetLatestVersionFromRemote();
-            var isLatest = IsLatestVersion(TOOL_VERSION, remoteVersion);
+            var remoteVersion = await VersionCheckUtility.GetLatestVersionFromRemote(GITHUB_LATEST_RELEASE_API_URL);
+            var isLatest = VersionCheckUtility.IsLatestVersion(TOOL_VERSION, remoteVersion);
             var message = (isLatest) ? 
                             LocalizeText.instance.langPair.localIsLatestMessageText.Replace("<LocalVersion>", TOOL_VERSION) :
                             LocalizeText.instance.langPair.localIsLatestMessageText.Replace("<LocalVersion>", TOOL_VERSION).Replace("<RemoteVersion>", remoteVersion);
@@ -778,64 +779,5 @@ namespace VRCAvatarEditor
                 GUILayout.FlexibleSpace();
             }
         }
-
-        private static async Task<string> GetLatestVersionFromRemote()
-        {
-            var request = UnityWebRequest.Get(GITHUB_LATEST_RELEASE_API_URL);
-            await request.SendWebRequest();
-
-            if (request.isNetworkError || request.isHttpError)
-            {
-                Debug.LogError(request.error);
-                return string.Empty;
-            }
-            else
-            {
-                var jsonData = request.downloadHandler.text;
-                return JsonUtility.FromJson<GitHubData>(jsonData)?.tag_name ?? string.Empty;
-            }
-        }
-
-        private static bool IsLatestVersion(string local, string remote)
-        {
-            var localVersion = local.Substring(1).Split('.').Select(x => int.Parse(x)).ToArray();
-            var remoteVersion = remote.Substring(1).Split('.').Select(x => int.Parse(x)).ToArray();
-            
-            // サイズを合わせる
-            if (localVersion.Length < remoteVersion.Length)
-            {
-                localVersion = Enumerable.Range(0, remoteVersion.Length)
-                                    .Select(i =>
-                                    {
-                                        if (i < localVersion.Length) return localVersion[i];
-                                        else return 0;
-                                    })
-                                    .ToArray();
-            }
-            else if (localVersion.Length > remoteVersion.Length)
-            {
-                remoteVersion = Enumerable.Range(0, localVersion.Length)
-                                    .Select(i =>
-                                    {
-                                        if (i < remoteVersion.Length) return remoteVersion[i];
-                                        else return 0;
-                                    })
-                                    .ToArray();
-            }
-
-            for (int index = 0; index < localVersion.Length; index++)
-            {
-                var l = localVersion[index];
-                var r = remoteVersion[index];
-                if (l < r) return false;
-                if (l > r) return true;
-            }
-            return true;
-        }
-    }
-
-    public class GitHubData
-    {
-        public string tag_name;
     }
 }
