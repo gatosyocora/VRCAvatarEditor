@@ -220,6 +220,9 @@ namespace VRCAvatarEditor
 
                             originalAvatar.LoadAvatarInfo();
                             editAvatar.LoadAvatarInfo();
+
+                            // TODO: 除外するBlendShapeの更新のために呼び出す
+                            vrcAvatarEditorGUI.OnTabChanged();
                         }
 
                         if (_tab == Tab.Sitting)
@@ -233,6 +236,9 @@ namespace VRCAvatarEditor
                                     editAvatar.Descriptor.CustomSittingAnims = customStandingAnimsController;
                                     originalAvatar.LoadAvatarInfo();
                                     editAvatar.LoadAvatarInfo();
+
+                                    // TODO: 除外するBlendShapeの更新のために呼び出す
+                                    vrcAvatarEditorGUI.OnTabChanged();
                                 }
                             }
                         }
