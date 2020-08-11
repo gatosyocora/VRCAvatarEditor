@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using VRCAvatarEditor.Utilitys;
 using VRCSDK2;
-using Avatar = VRCAvatarEditor.Avatar;
+using Avatar = VRCAvatarEditor.VRCAvatar;
 
 // Copyright (c) 2019 gatosyocora
 
@@ -39,8 +39,8 @@ namespace VRCAvatarEditor
         private bool needRepaint = false;
 
         private VRC_AvatarDescriptor targetAvatarDescriptor;
-        private Avatar edittingAvatar = null;
-        private Avatar originalAvatar = null;
+        private VRCAvatar edittingAvatar = null;
+        private VRCAvatar originalAvatar = null;
 
         private string editorFolderPath;
 
@@ -116,7 +116,7 @@ namespace VRCAvatarEditor
 
         private void OnEnable()
         {
-            edittingAvatar = new Avatar();
+            edittingAvatar = new VRCAvatar();
 
             editorFolderPath = Path.GetDirectoryName(
                                     AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this)));
@@ -534,7 +534,7 @@ namespace VRCAvatarEditor
         private void OnChangedAvatar()
         {
             edittingAvatar = avatarMonitorGUI.SetAvatarPreview(targetAvatarDescriptor);
-            originalAvatar = new Avatar(targetAvatarDescriptor);
+            originalAvatar = new VRCAvatar(targetAvatarDescriptor);
             EditorSetting.instance.ApplySettingsToEditorGUI(edittingAvatar, faceEmotionGUI);
 
             var targetAvatarObj = targetAvatarDescriptor.gameObject;

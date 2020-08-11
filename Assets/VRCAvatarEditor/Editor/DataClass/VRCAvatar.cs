@@ -8,7 +8,7 @@ using VRCSDK2;
 
 namespace VRCAvatarEditor
 {
-    public class Avatar
+    public class VRCAvatar
     {
         public Animator animator { get; set; }
         public VRC_AvatarDescriptor descriptor { get; set; }
@@ -34,7 +34,7 @@ namespace VRCAvatarEditor
 
         public List<FaceEmotion.AnimParam> defaultFaceEmotion { get; set; }
 
-        public Avatar()
+        public VRCAvatar()
         {
             animator = null;
             descriptor = null;
@@ -54,7 +54,7 @@ namespace VRCAvatarEditor
             animSavedFolderPath = $"Assets{Path.DirectorySeparatorChar}";
         }
 
-        public Avatar(VRC_AvatarDescriptor descriptor) : this()
+        public VRCAvatar(VRC_AvatarDescriptor descriptor) : this()
         {
             LoadAvatarInfo(descriptor);
         }

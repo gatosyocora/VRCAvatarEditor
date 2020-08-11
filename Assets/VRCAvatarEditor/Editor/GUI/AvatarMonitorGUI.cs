@@ -2,13 +2,13 @@
 using UnityEditor;
 using UnityEngine;
 using VRCSDK2;
-using Avatar = VRCAvatarEditor.Avatar;
+using Avatar = VRCAvatarEditor.VRCAvatar;
 
 namespace VRCAvatarEditor
 {
     public class AvatarMonitorGUI : Editor, IVRCAvatarEditorGUI
     {
-        private Avatar avatar;
+        private VRCAvatar avatar;
         private VRCAvatarEditorGUI.ToolFunc currentTool;
 
         private RenderTexture avatarCamTexture;
@@ -194,7 +194,7 @@ namespace VRCAvatarEditor
         /// <summary>
         /// アバターを写す用のカメラを設定する
         /// </summary>
-        public Avatar SetAvatarPreview(VRC_AvatarDescriptor descriptor)
+        public VRCAvatar SetAvatarPreview(VRC_AvatarDescriptor descriptor)
         {
             var avatar = avatarMonitorField.AddAvatar(descriptor);
             avatarMonitorField.SetAvatarCamBgColor(monitorBgColor);

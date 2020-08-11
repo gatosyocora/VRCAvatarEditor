@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using Avatar = VRCAvatarEditor.Avatar;
+using Avatar = VRCAvatarEditor.VRCAvatar;
 
 namespace VRCAvatarEditor
 {
     public class ShaderGUI : Editor, IVRCAvatarEditorGUI
     {
-        private Avatar edittingAvatar;
-        private Avatar originalAvatar;
+        private VRCAvatar edittingAvatar;
+        private VRCAvatar originalAvatar;
 
         private Shader[] customShaders;
         private string[] customShaderNames;
@@ -27,7 +27,7 @@ namespace VRCAvatarEditor
         private readonly static string MULTIPLE = $"**<{nameof(MULTIPLE)}>**";
         private readonly static string NOSELECTION = $"--<{nameof(NOSELECTION)}>--";
 
-        public void Initialize(Avatar edittingAvatar, Avatar originalAvatar)
+        public void Initialize(VRCAvatar edittingAvatar, VRCAvatar originalAvatar)
         {
             this.edittingAvatar = edittingAvatar;
             this.originalAvatar = originalAvatar;

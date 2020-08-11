@@ -4,7 +4,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VRCSDK2;
-using Avatar = VRCAvatarEditor.Avatar;
+using Avatar = VRCAvatarEditor.VRCAvatar;
 
 namespace VRCAvatarEditor
 {
@@ -20,7 +20,7 @@ namespace VRCAvatarEditor
         private Material textureMat;
 
         private VRC_AvatarDescriptor descriptor;
-        public Avatar avatar { get; private set; }
+        public VRCAvatar avatar { get; private set; }
         private SkinnedMeshRenderer faceMesh;
 
         private Rect rect;
@@ -61,7 +61,7 @@ namespace VRCAvatarEditor
         }
 
 
-        public void Initinalize(Avatar avatar)
+        public void Initinalize(VRCAvatar avatar)
         {
 
         }
@@ -106,7 +106,7 @@ namespace VRCAvatarEditor
             SceneManager.MoveGameObjectToScene(obj, scene);
         }
 
-        public Avatar AddAvatar(VRC_AvatarDescriptor descriptor)
+        public VRCAvatar AddAvatar(VRC_AvatarDescriptor descriptor)
         {
             if (avatarObj != null)
                 UnityEngine.Object.DestroyImmediate(avatarObj);
@@ -119,7 +119,7 @@ namespace VRCAvatarEditor
             this.avatarObj = newAvatarObj;
             newAvatarObj.transform.position = new Vector3(0, 0, 0);
             this.descriptor = newAvatarObj.GetComponent<VRC_AvatarDescriptor>();
-            avatar = new Avatar(this.descriptor);
+            avatar = new VRCAvatar(this.descriptor);
             ResetCameraTransform();
 
             return avatar;

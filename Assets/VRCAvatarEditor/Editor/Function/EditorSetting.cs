@@ -109,7 +109,7 @@ namespace VRCAvatarEditor
         /// <summary>
         /// 設定を反映する
         /// </summary>
-        public void ApplySettingsToEditorGUI(Avatar edittingAvatar, FaceEmotionGUI faceEmotionGUI)
+        public void ApplySettingsToEditorGUI(VRCAvatar edittingAvatar, FaceEmotionGUI faceEmotionGUI)
         {
             if (edittingAvatar.descriptor == null) return;
 

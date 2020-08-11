@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using Avatar = VRCAvatarEditor.Avatar;
+using Avatar = VRCAvatarEditor.VRCAvatar;
 
 // Copyright (c) 2019 gatosyocora
 
@@ -31,7 +31,7 @@ namespace VRCAvatarEditor
         /// <summary>
         /// 指定したBlendShapeのアニメーションファイルを作成する
         /// </summary>
-        public static AnimationClip CreateBlendShapeAnimationClip(string fileName, string saveFolderPath, ref Avatar avatar, ref List<string> exclusions, GameObject rootObj)
+        public static AnimationClip CreateBlendShapeAnimationClip(string fileName, string saveFolderPath, ref VRCAvatar avatar, ref List<string> exclusions, GameObject rootObj)
         {
             AnimationClip animClip = new AnimationClip();
 
@@ -113,7 +113,7 @@ namespace VRCAvatarEditor
         /// <summary>
         /// BlendShapeの値をすべてリセットする
         /// </summary>
-        public static void ResetAllBlendShapeValues(ref Avatar avatar)
+        public static void ResetAllBlendShapeValues(ref VRCAvatar avatar)
         {
             foreach (var skinnedMesh in avatar.skinnedMeshList)
             {
@@ -211,7 +211,7 @@ namespace VRCAvatarEditor
         /// </summary>
         /// <param name="animProperties"></param>
         /// <param name="skinnedMeshes"></param>
-        public static void ApplyAnimationProperties(List<AnimParam> animProperties, ref Avatar avatar)
+        public static void ApplyAnimationProperties(List<AnimParam> animProperties, ref VRCAvatar avatar)
         {
             for (int skinnedMeshIndex = 0; skinnedMeshIndex < avatar.skinnedMeshList.Count; skinnedMeshIndex++)
             {
@@ -245,20 +245,20 @@ namespace VRCAvatarEditor
             }
         }
 
-        public static void ApplyAnimationProperties(AnimationClip clip, ref Avatar avatar)
+        public static void ApplyAnimationProperties(AnimationClip clip, ref VRCAvatar avatar)
         {
             var paramList = GetAnimationParamaters(clip);
             ApplyAnimationProperties(paramList, ref avatar);
         }
 
-        public static void SetToDefaultFaceEmotion(ref Avatar editAvatar, Avatar originalAvatar)
+        public static void SetToDefaultFaceEmotion(ref VRCAvatar editAvatar, VRCAvatar originalAvatar)
         {
             var defaultFaceEmotion = GetAvatarFaceParamaters(editAvatar.skinnedMeshList);
             editAvatar.defaultFaceEmotion = defaultFaceEmotion;
             ApplyAnimationProperties(defaultFaceEmotion, ref originalAvatar);
         }
 
-        public static void ResetToDefaultFaceEmotion(ref Avatar avatar)
+        public static void ResetToDefaultFaceEmotion(ref VRCAvatar avatar)
         {
             if (avatar == null) return;
 

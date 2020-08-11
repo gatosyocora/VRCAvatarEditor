@@ -3,19 +3,19 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using VRCSDK2;
-using Avatar = VRCAvatarEditor.Avatar;
+using Avatar = VRCAvatarEditor.VRCAvatar;
 
 namespace VRCAvatarEditor
 {
     public class AvatarInfoGUI : Editor, IVRCAvatarEditorGUI
     {
-        private Avatar avatar;
+        private VRCAvatar avatar;
 
         private bool isOpeningLipSync = false;
         private Vector2 lipSyncScrollPos = Vector2.zero;
         private const int LIPSYNC_SHYPEKEY_NUM = 15;
 
-        public void Initialize(Avatar avatar)
+        public void Initialize(VRCAvatar avatar)
         {
             this.avatar = avatar;
         }
@@ -178,7 +178,7 @@ namespace VRCAvatarEditor
         public void Dispose() { }
 
         // TODO : モデルによっては前髪あたりまでviewpositionがいってしまう
-        private Vector3 CalcAvatarViewPosition(Avatar avatar)
+        private Vector3 CalcAvatarViewPosition(VRCAvatar avatar)
         {
             var viewPos = Vector3.zero;
             var animator = avatar.animator;

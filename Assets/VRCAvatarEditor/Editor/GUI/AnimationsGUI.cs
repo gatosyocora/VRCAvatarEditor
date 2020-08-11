@@ -4,14 +4,14 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using VRCAvatarEditor.Utilitys;
-using Avatar = VRCAvatarEditor.Avatar;
+using Avatar = VRCAvatarEditor.VRCAvatar;
 
 namespace VRCAvatarEditor
 {
     public class AnimationsGUI : Editor, IVRCAvatarEditorGUI
     {
-        private Avatar editAvatar;
-        private Avatar originalAvatar;
+        private VRCAvatar editAvatar;
+        private VRCAvatar originalAvatar;
         private VRCAvatarEditorGUI vrcAvatarEditorGUI;
         private FaceEmotionGUI faceEmotionGUI;
 
@@ -39,8 +39,8 @@ namespace VRCAvatarEditor
 
         private string saveFolderPath;
 
-        public void Initialize(Avatar editAvatar,
-                               Avatar originalAvatar,
+        public void Initialize(VRCAvatar editAvatar,
+                               VRCAvatar originalAvatar,
                                string saveFolderPath,
                                VRCAvatarEditorGUI vrcAvatarEditorGUI,
                                FaceEmotionGUI faceEmotionGUI)
