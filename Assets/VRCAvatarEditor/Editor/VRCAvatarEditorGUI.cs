@@ -35,7 +35,6 @@ namespace VRCAvatarEditor
         private IVRCAvatarEditorGUI selectedToolGUI;
         private Dictionary<ToolFunc, IVRCAvatarEditorGUI> toolGUIs = new Dictionary<ToolFunc, IVRCAvatarEditorGUI>();
 
-        private bool newSDKUI;
         private bool needRepaint = false;
 
         private VRC_AvatarDescriptor targetAvatarDescriptor;
@@ -118,8 +117,8 @@ namespace VRCAvatarEditor
         {
             edittingAvatar = new Avatar();
 
-            var editorScriptPath = AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this));
-            editorFolderPath = Path.GetDirectoryName(editorScriptPath);
+            editorFolderPath = Path.GetDirectoryName(
+                                    AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this)));
             editorFolderPath = editorFolderPath.Substring(0, editorFolderPath.LastIndexOf(Path.DirectorySeparatorChar) + 1);
 
             saveFolder = "Assets/";
@@ -170,8 +169,6 @@ namespace VRCAvatarEditor
                     selectionTransform = selectionTransform.parent;
                 }
             }
-
-            newSDKUI = VRCSDKUtility.IsNewSDKUI();
 
             SceneView.onSceneGUIDelegate += OnSceneGUI;
         }
@@ -318,7 +315,7 @@ namespace VRCAvatarEditor
                         // アップロード
                         if (GUILayout.Button(LocalizeText.instance.langPair.uploadAvatarButtonText))
                         {
-                            VRCSDKUtility.UploadAvatar(newSDKUI);
+                            VRCSDKUtility.UploadAvatar(VRCSDKUtility.IsNewSDKUI());
                         }
                     }
                 }
