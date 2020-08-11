@@ -111,12 +111,12 @@ namespace VRCAvatarEditor
         /// </summary>
         public void ApplySettingsToEditorGUI(VRCAvatar edittingAvatar, FaceEmotionGUI faceEmotionGUI)
         {
-            if (edittingAvatar.descriptor == null) return;
+            if (edittingAvatar.Descriptor == null) return;
 
-            foreach (var skinnedMesh in edittingAvatar.skinnedMeshList)
+            foreach (var skinnedMesh in edittingAvatar.SkinnedMeshList)
             {
-                if (edittingAvatar.lipSyncShapeKeyNames != null && edittingAvatar.lipSyncShapeKeyNames.Count > 0)
-                    skinnedMesh.SetExclusionBlendShapesByContains(faceEmotionGUI.blendshapeExclusions.Union(edittingAvatar.lipSyncShapeKeyNames).ToList<string>());
+                if (edittingAvatar.LipSyncShapeKeyNames != null && edittingAvatar.LipSyncShapeKeyNames.Count > 0)
+                    skinnedMesh.SetExclusionBlendShapesByContains(faceEmotionGUI.blendshapeExclusions.Union(edittingAvatar.LipSyncShapeKeyNames).ToList<string>());
 
                 if (faceEmotionGUI.selectedSortType == FaceEmotionGUI.SortType.AToZ)
                     skinnedMesh.SortBlendShapesToAscending();

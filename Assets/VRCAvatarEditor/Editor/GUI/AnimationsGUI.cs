@@ -53,9 +53,9 @@ namespace VRCAvatarEditor
 
             errorStyle.normal.textColor = Color.red;
 
-            if (editAvatar != null && editAvatar.standingAnimController != null)
+            if (editAvatar != null && editAvatar.StandingAnimController != null)
             {
-                ValidateAnimatorOverrideController(editAvatar.animator, editAvatar.standingAnimController);
+                ValidateAnimatorOverrideController(editAvatar.Animator, editAvatar.StandingAnimController);
             }
         }
 
@@ -75,13 +75,13 @@ namespace VRCAvatarEditor
                 {
                     titleText = LocalizeText.instance.langPair.standingTabText;
                     if (originalAvatar != null)
-                        controller = originalAvatar.standingAnimController;
+                        controller = originalAvatar.StandingAnimController;
                 }
                 else
                 {
                     titleText = LocalizeText.instance.langPair.sittingTabText;
                     if (originalAvatar != null)
-                        controller = originalAvatar.sittingAnimController;
+                        controller = originalAvatar.SittingAnimController;
                 }
 
                 using (new EditorGUILayout.HorizontalScope())
@@ -176,7 +176,7 @@ namespace VRCAvatarEditor
                 }
                 else
                 {
-                    if (editAvatar.descriptor == null)
+                    if (editAvatar.Descriptor == null)
                     {
                         EditorGUILayout.HelpBox(LocalizeText.instance.langPair.noAvatarMessageText, MessageType.Warning);
                     }
@@ -197,8 +197,8 @@ namespace VRCAvatarEditor
 
                         if (GUILayout.Button(createMessage))
                         {
-                            var fileName = "CO_" + originalAvatar.animator.gameObject.name + ".overrideController";
-                            saveFolderPath = "Assets/" + originalAvatar.animator.gameObject.name + "/";
+                            var fileName = "CO_" + originalAvatar.Animator.gameObject.name + ".overrideController";
+                            saveFolderPath = "Assets/" + originalAvatar.Animator.gameObject.name + "/";
                             var fullFolderPath = Path.GetFullPath(saveFolderPath);
                             if (!Directory.Exists(fullFolderPath))
                             {
@@ -209,13 +209,13 @@ namespace VRCAvatarEditor
 
                             if (_tab == Tab.Standing)
                             {
-                                originalAvatar.descriptor.CustomStandingAnims = createdCustomOverrideController;
-                                editAvatar.descriptor.CustomStandingAnims = createdCustomOverrideController;
+                                originalAvatar.Descriptor.CustomStandingAnims = createdCustomOverrideController;
+                                editAvatar.Descriptor.CustomStandingAnims = createdCustomOverrideController;
                             }
                             else
                             {
-                                originalAvatar.descriptor.CustomSittingAnims = createdCustomOverrideController;
-                                editAvatar.descriptor.CustomSittingAnims = createdCustomOverrideController;
+                                originalAvatar.Descriptor.CustomSittingAnims = createdCustomOverrideController;
+                                editAvatar.Descriptor.CustomSittingAnims = createdCustomOverrideController;
                             }
 
                             originalAvatar.LoadAvatarInfo();
@@ -224,13 +224,13 @@ namespace VRCAvatarEditor
 
                         if (_tab == Tab.Sitting)
                         {
-                            using (new EditorGUI.DisabledGroupScope(editAvatar.standingAnimController == null))
+                            using (new EditorGUI.DisabledGroupScope(editAvatar.StandingAnimController == null))
                             {
                                 if (GUILayout.Button(LocalizeText.instance.langPair.setToSameAsCustomStandingAnimsButtonText))
                                 {
-                                    var customStandingAnimsController = originalAvatar.descriptor.CustomStandingAnims;
-                                    originalAvatar.descriptor.CustomSittingAnims = customStandingAnimsController;
-                                    editAvatar.descriptor.CustomSittingAnims = customStandingAnimsController;
+                                    var customStandingAnimsController = originalAvatar.Descriptor.CustomStandingAnims;
+                                    originalAvatar.Descriptor.CustomSittingAnims = customStandingAnimsController;
+                                    editAvatar.Descriptor.CustomSittingAnims = customStandingAnimsController;
                                     originalAvatar.LoadAvatarInfo();
                                     editAvatar.LoadAvatarInfo();
                                 }
@@ -252,8 +252,8 @@ namespace VRCAvatarEditor
                             {
                                 if (!pathMissing[i]) continue;
                                 var result = GatoUtility.TryFixMissingPathInAnimationClip(
-                                                    editAvatar.animator,
-                                                    editAvatar.standingAnimController[HANDANIMS[i]]);
+                                                    editAvatar.Animator,
+                                                    editAvatar.StandingAnimController[HANDANIMS[i]]);
                                 pathMissing[i] = !result;
                                 failedAutoFixMissingPath = !result;
                             }

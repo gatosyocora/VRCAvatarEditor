@@ -40,7 +40,7 @@ namespace VRCAvatarEditor
                 targetPos = (ProbeAnchor.TARGETPOS)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.targetPositionLabel, targetPos);
 
                 // Rendererの一覧を表示
-                if (avatar != null && avatar.descriptor != null)
+                if (avatar != null && avatar.Descriptor != null)
                 {
                     isOpeningRendererList = EditorGUILayout.Foldout(isOpeningRendererList, LocalizeText.instance.langPair.rendererListLabel);
 
@@ -54,9 +54,9 @@ namespace VRCAvatarEditor
                             {
                                 int index = 0;
 
-                                if (isGettingSkinnedMeshRenderer && avatar.skinnedMeshRendererList != null && isSettingToSkinnedMesh != null)
+                                if (isGettingSkinnedMeshRenderer && avatar.SkinnedMeshRendererList != null && isSettingToSkinnedMesh != null)
                                 {
-                                    foreach (var skinnedMesh in avatar.skinnedMeshRendererList)
+                                    foreach (var skinnedMesh in avatar.SkinnedMeshRendererList)
                                     {
                                         if (skinnedMesh == null) continue;
 
@@ -73,9 +73,9 @@ namespace VRCAvatarEditor
 
                                 index = 0;
 
-                                if (isGettingMeshRenderer && avatar.meshRendererList != null && isSettingToMesh != null)
+                                if (isGettingMeshRenderer && avatar.MeshRendererList != null && isSettingToMesh != null)
                                 {
-                                    foreach (var mesh in avatar.meshRendererList)
+                                    foreach (var mesh in avatar.MeshRendererList)
                                     {
                                         if (mesh == null) continue;
 
@@ -101,7 +101,7 @@ namespace VRCAvatarEditor
             if (GUILayout.Button(LocalizeText.instance.langPair.setProbeAnchorButtonText))
             {
                 GameObject anchorTarget = null;
-                var result = ProbeAnchor.CreateAndSetProbeAnchorObject(avatar.descriptor.gameObject, targetPos, ref anchorTarget);
+                var result = ProbeAnchor.CreateAndSetProbeAnchorObject(avatar.Descriptor.gameObject, targetPos, ref anchorTarget);
                 if (result && isGettingSkinnedMeshRenderer)
                     ProbeAnchor.SetProbeAnchorToSkinnedMeshRenderers(ref anchorTarget, ref avatar, ref isSettingToSkinnedMesh);
                 if (result && isGettingMeshRenderer)
@@ -117,13 +117,13 @@ namespace VRCAvatarEditor
 
         public void SettingForProbeSetter()
         {
-            if (avatar == null || avatar.skinnedMeshRendererList == null || avatar.meshRendererList == null)
+            if (avatar == null || avatar.SkinnedMeshRendererList == null || avatar.MeshRendererList == null)
                 return;
 
-            isSettingToSkinnedMesh = new bool[avatar.skinnedMeshRendererList.Count];
-            for (int i = 0; i < avatar.skinnedMeshRendererList.Count; i++) isSettingToSkinnedMesh[i] = true;
-            isSettingToMesh = new bool[avatar.meshRendererList.Count];
-            for (int i = 0; i < avatar.meshRendererList.Count; i++) isSettingToMesh[i] = true;
+            isSettingToSkinnedMesh = new bool[avatar.SkinnedMeshRendererList.Count];
+            for (int i = 0; i < avatar.SkinnedMeshRendererList.Count; i++) isSettingToSkinnedMesh[i] = true;
+            isSettingToMesh = new bool[avatar.MeshRendererList.Count];
+            for (int i = 0; i < avatar.MeshRendererList.Count; i++) isSettingToMesh[i] = true;
         }
     }
 }

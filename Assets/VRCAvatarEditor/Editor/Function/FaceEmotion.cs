@@ -37,26 +37,26 @@ namespace VRCAvatarEditor
 
             if (fileName == "") fileName = "face_emotion";
 
-            foreach (var skinnedMesh in avatar.skinnedMeshList)
+            foreach (var skinnedMesh in avatar.SkinnedMeshList)
             {
-                if (!skinnedMesh.isOpenBlendShapes) continue;
+                if (!skinnedMesh.IsOpenBlendShapes) continue;
 
-                string path = GetHierarchyPath(rootObj, skinnedMesh.renderer.gameObject);
+                string path = GetHierarchyPath(rootObj, skinnedMesh.Renderer.gameObject);
 
-                foreach (var blendshape in skinnedMesh.blendshapes)
+                foreach (var blendshape in skinnedMesh.Blendshapes)
                 {
                     float keyValue;
                     AnimationCurve curve = new AnimationCurve();
-                    if (!blendshape.isExclusion && blendshape.isContains)
+                    if (!blendshape.IsExclusion && blendshape.IsContains)
                     {
-                        keyValue = skinnedMesh.renderer.GetBlendShapeWeight(blendshape.id);
+                        keyValue = skinnedMesh.Renderer.GetBlendShapeWeight(blendshape.Id);
 
                         curve.keys = null;
 
                         curve.AddKey(0, keyValue);
                         curve.AddKey(1 / 60.0f, keyValue);
 
-                        animClip.SetCurve(path, typeof(SkinnedMeshRenderer), "blendShape." + blendshape.name, curve);
+                        animClip.SetCurve(path, typeof(SkinnedMeshRenderer), "blendShape." + blendshape.Name, curve);
 
                     }
                 }
@@ -115,20 +115,20 @@ namespace VRCAvatarEditor
         /// </summary>
         public static void ResetAllBlendShapeValues(ref VRCAvatar avatar)
         {
-            foreach (var skinnedMesh in avatar.skinnedMeshList)
+            foreach (var skinnedMesh in avatar.SkinnedMeshList)
             {
-                if (!skinnedMesh.isOpenBlendShapes) continue;
+                if (!skinnedMesh.IsOpenBlendShapes) continue;
 
-                foreach (var blendshape in skinnedMesh.blendshapes)
-                    if (blendshape.isContains)
-                        SetBlendShapeMinValue(ref skinnedMesh.renderer, blendshape.id);
+                foreach (var blendshape in skinnedMesh.Blendshapes)
+                    if (blendshape.IsContains)
+                        SetBlendShapeMinValue(skinnedMesh.Renderer, blendshape.Id);
             }
         }
 
         /// <summary>
         /// BlendShapeの値を最大値にする
         /// </summary>
-        public static bool SetBlendShapeMaxValue(ref SkinnedMeshRenderer renderer, int id)
+        public static bool SetBlendShapeMaxValue(SkinnedMeshRenderer renderer, int id)
         {
             float maxValue = 0f;
 
@@ -150,7 +150,7 @@ namespace VRCAvatarEditor
 
         /// <summary>
         /// BlendShapeの値を最小値にする
-        public static bool SetBlendShapeMinValue(ref SkinnedMeshRenderer renderer, int id)
+        public static bool SetBlendShapeMinValue(SkinnedMeshRenderer renderer, int id)
         {
             float minValue = 0f;
 
@@ -174,12 +174,12 @@ namespace VRCAvatarEditor
         /// </summary>
         /// <param name="value"></param>
         /// <param name="blendshapes"></param>
-        public static bool SetContainsAll(bool value, ref List<SkinnedMesh.BlendShape> blendshapes)
+        public static bool SetContainsAll(bool value, List<SkinnedMesh.BlendShape> blendshapes)
         {
             if (blendshapes == null) return false;
 
             foreach (var blendshape in blendshapes)
-                blendshape.isContains = value;
+                blendshape.IsContains = value;
 
             return true;
         }
@@ -213,22 +213,22 @@ namespace VRCAvatarEditor
         /// <param name="skinnedMeshes"></param>
         public static void ApplyAnimationProperties(List<AnimParam> animProperties, ref VRCAvatar avatar)
         {
-            for (int skinnedMeshIndex = 0; skinnedMeshIndex < avatar.skinnedMeshList.Count; skinnedMeshIndex++)
+            for (int skinnedMeshIndex = 0; skinnedMeshIndex < avatar.SkinnedMeshList.Count; skinnedMeshIndex++)
             {
-                var mesh = avatar.skinnedMeshList[skinnedMeshIndex].mesh;
-                var renderer = avatar.skinnedMeshList[skinnedMeshIndex].renderer;
-                var blendshapes = avatar.skinnedMeshList[skinnedMeshIndex].blendshapes;
+                var mesh = avatar.SkinnedMeshList[skinnedMeshIndex].Mesh;
+                var renderer = avatar.SkinnedMeshList[skinnedMeshIndex].Renderer;
+                var blendshapes = avatar.SkinnedMeshList[skinnedMeshIndex].Blendshapes;
 
                 if (renderer == null) continue;
 
                 // 一旦すべてリセットする
-                for (int i = 0; i < avatar.defaultFaceEmotion.Count; i++)
+                for (int i = 0; i < avatar.DefaultFaceEmotion.Count; i++)
                 {
-                    var defaultAnimProperty = avatar.defaultFaceEmotion[i];
+                    var defaultAnimProperty = avatar.DefaultFaceEmotion[i];
                     var index = mesh.GetBlendShapeIndex(defaultAnimProperty.blendShapeName);
                     if (index < 0) continue;
                     renderer.SetBlendShapeWeight(index, defaultAnimProperty.value);
-                    blendshapes[index].isContains = false;
+                    blendshapes[index].IsContains = false;
                 }
 
                 // アニメーションファイルに含まれるものだけ値を変更して
@@ -239,7 +239,7 @@ namespace VRCAvatarEditor
                     if (index >= 0)
                     {
                         renderer.SetBlendShapeWeight(index, animProperty.value);
-                        blendshapes[index].isContains = true;
+                        blendshapes[index].IsContains = true;
                     }
                 }
             }
@@ -253,8 +253,8 @@ namespace VRCAvatarEditor
 
         public static void SetToDefaultFaceEmotion(ref VRCAvatar editAvatar, VRCAvatar originalAvatar)
         {
-            var defaultFaceEmotion = GetAvatarFaceParamaters(editAvatar.skinnedMeshList);
-            editAvatar.defaultFaceEmotion = defaultFaceEmotion;
+            var defaultFaceEmotion = GetAvatarFaceParamaters(editAvatar.SkinnedMeshList);
+            editAvatar.DefaultFaceEmotion = defaultFaceEmotion;
             ApplyAnimationProperties(defaultFaceEmotion, ref originalAvatar);
         }
 
@@ -262,7 +262,7 @@ namespace VRCAvatarEditor
         {
             if (avatar == null) return;
 
-            ApplyAnimationProperties(avatar.defaultFaceEmotion, ref avatar);
+            ApplyAnimationProperties(avatar.DefaultFaceEmotion, ref avatar);
         }
 
         public static List<AnimParam> GetAnimationParamaters(AnimationClip clip)
@@ -287,8 +287,8 @@ namespace VRCAvatarEditor
 
             for (int skinnedMeshIndex = 0; skinnedMeshIndex < skinnedMeshList.Count; skinnedMeshIndex++)
             {
-                var mesh = skinnedMeshList[skinnedMeshIndex].mesh;
-                var renderer = skinnedMeshList[skinnedMeshIndex].renderer;
+                var mesh = skinnedMeshList[skinnedMeshIndex].Mesh;
+                var renderer = skinnedMeshList[skinnedMeshIndex].Renderer;
 
                 for (int blendShapeIndex = 0; blendShapeIndex < mesh.blendShapeCount; blendShapeIndex++)
                 {

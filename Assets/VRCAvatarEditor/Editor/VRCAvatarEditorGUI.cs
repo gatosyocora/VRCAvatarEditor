@@ -250,7 +250,7 @@ namespace VRCAvatarEditor
                         }
                     }
 
-                    using (new EditorGUI.DisabledGroupScope(edittingAvatar.descriptor == null))
+                    using (new EditorGUI.DisabledGroupScope(edittingAvatar.Descriptor == null))
                     {
                         // LayoutType: Default
                         if (layoutType == LayoutType.Default)
@@ -309,8 +309,8 @@ namespace VRCAvatarEditor
                         // ポーズ修正
                         if (GUILayout.Button(LocalizeText.instance.langPair.resetPoseButtonText))
                         {
-                            HumanoidPose.ResetPose(edittingAvatar.descriptor.gameObject);
-                            HumanoidPose.ResetPose(originalAvatar.descriptor.gameObject);
+                            HumanoidPose.ResetPose(edittingAvatar.Descriptor.gameObject);
+                            HumanoidPose.ResetPose(originalAvatar.Descriptor.gameObject);
                         }
 
                         // アップロード
@@ -509,12 +509,12 @@ namespace VRCAvatarEditor
             {
                 faceEmotionGUI.Initialize(edittingAvatar, originalAvatar, saveFolder, this, animationsGUI);
 
-                if (edittingAvatar.skinnedMeshList != null)
+                if (edittingAvatar.SkinnedMeshList != null)
                 {
-                    for (int i = 0; i < edittingAvatar.skinnedMeshList.Count; i++)
+                    for (int i = 0; i < edittingAvatar.SkinnedMeshList.Count; i++)
                     {
-                        if (edittingAvatar.lipSyncShapeKeyNames != null && edittingAvatar.lipSyncShapeKeyNames.Count > 0)
-                            edittingAvatar.skinnedMeshList[i].SetExclusionBlendShapesByContains(faceEmotionGUI.blendshapeExclusions.Union(edittingAvatar.lipSyncShapeKeyNames).ToList<string>());
+                        if (edittingAvatar.LipSyncShapeKeyNames != null && edittingAvatar.LipSyncShapeKeyNames.Count > 0)
+                            edittingAvatar.SkinnedMeshList[i].SetExclusionBlendShapesByContains(faceEmotionGUI.blendshapeExclusions.Union(edittingAvatar.LipSyncShapeKeyNames).ToList<string>());
                     }
                 }
 

@@ -9,40 +9,40 @@ namespace VRCAvatarEditor
 
     public class SkinnedMesh
     {
-        public SkinnedMeshRenderer renderer;
-        public Mesh mesh;
-        public GameObject obj;
-        public int blendShapeNum;
-        public bool isOpenBlendShapes;
-        public List<BlendShape> blendshapes;
-        public List<BlendShape> blendshapes_origin = null;　// null: blendshapesは未ソート
-        public bool isContainsAll = true;
+        public SkinnedMeshRenderer Renderer { get; set; }
+        public Mesh Mesh { get; set; }
+        public GameObject Obj { get; set; }
+        public int BlendShapeNum { get; set; }
+        public bool IsOpenBlendShapes { get; set; }
+        public List<BlendShape> Blendshapes { get; set; }
+        public List<BlendShape> BlendshapesOrigin { get; set; } = null;　// null: blendshapesは未ソート
+        public bool IsContainsAll { get; set; } = true;
 
         public class BlendShape
         {
-            public int id;
-            public string name;
-            public bool isContains;
-            public bool isExclusion;
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public bool IsContains { get; set; }
+            public bool IsExclusion { get; set; }
 
             public BlendShape(int id, string name, bool isContains)
             {
-                this.id = id;
-                this.name = name;
-                this.isContains = isContains;
-                this.isExclusion = false;
+                this.Id = id;
+                this.Name = name;
+                this.IsContains = isContains;
+                this.IsExclusion = false;
             }
         }
 
         public SkinnedMesh(SkinnedMeshRenderer m_renderer, GameObject faceMeshObj)
         {
-            renderer = m_renderer;
-            mesh = m_renderer.sharedMesh;
-            obj = renderer.gameObject;
-            blendshapes = GetBlendShapes();
-            blendShapeNum = blendshapes.Count;
+            Renderer = m_renderer;
+            Mesh = m_renderer.sharedMesh;
+            Obj = Renderer.gameObject;
+            Blendshapes = GetBlendShapes();
+            BlendShapeNum = Blendshapes.Count;
             // 表情のメッシュのみtrueにする
-            isOpenBlendShapes = obj.Equals(faceMeshObj);
+            IsOpenBlendShapes = Obj.Equals(faceMeshObj);
         }
 
         /// <summary>
@@ -53,9 +53,9 @@ namespace VRCAvatarEditor
         {
             List<BlendShape> blendshapes = new List<BlendShape>();
 
-            for (int blendShapeIndex = 0; blendShapeIndex < mesh.blendShapeCount; blendShapeIndex++)
+            for (int blendShapeIndex = 0; blendShapeIndex < Mesh.blendShapeCount; blendShapeIndex++)
             {
-                blendshapes.Add(new BlendShape(blendShapeIndex, mesh.GetBlendShapeName(blendShapeIndex), true));
+                blendshapes.Add(new BlendShape(blendShapeIndex, Mesh.GetBlendShapeName(blendShapeIndex), true));
             }
 
             return blendshapes;
@@ -67,17 +67,17 @@ namespace VRCAvatarEditor
         /// <param name="exclusionWords"></param>
         public void SetExclusionBlendShapesByContains(List<string> exclusionWords)
         {
-            for (int blendShapeIndex = 0; blendShapeIndex < blendShapeNum; blendShapeIndex++)
+            for (int blendShapeIndex = 0; blendShapeIndex < BlendShapeNum; blendShapeIndex++)
             {
-                blendshapes[blendShapeIndex].isExclusion = false;
+                Blendshapes[blendShapeIndex].IsExclusion = false;
 
                 // 除外するキーかどうか調べる
                 foreach (var exclusionWord in exclusionWords)
                 {
                     if (exclusionWord == "") continue;
-                    if ((blendshapes[blendShapeIndex].name.ToLower()).Contains(exclusionWord.ToLower()))
+                    if ((Blendshapes[blendShapeIndex].Name.ToLower()).Contains(exclusionWord.ToLower()))
                     {
-                        blendshapes[blendShapeIndex].isExclusion = true;
+                        Blendshapes[blendShapeIndex].IsExclusion = true;
                         break;
                     }
                 }
@@ -89,13 +89,13 @@ namespace VRCAvatarEditor
         /// </summary>
         public void SortBlendShapesToAscending()
         {
-            if (blendShapeNum <= 1) return;
+            if (BlendShapeNum <= 1) return;
 
             // 初期状態の並び順に戻すことがあるので初期状態のやつをコピーしておく
-            if (blendshapes_origin == null)
-                blendshapes_origin = new List<BlendShape>(blendshapes);
+            if (BlendshapesOrigin == null)
+                BlendshapesOrigin = new List<BlendShape>(Blendshapes);
 
-            blendshapes = blendshapes.OrderBy(x => x.name).ToList<BlendShape>();
+            Blendshapes = Blendshapes.OrderBy(x => x.Name).ToList<BlendShape>();
         }
 
         /// <summary>
@@ -103,11 +103,11 @@ namespace VRCAvatarEditor
         /// </summary>
         public void ResetDefaultSort()
         {
-            if (blendshapes_origin == null) return;
+            if (BlendshapesOrigin == null) return;
 
-            blendshapes = blendshapes_origin;
+            Blendshapes = BlendshapesOrigin;
 
-            blendshapes_origin = null;
+            BlendshapesOrigin = null;
         }
     }
 

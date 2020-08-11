@@ -36,12 +36,12 @@ namespace VRCAvatarEditor
             shaderKindGroups = customShaders
                                     .GroupBy(s => s.name.Split('/').First())
                                     .ToArray();
-            currentShaderKindName = GetShaderKindName(edittingAvatar.materials);
+            currentShaderKindName = GetShaderKindName(edittingAvatar.Materials);
             shaderKindNames = shaderKindGroups.Select(s => s.Key).ToArray();
             shaderKindIndex = Array.IndexOf(shaderKindNames, currentShaderKindName);
 
             // すべてtrueで初期化したnew bool[edittingAvatar.materials.Length]
-            isTargets = Enumerable.Range(0, edittingAvatar.materials.Length).Select(b => true).ToArray();
+            isTargets = Enumerable.Range(0, edittingAvatar.Materials.Length).Select(b => true).ToArray();
         }
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
@@ -57,8 +57,8 @@ namespace VRCAvatarEditor
                         toggleAll = EditorGUILayout.ToggleLeft(LocalizeText.instance.langPair.toggleAll, toggleAll);
                         if (check.changed)
                         {
-                            isTargets = Enumerable.Range(0, edittingAvatar.materials.Length).Select(b => toggleAll).ToArray();
-                            currentShaderKindName = GetShaderKindName(edittingAvatar.materials.Where((v, index) => isTargets[index]));
+                            isTargets = Enumerable.Range(0, edittingAvatar.Materials.Length).Select(b => toggleAll).ToArray();
+                            currentShaderKindName = GetShaderKindName(edittingAvatar.Materials.Where((v, index) => isTargets[index]));
                             shaderKindIndex = Array.IndexOf(shaderKindNames, currentShaderKindName);
                             Repaint();
                         }
@@ -68,8 +68,8 @@ namespace VRCAvatarEditor
 
                     if (GUILayout.Button(LocalizeText.instance.langPair.duplicateSelectedButtonText))
                     {
-                        Undo.RegisterCompleteObjectUndo(originalAvatar.animator.gameObject, "Replace All Materials");
-                        var srcMaterials = edittingAvatar.materials.Where((v, i) => isTargets[i]).ToArray();
+                        Undo.RegisterCompleteObjectUndo(originalAvatar.Animator.gameObject, "Replace All Materials");
+                        var srcMaterials = edittingAvatar.Materials.Where((v, i) => isTargets[i]).ToArray();
                         var newMaterials = GatoUtility.DuplicateMaterials(srcMaterials);
                         for (int i = 0; i < newMaterials.Length; i++)
                         {
@@ -81,7 +81,7 @@ namespace VRCAvatarEditor
                     }
                     if (GUILayout.Button(LocalizeText.instance.langPair.optimizeSelectedButtonText))
                     {
-                        foreach (var mat in edittingAvatar.materials.Where((v, i) => isTargets[i]).ToArray())
+                        foreach (var mat in edittingAvatar.Materials.Where((v, i) => isTargets[i]).ToArray())
                         {
                             MaterialEdit.DeleteUnusedProperties(mat, AssetDatabase.GetAssetPath(mat));
                         }
@@ -93,11 +93,11 @@ namespace VRCAvatarEditor
                 using (var scrollView = new EditorGUILayout.ScrollViewScope(leftScrollPosShader))
                 {
                     leftScrollPosShader = scrollView.scrollPosition;
-                    if (edittingAvatar.materials != null)
+                    if (edittingAvatar.Materials != null)
                     {
-                        for (int i = 0; i < edittingAvatar.materials.Length; i++)
+                        for (int i = 0; i < edittingAvatar.Materials.Length; i++)
                         {
-                            var mat = edittingAvatar.materials[i];
+                            var mat = edittingAvatar.Materials[i];
                             if (mat is null || mat.shader is null) continue;
 
                             using (new EditorGUILayout.HorizontalScope())
@@ -107,7 +107,7 @@ namespace VRCAvatarEditor
                                     isTargets[i] = EditorGUILayout.ToggleLeft(string.Empty, isTargets[i], GUILayout.Width(30f));
                                     if (check.changed)
                                     {
-                                        currentShaderKindName = GetShaderKindName(edittingAvatar.materials.Where((v, index) => isTargets[index]));
+                                        currentShaderKindName = GetShaderKindName(edittingAvatar.Materials.Where((v, index) => isTargets[index]));
                                         shaderKindIndex = Array.IndexOf(shaderKindNames, currentShaderKindName);
                                         Repaint();
                                     }
@@ -125,7 +125,7 @@ namespace VRCAvatarEditor
                                     {
                                         MaterialEdit.ReplaceMaterial(edittingAvatar, mat, material);
                                         MaterialEdit.ReplaceMaterial(originalAvatar, mat, material);
-                                        currentShaderKindName = GetShaderKindName(edittingAvatar.materials.Where((v, index) => isTargets[index]));
+                                        currentShaderKindName = GetShaderKindName(edittingAvatar.Materials.Where((v, index) => isTargets[index]));
                                         shaderKindIndex = Array.IndexOf(shaderKindNames, currentShaderKindName);
                                         Repaint();
                                     }
@@ -138,7 +138,7 @@ namespace VRCAvatarEditor
                                     if (check.changed)
                                     {
                                         mat.shader = customShaders[shaderIndex];
-                                        currentShaderKindName = GetShaderKindName(edittingAvatar.materials.Where((v, index) => isTargets[index]));
+                                        currentShaderKindName = GetShaderKindName(edittingAvatar.Materials.Where((v, index) => isTargets[index]));
                                         shaderKindIndex = Array.IndexOf(shaderKindNames, currentShaderKindName);
                                         Repaint();
                                     }
@@ -168,7 +168,7 @@ namespace VRCAvatarEditor
                     {
                         if (GUILayout.Button(LocalizeText.instance.langPair.replaceShaderButtonText))
                         {
-                            var materials = edittingAvatar.materials.Where((v, i) => isTargets[i]).ToArray();
+                            var materials = edittingAvatar.Materials.Where((v, i) => isTargets[i]).ToArray();
                             var group = shaderKindGroups[shaderKindIndex];
                             if (group.Count() == 1)
                             {

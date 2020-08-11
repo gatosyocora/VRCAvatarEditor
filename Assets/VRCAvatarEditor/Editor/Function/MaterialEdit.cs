@@ -27,10 +27,10 @@ namespace VRCAvatarEditor
         /// <param name="dstMaterial">変更後のMaterial</param>
         public static void ReplaceMaterial(VRCAvatar avatar, Material srcMaterial, Material dstMaterial)
         {
-            GatoUtility.ReplaceMaterial(avatar.animator.gameObject, srcMaterial, dstMaterial);
-            var index = Array.IndexOf(avatar.materials, srcMaterial);
+            GatoUtility.ReplaceMaterial(avatar.Animator.gameObject, srcMaterial, dstMaterial);
+            var index = Array.IndexOf(avatar.Materials, srcMaterial);
             if (index == -1) return;
-            avatar.materials[index] = dstMaterial;
+            avatar.Materials[index] = dstMaterial;
         }
 
         /// <summary>

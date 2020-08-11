@@ -18,7 +18,7 @@ namespace VRCAvatarEditor
             this.avatar = avatar;
             exclusions = new List<SkinnedMeshRenderer>();
             targetRenderers = MeshBounds.GetSkinnedMeshRenderersWithoutExclusions(
-                                    avatar.descriptor.gameObject,
+                                    avatar.Descriptor.gameObject,
                                     exclusions);
         }
 
@@ -63,7 +63,7 @@ namespace VRCAvatarEditor
                             exclusions = exclusions.Distinct().ToList();
 
                             targetRenderers = MeshBounds.GetSkinnedMeshRenderersWithoutExclusions(
-                                                            avatar.descriptor.gameObject,
+                                                            avatar.Descriptor.gameObject,
                                                             exclusions);
                         }
                     }
@@ -104,7 +104,7 @@ namespace VRCAvatarEditor
                         if (check.changed && avatar != null)
                         {
                             targetRenderers = MeshBounds.GetSkinnedMeshRenderersWithoutExclusions(
-                                                avatar.descriptor.gameObject,
+                                                avatar.Descriptor.gameObject,
                                                 exclusions);
                         }
                     }

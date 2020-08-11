@@ -10,48 +10,48 @@ namespace VRCAvatarEditor
 {
     public class VRCAvatar
     {
-        public Animator animator { get; set; }
-        public VRC_AvatarDescriptor descriptor { get; set; }
-        public Vector3 eyePos { get; set; }
-        public AnimatorOverrideController standingAnimController { get; set; }
-        public AnimatorOverrideController sittingAnimController { get; set; }
-        public VRC_AvatarDescriptor.AnimationSet sex { get; set; }
-        public string avatarId { get; set; }
-        public int overridesNum { get; set; }
-        public SkinnedMeshRenderer faceMesh { get; set; }
-        public List<string> lipSyncShapeKeyNames;
-        public Material[] materials { get; set; }
-        public int triangleCount { get; set; }
-        public int triangleCountInactive { get; set; }
-        public VRC_AvatarDescriptor.LipSyncStyle lipSyncStyle { get; set; }
-        public Enum faceShapeKeyEnum { get; set; }
-        public List<SkinnedMesh> skinnedMeshList { get; set; }
+        public Animator Animator { get; set; }
+        public VRC_AvatarDescriptor Descriptor { get; set; }
+        public Vector3 EyePos { get; set; }
+        public AnimatorOverrideController StandingAnimController { get; set; }
+        public AnimatorOverrideController SittingAnimController { get; set; }
+        public VRC_AvatarDescriptor.AnimationSet Sex { get; set; }
+        public string AvatarId { get; set; }
+        public int OverridesNum { get; set; }
+        public SkinnedMeshRenderer FaceMesh { get; set; }
+        public List<string> LipSyncShapeKeyNames { get; set; }
+        public Material[] Materials { get; set; }
+        public int TriangleCount { get; set; }
+        public int TriangleCountInactive { get; set; }
+        public VRC_AvatarDescriptor.LipSyncStyle LipSyncStyle { get; set; }
+        public Enum FaceShapeKeyEnum { get; set; }
+        public List<SkinnedMesh> SkinnedMeshList { get; set; }
 
-        public List<SkinnedMeshRenderer> skinnedMeshRendererList { get; set; }
-        public List<MeshRenderer> meshRendererList { get; set; }
+        public List<SkinnedMeshRenderer> SkinnedMeshRendererList { get; set; }
+        public List<MeshRenderer> MeshRendererList { get; set; }
 
-        public string animSavedFolderPath { get; set; }
+        public string AnimSavedFolderPath { get; set; }
 
-        public List<FaceEmotion.AnimParam> defaultFaceEmotion { get; set; }
+        public List<FaceEmotion.AnimParam> DefaultFaceEmotion { get; set; }
 
         public VRCAvatar()
         {
-            animator = null;
-            descriptor = null;
-            eyePos = Vector3.zero;
-            standingAnimController = null;
-            sittingAnimController = null;
-            sex = VRC_AvatarDescriptor.AnimationSet.None;
-            avatarId = string.Empty;
-            overridesNum = 0;
-            faceMesh = null;
-            lipSyncShapeKeyNames = null;
-            triangleCount = 0;
-            triangleCountInactive = 0;
-            lipSyncStyle = VRC_AvatarDescriptor.LipSyncStyle.Default;
-            faceShapeKeyEnum = null;
-            skinnedMeshList = null;
-            animSavedFolderPath = $"Assets{Path.DirectorySeparatorChar}";
+            Animator = null;
+            Descriptor = null;
+            EyePos = Vector3.zero;
+            StandingAnimController = null;
+            SittingAnimController = null;
+            Sex = VRC_AvatarDescriptor.AnimationSet.None;
+            AvatarId = string.Empty;
+            OverridesNum = 0;
+            FaceMesh = null;
+            LipSyncShapeKeyNames = null;
+            TriangleCount = 0;
+            TriangleCountInactive = 0;
+            LipSyncStyle = VRC_AvatarDescriptor.LipSyncStyle.Default;
+            FaceShapeKeyEnum = null;
+            SkinnedMeshList = null;
+            AnimSavedFolderPath = $"Assets{Path.DirectorySeparatorChar}";
         }
 
         public VRCAvatar(VRC_AvatarDescriptor descriptor) : this()
@@ -61,7 +61,7 @@ namespace VRCAvatarEditor
 
         public void LoadAvatarInfo(VRC_AvatarDescriptor descriptor)
         {
-            this.descriptor = descriptor;
+            this.Descriptor = descriptor;
             LoadAvatarInfo();
         }
 
@@ -70,44 +70,44 @@ namespace VRCAvatarEditor
         /// </summary>
         public void LoadAvatarInfo()
         {
-            if (descriptor == null) return;
+            if (Descriptor == null) return;
 
-            var avatarObj = descriptor.gameObject;
+            var avatarObj = Descriptor.gameObject;
 
-            animator = avatarObj.GetComponent<Animator>();
+            Animator = avatarObj.GetComponent<Animator>();
 
-            eyePos = descriptor.ViewPosition;
-            sex = descriptor.Animations;
+            EyePos = Descriptor.ViewPosition;
+            Sex = Descriptor.Animations;
 
-            standingAnimController = descriptor.CustomStandingAnims;
-            sittingAnimController = descriptor.CustomSittingAnims;
+            StandingAnimController = Descriptor.CustomStandingAnims;
+            SittingAnimController = Descriptor.CustomSittingAnims;
 
             SetAnimSavedFolderPath();
 
-            avatarId = descriptor.gameObject.GetComponent<PipelineManager>().blueprintId;
+            AvatarId = Descriptor.gameObject.GetComponent<PipelineManager>().blueprintId;
 
-            faceMesh = descriptor.VisemeSkinnedMesh;
+            FaceMesh = Descriptor.VisemeSkinnedMesh;
 
-            if (faceMesh != null && descriptor.lipSync == VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape)
+            if (FaceMesh != null && Descriptor.lipSync == VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape)
             {
-                lipSyncShapeKeyNames = new List<string>();
-                lipSyncShapeKeyNames.AddRange(descriptor.VisemeBlendShapes);
+                LipSyncShapeKeyNames = new List<string>();
+                LipSyncShapeKeyNames.AddRange(Descriptor.VisemeBlendShapes);
             }
 
-            materials = GatoUtility.GetMaterials(avatarObj);
+            Materials = GatoUtility.GetMaterials(avatarObj);
 
             int triangleCountInactive = 0;
-            triangleCount = GatoUtility.GetAllTrianglesCount(avatarObj, ref triangleCountInactive);
-            this.triangleCountInactive = triangleCountInactive;
+            TriangleCount = GatoUtility.GetAllTrianglesCount(avatarObj, ref triangleCountInactive);
+            this.TriangleCountInactive = triangleCountInactive;
 
-            lipSyncStyle = descriptor.lipSync;
+            LipSyncStyle = Descriptor.lipSync;
 
-            skinnedMeshList = FaceEmotion.GetSkinnedMeshListOfBlendShape(avatarObj, faceMesh.gameObject);
+            SkinnedMeshList = FaceEmotion.GetSkinnedMeshListOfBlendShape(avatarObj, FaceMesh.gameObject);
 
-            skinnedMeshRendererList = GatoUtility.GetSkinnedMeshList(avatarObj);
-            meshRendererList = GatoUtility.GetMeshList(avatarObj);
+            SkinnedMeshRendererList = GatoUtility.GetSkinnedMeshList(avatarObj);
+            MeshRendererList = GatoUtility.GetMeshList(avatarObj);
 
-            defaultFaceEmotion = FaceEmotion.GetAvatarFaceParamaters(skinnedMeshList);
+            DefaultFaceEmotion = FaceEmotion.GetAvatarFaceParamaters(SkinnedMeshList);
         }
 
         /// <summary>
@@ -115,20 +115,20 @@ namespace VRCAvatarEditor
         /// </summary>
         public void SetLipSyncToViseme()
         {
-            if (descriptor == null) return;
+            if (Descriptor == null) return;
 
-            lipSyncStyle = VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape;
-            descriptor.lipSync = VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape;
+            LipSyncStyle = VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape;
+            Descriptor.lipSync = VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape;
 
-            if (faceMesh == null)
+            if (FaceMesh == null)
             {
-                var rootObj = animator.gameObject;
-                faceMesh = rootObj.GetComponentInChildren<SkinnedMeshRenderer>();
-                descriptor.VisemeSkinnedMesh = faceMesh;
+                var rootObj = Animator.gameObject;
+                FaceMesh = rootObj.GetComponentInChildren<SkinnedMeshRenderer>();
+                Descriptor.VisemeSkinnedMesh = FaceMesh;
             }
 
-            if (faceMesh == null) return;
-            var mesh = faceMesh.sharedMesh;
+            if (FaceMesh == null) return;
+            var mesh = FaceMesh.sharedMesh;
 
             var visemeBlendShapeNames = Enum.GetNames(typeof(VRC_AvatarDescriptor.Viseme));
 
@@ -138,24 +138,24 @@ namespace VRCAvatarEditor
                 var visemeShapeKeyName = "vrc.v_" + visemeBlendShapeNames[visemeIndex];
                 if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
                 {
-                    descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
+                    Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
                     continue;
                 }
 
                 visemeShapeKeyName = "VRC.v_" + visemeBlendShapeNames[visemeIndex];
                 if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
                 {
-                    descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
+                    Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
                 }
             }
         }
 
         public void SetAnimSavedFolderPath()
         {
-            if (standingAnimController != null)
+            if (StandingAnimController != null)
             {
-                var assetPath = AssetDatabase.GetAssetPath(standingAnimController);
-                animSavedFolderPath = $"{Path.GetDirectoryName(assetPath)}{Path.DirectorySeparatorChar}";
+                var assetPath = AssetDatabase.GetAssetPath(StandingAnimController);
+                AnimSavedFolderPath = $"{Path.GetDirectoryName(assetPath)}{Path.DirectorySeparatorChar}";
             }
         }
     }

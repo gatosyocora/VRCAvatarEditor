@@ -52,7 +52,7 @@ namespace VRCAvatarEditor
 
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
             {
-                using (new EditorGUI.DisabledScope(editAvatar.descriptor == null))
+                using (new EditorGUI.DisabledScope(editAvatar.Descriptor == null))
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     GUILayout.FlexibleSpace();
@@ -80,7 +80,7 @@ namespace VRCAvatarEditor
                     }
                 }
 
-                if (editAvatar.skinnedMeshList != null)
+                if (editAvatar.SkinnedMeshList != null)
                 {
                     BlendShapeListGUI();
                 }
@@ -89,14 +89,14 @@ namespace VRCAvatarEditor
 
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    EditorGUILayout.LabelField(LocalizeText.instance.langPair.animClipSaveFolderLabel, originalAvatar.animSavedFolderPath);
+                    EditorGUILayout.LabelField(LocalizeText.instance.langPair.animClipSaveFolderLabel, originalAvatar.AnimSavedFolderPath);
 
                     if (GUILayout.Button(LocalizeText.instance.langPair.selectFolder, GUILayout.Width(100)))
                     {
-                        originalAvatar.animSavedFolderPath = EditorUtility.OpenFolderPanel(LocalizeText.instance.langPair.selectFolderDialogMessageText, originalAvatar.animSavedFolderPath, string.Empty);
-                        originalAvatar.animSavedFolderPath = $"{FileUtil.GetProjectRelativePath(originalAvatar.animSavedFolderPath)}{Path.DirectorySeparatorChar}";
-                        if (originalAvatar.animSavedFolderPath == $"{Path.DirectorySeparatorChar}") originalAvatar.animSavedFolderPath = $"Assets{Path.DirectorySeparatorChar}";
-                        parentWindow.animationsGUI.UpdateSaveFolderPath(originalAvatar.animSavedFolderPath);
+                        originalAvatar.AnimSavedFolderPath = EditorUtility.OpenFolderPanel(LocalizeText.instance.langPair.selectFolderDialogMessageText, originalAvatar.AnimSavedFolderPath, string.Empty);
+                        originalAvatar.AnimSavedFolderPath = $"{FileUtil.GetProjectRelativePath(originalAvatar.AnimSavedFolderPath)}{Path.DirectorySeparatorChar}";
+                        if (originalAvatar.AnimSavedFolderPath == $"{Path.DirectorySeparatorChar}") originalAvatar.AnimSavedFolderPath = $"Assets{Path.DirectorySeparatorChar}";
+                        parentWindow.animationsGUI.UpdateSaveFolderPath(originalAvatar.AnimSavedFolderPath);
                     }
 
                 }
@@ -129,9 +129,9 @@ namespace VRCAvatarEditor
                 {
                     if (GUILayout.Button(LocalizeText.instance.langPair.createAnimFileButtonText))
                     {
-                        var animController = originalAvatar.standingAnimController;
+                        var animController = originalAvatar.StandingAnimController;
 
-                        var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, originalAvatar.animSavedFolderPath, ref editAvatar, ref blendshapeExclusions, editAvatar.descriptor.gameObject);
+                        var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, originalAvatar.AnimSavedFolderPath, ref editAvatar, ref blendshapeExclusions, editAvatar.Descriptor.gameObject);
                         if (selectedHandAnim != HandPose.HandPoseType.NoSelection)
                         {
                             HandPose.AddHandPoseAnimationKeysFromOriginClip(createdAnimClip, handPoseAnim);
@@ -141,8 +141,8 @@ namespace VRCAvatarEditor
                             FaceEmotion.ResetToDefaultFaceEmotion(ref editAvatar);
                         }
 
-                        originalAvatar.standingAnimController = animController;
-                        editAvatar.standingAnimController = animController;
+                        originalAvatar.StandingAnimController = animController;
+                        editAvatar.StandingAnimController = animController;
 
                         animationsGUI.ResetPathMissing(AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]);
                     }
@@ -210,10 +210,10 @@ namespace VRCAvatarEditor
             using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos))
             {
                 scrollPos = scrollView.scrollPosition;
-                foreach (var skinnedMesh in editAvatar.skinnedMeshList)
+                foreach (var skinnedMesh in editAvatar.SkinnedMeshList)
                 {
-                    skinnedMesh.isOpenBlendShapes = EditorGUILayout.Foldout(skinnedMesh.isOpenBlendShapes, skinnedMesh.obj.name);
-                    if (skinnedMesh.isOpenBlendShapes)
+                    skinnedMesh.IsOpenBlendShapes = EditorGUILayout.Foldout(skinnedMesh.IsOpenBlendShapes, skinnedMesh.Obj.name);
+                    if (skinnedMesh.IsOpenBlendShapes)
                     {
                         using (new EditorGUI.IndentLevelScope())
                         {
@@ -221,39 +221,39 @@ namespace VRCAvatarEditor
                             {
                                 using (var check = new EditorGUI.ChangeCheckScope())
                                 {
-                                    skinnedMesh.isContainsAll = EditorGUILayout.ToggleLeft(string.Empty, skinnedMesh.isContainsAll, GUILayout.Width(45));
+                                    skinnedMesh.IsContainsAll = EditorGUILayout.ToggleLeft(string.Empty, skinnedMesh.IsContainsAll, GUILayout.Width(45));
                                     if (check.changed)
                                     {
-                                        FaceEmotion.SetContainsAll(skinnedMesh.isContainsAll, ref skinnedMesh.blendshapes);
+                                        FaceEmotion.SetContainsAll(skinnedMesh.IsContainsAll, skinnedMesh.Blendshapes);
                                     }
                                 }
                                 EditorGUILayout.LabelField(LocalizeText.instance.langPair.toggleAllLabel, GUILayout.Height(20));
                             }
 
-                            foreach (var blendshape in skinnedMesh.blendshapes)
+                            foreach (var blendshape in skinnedMesh.Blendshapes)
                             {
-                                if (!blendshape.isExclusion)
+                                if (!blendshape.IsExclusion)
                                 {
                                     using (new EditorGUILayout.HorizontalScope())
                                     {
-                                        blendshape.isContains = EditorGUILayout.ToggleLeft(string.Empty, blendshape.isContains, GUILayout.Width(45));
+                                        blendshape.IsContains = EditorGUILayout.ToggleLeft(string.Empty, blendshape.IsContains, GUILayout.Width(45));
 
-                                        EditorGUILayout.SelectableLabel(blendshape.name, GUILayout.Height(20));
+                                        EditorGUILayout.SelectableLabel(blendshape.Name, GUILayout.Height(20));
                                         using (var check = new EditorGUI.ChangeCheckScope())
                                         {
-                                            var value = skinnedMesh.renderer.GetBlendShapeWeight(blendshape.id);
+                                            var value = skinnedMesh.Renderer.GetBlendShapeWeight(blendshape.Id);
                                             value = EditorGUILayout.Slider(value, 0, 100);
                                             if (check.changed)
-                                                skinnedMesh.renderer.SetBlendShapeWeight(blendshape.id, value);
+                                                skinnedMesh.Renderer.SetBlendShapeWeight(blendshape.Id, value);
                                         }
 
                                         if (GUILayout.Button(LocalizeText.instance.langPair.minButtonText, GUILayout.MaxWidth(50)))
                                         {
-                                            FaceEmotion.SetBlendShapeMinValue(ref skinnedMesh.renderer, blendshape.id);
+                                            FaceEmotion.SetBlendShapeMinValue(skinnedMesh.Renderer, blendshape.Id);
                                         }
                                         if (GUILayout.Button(LocalizeText.instance.langPair.maxButtonText, GUILayout.MaxWidth(50)))
                                         {
-                                            FaceEmotion.SetBlendShapeMaxValue(ref skinnedMesh.renderer, blendshape.id);
+                                            FaceEmotion.SetBlendShapeMaxValue(skinnedMesh.Renderer, blendshape.Id);
                                         }
                                     }
                                 }
@@ -286,7 +286,7 @@ namespace VRCAvatarEditor
         {
             if (usePreviousAnimationOnHandAnimation)
             {
-                var animController = originalAvatar.standingAnimController;
+                var animController = originalAvatar.StandingAnimController;
                 var previousAnimation = animController[AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]];
 
                 // 未設定でなければ以前設定されていたものをHandPoseAnimationとして使う

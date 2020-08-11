@@ -68,7 +68,7 @@ namespace VRCAvatarEditor
 
         public static void SetProbeAnchorToSkinnedMeshRenderers(ref GameObject anchorTargetObj, ref VRCAvatar avatar, ref bool[] isSettingToSkinnedMesh)
         {
-            List<SkinnedMeshRenderer> skinnedMeshRendererList = avatar.skinnedMeshRendererList;
+            List<SkinnedMeshRenderer> skinnedMeshRendererList = avatar.SkinnedMeshRendererList;
 
             for (int index = 0; index < skinnedMeshRendererList.Count; index++)
             {
@@ -81,7 +81,7 @@ namespace VRCAvatarEditor
 
         public static void SetProbeAnchorToMeshRenderers(ref GameObject anchorTargetObj, ref VRCAvatar avatar, ref bool[] isSettingToMesh)
         {
-            List<MeshRenderer> meshRendererList = avatar.meshRendererList;
+            List<MeshRenderer> meshRendererList = avatar.MeshRendererList;
 
             for (int index = 0; index < meshRendererList.Count; index++)
             {
