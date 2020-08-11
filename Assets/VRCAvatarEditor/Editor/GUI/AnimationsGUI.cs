@@ -136,7 +136,7 @@ namespace VRCAvatarEditor
                                         if (vrcAvatarEditorGUI.currentTool != VRCAvatarEditorGUI.ToolFunc.FaceEmotion)
                                         {
                                             vrcAvatarEditorGUI.currentTool = VRCAvatarEditorGUI.ToolFunc.FaceEmotion;
-                                            vrcAvatarEditorGUI.TabChanged();
+                                            vrcAvatarEditorGUI.OnTabChanged();
                                         }
                                         FaceEmotion.ApplyAnimationProperties(controller[handPoseName], ref editAvatar);
                                         faceEmotionGUI.ChangeSaveAnimationState(controller[handPoseName].name,

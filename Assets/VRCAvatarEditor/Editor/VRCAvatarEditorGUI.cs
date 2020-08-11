@@ -491,13 +491,13 @@ namespace VRCAvatarEditor
 
                     if (check.changed)
                     {
-                        TabChanged();
+                        OnTabChanged();
                     }
                 }
             }
         }
 
-        public void TabChanged()
+        public void OnTabChanged()
         {
             selectedToolGUI = toolGUIs[currentTool];
 
