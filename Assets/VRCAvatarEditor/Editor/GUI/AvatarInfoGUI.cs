@@ -49,18 +49,13 @@ namespace VRCAvatarEditor
                     // AnimatorOverrideController
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
-                        avatar.StandingAnimController = EditorGUILayout.ObjectField(
+                        avatar.StandingAnimController = GatoGUILayout.ObjectField(
                             LocalizeText.instance.langPair.customStandingAnimsLabel,
-                            avatar.StandingAnimController,
-                            typeof(AnimatorOverrideController),
-                            true
-                        ) as AnimatorOverrideController;
-                        avatar.SittingAnimController = EditorGUILayout.ObjectField(
+                            avatar.StandingAnimController);
+
+                        avatar.SittingAnimController = GatoGUILayout.ObjectField(
                             LocalizeText.instance.langPair.customSittingAnimsLabel,
-                            avatar.SittingAnimController,
-                            typeof(AnimatorOverrideController),
-                            true
-                        ) as AnimatorOverrideController;
+                            avatar.SittingAnimController);
 
                         if (check.changed)
                         {
@@ -78,12 +73,9 @@ namespace VRCAvatarEditor
                     // faceMesh
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
-                        avatar.FaceMesh = EditorGUILayout.ObjectField(
+                        avatar.FaceMesh = GatoGUILayout.ObjectField(
                             LocalizeText.instance.langPair.faceMeshLabel,
-                            avatar.FaceMesh,
-                            typeof(SkinnedMeshRenderer),
-                            true
-                        ) as SkinnedMeshRenderer;
+                            avatar.FaceMesh);
 
                         if (check.changed)
                         {
@@ -159,11 +151,12 @@ namespace VRCAvatarEditor
                     if (avatar.LipSyncStyle != VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape || avatar.FaceMesh == null)
                     {
                         EditorGUILayout.HelpBox(LocalizeText.instance.langPair.lipSyncWarningMessageText, MessageType.Warning);
-                        if (GUILayout.Button(LocalizeText.instance.langPair.lipSyncBlendShapesAutoDetectButtonText))
-                        {
-                            avatar.SetLipSyncToViseme();
-                            EditorUtility.SetDirty(avatar.Descriptor);
-                        }
+                        GatoGUILayout.Button(
+                            LocalizeText.instance.langPair.lipSyncBlendShapesAutoDetectButtonText,
+                            () => {
+                                avatar.SetLipSyncToViseme();
+                                EditorUtility.SetDirty(avatar.Descriptor);
+                            });
                     }
                 }
 

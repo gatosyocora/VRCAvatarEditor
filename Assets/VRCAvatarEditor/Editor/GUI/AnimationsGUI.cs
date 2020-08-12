@@ -98,10 +98,12 @@ namespace VRCAvatarEditor
                         btnText = LocalizeText.instance.langPair.faceAndHandButtonText;
                     }
 
-                    if (GUILayout.Button(btnText))
-                    {
-                        showEmoteAnimations = !showEmoteAnimations;
-                    }
+                    GatoGUILayout.Button(
+                        btnText,
+                        () =>
+                        {
+                            showEmoteAnimations = !showEmoteAnimations;
+                        });
                 }
 
                 EditorGUILayout.Space();
@@ -123,28 +125,29 @@ namespace VRCAvatarEditor
                             {
                                 GUILayout.Label((i + 1) + ":" + handPoseName, (pathMissing[i]) ? errorStyle : normalStyle, GUILayout.Width(100));
 
-                                controller[handPoseName] = EditorGUILayout.ObjectField(
+                                controller[handPoseName] = GatoGUILayout.ObjectField(
                                     string.Empty,
                                     anim,
-                                    typeof(AnimationClip),
                                     true,
-                                    GUILayout.Width(200)
-                                ) as AnimationClip;
+                                    GUILayout.Width(200));
 
                                 using (new EditorGUI.DisabledGroupScope(anim == null))
                                 {
-                                    if (GUILayout.Button(LocalizeText.instance.langPair.edit, GUILayout.Width(50)))
-                                    {
-                                        if (vrcAvatarEditorGUI.currentTool != VRCAvatarEditorGUI.ToolFunc.FaceEmotion)
-                                        {
-                                            vrcAvatarEditorGUI.currentTool = VRCAvatarEditorGUI.ToolFunc.FaceEmotion;
-                                            vrcAvatarEditorGUI.OnTabChanged();
-                                        }
-                                        FaceEmotion.ApplyAnimationProperties(controller[handPoseName], ref editAvatar);
-                                        faceEmotionGUI.ChangeSaveAnimationState(controller[handPoseName].name,
-                                            (HandPose.HandPoseType)Enum.ToObject(typeof(HandPose.HandPoseType), i + 1),
-                                            controller[handPoseName]);
-                                    }
+                                    GatoGUILayout.Button(
+                                        LocalizeText.instance.langPair.edit,
+                                        () => {
+                                            if (vrcAvatarEditorGUI.currentTool != VRCAvatarEditorGUI.ToolFunc.FaceEmotion)
+                                            {
+                                                vrcAvatarEditorGUI.currentTool = VRCAvatarEditorGUI.ToolFunc.FaceEmotion;
+                                                vrcAvatarEditorGUI.OnTabChanged();
+                                            }
+                                            FaceEmotion.ApplyAnimationProperties(controller[handPoseName], ref editAvatar);
+                                            faceEmotionGUI.ChangeSaveAnimationState(controller[handPoseName].name,
+                                                (HandPose.HandPoseType)Enum.ToObject(typeof(HandPose.HandPoseType), i + 1),
+                                                controller[handPoseName]);
+                                        },
+                                        anim != null,
+                                        GUILayout.Width(50));
                                 }
                             }
                         }
@@ -163,13 +166,11 @@ namespace VRCAvatarEditor
                             {
                                 GUILayout.Label(emoteAnim, GUILayout.Width(90));
 
-                                controller[emoteAnim] = EditorGUILayout.ObjectField(
+                                controller[emoteAnim] = GatoGUILayout.ObjectField(
                                     string.Empty,
                                     anim,
-                                    typeof(AnimationClip),
                                     true,
-                                    GUILayout.Width(250)
-                                ) as AnimationClip;
+                                    GUILayout.Width(250));
                             }
                         }
                     }
@@ -195,52 +196,52 @@ namespace VRCAvatarEditor
                         }
                         EditorGUILayout.HelpBox(notSettingMessage, MessageType.Warning);
 
-                        if (GUILayout.Button(createMessage))
-                        {
-                            var fileName = "CO_" + originalAvatar.Animator.gameObject.name + ".overrideController";
-                            saveFolderPath = "Assets/" + originalAvatar.Animator.gameObject.name + "/";
-                            var fullFolderPath = Path.GetFullPath(saveFolderPath);
-                            if (!Directory.Exists(fullFolderPath))
-                            {
-                                Directory.CreateDirectory(fullFolderPath);
-                                AssetDatabase.Refresh();
-                            }
-                            var createdCustomOverrideController = InstantiateVrcCustomOverideController(saveFolderPath + fileName);
+                        GatoGUILayout.Button(
+                            createMessage,
+                            () => {
+                                var fileName = "CO_" + originalAvatar.Animator.gameObject.name + ".overrideController";
+                                saveFolderPath = "Assets/" + originalAvatar.Animator.gameObject.name + "/";
+                                var fullFolderPath = Path.GetFullPath(saveFolderPath);
+                                if (!Directory.Exists(fullFolderPath))
+                                {
+                                    Directory.CreateDirectory(fullFolderPath);
+                                    AssetDatabase.Refresh();
+                                }
+                                var createdCustomOverrideController = InstantiateVrcCustomOverideController(saveFolderPath + fileName);
 
-                            if (_tab == Tab.Standing)
-                            {
-                                originalAvatar.Descriptor.CustomStandingAnims = createdCustomOverrideController;
-                                editAvatar.Descriptor.CustomStandingAnims = createdCustomOverrideController;
-                            }
-                            else
-                            {
-                                originalAvatar.Descriptor.CustomSittingAnims = createdCustomOverrideController;
-                                editAvatar.Descriptor.CustomSittingAnims = createdCustomOverrideController;
-                            }
+                                if (_tab == Tab.Standing)
+                                {
+                                    originalAvatar.Descriptor.CustomStandingAnims = createdCustomOverrideController;
+                                    editAvatar.Descriptor.CustomStandingAnims = createdCustomOverrideController;
+                                }
+                                else
+                                {
+                                    originalAvatar.Descriptor.CustomSittingAnims = createdCustomOverrideController;
+                                    editAvatar.Descriptor.CustomSittingAnims = createdCustomOverrideController;
+                                }
 
-                            originalAvatar.LoadAvatarInfo();
-                            editAvatar.LoadAvatarInfo();
+                                originalAvatar.LoadAvatarInfo();
+                                editAvatar.LoadAvatarInfo();
 
-                            // TODO: 除外するBlendShapeの更新のために呼び出す
-                            vrcAvatarEditorGUI.OnTabChanged();
-                        }
+                                // TODO: 除外するBlendShapeの更新のために呼び出す
+                                vrcAvatarEditorGUI.OnTabChanged();
+                            });
 
                         if (_tab == Tab.Sitting)
                         {
-                            using (new EditorGUI.DisabledGroupScope(editAvatar.StandingAnimController == null))
-                            {
-                                if (GUILayout.Button(LocalizeText.instance.langPair.setToSameAsCustomStandingAnimsButtonText))
-                                {
+                            GatoGUILayout.Button(
+                                LocalizeText.instance.langPair.setToSameAsCustomStandingAnimsButtonText,
+                                () => {
                                     var customStandingAnimsController = originalAvatar.Descriptor.CustomStandingAnims;
                                     originalAvatar.Descriptor.CustomSittingAnims = customStandingAnimsController;
                                     editAvatar.Descriptor.CustomSittingAnims = customStandingAnimsController;
                                     originalAvatar.LoadAvatarInfo();
                                     editAvatar.LoadAvatarInfo();
 
-                                    // TODO: 除外するBlendShapeの更新のために呼び出す
-                                    vrcAvatarEditorGUI.OnTabChanged();
-                                }
-                            }
+                                        // TODO: 除外するBlendShapeの更新のために呼び出す
+                                        vrcAvatarEditorGUI.OnTabChanged();
+                                },
+                                editAvatar.StandingAnimController != null);
                         }
                     }
                 }
@@ -249,10 +250,9 @@ namespace VRCAvatarEditor
                 {
                     var warningMessage = (failedAutoFixMissingPath) ? LocalizeText.instance.langPair.failAutoFixMissingPathMessageText : LocalizeText.instance.langPair.existMissingPathMessageText;
                     EditorGUILayout.HelpBox(warningMessage, MessageType.Warning);
-                    using (new EditorGUI.DisabledGroupScope(failedAutoFixMissingPath))
-                    {
-                        if (GUILayout.Button(LocalizeText.instance.langPair.autoFix))
-                        {
+                    GatoGUILayout.Button(
+                        LocalizeText.instance.langPair.autoFix,
+                        () => {
                             failedAutoFixMissingPath = false;
                             for (int i = 0; i < pathMissing.Length; i++)
                             {
@@ -263,8 +263,9 @@ namespace VRCAvatarEditor
                                 pathMissing[i] = !result;
                                 failedAutoFixMissingPath = !result;
                             }
-                        }
-                    }
+                        },
+                        !failedAutoFixMissingPath
+                        );
                 }
             }
             return false;

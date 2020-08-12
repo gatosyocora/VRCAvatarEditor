@@ -32,10 +32,11 @@ namespace VRCAvatarEditor
                 {
                     GUILayout.FlexibleSpace();
 
-                    if (GUILayout.Button(LocalizeText.instance.langPair.resetToBoundsToPrefabButtonText))
-                    {
-                        MeshBounds.RevertBoundsToPrefab(targetRenderers);
-                    }
+                    GatoGUILayout.Button(
+                        LocalizeText.instance.langPair.resetToBoundsToPrefabButtonText,
+                        () => {
+                            MeshBounds.RevertBoundsToPrefab(targetRenderers);
+                        });
                 }
 
                 EditorGUILayout.Space();
@@ -46,12 +47,9 @@ namespace VRCAvatarEditor
                 {
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
-                        var parentObject = EditorGUILayout.ObjectField(
-                            LocalizeText.instance.langPair.childObjectsLabel,
-                            null,
-                            typeof(GameObject),
-                            true
-                        ) as GameObject;
+                        var parentObject = GatoGUILayout.ObjectField<GameObject>(
+                                                LocalizeText.instance.langPair.childObjectsLabel,
+                                                null);
 
                         if (check.changed && parentObject != null && avatar != null)
                         {
@@ -74,10 +72,13 @@ namespace VRCAvatarEditor
                     {
                         GUILayout.FlexibleSpace();
 
-                        if (GUILayout.Button("+", GUILayout.MaxWidth(60)))
-                        {
-                            exclusions.Add(null);
-                        }
+                        GatoGUILayout.Button(
+                            "+",
+                            () => {
+                                exclusions.Add(null);
+                            },
+                            true,
+                            GUILayout.MaxWidth(60));
                     }
 
                     using (var check = new EditorGUI.ChangeCheckScope())
@@ -87,17 +88,17 @@ namespace VRCAvatarEditor
                         {
                             using (new EditorGUILayout.HorizontalScope())
                             {
-                                exclusions[i] = EditorGUILayout.ObjectField(
-                                    "Object " + (i + 1),
-                                    exclusions[i],
-                                    typeof(SkinnedMeshRenderer),
-                                    true
-                                ) as SkinnedMeshRenderer;
+                                exclusions[i] = GatoGUILayout.ObjectField(
+                                                    "Object " + (i + 1),
+                                                    exclusions[i]);
 
-                                if (GUILayout.Button("x", GUILayout.MaxWidth(30)))
-                                {
-                                    exclusions.RemoveAt(i);
-                                }
+                                GatoGUILayout.Button(
+                                    "x",
+                                    () => {
+                                        exclusions.RemoveAt(i);
+                                    },
+                                    true,
+                                    GUILayout.MaxWidth(30));
                             }
                         }
 
@@ -113,10 +114,12 @@ namespace VRCAvatarEditor
                 }
             }
 
-            if (GUILayout.Button(LocalizeText.instance.langPair.setBoundsButtonText))
-            {
-                MeshBounds.BoundsSetter(targetRenderers);
-            }
+            GatoGUILayout.Button(
+                LocalizeText.instance.langPair.setBoundsButtonText,
+                () => {
+                    MeshBounds.BoundsSetter(targetRenderers);
+                });
+
             return false;
         }
 

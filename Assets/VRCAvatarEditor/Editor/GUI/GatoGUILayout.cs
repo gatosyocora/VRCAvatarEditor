@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEditor;
+using UnityEngine;
 
 public static class GatoGUILayout
 {
@@ -142,5 +144,29 @@ public static class GatoGUILayout
         }
 
         return Vector2.zero;
+    }
+
+    public static void Button(string text, Action OnPress, bool available = true, params GUILayoutOption[] options)
+    {
+        using (new EditorGUI.DisabledGroupScope(!available))
+        {
+            if (GUILayout.Button(text, options))
+            {
+                OnPress();
+            }
+        }
+    }
+
+    public static T ObjectField<T>(string label, T obj, bool allowSceneObjects = true, params GUILayoutOption[] options) where T : UnityEngine.Object
+    {
+        return EditorGUILayout.ObjectField(label, obj, typeof(T), allowSceneObjects, options) as T;
+    }
+
+    public static void ErrorBox(string errorMessage, bool validate, MessageType type = MessageType.Error)
+    {
+        if (!validate)
+        {
+            EditorGUILayout.HelpBox(errorMessage, type);
+        }
     }
 }

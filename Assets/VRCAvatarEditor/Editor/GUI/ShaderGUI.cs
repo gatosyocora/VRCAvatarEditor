@@ -66,26 +66,29 @@ namespace VRCAvatarEditor
 
                     GUILayout.FlexibleSpace();
 
-                    if (GUILayout.Button(LocalizeText.instance.langPair.duplicateSelectedButtonText))
-                    {
-                        Undo.RegisterCompleteObjectUndo(originalAvatar.Animator.gameObject, "Replace All Materials");
-                        var srcMaterials = edittingAvatar.Materials.Where((v, i) => isTargets[i]).ToArray();
-                        var newMaterials = GatoUtility.DuplicateMaterials(srcMaterials);
-                        for (int i = 0; i < newMaterials.Length; i++)
-                        {
-                            MaterialEdit.ReplaceMaterial(originalAvatar, srcMaterials[i], newMaterials[i]);
-                            MaterialEdit.ReplaceMaterial(edittingAvatar, srcMaterials[i], newMaterials[i]);
-                        }
-                        Undo.SetCurrentGroupName("Replace All Materials");
-                        Repaint();
-                    }
-                    if (GUILayout.Button(LocalizeText.instance.langPair.optimizeSelectedButtonText))
-                    {
-                        foreach (var mat in edittingAvatar.Materials.Where((v, i) => isTargets[i]).ToArray())
-                        {
-                            MaterialEdit.DeleteUnusedProperties(mat, AssetDatabase.GetAssetPath(mat));
-                        }
-                    }
+                    GatoGUILayout.Button(
+                        LocalizeText.instance.langPair.duplicateSelectedButtonText,
+                        () => {
+                            Undo.RegisterCompleteObjectUndo(originalAvatar.Animator.gameObject, "Replace All Materials");
+                            var srcMaterials = edittingAvatar.Materials.Where((v, i) => isTargets[i]).ToArray();
+                            var newMaterials = GatoUtility.DuplicateMaterials(srcMaterials);
+                            for (int i = 0; i < newMaterials.Length; i++)
+                            {
+                                MaterialEdit.ReplaceMaterial(originalAvatar, srcMaterials[i], newMaterials[i]);
+                                MaterialEdit.ReplaceMaterial(edittingAvatar, srcMaterials[i], newMaterials[i]);
+                            }
+                            Undo.SetCurrentGroupName("Replace All Materials");
+                            Repaint();
+                        });
+
+                    GatoGUILayout.Button(
+                        LocalizeText.instance.langPair.optimizeSelectedButtonText,
+                        () => {
+                            foreach (var mat in edittingAvatar.Materials.Where((v, i) => isTargets[i]).ToArray())
+                            {
+                                MaterialEdit.DeleteUnusedProperties(mat, AssetDatabase.GetAssetPath(mat));
+                            }
+                        });
                 }
 
                 EditorGUILayout.Space();
@@ -115,12 +118,8 @@ namespace VRCAvatarEditor
 
                                 using (var check = new EditorGUI.ChangeCheckScope())
                                 {
-                                    var material = EditorGUILayout.ObjectField(
-                                                        string.Empty,
-                                                        mat,
-                                                        typeof(Material),
-                                                        true,
-                                                        GUILayout.Width(200f)) as Material;
+                                    var material = GatoGUILayout.ObjectField(string.Empty, mat, true, GUILayout.Width(200f));
+
                                     if (check.changed && material != null)
                                     {
                                         MaterialEdit.ReplaceMaterial(edittingAvatar, mat, material);
@@ -143,10 +142,12 @@ namespace VRCAvatarEditor
                                         Repaint();
                                     }
                                 }
-                                if (GUILayout.Button(LocalizeText.instance.langPair.edit))
-                                {
-                                    Selection.activeObject = mat;
-                                }
+
+                                GatoGUILayout.Button(
+                                    LocalizeText.instance.langPair.edit,
+                                    () => {
+                                        Selection.activeObject = mat;
+                                    });
                             }
                         }
                     }
@@ -166,32 +167,33 @@ namespace VRCAvatarEditor
 
                     using (new EditorGUI.DisabledGroupScope(shaderKindIndex == -1 || currentShaderKindName == NOSELECTION || currentShaderKindName == shaderKindNames[shaderKindIndex]))
                     {
-                        if (GUILayout.Button(LocalizeText.instance.langPair.replaceShaderButtonText))
-                        {
-                            var materials = edittingAvatar.Materials.Where((v, i) => isTargets[i]).ToArray();
-                            var group = shaderKindGroups[shaderKindIndex];
-                            if (group.Count() == 1)
-                            {
-                                var dstShader = group.Single();
-                                foreach (var mat in materials)
+                        GatoGUILayout.Button(
+                            LocalizeText.instance.langPair.replaceShaderButtonText,
+                            () => {
+                                var materials = edittingAvatar.Materials.Where((v, i) => isTargets[i]).ToArray();
+                                var group = shaderKindGroups[shaderKindIndex];
+                                if (group.Count() == 1)
                                 {
-                                    mat.shader = dstShader;
+                                    var dstShader = group.Single();
+                                    foreach (var mat in materials)
+                                    {
+                                        mat.shader = dstShader;
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                var dstShaderGroup = shaderKindGroups[shaderKindIndex].Select(s => s).ToArray();
-                                foreach (var mat in materials)
+                                else
                                 {
-                                    var dstShader = MaterialEdit.CalculateSimilarShader(dstShaderGroup, mat.shader);
-                                    mat.shader = dstShader;
+                                    var dstShaderGroup = shaderKindGroups[shaderKindIndex].Select(s => s).ToArray();
+                                    foreach (var mat in materials)
+                                    {
+                                        var dstShader = MaterialEdit.CalculateSimilarShader(dstShaderGroup, mat.shader);
+                                        mat.shader = dstShader;
+                                    }
                                 }
-                            }
 
-                            currentShaderKindName = shaderKindNames[shaderKindIndex];
+                                currentShaderKindName = shaderKindNames[shaderKindIndex];
 
-                            Repaint();
-                        }
+                                Repaint();
+                            });
                     }
                 }
             }

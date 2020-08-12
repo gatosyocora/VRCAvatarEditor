@@ -52,32 +52,37 @@ namespace VRCAvatarEditor
 
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
             {
-                using (new EditorGUI.DisabledScope(editAvatar.Descriptor == null))
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     GUILayout.FlexibleSpace();
 
-                    if (GUILayout.Button(LocalizeText.instance.langPair.loadAnimationButtonText))
-                    {
-                        FaceEmotion.LoadAnimationProperties(this, parentWindow);
-                    }
+                    GatoGUILayout.Button(
+                        LocalizeText.instance.langPair.loadAnimationButtonText,
+                        () => {
+                            FaceEmotion.LoadAnimationProperties(this, parentWindow);
+                        },
+                        editAvatar.Descriptor != null);
 
-                    if (GUILayout.Button(LocalizeText.instance.langPair.setToDefaultButtonText))
-                    {
-                        if (EditorUtility.DisplayDialog(
-                                LocalizeText.instance.langPair.setToDefaultDialogTitleText,
-                                LocalizeText.instance.langPair.setToDefaultDialogMessageText,
-                                LocalizeText.instance.langPair.ok, LocalizeText.instance.langPair.cancel))
-                        {
-                            FaceEmotion.SetToDefaultFaceEmotion(ref editAvatar, originalAvatar);
-                        }
-                    }
+                    GatoGUILayout.Button(
+                        LocalizeText.instance.langPair.setToDefaultButtonText,
+                        () => {
+                            if (EditorUtility.DisplayDialog(
+                                    LocalizeText.instance.langPair.setToDefaultDialogTitleText,
+                                    LocalizeText.instance.langPair.setToDefaultDialogMessageText,
+                                    LocalizeText.instance.langPair.ok, LocalizeText.instance.langPair.cancel))
+                            {
+                                FaceEmotion.SetToDefaultFaceEmotion(ref editAvatar, originalAvatar);
+                            }
+                        },
+                        editAvatar.Descriptor != null);
 
-                    if (GUILayout.Button(LocalizeText.instance.langPair.resetToDefaultButtonText))
-                    {
-                        FaceEmotion.ResetToDefaultFaceEmotion(ref editAvatar);
-                        ChangeSaveAnimationState();
-                    }
+                    GatoGUILayout.Button(
+                        LocalizeText.instance.langPair.resetToDefaultButtonText,
+                        () => {
+                            FaceEmotion.ResetToDefaultFaceEmotion(ref editAvatar);
+                            ChangeSaveAnimationState();
+                        },
+                        editAvatar.Descriptor != null);
                 }
 
                 if (editAvatar.SkinnedMeshList != null)
@@ -91,14 +96,16 @@ namespace VRCAvatarEditor
                 {
                     EditorGUILayout.LabelField(LocalizeText.instance.langPair.animClipSaveFolderLabel, originalAvatar.AnimSavedFolderPath);
 
-                    if (GUILayout.Button(LocalizeText.instance.langPair.selectFolder, GUILayout.Width(100)))
-                    {
-                        originalAvatar.AnimSavedFolderPath = EditorUtility.OpenFolderPanel(LocalizeText.instance.langPair.selectFolderDialogMessageText, originalAvatar.AnimSavedFolderPath, string.Empty);
-                        originalAvatar.AnimSavedFolderPath = $"{FileUtil.GetProjectRelativePath(originalAvatar.AnimSavedFolderPath)}{Path.DirectorySeparatorChar}";
-                        if (originalAvatar.AnimSavedFolderPath == $"{Path.DirectorySeparatorChar}") originalAvatar.AnimSavedFolderPath = $"Assets{Path.DirectorySeparatorChar}";
-                        parentWindow.animationsGUI.UpdateSaveFolderPath(originalAvatar.AnimSavedFolderPath);
-                    }
-
+                    GatoGUILayout.Button(
+                        LocalizeText.instance.langPair.selectFolder,
+                        () => {
+                            originalAvatar.AnimSavedFolderPath = EditorUtility.OpenFolderPanel(LocalizeText.instance.langPair.selectFolderDialogMessageText, originalAvatar.AnimSavedFolderPath, string.Empty);
+                            originalAvatar.AnimSavedFolderPath = $"{FileUtil.GetProjectRelativePath(originalAvatar.AnimSavedFolderPath)}{Path.DirectorySeparatorChar}";
+                            if (originalAvatar.AnimSavedFolderPath == $"{Path.DirectorySeparatorChar}") originalAvatar.AnimSavedFolderPath = $"Assets{Path.DirectorySeparatorChar}";
+                            parentWindow.animationsGUI.UpdateSaveFolderPath(originalAvatar.AnimSavedFolderPath);
+                        },
+                        true,
+                        GUILayout.Width(100));
                 }
 
                 EditorGUILayout.Space();
@@ -118,17 +125,16 @@ namespace VRCAvatarEditor
 
                 using (new EditorGUI.DisabledGroupScope(selectedHandAnim == HandPose.HandPoseType.NoSelection))
                 {
-                    handPoseAnim = EditorGUILayout.ObjectField(LocalizeText.instance.langPair.handPoseAnimClipLabel, handPoseAnim, typeof(AnimationClip), true) as AnimationClip;
+                    handPoseAnim = GatoGUILayout.ObjectField(
+                                        LocalizeText.instance.langPair.handPoseAnimClipLabel,
+                                        handPoseAnim);
                 }
 
                 GUILayout.Space(20);
 
-                using (new EditorGUI.DisabledGroupScope(
-                            selectedHandAnim == HandPose.HandPoseType.NoSelection ||
-                            handPoseAnim == null))
-                {
-                    if (GUILayout.Button(LocalizeText.instance.langPair.createAnimFileButtonText))
-                    {
+                GatoGUILayout.Button(
+                    LocalizeText.instance.langPair.createAnimFileButtonText,
+                    () => {
                         var animController = originalAvatar.StandingAnimController;
 
                         var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, originalAvatar.AnimSavedFolderPath, ref editAvatar, ref blendshapeExclusions, editAvatar.Descriptor.gameObject);
@@ -145,9 +151,9 @@ namespace VRCAvatarEditor
                         editAvatar.StandingAnimController = animController;
 
                         animationsGUI.ResetPathMissing(AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]);
-                    }
-                }
-
+                    },
+                    selectedHandAnim != HandPose.HandPoseType.NoSelection &&
+                    handPoseAnim != null);
             }
 
             return false;
@@ -177,8 +183,11 @@ namespace VRCAvatarEditor
 
                 using (new GUILayout.HorizontalScope())
                 {
-                    if (GUILayout.Button(LocalizeText.instance.langPair.add))
-                        blendshapeExclusions.Add(string.Empty);
+                    GatoGUILayout.Button(
+                        LocalizeText.instance.langPair.add,
+                        () => {
+                            blendshapeExclusions.Add(string.Empty);
+                        });
                 }
             }
 
@@ -247,14 +256,21 @@ namespace VRCAvatarEditor
                                                 skinnedMesh.Renderer.SetBlendShapeWeight(blendshape.Id, value);
                                         }
 
-                                        if (GUILayout.Button(LocalizeText.instance.langPair.minButtonText, GUILayout.MaxWidth(50)))
-                                        {
-                                            FaceEmotion.SetBlendShapeMinValue(skinnedMesh.Renderer, blendshape.Id);
-                                        }
-                                        if (GUILayout.Button(LocalizeText.instance.langPair.maxButtonText, GUILayout.MaxWidth(50)))
-                                        {
-                                            FaceEmotion.SetBlendShapeMaxValue(skinnedMesh.Renderer, blendshape.Id);
-                                        }
+                                        GatoGUILayout.Button(
+                                            LocalizeText.instance.langPair.minButtonText,
+                                            () => {
+                                                FaceEmotion.SetBlendShapeMinValue(skinnedMesh.Renderer, blendshape.Id);
+                                            },
+                                            true,
+                                            GUILayout.MaxWidth(50));
+
+                                        GatoGUILayout.Button(
+                                            LocalizeText.instance.langPair.maxButtonText,
+                                            () => {
+                                                FaceEmotion.SetBlendShapeMaxValue(skinnedMesh.Renderer, blendshape.Id);
+                                            },
+                                            true,
+                                            GUILayout.MaxWidth(50));
                                     }
                                 }
                             }

@@ -47,15 +47,18 @@ namespace VRCAvatarEditor
 
             using (new EditorGUILayout.HorizontalScope())
             {
-                if (GUILayout.Button("Canncel"))
-                {
-                    this.Close();
-                }
-                if (GUILayout.Button("Load Properties"))
-                {
-                    LoadAnimationProperties();
-                    this.Close();
-                }
+                GatoGUILayout.Button(
+                    "Canncel",
+                    () => {
+                        this.Close();
+                    });
+
+                GatoGUILayout.Button(
+                    "Load Properties",
+                    () => {
+                        LoadAnimationProperties();
+                        this.Close();
+                    });
             }
         }
 

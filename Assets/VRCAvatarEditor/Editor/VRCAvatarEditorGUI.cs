@@ -198,32 +198,42 @@ namespace VRCAvatarEditor
 
                 GUILayout.FlexibleSpace();
 
-                using (new EditorGUI.DisabledGroupScope(originalAvatar is null))
-                {
-                    if (GUILayout.Button(LocalizeText.instance.langPair.reloadAvatarButtonText))
-                    {
+                GatoGUILayout.Button(
+                    LocalizeText.instance.langPair.reloadAvatarButtonText,
+                    () => {
                         OnChangedAvatar();
-                    }
-                }
+                    },
+                    originalAvatar != null);
 
                 EditorGUILayout.Space();
 
                 var toolInfoButtonText = (!isShowingToolInfo) ? LocalizeText.instance.langPair.toolInfoButtonText : LocalizeText.instance.langPair.close;
                 var settingButtonText = (!isShowingSetting) ? LocalizeText.instance.langPair.settingButtonText : LocalizeText.instance.langPair.close;
-                if (GUILayout.Button(toolInfoButtonText, GUILayout.MinWidth(50)))
-                {
-                    isShowingToolInfo = !isShowingToolInfo;
-                    isShowingSetting = false;
-                }
+                GatoGUILayout.Button(
+                    toolInfoButtonText,
+                    () => {
+                        isShowingToolInfo = !isShowingToolInfo;
+                        isShowingSetting = false;
+                    },
+                    true,
+                    GUILayout.MinWidth(50));
 
-                if (GUILayout.Button(settingButtonText, GUILayout.MinWidth(50)))
-                {
-                    isShowingSetting = !isShowingSetting;
-                    isShowingToolInfo = false;
+                GatoGUILayout.Button(
+                    settingButtonText,
+                    () =>
+                    {
+                        isShowingSetting = !isShowingSetting;
+                        isShowingToolInfo = false;
 
-                    if (!isShowingSetting)
-                        EditorSetting.instance.ApplySettingsToEditorGUI(edittingAvatar, faceEmotionGUI);
-                }
+                        if (!isShowingSetting)
+                        {
+                            EditorSetting.instance.ApplySettingsToEditorGUI(
+                                edittingAvatar,
+                                faceEmotionGUI);
+                        }
+                    },
+                    true,
+                    GUILayout.MinWidth(50));
             }
 
             if (!isShowingToolInfo && !isShowingSetting)
@@ -233,12 +243,9 @@ namespace VRCAvatarEditor
                     // アバター選択
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
-                        targetAvatarDescriptor = EditorGUILayout.ObjectField(
+                        targetAvatarDescriptor = GatoGUILayout.ObjectField(
                             LocalizeText.instance.langPair.avatarLabel,
-                            targetAvatarDescriptor,
-                            typeof(VRC_AvatarDescriptor),
-                            allowSceneObjects: true
-                        ) as VRC_AvatarDescriptor;
+                            targetAvatarDescriptor);
 
                         if (check.changed)
                         {
@@ -307,17 +314,19 @@ namespace VRCAvatarEditor
                         EditorGUILayout.Space();
 
                         // ポーズ修正
-                        if (GUILayout.Button(LocalizeText.instance.langPair.resetPoseButtonText))
-                        {
-                            HumanoidPose.ResetPose(edittingAvatar.Descriptor.gameObject);
-                            HumanoidPose.ResetPose(originalAvatar.Descriptor.gameObject);
-                        }
+                        GatoGUILayout.Button(
+                            LocalizeText.instance.langPair.resetPoseButtonText,
+                            () => {
+                                HumanoidPose.ResetPose(edittingAvatar.Descriptor.gameObject);
+                                HumanoidPose.ResetPose(originalAvatar.Descriptor.gameObject);
+                            });
 
                         // アップロード
-                        if (GUILayout.Button(LocalizeText.instance.langPair.uploadAvatarButtonText))
-                        {
-                            VRCSDKUtility.UploadAvatar(VRCSDKUtility.IsNewSDKUI());
-                        }
+                        GatoGUILayout.Button(
+                            LocalizeText.instance.langPair.uploadAvatarButtonText,
+                            () => {
+                                VRCSDKUtility.UploadAvatar(VRCSDKUtility.IsNewSDKUI());
+                            });
                     }
                 }
             }
@@ -352,8 +361,11 @@ namespace VRCAvatarEditor
 
             EditorGUILayout.Space();
 
-            if (GUILayout.Button(LocalizeText.instance.langPair.openOnlineManualButtonText))
-                Application.OpenURL(MANUAL_URL);
+            GatoGUILayout.Button(
+                LocalizeText.instance.langPair.openOnlineManualButtonText,
+                () => {
+                    Application.OpenURL(MANUAL_URL);
+                });
 
             EditorGUILayout.Space();
 
@@ -374,16 +386,28 @@ namespace VRCAvatarEditor
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     EditorGUILayout.LabelField("Twitter", "@" + TWITTER_ID, GUILayout.Width(300));
-                    if (GUILayout.Button(LocalizeText.instance.langPair.open, GUILayout.Width(50)))
-                        Application.OpenURL("https://twitter.com/" + TWITTER_ID);
+                    GatoGUILayout.Button(
+                        LocalizeText.instance.langPair.open,
+                        () => {
+                            Application.OpenURL("https://twitter.com/" + TWITTER_ID);
+                        },
+                        true,
+                        GUILayout.Width(50));
+
                     GUILayout.FlexibleSpace();
                 }
                 EditorGUILayout.LabelField("Discord", DISCORD_ID);
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     EditorGUILayout.LabelField("Booth", BOOTH_URL, GUILayout.Width(300));
-                    if (GUILayout.Button(LocalizeText.instance.langPair.open, GUILayout.Width(50)))
-                        Application.OpenURL(BOOTH_ITEM_URL);
+                    GatoGUILayout.Button(
+                        LocalizeText.instance.langPair.open,
+                        () => {
+                            Application.OpenURL(BOOTH_ITEM_URL);
+                        },
+                        true,
+                        GUILayout.Width(50));
+
                     GUILayout.FlexibleSpace();
                 }
             }
@@ -446,6 +470,7 @@ namespace VRCAvatarEditor
             faceEmotionGUI.DrawSettingsGUI();
 
             EditorGUILayout.Space();
+
             EditorGUILayout.LabelField(LocalizeText.instance.langPair.otherLabel, EditorStyles.boldLabel);
 
             layoutType = (LayoutType)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.layoutTypeLabel, layoutType);
@@ -466,20 +491,22 @@ namespace VRCAvatarEditor
 
             EditorGUILayout.Space();
 
-            if (GUILayout.Button(LocalizeText.instance.langPair.saveSettingButtonText))
-            {
-                EditorSetting.instance.SaveSettingDataToScriptableObject(
+            GatoGUILayout.Button(
+                LocalizeText.instance.langPair.saveSettingButtonText,
+                () => {
+                    EditorSetting.instance.SaveSettingDataToScriptableObject(
                                             layoutType, language,
                                             avatarMonitorGUI, faceEmotionGUI);
-            }
-            if (GUILayout.Button(LocalizeText.instance.langPair.changeDefaultSettingButtonText))
-            {
-                EditorSetting.instance.DeleteMySettingData();
-                (layoutType, language) = EditorSetting.instance.LoadSettingDataFromScriptableObject(
-                                            editorFolderPath, language,
-                                            avatarMonitorGUI, faceEmotionGUI);
-            }
+                });
 
+            GatoGUILayout.Button(
+                LocalizeText.instance.langPair.changeDefaultSettingButtonText,
+                () => {
+                    EditorSetting.instance.DeleteMySettingData();
+                    (layoutType, language) = EditorSetting.instance.LoadSettingDataFromScriptableObject(
+                                                editorFolderPath, language,
+                                                avatarMonitorGUI, faceEmotionGUI);
+                });
         }
 
         private void DrawToolSwitchTab()

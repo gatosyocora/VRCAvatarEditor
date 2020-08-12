@@ -63,8 +63,10 @@ namespace VRCAvatarEditor
                                         using (new GUILayout.HorizontalScope())
                                         {
                                             isSettingToSkinnedMesh[index] = EditorGUILayout.Toggle(skinnedMesh.gameObject.name, isSettingToSkinnedMesh[index]);
-                                            if (GUILayout.Button(LocalizeText.instance.langPair.select))
-                                                Selection.activeGameObject = skinnedMesh.gameObject;
+                                            GatoGUILayout.Button(LocalizeText.instance.langPair.select,
+                                                () => {
+                                                    Selection.activeGameObject = skinnedMesh.gameObject;
+                                                });
                                         }
 
                                         index++;
@@ -82,8 +84,10 @@ namespace VRCAvatarEditor
                                         using (new GUILayout.HorizontalScope())
                                         {
                                             isSettingToMesh[index] = EditorGUILayout.Toggle(mesh.gameObject.name, isSettingToMesh[index]);
-                                            if (GUILayout.Button(LocalizeText.instance.langPair.select))
-                                                Selection.activeGameObject = mesh.gameObject;
+                                            GatoGUILayout.Button(LocalizeText.instance.langPair.select,
+                                                () => {
+                                                    Selection.activeGameObject = mesh.gameObject;
+                                                });
                                         }
 
                                         index++;
@@ -98,15 +102,15 @@ namespace VRCAvatarEditor
                 }
             }
 
-            if (GUILayout.Button(LocalizeText.instance.langPair.setProbeAnchorButtonText))
-            {
-                GameObject anchorTarget = null;
-                var result = ProbeAnchor.CreateAndSetProbeAnchorObject(avatar.Descriptor.gameObject, targetPos, ref anchorTarget);
-                if (result && isGettingSkinnedMeshRenderer)
-                    ProbeAnchor.SetProbeAnchorToSkinnedMeshRenderers(ref anchorTarget, ref avatar, ref isSettingToSkinnedMesh);
-                if (result && isGettingMeshRenderer)
-                    ProbeAnchor.SetProbeAnchorToMeshRenderers(ref anchorTarget, ref avatar, ref isSettingToMesh);
-            }
+            GatoGUILayout.Button(LocalizeText.instance.langPair.setProbeAnchorButtonText,
+                () => {
+                    GameObject anchorTarget = null;
+                    var result = ProbeAnchor.CreateAndSetProbeAnchorObject(avatar.Descriptor.gameObject, targetPos, ref anchorTarget);
+                    if (result && isGettingSkinnedMeshRenderer)
+                        ProbeAnchor.SetProbeAnchorToSkinnedMeshRenderers(ref anchorTarget, ref avatar, ref isSettingToSkinnedMesh);
+                    if (result && isGettingMeshRenderer)
+                        ProbeAnchor.SetProbeAnchorToMeshRenderers(ref anchorTarget, ref avatar, ref isSettingToMesh);
+                });
 
             return false;
         }
