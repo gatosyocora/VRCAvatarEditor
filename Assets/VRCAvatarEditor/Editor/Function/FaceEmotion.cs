@@ -41,7 +41,7 @@ namespace VRCAvatarEditor
             {
                 if (!skinnedMesh.IsOpenBlendShapes) continue;
 
-                string path = GetHierarchyPath(rootObj, skinnedMesh.Renderer.gameObject);
+                string path = AnimationUtility.CalculateTransformPath(rootObj.transform, skinnedMesh.Renderer.transform);
 
                 foreach (var blendshape in skinnedMesh.Blendshapes)
                 {
@@ -67,25 +67,6 @@ namespace VRCAvatarEditor
             AssetDatabase.Refresh();
 
             return animClip;
-        }
-
-        /// <summary>
-        /// 特定のオブジェクトまでのパスを取得する
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public static string GetHierarchyPath(GameObject rootObj, GameObject obj)
-        {
-            string path = obj.name;
-            Transform parent = obj.transform.parent;
-            while (parent != null)
-            {
-                if (parent.parent == null || parent.gameObject == rootObj) return path;
-
-                path = parent.name + "/" + path;
-                parent = parent.parent;
-            }
-            return path;
         }
 
         /// <summary>
