@@ -39,8 +39,8 @@ namespace VRCAvatarEditor
                 {
                     using (new EditorGUILayout.HorizontalScope())
                     {
-                        animParamList[i].isSelect = EditorGUILayout.ToggleLeft(animParamList[i].blendShapeName, animParamList[i].isSelect);
-                        GUILayout.Label(animParamList[i].value + "");
+                        animParamList[i].IsSelect = EditorGUILayout.ToggleLeft(animParamList[i].BlendShapeName, animParamList[i].IsSelect);
+                        GUILayout.Label(animParamList[i].Value + "");
                     }
                 }
             }
@@ -67,7 +67,7 @@ namespace VRCAvatarEditor
 
         private void LoadAnimationProperties()
         {
-            ScriptableSingleton<SendData>.instance.loadingProperties = animParamList.Where(x => x.isSelect).ToList();
+            ScriptableSingleton<SendData>.instance.loadingProperties = animParamList.Where(x => x.IsSelect).ToList();
 
             OnLoadedAnimationProperties();
         }

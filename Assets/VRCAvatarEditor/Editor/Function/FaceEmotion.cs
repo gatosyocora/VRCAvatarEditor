@@ -14,17 +14,17 @@ namespace VRCAvatarEditor
 
         public class AnimParam
         {
-            public string objPath;
-            public string blendShapeName;
-            public float value;
-            public bool isSelect;
+            public string ObjPath { set; get; }
+            public string BlendShapeName { set; get; }
+            public float Value { set; get; }
+            public bool IsSelect { set; get; }
 
             public AnimParam(string path, string propertyName, float value)
             {
-                objPath = path;
-                this.blendShapeName = propertyName.Replace("blendShape.", "");
-                this.value = value;
-                isSelect = true;
+                ObjPath = path;
+                this.BlendShapeName = propertyName.Replace("blendShape.", "");
+                this.Value = value;
+                IsSelect = true;
             }
         }
 
@@ -206,9 +206,9 @@ namespace VRCAvatarEditor
                 for (int i = 0; i < avatar.DefaultFaceEmotion.Count; i++)
                 {
                     var defaultAnimProperty = avatar.DefaultFaceEmotion[i];
-                    var index = mesh.GetBlendShapeIndex(defaultAnimProperty.blendShapeName);
+                    var index = mesh.GetBlendShapeIndex(defaultAnimProperty.BlendShapeName);
                     if (index < 0) continue;
-                    renderer.SetBlendShapeWeight(index, defaultAnimProperty.value);
+                    renderer.SetBlendShapeWeight(index, defaultAnimProperty.Value);
                     blendshapes[index].IsContains = false;
                 }
 
@@ -216,10 +216,10 @@ namespace VRCAvatarEditor
                 // 適用させるチェックマークにチェックをいれる
                 foreach (var animProperty in animProperties)
                 {
-                    var index = mesh.GetBlendShapeIndex(animProperty.blendShapeName);
+                    var index = mesh.GetBlendShapeIndex(animProperty.BlendShapeName);
                     if (index >= 0)
                     {
-                        renderer.SetBlendShapeWeight(index, animProperty.value);
+                        renderer.SetBlendShapeWeight(index, animProperty.Value);
                         blendshapes[index].IsContains = true;
                     }
                 }
