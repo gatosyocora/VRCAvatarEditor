@@ -40,24 +40,13 @@ namespace VRCAvatarEditor
             this.subOrthographicSize = 0f;
 
             scene = EditorSceneManager.NewPreviewScene();
-            cameraObj = new GameObject("Camera", typeof(Camera));
+
+            cameraObj = CreateCameraObj();
             AddGameObject(cameraObj);
-            camera = cameraObj.GetComponent<Camera>();
-            camera.cameraType = CameraType.Preview;
-            camera.orthographic = true;
-            camera.orthographicSize = defaultOrthographicSize;
-            camera.forceIntoRenderTexture = true;
-            camera.scene = scene;
-            camera.enabled = false;
-            camera.nearClipPlane = 0.01f;
-            camera.clearFlags = CameraClearFlags.SolidColor;
             SetAvatarCamBgColor(Color.black);
 
-            lightObj = new GameObject("Directional Light", typeof(Light));
-            lightObj.transform.rotation = Quaternion.Euler(50, -30, 0);
+            lightObj = CreateLightObj();
             AddGameObject(lightObj);
-            var light = lightObj.GetComponent<Light>();
-            light.type = LightType.Directional;
         }
 
 
@@ -104,6 +93,30 @@ namespace VRCAvatarEditor
         public void AddGameObject(GameObject obj)
         {
             SceneManager.MoveGameObjectToScene(obj, scene);
+        }
+
+        private GameObject CreateCameraObj()
+        {
+            var cameraObj = new GameObject("Camera", typeof(Camera));
+            camera = cameraObj.GetComponent<Camera>();
+            camera.cameraType = CameraType.Preview;
+            camera.orthographic = true;
+            camera.orthographicSize = defaultOrthographicSize;
+            camera.forceIntoRenderTexture = true;
+            camera.scene = scene;
+            camera.enabled = false;
+            camera.nearClipPlane = 0.01f;
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            return cameraObj;
+        }
+
+        private GameObject CreateLightObj()
+        {
+            var lightObj = new GameObject("Directional Light", typeof(Light));
+            lightObj.transform.rotation = Quaternion.Euler(50, -30, 0);
+            var light = lightObj.GetComponent<Light>();
+            light.type = LightType.Directional;
+            return lightObj;
         }
 
         public VRCAvatar AddAvatar(VRC_AvatarDescriptor descriptor)
