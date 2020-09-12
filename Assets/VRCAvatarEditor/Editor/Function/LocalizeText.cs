@@ -26,7 +26,7 @@ namespace VRCAvatarEditor
         public string[] toolTabTexts { get; private set; }
         public string[] animationTabTexts { get; private set; }
 
-        public async void OnEnable()
+        public void OnEnable()
         {
             FirstLoad();
         }
