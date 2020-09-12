@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
+using VRCAvatar = VRCAvatarEditor.Base.VRCAvatarBase;
 
 namespace VRCAvatarEditor
 {
@@ -40,7 +40,7 @@ namespace VRCAvatarEditor
                 targetPos = (ProbeAnchor.TARGETPOS)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.targetPositionLabel, targetPos);
 
                 // Rendererの一覧を表示
-                if (avatar != null && avatar.Descriptor != null)
+                if (avatar != null && avatar.Animator != null)
                 {
                     isOpeningRendererList = EditorGUILayout.Foldout(isOpeningRendererList, LocalizeText.instance.langPair.rendererListLabel);
 
@@ -105,7 +105,7 @@ namespace VRCAvatarEditor
             GatoGUILayout.Button(LocalizeText.instance.langPair.setProbeAnchorButtonText,
                 () => {
                     GameObject anchorTarget = null;
-                    var result = ProbeAnchor.CreateAndSetProbeAnchorObject(avatar.Descriptor.gameObject, targetPos, ref anchorTarget);
+                    var result = ProbeAnchor.CreateAndSetProbeAnchorObject(avatar.Animator.gameObject, targetPos, ref anchorTarget);
                     if (result && isGettingSkinnedMeshRenderer)
                         ProbeAnchor.SetProbeAnchorToSkinnedMeshRenderers(ref anchorTarget, ref avatar, ref isSettingToSkinnedMesh);
                     if (result && isGettingMeshRenderer)

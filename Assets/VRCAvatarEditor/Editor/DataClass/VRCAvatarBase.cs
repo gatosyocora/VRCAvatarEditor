@@ -4,8 +4,6 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using VRC.Core;
-using VRCSDK2;
-using VRC.SDKBase;
 using LipSyncStyle = VRC.SDKBase.VRC_AvatarDescriptor.LipSyncStyle;
 using AnimationSet = VRC.SDKBase.VRC_AvatarDescriptor.AnimationSet;
 

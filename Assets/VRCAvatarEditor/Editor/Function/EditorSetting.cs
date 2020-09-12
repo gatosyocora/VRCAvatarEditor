@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using VRCAvatarEditor;
 using static VRCAvatarEditor.VRCAvatarEditorGUI;
-using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
+using VRCAvatar = VRCAvatarEditor.Base.VRCAvatarBase;
 
 namespace VRCAvatarEditor
 {
@@ -118,7 +118,7 @@ namespace VRCAvatarEditor
         /// </summary>
         public void ApplySettingsToEditorGUI(VRCAvatar edittingAvatar, FaceEmotionGUI faceEmotionGUI)
         {
-            if (edittingAvatar.Descriptor == null) return;
+            if (edittingAvatar.Animator == null) return;
 
             foreach (var skinnedMesh in edittingAvatar.SkinnedMeshList)
             {

@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
+using VRCAvatar = VRCAvatarEditor.Base.VRCAvatarBase;
 
 namespace VRCAvatarEditor
 {
@@ -18,7 +18,7 @@ namespace VRCAvatarEditor
             this.avatar = avatar;
             exclusions = new List<SkinnedMeshRenderer>();
             targetRenderers = MeshBounds.GetSkinnedMeshRenderersWithoutExclusions(
-                                    avatar.Descriptor.gameObject,
+                                    avatar.Animator.gameObject,
                                     exclusions);
         }
 
@@ -61,7 +61,7 @@ namespace VRCAvatarEditor
                             exclusions = exclusions.Distinct().ToList();
 
                             targetRenderers = MeshBounds.GetSkinnedMeshRenderersWithoutExclusions(
-                                                            avatar.Descriptor.gameObject,
+                                                            avatar.Animator.gameObject,
                                                             exclusions);
                         }
                     }
@@ -105,7 +105,7 @@ namespace VRCAvatarEditor
                         if (check.changed && avatar != null)
                         {
                             targetRenderers = MeshBounds.GetSkinnedMeshRenderersWithoutExclusions(
-                                                avatar.Descriptor.gameObject,
+                                                avatar.Animator.gameObject,
                                                 exclusions);
                         }
                     }

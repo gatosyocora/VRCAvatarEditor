@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
+using VRCAvatar = VRCAvatarEditor.Base.VRCAvatarBase;
 
 // Copyright (c) 2019 gatosyocora
 

@@ -4,6 +4,8 @@ using UnityEditor;
 using UnityEngine;
 using VRCSDK2;
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
+using LipSyncStyle = VRC.SDKBase.VRC_AvatarDescriptor.LipSyncStyle;
+using AnimationSet = VRC.SDKBase.VRC_AvatarDescriptor.AnimationSet;
 
 namespace VRCAvatarEditor
 {
@@ -31,7 +33,7 @@ namespace VRCAvatarEditor
                     // 性別
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
-                        avatar.Sex = (VRC_AvatarDescriptor.AnimationSet)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.genderLabel, avatar.Sex);
+                        avatar.Sex = (AnimationSet)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.genderLabel, avatar.Sex);
 
                         if (check.changed)
                         {
@@ -124,11 +126,11 @@ namespace VRCAvatarEditor
                     // リップシンク
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
-                        avatar.LipSyncStyle = (VRC_AvatarDescriptor.LipSyncStyle)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.lipSyncTypeLabel, avatar.LipSyncStyle);
+                        avatar.LipSyncStyle = (LipSyncStyle)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.lipSyncTypeLabel, avatar.LipSyncStyle);
 
                         if (check.changed) avatar.Descriptor.lipSync = avatar.LipSyncStyle;
                     }
-                    if (avatar.LipSyncStyle == VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape)
+                    if (avatar.LipSyncStyle == LipSyncStyle.VisemeBlendShape)
                     {
                         if (avatar.FaceMesh != null)
                         {
@@ -148,7 +150,7 @@ namespace VRCAvatarEditor
                             }
                         }
                     }
-                    if (avatar.LipSyncStyle != VRC_AvatarDescriptor.LipSyncStyle.VisemeBlendShape || avatar.FaceMesh == null)
+                    if (avatar.LipSyncStyle != LipSyncStyle.VisemeBlendShape || avatar.FaceMesh == null)
                     {
                         EditorGUILayout.HelpBox(LocalizeText.instance.langPair.lipSyncWarningMessageText, MessageType.Warning);
                         GatoGUILayout.Button(
@@ -175,7 +177,7 @@ namespace VRCAvatarEditor
         {
             var viewPos = Vector3.zero;
             var animator = avatar.Animator;
-            var objTrans = avatar.Descriptor.transform;
+            var objTrans = avatar.Animator.transform;
 
             // leftEyeとRightEyeの位置からx, yを計算する
             var leftEyeTrans = animator.GetBoneTransform(HumanBodyBones.LeftEye);
