@@ -57,7 +57,7 @@ namespace VRCAvatarEditor
 
         public bool Render(int monitorSize, bool isGammaCorrection = true)
         {
-            if (monitorSize != this.monitorSize)
+            if (monitorSize != this.monitorSize || renderTexture == null)
             {
                 ResizeMonitor(monitorSize);
             }
