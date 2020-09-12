@@ -338,6 +338,8 @@ namespace VRCAvatarEditor
             {
                 SettingGUI();
             }
+
+            EditorGUILayout.Space();
         }
 
         void OnSceneGUI(SceneView sceneView)
