@@ -21,8 +21,6 @@ namespace VRCAvatarEditor.Avatars2
 
         public VRCAvatar2() : base()
         {
-            Debug.Log("VRCAvatar2()");
-
             Descriptor = null;
 
             StandingAnimController = null;
@@ -31,8 +29,6 @@ namespace VRCAvatarEditor.Avatars2
 
         public VRCAvatar2(VRC_AvatarDescriptor descriptor) : this()
         {
-            Debug.Log("VRCAvatar2(descriptor)");
-
             if (descriptor == null) return;
             LoadAvatarInfo(descriptor);
         }

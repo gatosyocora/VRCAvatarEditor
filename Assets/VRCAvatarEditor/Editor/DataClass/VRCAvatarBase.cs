@@ -33,8 +33,6 @@ namespace VRCAvatarEditor.Base
 
         public VRCAvatarBase()
         {
-            Debug.Log("VRCAvatarBase()");
-
             Animator = null;
             EyePos = Vector3.zero;
             AvatarId = string.Empty;
