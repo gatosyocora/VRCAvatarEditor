@@ -28,6 +28,11 @@ namespace VRCAvatarEditor
 
         public async void OnEnable()
         {
+            FirstLoad();
+        }
+
+        public async void FirstLoad()
+        {
             // UIがおかしくなるのを防止するために一度ローカルのデフォルトを読み込んでおく
             _ = LoadLanguage(BASE_LANGUAGE_PACK);
 

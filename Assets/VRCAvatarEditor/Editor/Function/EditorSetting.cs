@@ -39,9 +39,15 @@ namespace VRCAvatarEditor
         public (LayoutType, string) LoadSettingDataFromScriptableObject(string editorFolderPath, string language,
                                                                         AvatarMonitorGUI avatarMonitorGUI, FaceEmotionGUI faceEmotionGUI)
         {
-            EditorSetting.instance.LoadSettingData();
+            instance.LoadSettingData();
 
             LocalizeText.instance.LoadLanguageTypesFromLocal(editorFolderPath);
+
+            if (LocalizeText.instance.langPair == null)
+            {
+                LocalizeText.instance.FirstLoad();
+            }
+
             if (string.IsNullOrEmpty(language) || instance.Data.language != LocalizeText.instance.langPair.name)
             {
                 // awaitするとUIスレッドが止まっておかしくなるのでawaitしない
