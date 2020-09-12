@@ -85,6 +85,14 @@ namespace VRCAvatarEditor
             camera.Render();
             Unsupported.useScriptableRenderPipeline = oldAllowPipes;
 
+            // TODO: Editorを開いた状態で再生すると再生後にAvatarMonitorのガンマ補正がなくなる
+            // Disposeによって？textureMatがnullになっているので再生成する
+            // もっといい解決策がありそう
+            if (textureMat == null)
+            {
+                textureMat = CreateGammaMaterial();
+            }
+
             Graphics.DrawTexture(rect, renderTexture, (isGammaCorrection) ? textureMat : null);
 
             return false;
