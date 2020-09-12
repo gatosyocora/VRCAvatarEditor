@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using VRCAvatarEditor.Utilitys;
-using Avatar = VRCAvatarEditor.VRCAvatar;
+using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
 
 namespace VRCAvatarEditor
 {

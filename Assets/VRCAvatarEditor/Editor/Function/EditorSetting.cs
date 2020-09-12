@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using VRCAvatarEditor;
 using static VRCAvatarEditor.VRCAvatarEditorGUI;
+using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
 
 namespace VRCAvatarEditor
 {

@@ -4,7 +4,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VRCSDK2;
-using Avatar = VRCAvatarEditor.VRCAvatar;
+using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
 
 namespace VRCAvatarEditor
 {

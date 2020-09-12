@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using VRCAvatarEditor.Utilitys;
 using VRCSDK2;
-using Avatar = VRCAvatarEditor.VRCAvatar;
+using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
 
 // Copyright (c) 2019 gatosyocora
 
