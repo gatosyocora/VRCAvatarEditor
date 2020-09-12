@@ -4,7 +4,11 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+#if VRC_SDK_VRCSDK2
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
+#else
+using VRCAvatar = VRCAvatarEditor.Test.VRCAvatar2;
+#endif
 
 namespace VRCAvatarEditor
 {

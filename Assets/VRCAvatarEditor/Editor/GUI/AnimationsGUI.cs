@@ -4,7 +4,11 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using VRCAvatarEditor.Utilitys;
+#if VRC_SDK_VRCSDK2
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
+#else
+using VRCAvatar = VRCAvatarEditor.Test.VRCAvatar2;
+#endif
 
 namespace VRCAvatarEditor
 {
@@ -207,6 +211,7 @@ namespace VRCAvatarEditor
                                     Directory.CreateDirectory(fullFolderPath);
                                     AssetDatabase.Refresh();
                                 }
+#if VRC_SDK_VRCSDK2
                                 var createdCustomOverrideController = InstantiateVrcCustomOverideController(saveFolderPath + fileName);
 
                                 if (_tab == Tab.Standing)
@@ -219,6 +224,7 @@ namespace VRCAvatarEditor
                                     originalAvatar.Descriptor.CustomSittingAnims = createdCustomOverrideController;
                                     editAvatar.Descriptor.CustomSittingAnims = createdCustomOverrideController;
                                 }
+#endif
 
                                 originalAvatar.LoadAvatarInfo();
                                 editAvatar.LoadAvatarInfo();
@@ -232,9 +238,11 @@ namespace VRCAvatarEditor
                             GatoGUILayout.Button(
                                 LocalizeText.instance.langPair.setToSameAsCustomStandingAnimsButtonText,
                                 () => {
+#if VRC_SDK_VRCSDK2
                                     var customStandingAnimsController = originalAvatar.Descriptor.CustomStandingAnims;
                                     originalAvatar.Descriptor.CustomSittingAnims = customStandingAnimsController;
                                     editAvatar.Descriptor.CustomSittingAnims = customStandingAnimsController;
+#endif
                                     originalAvatar.LoadAvatarInfo();
                                     editAvatar.LoadAvatarInfo();
 

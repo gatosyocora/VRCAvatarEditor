@@ -104,6 +104,8 @@ namespace VRCAvatarEditor.Avatars2
         {
             AnimSavedFolderPath = GetAnimSavedFolderPath(StandingAnimController);
         }
+#else
+    public override void SetLipSyncToViseme() {}
 #endif
     }
 }

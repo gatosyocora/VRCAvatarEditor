@@ -2,10 +2,15 @@
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+#if VRC_SDK_VRCSDK2
 using VRCSDK2;
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
+#else
+using VRCAvatar = VRCAvatarEditor.Test.VRCAvatar2;
+#endif
 using LipSyncStyle = VRC.SDKBase.VRC_AvatarDescriptor.LipSyncStyle;
 using AnimationSet = VRC.SDKBase.VRC_AvatarDescriptor.AnimationSet;
+using Viseme = VRC.SDKBase.VRC_AvatarDescriptor.Viseme;
 
 namespace VRCAvatarEditor
 {
@@ -51,6 +56,7 @@ namespace VRCAvatarEditor
                     // AnimatorOverrideController
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
+#if VRC_SDK_VRCSDK2
                         avatar.StandingAnimController = GatoGUILayout.ObjectField(
                             LocalizeText.instance.langPair.customStandingAnimsLabel,
                             avatar.StandingAnimController);
@@ -67,6 +73,7 @@ namespace VRCAvatarEditor
 
                             avatar.SetAnimSavedFolderPath();
                         }
+#endif
                     }
 
                     // ポリゴン数
@@ -144,7 +151,7 @@ namespace VRCAvatarEditor
 
                                     for (int visemeIndex = 0; visemeIndex < LIPSYNC_SHYPEKEY_NUM; visemeIndex++)
                                     {
-                                        EditorGUILayout.LabelField("Viseme:" + Enum.GetName(typeof(VRC_AvatarDescriptor.Viseme), visemeIndex), avatar.Descriptor.VisemeBlendShapes[visemeIndex]);
+                                        EditorGUILayout.LabelField("Viseme:" + Enum.GetName(typeof(Viseme), visemeIndex), avatar.Descriptor.VisemeBlendShapes[visemeIndex]);
                                     }
                                 }
                             }
@@ -230,6 +237,7 @@ namespace VRCAvatarEditor
             return maxDistance;
         }
 
+#if VRC_SDK_VRCSDK2
         private static Vector3 RevertEyePosToPrefab(VRC_AvatarDescriptor descriptor)
         {
             PrefabUtility.ReconnectToLastPrefab(descriptor.gameObject);
@@ -250,6 +258,7 @@ namespace VRCAvatarEditor
 #endif
             return descriptor.ViewPosition;
         }
+#endif
     }
 }
 

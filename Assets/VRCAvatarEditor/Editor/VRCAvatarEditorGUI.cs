@@ -9,8 +9,13 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 using VRCAvatarEditor.Utilitys;
+#if VRC_SDK_VRCSDK2
 using VRCSDK2;
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
+#else
+using VRCAvatar = VRCAvatarEditor.Test.VRCAvatar2;
+using VRC_AvatarDescriptor = VRC.SDKBase.VRC_AvatarDescriptor;
+#endif
 
 // Copyright (c) 2019 gatosyocora
 
@@ -39,6 +44,7 @@ namespace VRCAvatarEditor
         private bool needRepaint = false;
 
         private VRC_AvatarDescriptor targetAvatarDescriptor;
+
         private VRCAvatar edittingAvatar = null;
         private VRCAvatar originalAvatar = null;
 
@@ -161,12 +167,14 @@ namespace VRCAvatarEditor
                 var selectionTransform = Selection.gameObjects.Single().transform;
                 while (selectionTransform != null)
                 {
+#if VRC_SDK_VRCSDK2
                     targetAvatarDescriptor = selectionTransform.GetComponent<VRC_AvatarDescriptor>();
                     if (targetAvatarDescriptor != null)
                     {
                         OnChangedAvatar();
                         break;
                     }
+#endif
                     selectionTransform = selectionTransform.parent;
                 }
             }
@@ -241,6 +249,7 @@ namespace VRCAvatarEditor
                 using (new EditorGUILayout.VerticalScope())
                 {
                     // アバター選択
+#if VRC_SDK_VRCSDK2
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
                         targetAvatarDescriptor = GatoGUILayout.ObjectField(
@@ -256,6 +265,7 @@ namespace VRCAvatarEditor
                             }
                         }
                     }
+#endif
 
                     using (new EditorGUI.DisabledGroupScope(edittingAvatar.Descriptor == null))
                     {
@@ -562,12 +572,16 @@ namespace VRCAvatarEditor
 
         private void OnChangedAvatar()
         {
+#if VRC_SDK_VRCSDK2
             edittingAvatar = avatarMonitorGUI.SetAvatarPreview(targetAvatarDescriptor);
             originalAvatar = new VRCAvatar(targetAvatarDescriptor);
+#endif
             EditorSetting.instance.ApplySettingsToEditorGUI(edittingAvatar, faceEmotionGUI);
 
+#if VRC_SDK_VRCSDK2
             var targetAvatarObj = targetAvatarDescriptor.gameObject;
             targetAvatarObj.SetActive(true);
+#endif
 
             avatarMonitorGUI.MoveAvatarCam(false);
             animationsGUI.Initialize(edittingAvatar, originalAvatar, saveFolder, this, faceEmotionGUI);
