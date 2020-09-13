@@ -296,13 +296,22 @@ namespace VRCAvatarEditor
 
         public void ChangeSaveAnimationState(
                 string animName = "",
+#if VRC_SDK_VRCSDK2
                 HandPose.HandPoseType selectedHandAnim = HandPose.HandPoseType.NoSelection,
+#elif VRC_SDK_VRCSDK3
+                int selectStateIndex = 0,
+#endif
                 AnimationClip handPoseAnim = null)
         {
             this.animName = animName;
+#if VRC_SDK_VRCSDK2
             this.selectedHandAnim = selectedHandAnim;
+#elif VRC_SDK_VRCSDK3
+            // TODO: 一時対処
+            this.selectedHandAnim = HandPose.HandPoseType.NoSelection;
+#endif
             if (handPoseAnim is null)
-                handPoseAnim = HandPose.GetHandAnimationClip(selectedHandAnim);
+                handPoseAnim = HandPose.GetHandAnimationClip(this.selectedHandAnim);
             this.handPoseAnim = handPoseAnim;
         }
 
