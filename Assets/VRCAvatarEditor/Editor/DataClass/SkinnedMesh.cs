@@ -74,7 +74,7 @@ namespace VRCAvatarEditor
                 // 除外するキーかどうか調べる
                 foreach (var exclusionWord in exclusionWords)
                 {
-                    if (exclusionWord == "") continue;
+                    if (string.IsNullOrEmpty(exclusionWord)) continue;
                     if ((Blendshapes[blendShapeIndex].Name.ToLower()).Contains(exclusionWord.ToLower()))
                     {
                         Blendshapes[blendShapeIndex].IsExclusion = true;
