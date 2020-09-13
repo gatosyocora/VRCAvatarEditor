@@ -31,6 +31,7 @@ namespace VRCAvatarEditor
         {
             this.edittingAvatar = edittingAvatar;
             this.originalAvatar = originalAvatar;
+            // TODO: 1秒以上かかる
             customShaders = GatoUtility.LoadShadersInProject();
             customShaderNames = customShaders.Select(s => s.name).ToArray();
             shaderKindGroups = customShaders
