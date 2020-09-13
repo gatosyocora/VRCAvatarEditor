@@ -7,7 +7,7 @@ using UnityEngine;
 #if VRC_SDK_VRCSDK2
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
 #else
-using VRCAvatar = VRCAvatarEditor.Test.VRCAvatar2;
+using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
 #endif
 
 namespace VRCAvatarEditor
@@ -139,6 +139,7 @@ namespace VRCAvatarEditor
                 GatoGUILayout.Button(
                     LocalizeText.instance.langPair.createAnimFileButtonText,
                     () => {
+#if VRC_SDK_VRCSDK2
                         var animController = originalAvatar.StandingAnimController;
 
                         var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, originalAvatar.AnimSavedFolderPath, editAvatar, blendshapeExclusions, editAvatar.Descriptor.gameObject);
@@ -155,6 +156,7 @@ namespace VRCAvatarEditor
                         editAvatar.StandingAnimController = animController;
 
                         animationsGUI.ResetPathMissing(AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]);
+#endif
                     },
                     selectedHandAnim != HandPose.HandPoseType.NoSelection &&
                     handPoseAnim != null);
@@ -304,6 +306,7 @@ namespace VRCAvatarEditor
 
         private void ChangeSelectionHandAnimation()
         {
+#if VRC_SDK_VRCSDK2
             if (usePreviousAnimationOnHandAnimation)
             {
                 var animController = originalAvatar.StandingAnimController;
@@ -323,6 +326,7 @@ namespace VRCAvatarEditor
             {
                 handPoseAnim = HandPose.GetHandAnimationClip(selectedHandAnim);
             }
+#endif
         }
     }
 }

@@ -7,7 +7,7 @@ using VRCAvatarEditor.Utilitys;
 #if VRC_SDK_VRCSDK2
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
 #else
-using VRCAvatar = VRCAvatarEditor.Test.VRCAvatar2;
+using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
 #endif
 
 namespace VRCAvatarEditor
@@ -57,10 +57,12 @@ namespace VRCAvatarEditor
 
             errorStyle.normal.textColor = Color.red;
 
+#if VRC_SDK_VRCSDK2
             if (editAvatar != null && editAvatar.StandingAnimController != null)
             {
                 ValidateAnimatorOverrideController(editAvatar.Animator, editAvatar.StandingAnimController);
             }
+#endif
         }
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
@@ -75,6 +77,7 @@ namespace VRCAvatarEditor
                     _tab = (Tab)GUILayout.Toolbar((int)_tab, LocalizeText.instance.animationTabTexts, "LargeButton", GUI.ToolbarButtonSize.Fixed);
                     GUILayout.FlexibleSpace();
                 }
+#if VRC_SDK_VRCSDK2
                 if (_tab == Tab.Standing)
                 {
                     titleText = LocalizeText.instance.langPair.standingTabText;
@@ -87,6 +90,7 @@ namespace VRCAvatarEditor
                     if (originalAvatar != null)
                         controller = originalAvatar.SittingAnimController;
                 }
+#endif
 
                 using (new EditorGUILayout.HorizontalScope())
                 {
@@ -235,14 +239,13 @@ namespace VRCAvatarEditor
 
                         if (_tab == Tab.Sitting)
                         {
+#if VRC_SDK_VRCSDK2
                             GatoGUILayout.Button(
                                 LocalizeText.instance.langPair.setToSameAsCustomStandingAnimsButtonText,
                                 () => {
-#if VRC_SDK_VRCSDK2
                                     var customStandingAnimsController = originalAvatar.Descriptor.CustomStandingAnims;
                                     originalAvatar.Descriptor.CustomSittingAnims = customStandingAnimsController;
                                     editAvatar.Descriptor.CustomSittingAnims = customStandingAnimsController;
-#endif
                                     originalAvatar.LoadAvatarInfo();
                                     editAvatar.LoadAvatarInfo();
 
@@ -250,6 +253,7 @@ namespace VRCAvatarEditor
                                         vrcAvatarEditorGUI.OnTabChanged();
                                 },
                                 editAvatar.StandingAnimController != null);
+#endif
                         }
                     }
                 }
@@ -261,6 +265,7 @@ namespace VRCAvatarEditor
                     GatoGUILayout.Button(
                         LocalizeText.instance.langPair.autoFix,
                         () => {
+#if VRC_SDK_VRCSDK2
                             failedAutoFixMissingPath = false;
                             for (int i = 0; i < pathMissing.Length; i++)
                             {
@@ -271,6 +276,7 @@ namespace VRCAvatarEditor
                                 pathMissing[i] = !result;
                                 failedAutoFixMissingPath = !result;
                             }
+#endif
                         },
                         !failedAutoFixMissingPath
                         );
