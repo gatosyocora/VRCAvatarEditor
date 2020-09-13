@@ -5,8 +5,8 @@ using UnityEngine;
 #if VRC_SDK_VRCSDK2
 using VRCSDK2;
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
-#else
-using VRCAvatar = VRCAvatarEditor.Test.VRCAvatar2;
+#elif VRC_SDK_VRCSDK3
+using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
 #endif
 using LipSyncStyle = VRC.SDKBase.VRC_AvatarDescriptor.LipSyncStyle;
 using AnimationSet = VRC.SDKBase.VRC_AvatarDescriptor.AnimationSet;
@@ -64,16 +64,29 @@ namespace VRCAvatarEditor
                         avatar.SittingAnimController = GatoGUILayout.ObjectField(
                             LocalizeText.instance.langPair.customSittingAnimsLabel,
                             avatar.SittingAnimController);
+#elif VRC_SDK_VRCSDK3
+                        avatar.GestureController = GatoGUILayout.ObjectField(
+                            "Gesture Layer",
+                            avatar.GestureController);
+
+                        avatar.FxController = GatoGUILayout.ObjectField(
+                            "FX Layer",
+                            avatar.FxController);
+#endif
 
                         if (check.changed)
                         {
+#if VRC_SDK_VRCSDK2
                             avatar.Descriptor.CustomStandingAnims = avatar.StandingAnimController;
                             avatar.Descriptor.CustomSittingAnims = avatar.SittingAnimController;
+#elif VRC_SDK_VRCSDK3
+                            avatar.Descriptor.baseAnimationLayers[2].animatorController = avatar.GestureController;
+                            avatar.Descriptor.baseAnimationLayers[4].animatorController = avatar.FxController;
+#endif
                             EditorUtility.SetDirty(avatar.Descriptor);
 
                             avatar.SetAnimSavedFolderPath();
                         }
-#endif
                     }
 
                     // ポリゴン数
