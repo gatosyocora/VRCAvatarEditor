@@ -1,23 +1,19 @@
-﻿using System;
+﻿#if VRC_SDK_VRCSDK2
+using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using VRCAvatarEditor.Base;
 using VRCAvatarEditor.Utilitys;
-#if VRC_SDK_VRCSDK2
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
-#else
-using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
-#endif
 
-namespace VRCAvatarEditor
+namespace VRCAvatarEditor.Avatars2
 {
-    public class AnimationsGUI : Editor, IVRCAvatarEditorGUI
+    public class AnimationsGUI2 : AnimationsGUIBase
     {
         private VRCAvatar editAvatar;
         private VRCAvatar originalAvatar;
-        private VRCAvatarEditorGUI vrcAvatarEditorGUI;
-        private FaceEmotionGUI faceEmotionGUI;
 
         public static readonly string[] HANDANIMS = { "FIST", "FINGERPOINT", "ROCKNROLL", "HANDOPEN", "THUMBSUP", "VICTORY", "HANDGUN" };
         public static readonly string[] EMOTEANIMS = { "EMOTE1", "EMOTE2", "EMOTE3", "EMOTE4", "EMOTE5", "EMOTE6", "EMOTE7", "EMOTE8" };
@@ -41,8 +37,6 @@ namespace VRCAvatarEditor
             Sitting,
         }
 
-        private string saveFolderPath;
-
         public void Initialize(VRCAvatar editAvatar,
                                VRCAvatar originalAvatar,
                                string saveFolderPath,
@@ -56,16 +50,13 @@ namespace VRCAvatarEditor
             UpdateSaveFolderPath(saveFolderPath);
 
             errorStyle.normal.textColor = Color.red;
-
-#if VRC_SDK_VRCSDK2
             if (editAvatar != null && editAvatar.StandingAnimController != null)
             {
                 ValidateAnimatorOverrideController(editAvatar.Animator, editAvatar.StandingAnimController);
             }
-#endif
         }
 
-        public bool DrawGUI(GUILayoutOption[] layoutOptions)
+        public override bool DrawGUI(GUILayoutOption[] layoutOptions)
         {
             // 設定済みアニメーション一覧
             using (new EditorGUILayout.VerticalScope(GUI.skin.box, layoutOptions))
@@ -77,7 +68,6 @@ namespace VRCAvatarEditor
                     _tab = (Tab)GUILayout.Toolbar((int)_tab, LocalizeText.instance.animationTabTexts, "LargeButton", GUI.ToolbarButtonSize.Fixed);
                     GUILayout.FlexibleSpace();
                 }
-#if VRC_SDK_VRCSDK2
                 if (_tab == Tab.Standing)
                 {
                     titleText = LocalizeText.instance.langPair.standingTabText;
@@ -90,7 +80,6 @@ namespace VRCAvatarEditor
                     if (originalAvatar != null)
                         controller = originalAvatar.SittingAnimController;
                 }
-#endif
 
                 using (new EditorGUILayout.HorizontalScope())
                 {
@@ -215,7 +204,6 @@ namespace VRCAvatarEditor
                                     Directory.CreateDirectory(fullFolderPath);
                                     AssetDatabase.Refresh();
                                 }
-#if VRC_SDK_VRCSDK2
                                 var createdCustomOverrideController = InstantiateVrcCustomOverideController(saveFolderPath + fileName);
 
                                 if (_tab == Tab.Standing)
@@ -228,7 +216,6 @@ namespace VRCAvatarEditor
                                     originalAvatar.Descriptor.CustomSittingAnims = createdCustomOverrideController;
                                     editAvatar.Descriptor.CustomSittingAnims = createdCustomOverrideController;
                                 }
-#endif
 
                                 originalAvatar.LoadAvatarInfo();
                                 editAvatar.LoadAvatarInfo();
@@ -239,7 +226,6 @@ namespace VRCAvatarEditor
 
                         if (_tab == Tab.Sitting)
                         {
-#if VRC_SDK_VRCSDK2
                             GatoGUILayout.Button(
                                 LocalizeText.instance.langPair.setToSameAsCustomStandingAnimsButtonText,
                                 () => {
@@ -253,7 +239,6 @@ namespace VRCAvatarEditor
                                         vrcAvatarEditorGUI.OnTabChanged();
                                 },
                                 editAvatar.StandingAnimController != null);
-#endif
                         }
                     }
                 }
@@ -265,7 +250,6 @@ namespace VRCAvatarEditor
                     GatoGUILayout.Button(
                         LocalizeText.instance.langPair.autoFix,
                         () => {
-#if VRC_SDK_VRCSDK2
                             failedAutoFixMissingPath = false;
                             for (int i = 0; i < pathMissing.Length; i++)
                             {
@@ -276,7 +260,6 @@ namespace VRCAvatarEditor
                                 pathMissing[i] = !result;
                                 failedAutoFixMissingPath = !result;
                             }
-#endif
                         },
                         !failedAutoFixMissingPath
                         );
@@ -284,11 +267,6 @@ namespace VRCAvatarEditor
             }
             return false;
         }
-
-        public void DrawSettingsGUI() { }
-        public void LoadSettingData(SettingData settingAsset) { }
-        public void SaveSettingData(ref SettingData settingAsset) { }
-        public void Dispose() { }
 
         /// <summary>
         /// VRChat用のCustomOverrideControllerの複製を取得する
@@ -304,11 +282,6 @@ namespace VRCAvatarEditor
             var overrideController = AssetDatabase.LoadAssetAtPath(newFilePath, typeof(AnimatorOverrideController)) as AnimatorOverrideController;
 
             return overrideController;
-        }
-
-        public void UpdateSaveFolderPath(string saveFolderPath)
-        {
-            this.saveFolderPath = saveFolderPath;
         }
 
         private void ValidateAnimatorOverrideController(Animator animator, AnimatorOverrideController controller)
@@ -336,3 +309,4 @@ namespace VRCAvatarEditor
         }
     }
 }
+#endif
