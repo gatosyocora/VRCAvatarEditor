@@ -1,5 +1,5 @@
-﻿using VRCAvatarEditor.Base;
-#if VRC_SDK_VRCSDK2
+﻿#if VRC_SDK_VRCSDK2
+using VRCAvatarEditor.Base;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,13 +7,11 @@ using VRCSDK2;
 using LipSyncStyle = VRC.SDKBase.VRC_AvatarDescriptor.LipSyncStyle;
 using AnimationSet = VRC.SDKBase.VRC_AvatarDescriptor.AnimationSet;
 using Viseme = VRC.SDKBase.VRC_AvatarDescriptor.Viseme;
-#endif
 
 namespace VRCAvatarEditor.Avatars2
 {
     public class VRCAvatar2 : VRCAvatarBase
     {
-#if VRC_SDK_VRCSDK2
         public VRC_AvatarDescriptor Descriptor { get; set; }
 
         public AnimatorOverrideController StandingAnimController { get; set; }
@@ -104,8 +102,7 @@ namespace VRCAvatarEditor.Avatars2
         {
             AnimSavedFolderPath = GetAnimSavedFolderPath(StandingAnimController);
         }
-#else
-    public override void SetLipSyncToViseme() {}
-#endif
+
     }
 }
+#endif
