@@ -75,7 +75,7 @@ namespace VRCAvatarEditor
                                     LocalizeText.instance.langPair.setToDefaultDialogMessageText,
                                     LocalizeText.instance.langPair.ok, LocalizeText.instance.langPair.cancel))
                             {
-                                FaceEmotion.SetToDefaultFaceEmotion(ref editAvatar, originalAvatar);
+                                FaceEmotion.SetToDefaultFaceEmotion(editAvatar, originalAvatar);
                             }
                         },
                         editAvatar.Descriptor != null);
@@ -83,7 +83,7 @@ namespace VRCAvatarEditor
                     GatoGUILayout.Button(
                         LocalizeText.instance.langPair.resetToDefaultButtonText,
                         () => {
-                            FaceEmotion.ResetToDefaultFaceEmotion(ref editAvatar);
+                            FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
                             ChangeSaveAnimationState();
                         },
                         editAvatar.Descriptor != null);
@@ -141,14 +141,14 @@ namespace VRCAvatarEditor
                     () => {
                         var animController = originalAvatar.StandingAnimController;
 
-                        var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, originalAvatar.AnimSavedFolderPath, ref editAvatar, ref blendshapeExclusions, editAvatar.Descriptor.gameObject);
+                        var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, originalAvatar.AnimSavedFolderPath, editAvatar, blendshapeExclusions, editAvatar.Descriptor.gameObject);
                         if (selectedHandAnim != HandPose.HandPoseType.NoSelection)
                         {
                             HandPose.AddHandPoseAnimationKeysFromOriginClip(createdAnimClip, handPoseAnim);
                             animController[AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]] = createdAnimClip;
                             EditorUtility.SetDirty(animController);
 
-                            FaceEmotion.ResetToDefaultFaceEmotion(ref editAvatar);
+                            FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
                         }
 
                         originalAvatar.StandingAnimController = animController;
@@ -214,7 +214,7 @@ namespace VRCAvatarEditor
 
         public void Dispose()
         {
-            FaceEmotion.ResetToDefaultFaceEmotion(ref editAvatar);
+            FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
         }
 
         private void BlendShapeListGUI()
@@ -286,7 +286,7 @@ namespace VRCAvatarEditor
 
         public void OnLoadedAnimationProperties()
         {
-            FaceEmotion.ApplyAnimationProperties(ScriptableSingleton<SendData>.instance.loadingProperties, ref editAvatar);
+            FaceEmotion.ApplyAnimationProperties(ScriptableSingleton<SendData>.instance.loadingProperties, editAvatar);
             ChangeSaveAnimationState();
         }
 
