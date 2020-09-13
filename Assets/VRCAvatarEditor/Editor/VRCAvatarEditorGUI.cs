@@ -12,9 +12,10 @@ using VRCAvatarEditor.Utilitys;
 #if VRC_SDK_VRCSDK2
 using VRCSDK2;
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
-#else
-using VRCAvatar = VRCAvatarEditor.Test.VRCAvatar2;
-using VRC_AvatarDescriptor = VRC.SDKBase.VRC_AvatarDescriptor;
+#elif VRC_SDK_VRCSDK3
+using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
+using VRC.SDK3.Avatars.Components;
+using VRC_AvatarDescriptor = VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
 #endif
 
 // Copyright (c) 2019 gatosyocora
@@ -167,14 +168,12 @@ namespace VRCAvatarEditor
                 var selectionTransform = Selection.gameObjects.Single().transform;
                 while (selectionTransform != null)
                 {
-#if VRC_SDK_VRCSDK2
                     targetAvatarDescriptor = selectionTransform.GetComponent<VRC_AvatarDescriptor>();
                     if (targetAvatarDescriptor != null)
                     {
                         OnChangedAvatar();
                         break;
                     }
-#endif
                     selectionTransform = selectionTransform.parent;
                 }
             }
@@ -249,7 +248,6 @@ namespace VRCAvatarEditor
                 using (new EditorGUILayout.VerticalScope())
                 {
                     // アバター選択
-#if VRC_SDK_VRCSDK2
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
                         targetAvatarDescriptor = GatoGUILayout.ObjectField(
@@ -265,7 +263,6 @@ namespace VRCAvatarEditor
                             }
                         }
                     }
-#endif
 
                     using (new EditorGUI.DisabledGroupScope(edittingAvatar.Descriptor == null))
                     {
