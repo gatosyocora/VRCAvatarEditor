@@ -5,7 +5,8 @@ using UnityEngine;
 using VRCSDK2;
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
 #else
-using VRCAvatar = VRCAvatarEditor.Test.VRCAvatar2;
+using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
+using VRC_AvatarDescriptor = VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
 #endif
 
 namespace VRCAvatarEditor
@@ -194,7 +195,6 @@ namespace VRCAvatarEditor
             }
         }
 
-#if VRC_SDK_VRCSDK2
         /// <summary>
         /// アバターを写す用のカメラを設定する
         /// </summary>
@@ -206,7 +206,6 @@ namespace VRCAvatarEditor
 
             return avatar;
         }
-#endif
 
         public void LoadSettingData(SettingData settingAsset)
         {

@@ -569,16 +569,12 @@ namespace VRCAvatarEditor
 
         private void OnChangedAvatar()
         {
-#if VRC_SDK_VRCSDK2
             edittingAvatar = avatarMonitorGUI.SetAvatarPreview(targetAvatarDescriptor);
             originalAvatar = new VRCAvatar(targetAvatarDescriptor);
-#endif
             EditorSetting.instance.ApplySettingsToEditorGUI(edittingAvatar, faceEmotionGUI);
 
-#if VRC_SDK_VRCSDK2
             var targetAvatarObj = targetAvatarDescriptor.gameObject;
             targetAvatarObj.SetActive(true);
-#endif
 
             avatarMonitorGUI.MoveAvatarCam(false);
             animationsGUI.Initialize(edittingAvatar, originalAvatar, saveFolder, this, faceEmotionGUI);
