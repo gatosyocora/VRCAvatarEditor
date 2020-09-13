@@ -601,7 +601,7 @@ namespace VRCAvatarEditor
             var isLatest = VersionCheckUtility.IsLatestVersion(TOOL_VERSION, remoteVersion);
             var message = (isLatest) ? 
                             LocalizeText.instance.langPair.localIsLatestMessageText.Replace("<LocalVersion>", TOOL_VERSION) :
-                            LocalizeText.instance.langPair.localIsLatestMessageText.Replace("<LocalVersion>", TOOL_VERSION).Replace("<RemoteVersion>", remoteVersion);
+                            LocalizeText.instance.langPair.remoteIsLatestMessageText.Replace("<LocalVersion>", TOOL_VERSION).Replace("<RemoteVersion>", remoteVersion);
             var okText = (isLatest) ? 
                             LocalizeText.instance.langPair.ok :
                             LocalizeText.instance.langPair.downloadLatestButtonText;
