@@ -7,8 +7,9 @@ using UnityEngine.SceneManagement;
 using VRCSDK2;
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
 #else
-using VRCAvatar = VRCAvatarEditor.Test.VRCAvatar2;
-using VRC_AvatarDescriptor = VRC.SDKBase.VRC_AvatarDescriptor;
+using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
+using VRC.SDK3.Avatars.Components;
+using VRC_AvatarDescriptor = VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
 #endif
 
 namespace VRCAvatarEditor
@@ -135,7 +136,6 @@ namespace VRCAvatarEditor
 
         public VRCAvatar AddAvatar(VRC_AvatarDescriptor descriptor)
         {
-#if VRC_SDK_VRCSDK2
             if (avatarObj != null)
                 UnityEngine.Object.DestroyImmediate(avatarObj);
 
@@ -151,9 +151,6 @@ namespace VRCAvatarEditor
             ResetCameraTransform();
 
             return avatar;
-#else
-            return new VRCAvatar();
-#endif
         }
 
         public void SetAvatarCamBgColor(Color col)
@@ -216,11 +213,7 @@ namespace VRCAvatarEditor
             {
                 mainOrthographicSize = defaultOrthographicSize;
             }
-#if VRC_SDK_VRCSDK2
             camera.transform.position = new Vector3(0, descriptor.ViewPosition.y, 1);
-#else
-            camera.transform.position = new Vector3(0, 1, 1);
-#endif
             cameraObj.transform.rotation = Quaternion.Euler(0, 180, 0);
             subOrthographicSize = 0f;
             camera.orthographicSize = mainOrthographicSize;
@@ -228,11 +221,7 @@ namespace VRCAvatarEditor
 
         public void ResetCameraTransform()
         {
-#if VRC_SDK_VRCSDK2
             cameraObj.transform.position = new Vector3(0, descriptor.ViewPosition.y, 1);
-#else
-            camera.transform.position = new Vector3(0, 1, 1);
-#endif
             cameraObj.transform.rotation = Quaternion.Euler(0, 180, 0);
             mainOrthographicSize = defaultOrthographicSize;
             subOrthographicSize = 0f;
@@ -246,11 +235,7 @@ namespace VRCAvatarEditor
         public void MoveAvatarCamHeight(float value)
         {
             if (camera == null || descriptor == null) return;
-#if VRC_SDK_VRCSDK2
             var y = Mathf.Lerp(0, descriptor.ViewPosition.y * 1.1f, value);
-#else
-var y = Mathf.Lerp(0, 1.1f, value);
-#endif
             var nowCamPos = camera.transform.position;
             camera.transform.position = new Vector3(nowCamPos.x, y, nowCamPos.z);
         }
@@ -288,11 +273,7 @@ var y = Mathf.Lerp(0, 1.1f, value);
         public float GetNormalizedMonitorHeight()
         {
             if (cameraObj == null || descriptor == null) return 1f;
-#if VRC_SDK_VRCSDK2
             return cameraObj.transform.position.y / (descriptor.ViewPosition.y * 1.1f);
-#else
-return cameraObj.transform.position.y / 1.1f;
-#endif
         }
 
         public float GetNormalizedSubOrthographicSize()
