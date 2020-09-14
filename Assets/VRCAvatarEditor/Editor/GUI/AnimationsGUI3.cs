@@ -6,10 +6,9 @@ using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 using VRCAvatarEditor.Base;
-using VRCAvatarEditor.Utilitys;
+using VRCAvatarEditor.Utilities;
 using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
 using VRC.SDK3.Avatars.Components;
-using VRCAvatarEditor.Utilities;
 
 namespace VRCAvatarEditor.Avatars3
 {
@@ -28,7 +27,7 @@ namespace VRCAvatarEditor.Avatars3
                                VRCAvatar originalAvatar,
                                string saveFolderPath,
                                VRCAvatarEditorGUI vrcAvatarEditorGUI,
-                               FaceEmotionGUI faceEmotionGUI)
+                               FaceEmotionGUI3 faceEmotionGUI)
         {
             this.editAvatar = editAvatar;
             this.originalAvatar = originalAvatar;
@@ -93,7 +92,7 @@ namespace VRCAvatarEditor.Avatars3
                                     vrcAvatarEditorGUI.OnTabChanged();
                                 }
                                 FaceEmotion.ApplyAnimationProperties(anim, editAvatar);
-                                faceEmotionGUI.ChangeSaveAnimationState(
+                                ((FaceEmotionGUI3)faceEmotionGUI).ChangeSaveAnimationState(
                                     anim.name,
                                     i,
                                     anim);

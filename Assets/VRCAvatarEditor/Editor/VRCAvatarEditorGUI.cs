@@ -20,7 +20,7 @@ using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
 using VRC.SDK3.Avatars.Components;
 using VRC_AvatarDescriptor = VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
 using AnimationsGUI = VRCAvatarEditor.Avatars3.AnimationsGUI3;
-using FaceEmotionGUI = VRCAvatarEditor.Avatars2.FaceEmotionGUI2;
+using FaceEmotionGUI = VRCAvatarEditor.Avatars3.FaceEmotionGUI3;
 #endif
 
 // Copyright (c) 2019 gatosyocora

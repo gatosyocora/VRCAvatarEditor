@@ -1,17 +1,13 @@
-﻿using System;
+﻿#if VRC_SDK_VRCSDK2
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using VRCAvatarEditor.Base;
-#if VRC_SDK_VRCSDK2
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
 using AnimationsGUI = VRCAvatarEditor.Avatars2.AnimationsGUI2;
-#else
-using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
-using AnimationsGUI = VRCAvatarEditor.Avatars3.AnimationsGUI3;
-#endif
 
 namespace VRCAvatarEditor.Avatars2
 {
@@ -106,7 +102,6 @@ namespace VRCAvatarEditor.Avatars2
                 GatoGUILayout.Button(
                     LocalizeText.instance.langPair.createAnimFileButtonText,
                     () => {
-#if VRC_SDK_VRCSDK2
                         var animController = originalAvatar.StandingAnimController;
 
                         var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, originalAvatar.AnimSavedFolderPath, editAvatar, blendshapeExclusions, editAvatar.Descriptor.gameObject);
@@ -123,7 +118,6 @@ namespace VRCAvatarEditor.Avatars2
                         editAvatar.StandingAnimController = animController;
 
                         animationsGUI.ResetPathMissing(AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]);
-#endif
                     },
                     selectedHandAnim != HandPose.HandPoseType.NoSelection &&
                     handPoseAnim != null);
@@ -140,20 +134,11 @@ namespace VRCAvatarEditor.Avatars2
 
         public void ChangeSaveAnimationState(
                 string animName = "",
-#if VRC_SDK_VRCSDK2
                 HandPose.HandPoseType selectedHandAnim = HandPose.HandPoseType.NoSelection,
-#elif VRC_SDK_VRCSDK3
-                int selectStateIndex = 0,
-#endif
                 AnimationClip handPoseAnim = null)
         {
             this.animName = animName;
-#if VRC_SDK_VRCSDK2
             this.selectedHandAnim = selectedHandAnim;
-#elif VRC_SDK_VRCSDK3
-            // TODO: 一時対処
-            this.selectedHandAnim = HandPose.HandPoseType.NoSelection;
-#endif
             if (handPoseAnim is null)
                 handPoseAnim = HandPose.GetHandAnimationClip(this.selectedHandAnim);
             this.handPoseAnim = handPoseAnim;
@@ -161,7 +146,6 @@ namespace VRCAvatarEditor.Avatars2
 
         private void ChangeSelectionHandAnimation()
         {
-#if VRC_SDK_VRCSDK2
             if (usePreviousAnimationOnHandAnimation)
             {
                 var animController = originalAvatar.StandingAnimController;
@@ -181,7 +165,7 @@ namespace VRCAvatarEditor.Avatars2
             {
                 handPoseAnim = HandPose.GetHandAnimationClip(selectedHandAnim);
             }
-#endif
         }
     }
 }
+#endif
