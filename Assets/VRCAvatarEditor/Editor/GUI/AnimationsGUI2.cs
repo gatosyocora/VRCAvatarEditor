@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using VRCAvatarEditor.Base;
-using VRCAvatarEditor.Utilitys;
+using VRCAvatarEditor.Utilities;
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
 
 namespace VRCAvatarEditor.Avatars2

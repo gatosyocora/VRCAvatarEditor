@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace VRCAvatarEditor.Utilitys
+namespace VRCAvatarEditor.Utilities
 {
     public class VRCSDKUtility
     {

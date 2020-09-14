@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
-using VRCAvatarEditor.Utilitys;
+using VRCAvatarEditor.Utilities;
 #if VRC_SDK_VRCSDK2
 using VRCSDK2;
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;

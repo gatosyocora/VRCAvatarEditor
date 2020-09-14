@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-namespace VRCAvatarEditor.Utilitys
+namespace VRCAvatarEditor.Utilities
 {
     public class FileUtility
     {
