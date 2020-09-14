@@ -20,9 +20,6 @@ namespace VRCAvatarEditor.Avatars2
 
         private bool[] pathMissing = new bool[7];
 
-        private GUIStyle normalStyle = new GUIStyle();
-        private GUIStyle errorStyle = new GUIStyle();
-
         private bool failedAutoFixMissingPath = false;
 
         string titleText;
@@ -49,7 +46,8 @@ namespace VRCAvatarEditor.Avatars2
             this.faceEmotionGUI = faceEmotionGUI;
             UpdateSaveFolderPath(saveFolderPath);
 
-            errorStyle.normal.textColor = Color.red;
+            Initialize(saveFolderPath);
+
             if (editAvatar != null && editAvatar.StandingAnimController != null)
             {
                 ValidateAnimatorOverrideController(editAvatar.Animator, editAvatar.StandingAnimController);
@@ -113,40 +111,26 @@ namespace VRCAvatarEditor.Avatars2
                         for (int i = 0; i < HANDANIMS.Length; i++)
                         {
                             var handPoseName = HANDANIMS[i];
-                            if (handPoseName == controller[handPoseName].name)
-                                anim = null;
-                            else
-                                anim = controller[handPoseName];
+                            anim = handPoseName == controller[handPoseName].name ?
+                                        null : 
+                                        controller[handPoseName];
 
-                            using (new EditorGUILayout.HorizontalScope(GUILayout.Width(350)))
-                            {
-                                GUILayout.Label((i + 1) + ":" + handPoseName, (pathMissing[i]) ? errorStyle : normalStyle, GUILayout.Width(100));
-
-                                controller[handPoseName] = GatoGUILayout.ObjectField(
-                                    string.Empty,
-                                    anim,
-                                    true,
-                                    GUILayout.Width(200));
-
-                                using (new EditorGUI.DisabledGroupScope(anim == null))
-                                {
-                                    GatoGUILayout.Button(
-                                        LocalizeText.instance.langPair.edit,
-                                        () => {
-                                            if (vrcAvatarEditorGUI.currentTool != VRCAvatarEditorGUI.ToolFunc.FaceEmotion)
-                                            {
-                                                vrcAvatarEditorGUI.currentTool = VRCAvatarEditorGUI.ToolFunc.FaceEmotion;
-                                                vrcAvatarEditorGUI.OnTabChanged();
-                                            }
-                                            FaceEmotion.ApplyAnimationProperties(controller[handPoseName], editAvatar);
-                                            faceEmotionGUI.ChangeSaveAnimationState(controller[handPoseName].name,
-                                                (HandPose.HandPoseType)Enum.ToObject(typeof(HandPose.HandPoseType), i + 1),
-                                                controller[handPoseName]);
-                                        },
-                                        anim != null,
-                                        GUILayout.Width(50));
-                                }
-                            }
+                            controller[handPoseName] = EdittableAnimationField(
+                                (i + 1) + ":" + handPoseName,
+                                anim,
+                                pathMissing[i],
+                                anim != null,
+                                () => {
+                                    if (vrcAvatarEditorGUI.currentTool != VRCAvatarEditorGUI.ToolFunc.FaceEmotion)
+                                    {
+                                        vrcAvatarEditorGUI.currentTool = VRCAvatarEditorGUI.ToolFunc.FaceEmotion;
+                                        vrcAvatarEditorGUI.OnTabChanged();
+                                    }
+                                    FaceEmotion.ApplyAnimationProperties(controller[handPoseName], editAvatar);
+                                    faceEmotionGUI.ChangeSaveAnimationState(controller[handPoseName].name,
+                                        (HandPose.HandPoseType)Enum.ToObject(typeof(HandPose.HandPoseType), i + 1),
+                                        controller[handPoseName]);
+                                });
                         }
                     }
                     else
@@ -154,21 +138,11 @@ namespace VRCAvatarEditor.Avatars2
                         AnimationClip anim;
                         foreach (var emoteAnim in EMOTEANIMS)
                         {
-                            if (emoteAnim == controller[emoteAnim].name)
-                                anim = null;
-                            else
-                                anim = controller[emoteAnim];
+                            anim = emoteAnim == controller[emoteAnim].name ?
+                                        null :
+                                        controller[emoteAnim];
 
-                            using (new EditorGUILayout.HorizontalScope(GUILayout.Width(350)))
-                            {
-                                GUILayout.Label(emoteAnim, GUILayout.Width(90));
-
-                                controller[emoteAnim] = GatoGUILayout.ObjectField(
-                                    string.Empty,
-                                    anim,
-                                    true,
-                                    GUILayout.Width(250));
-                            }
+                            controller[emoteAnim] = ValidatableAnimationField($" {emoteAnim}", anim, false);
                         }
                     }
                 }
