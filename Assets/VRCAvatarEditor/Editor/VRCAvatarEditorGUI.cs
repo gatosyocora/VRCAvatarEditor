@@ -13,6 +13,7 @@ using VRCAvatarEditor.Utilities;
 using VRCSDK2;
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
 using AnimationsGUI = VRCAvatarEditor.Avatars2.AnimationsGUI2;
+using VRC_AvatarDescriptor = VRCSDK2.VRC_AvatarDescriptor;
 #elif VRC_SDK_VRCSDK3
 using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
 using VRC.SDK3.Avatars.Components;
