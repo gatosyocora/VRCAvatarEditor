@@ -9,7 +9,7 @@ namespace VRCAvatarEditor.Base
     public abstract class AnimationsGUIBase : Editor, IVRCAvatarEditorGUI
     {
         protected VRCAvatarEditorGUI vrcAvatarEditorGUI;
-        protected FaceEmotionGUI faceEmotionGUI;
+        protected FaceEmotionGUIBase faceEmotionGUI;
 
         protected string saveFolderPath;
 

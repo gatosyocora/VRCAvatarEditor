@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using VRCAvatarEditor;
+using VRCAvatarEditor.Base;
 using static VRCAvatarEditor.VRCAvatarEditorGUI;
 using VRCAvatar = VRCAvatarEditor.Base.VRCAvatarBase;
 
@@ -37,7 +38,7 @@ namespace VRCAvatarEditor
         /// 設定情報を読み込む
         /// </summary>
         public (LayoutType, string) LoadSettingDataFromScriptableObject(string editorFolderPath, string language,
-                                                                        AvatarMonitorGUI avatarMonitorGUI, FaceEmotionGUI faceEmotionGUI)
+                                                                        AvatarMonitorGUI avatarMonitorGUI, FaceEmotionGUIBase faceEmotionGUI)
         {
             instance.LoadSettingData();
 
@@ -67,7 +68,7 @@ namespace VRCAvatarEditor
         /// 設定情報を保存する
         /// </summary>
         public void SaveSettingDataToScriptableObject(LayoutType layoutType, string language,
-                                                        AvatarMonitorGUI avatarMonitorGUI, FaceEmotionGUI faceEmotionGUI)
+                                                        AvatarMonitorGUI avatarMonitorGUI, FaceEmotionGUIBase faceEmotionGUI)
         {
             bool newCreated = false;
             var settingAsset = Resources.Load<SettingData>("CustomSettingData");
@@ -116,7 +117,7 @@ namespace VRCAvatarEditor
         /// <summary>
         /// 設定を反映する
         /// </summary>
-        public void ApplySettingsToEditorGUI(VRCAvatar edittingAvatar, FaceEmotionGUI faceEmotionGUI)
+        public void ApplySettingsToEditorGUI(VRCAvatar edittingAvatar, FaceEmotionGUIBase faceEmotionGUI)
         {
             if (edittingAvatar.Animator == null) return;
 
@@ -125,7 +126,7 @@ namespace VRCAvatarEditor
                 if (edittingAvatar.LipSyncShapeKeyNames != null && edittingAvatar.LipSyncShapeKeyNames.Count > 0)
                     skinnedMesh.SetExclusionBlendShapesByContains(faceEmotionGUI.blendshapeExclusions.Union(edittingAvatar.LipSyncShapeKeyNames).ToList<string>());
 
-                if (faceEmotionGUI.selectedSortType == FaceEmotionGUI.SortType.AToZ)
+                if (faceEmotionGUI.selectedSortType == FaceEmotionGUIBase.SortType.AToZ)
                     skinnedMesh.SortBlendShapesToAscending();
                 else
                     skinnedMesh.ResetDefaultSort();

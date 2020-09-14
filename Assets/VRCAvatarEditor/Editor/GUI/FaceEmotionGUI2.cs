@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using VRCAvatarEditor.Base;
 #if VRC_SDK_VRCSDK2
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
 using AnimationsGUI = VRCAvatarEditor.Avatars2.AnimationsGUI2;
@@ -12,47 +13,11 @@ using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
 using AnimationsGUI = VRCAvatarEditor.Avatars3.AnimationsGUI3;
 #endif
 
-namespace VRCAvatarEditor
+namespace VRCAvatarEditor.Avatars2
 {
-    public class FaceEmotionGUI : Editor, IVRCAvatarEditorGUI
+    public class FaceEmotionGUI2 : FaceEmotionGUIBase
     {
-        private VRCAvatar editAvatar;
-        private VRCAvatar originalAvatar;
-        private VRCAvatarEditorGUI parentWindow;
-        private AnimationsGUI animationsGUI;
-
-        private static readonly string DEFAULT_ANIM_NAME = "faceAnim";
-        private HandPose.HandPoseType selectedHandAnim = HandPose.HandPoseType.NoSelection;
-
-        private Vector2 scrollPos = Vector2.zero;
-
-        public enum SortType
-        {
-            UnSort,
-            AToZ,
-        }
-
-        public SortType selectedSortType = SortType.UnSort;
-        public List<string> blendshapeExclusions = new List<string> { "vrc.v_", "vrc.blink_", "vrc.lowerlid_", "vrc.owerlid_", "mmd" };
-
-        private bool isOpeningBlendShapeExclusionList = false;
-
-        private string animName;
-
-        private AnimationClip handPoseAnim;
-
-        private bool usePreviousAnimationOnHandAnimation;
-
-        public void Initialize(VRCAvatar editAvatar, VRCAvatar originalAvatar, string saveFolderPath, EditorWindow window, AnimationsGUI animationsGUI)
-        {
-            this.editAvatar = editAvatar;
-            this.originalAvatar = originalAvatar;
-            animName = DEFAULT_ANIM_NAME;
-            this.parentWindow = window as VRCAvatarEditorGUI;
-            this.animationsGUI = animationsGUI;
-        }
-
-        public bool DrawGUI(GUILayoutOption[] layoutOptions)
+        public override bool DrawGUI(GUILayoutOption[] layoutOptions)
         {
             EditorGUILayout.LabelField(LocalizeText.instance.langPair.faceEmotionTitle, EditorStyles.boldLabel);
 
@@ -167,130 +132,9 @@ namespace VRCAvatarEditor
             return false;
         }
 
-        public void DrawSettingsGUI()
+        public override void OnLoadedAnimationProperties()
         {
-            EditorGUILayout.LabelField("FaceEmotion Creator", EditorStyles.boldLabel);
-
-            selectedSortType = (SortType)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.sortTypeLabel, selectedSortType);
-
-            isOpeningBlendShapeExclusionList = EditorGUILayout.Foldout(isOpeningBlendShapeExclusionList, LocalizeText.instance.langPair.blendShapeExclusionsLabel);
-            if (isOpeningBlendShapeExclusionList)
-            {
-                using (new EditorGUI.IndentLevelScope())
-                {
-                    for (int i = 0; i < blendshapeExclusions.Count; i++)
-                    {
-                        using (new GUILayout.HorizontalScope())
-                        {
-                            blendshapeExclusions[i] = EditorGUILayout.TextField(blendshapeExclusions[i]);
-                            if (GUILayout.Button(LocalizeText.instance.langPair.remove))
-                                blendshapeExclusions.RemoveAt(i);
-                        }
-                    }
-                }
-
-                using (new GUILayout.HorizontalScope())
-                {
-                    GatoGUILayout.Button(
-                        LocalizeText.instance.langPair.add,
-                        () => {
-                            blendshapeExclusions.Add(string.Empty);
-                        });
-                }
-            }
-
-            usePreviousAnimationOnHandAnimation = EditorGUILayout.ToggleLeft(LocalizeText.instance.langPair.usePreviousAnimationOnHandAnimationLabel, usePreviousAnimationOnHandAnimation);
-        }
-
-        public void LoadSettingData(SettingData settingAsset)
-        {
-            selectedSortType = settingAsset.selectedSortType;
-            blendshapeExclusions = new List<string>(settingAsset.blendshapeExclusions);
-            usePreviousAnimationOnHandAnimation = settingAsset.usePreviousAnimationOnHandAnimation;
-        }
-
-        public void SaveSettingData(ref SettingData settingAsset)
-        {
-            settingAsset.selectedSortType = selectedSortType;
-            settingAsset.blendshapeExclusions = new List<string>(blendshapeExclusions);
-            settingAsset.usePreviousAnimationOnHandAnimation = usePreviousAnimationOnHandAnimation;
-        }
-
-        public void Dispose()
-        {
-            FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
-        }
-
-        private void BlendShapeListGUI()
-        {
-            // BlendShapeのリスト
-            using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos))
-            {
-                scrollPos = scrollView.scrollPosition;
-                foreach (var skinnedMesh in editAvatar.SkinnedMeshList)
-                {
-                    skinnedMesh.IsOpenBlendShapes = EditorGUILayout.Foldout(skinnedMesh.IsOpenBlendShapes, skinnedMesh.Obj.name);
-                    if (skinnedMesh.IsOpenBlendShapes)
-                    {
-                        using (new EditorGUI.IndentLevelScope())
-                        {
-                            using (new GUILayout.HorizontalScope())
-                            {
-                                using (var check = new EditorGUI.ChangeCheckScope())
-                                {
-                                    skinnedMesh.IsContainsAll = EditorGUILayout.ToggleLeft(string.Empty, skinnedMesh.IsContainsAll, GUILayout.Width(45));
-                                    if (check.changed)
-                                    {
-                                        FaceEmotion.SetContainsAll(skinnedMesh.IsContainsAll, skinnedMesh.Blendshapes);
-                                    }
-                                }
-                                EditorGUILayout.LabelField(LocalizeText.instance.langPair.toggleAllLabel, GUILayout.Height(20));
-                            }
-
-                            foreach (var blendshape in skinnedMesh.Blendshapes)
-                            {
-                                if (!blendshape.IsExclusion)
-                                {
-                                    using (new EditorGUILayout.HorizontalScope())
-                                    {
-                                        blendshape.IsContains = EditorGUILayout.ToggleLeft(string.Empty, blendshape.IsContains, GUILayout.Width(45));
-
-                                        EditorGUILayout.SelectableLabel(blendshape.Name, GUILayout.Height(20));
-                                        using (var check = new EditorGUI.ChangeCheckScope())
-                                        {
-                                            var value = skinnedMesh.Renderer.GetBlendShapeWeight(blendshape.Id);
-                                            value = EditorGUILayout.Slider(value, 0, 100);
-                                            if (check.changed)
-                                                skinnedMesh.Renderer.SetBlendShapeWeight(blendshape.Id, value);
-                                        }
-
-                                        GatoGUILayout.Button(
-                                            LocalizeText.instance.langPair.minButtonText,
-                                            () => {
-                                                FaceEmotion.SetBlendShapeMinValue(skinnedMesh.Renderer, blendshape.Id);
-                                            },
-                                            true,
-                                            GUILayout.MaxWidth(50));
-
-                                        GatoGUILayout.Button(
-                                            LocalizeText.instance.langPair.maxButtonText,
-                                            () => {
-                                                FaceEmotion.SetBlendShapeMaxValue(skinnedMesh.Renderer, blendshape.Id);
-                                            },
-                                            true,
-                                            GUILayout.MaxWidth(50));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        public void OnLoadedAnimationProperties()
-        {
-            FaceEmotion.ApplyAnimationProperties(ScriptableSingleton<SendData>.instance.loadingProperties, editAvatar);
+            base.OnLoadedAnimationProperties();
             ChangeSaveAnimationState();
         }
 

@@ -38,7 +38,7 @@ namespace VRCAvatarEditor.Avatars2
                                VRCAvatar originalAvatar,
                                string saveFolderPath,
                                VRCAvatarEditorGUI vrcAvatarEditorGUI,
-                               FaceEmotionGUI faceEmotionGUI)
+                               FaceEmotionGUI2 faceEmotionGUI)
         {
             this.editAvatar = editAvatar;
             this.originalAvatar = originalAvatar;
@@ -126,7 +126,7 @@ namespace VRCAvatarEditor.Avatars2
                                         vrcAvatarEditorGUI.OnTabChanged();
                                     }
                                     FaceEmotion.ApplyAnimationProperties(controller[handPoseName], editAvatar);
-                                    faceEmotionGUI.ChangeSaveAnimationState(controller[handPoseName].name,
+                                    ((FaceEmotionGUI2)faceEmotionGUI).ChangeSaveAnimationState(controller[handPoseName].name,
                                         (HandPose.HandPoseType)Enum.ToObject(typeof(HandPose.HandPoseType), i + 1),
                                         controller[handPoseName]);
                                 });

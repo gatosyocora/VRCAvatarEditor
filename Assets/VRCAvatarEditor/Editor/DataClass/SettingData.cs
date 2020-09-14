@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using VRCAvatarEditor.Base;
 
 // Copyright (c) 2019 gatosyocora
 
@@ -15,7 +16,7 @@ namespace VRCAvatarEditor
         public bool isGammaCorrection = true;
         public Color monitorBgColor = new Color(0.95f, 0.95f, 0.95f, 1);
 
-        public FaceEmotionGUI.SortType selectedSortType = FaceEmotionGUI.SortType.UnSort;
+        public FaceEmotionGUIBase.SortType selectedSortType = FaceEmotionGUIBase.SortType.UnSort;
         public List<string> blendshapeExclusions = new List<string> { "vrc.blink_", "vrc.lowerlid_", "mmd" };
         public bool usePreviousAnimationOnHandAnimation = false;
 

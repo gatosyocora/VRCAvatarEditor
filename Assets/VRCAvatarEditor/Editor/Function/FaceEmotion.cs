@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using VRCAvatarEditor.Base;
 using VRCAvatar = VRCAvatarEditor.Base.VRCAvatarBase;
 
 // Copyright (c) 2019 gatosyocora
@@ -171,7 +172,7 @@ namespace VRCAvatarEditor
         /// </summary>
         /// <param name="sendData"></param>
         /// <param name="preWindow"></param>
-        public static void LoadAnimationProperties(FaceEmotionGUI faceEmotionGUI, VRCAvatarEditorGUI editorGUI)
+        public static void LoadAnimationProperties(FaceEmotionGUIBase faceEmotionGUI, VRCAvatarEditorGUI editorGUI)
         {
 
             string animFilePath = EditorUtility.OpenFilePanel("Select Loading Animation File", "Assets", "anim");
