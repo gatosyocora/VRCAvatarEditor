@@ -40,7 +40,8 @@ namespace VRCAvatarEditor.Base
             TriangleCount = 0;
             TriangleCountInactive = 0;
             FaceShapeKeyEnum = null;
-            SkinnedMeshList = null;
+            // TODO: CustomStandingAnimsが未設定の3Dモデルではぬるぽが出るのでインスタンス化して一時対処
+            SkinnedMeshList = new List<SkinnedMesh>();
             AnimSavedFolderPath = $"Assets{Path.DirectorySeparatorChar}";
             Sex = AnimationSet.None;
             LipSyncStyle = LipSyncStyle.Default;
