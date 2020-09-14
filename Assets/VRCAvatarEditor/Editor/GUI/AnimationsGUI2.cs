@@ -44,7 +44,6 @@ namespace VRCAvatarEditor.Avatars2
             this.originalAvatar = originalAvatar;
             this.vrcAvatarEditorGUI = vrcAvatarEditorGUI;
             this.faceEmotionGUI = faceEmotionGUI;
-            UpdateSaveFolderPath(saveFolderPath);
 
             Initialize(saveFolderPath);
 

@@ -20,6 +20,7 @@ namespace VRCAvatarEditor.Base
         {
             errorStyle.normal.textColor = Color.red;
 
+            UpdateSaveFolderPath(saveFolderPath);
         }
 
         public abstract bool DrawGUI(GUILayoutOption[] layoutOptions);
