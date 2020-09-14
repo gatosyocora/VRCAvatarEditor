@@ -9,6 +9,7 @@ using VRCAvatarEditor.Base;
 using VRCAvatarEditor.Utilitys;
 using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
 using VRC.SDK3.Avatars.Components;
+using VRCAvatarEditor.Utilities;
 
 namespace VRCAvatarEditor.Avatars3
 {
@@ -33,7 +34,8 @@ namespace VRCAvatarEditor.Avatars3
             this.originalAvatar = originalAvatar;
             this.vrcAvatarEditorGUI = vrcAvatarEditorGUI;
             this.faceEmotionGUI = faceEmotionGUI;
-            UpdateSaveFolderPath(saveFolderPath);
+
+            Initialize(saveFolderPath);
 
             if (editAvatar != null && editAvatar.FxController != null)
             {
@@ -79,35 +81,23 @@ namespace VRCAvatarEditor.Avatars3
                         var stateName = states[i].state.name;
                         anim = states[i].state.motion as AnimationClip;
 
-                        using (new EditorGUILayout.HorizontalScope(GUILayout.Width(350)))
-                        {
-                            GUILayout.Label($"{i + 1}:{stateName}", GUILayout.Width(100));
-
-                            states[i].state.motion = GatoGUILayout.ObjectField(
-                                string.Empty,
-                                anim,
-                                true,
-                                GUILayout.Width(200)
-                            );
-
-                            GatoGUILayout.Button(
-                                LocalizeText.instance.langPair.edit,
-                                () => {
-                                    if (vrcAvatarEditorGUI.currentTool != VRCAvatarEditorGUI.ToolFunc.FaceEmotion)
-                                    {
-                                        vrcAvatarEditorGUI.currentTool = VRCAvatarEditorGUI.ToolFunc.FaceEmotion;
-                                        vrcAvatarEditorGUI.OnTabChanged();
-                                    }
-                                    FaceEmotion.ApplyAnimationProperties(anim, editAvatar);
-                                    // TODO: iを受け取るようにする
-                                    faceEmotionGUI.ChangeSaveAnimationState(
-                                        anim.name,
-                                        i,
-                                        anim);
-                                },
-                                anim != null && !anim.name.StartsWith("proxy_"),
-                                GUILayout.Width(50));
-                        }
+                        states[i].state.motion = EdittableAnimationField(
+                            $"{i + 1}:{stateName}",
+                            anim,
+                            false,
+                            anim != null && !anim.name.StartsWith("proxy_"),
+                            () => {
+                                if (vrcAvatarEditorGUI.currentTool != VRCAvatarEditorGUI.ToolFunc.FaceEmotion)
+                                {
+                                    vrcAvatarEditorGUI.currentTool = VRCAvatarEditorGUI.ToolFunc.FaceEmotion;
+                                    vrcAvatarEditorGUI.OnTabChanged();
+                                }
+                                FaceEmotion.ApplyAnimationProperties(anim, editAvatar);
+                                faceEmotionGUI.ChangeSaveAnimationState(
+                                    anim.name,
+                                    i,
+                                    anim);
+                            });
                     }
                 }
                 else
