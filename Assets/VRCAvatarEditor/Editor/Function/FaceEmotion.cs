@@ -42,7 +42,7 @@ namespace VRCAvatarEditor
             {
                 if (!skinnedMesh.IsOpenBlendShapes || skinnedMesh.BlendShapeCount <= 0) continue;
 
-                string path = AnimationUtility.CalculateTransformPath(avatar.Animator.transform, skinnedMesh.Renderer.transform);
+                string path = AnimationUtility.CalculateTransformPath(skinnedMesh.Renderer.transform, avatar.Animator.transform);
 
                 foreach (var blendshape in skinnedMesh.Blendshapes)
                 {
