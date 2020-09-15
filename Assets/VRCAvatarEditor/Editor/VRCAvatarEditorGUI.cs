@@ -550,12 +550,18 @@ namespace VRCAvatarEditor
             {
                 faceEmotionGUI.Initialize(edittingAvatar, originalAvatar, saveFolder, this, animationsGUI);
 
+                var exclusionsBlendShapes = faceEmotionGUI.blendshapeExclusions
+                                                .Union(edittingAvatar.LipSyncShapeKeyNames);
+
                 if (edittingAvatar.SkinnedMeshList != null)
                 {
                     for (int i = 0; i < edittingAvatar.SkinnedMeshList.Count; i++)
                     {
-                        if (edittingAvatar.LipSyncShapeKeyNames != null && edittingAvatar.LipSyncShapeKeyNames.Count > 0)
-                            edittingAvatar.SkinnedMeshList[i].SetExclusionBlendShapesByContains(faceEmotionGUI.blendshapeExclusions.Union(edittingAvatar.LipSyncShapeKeyNames).ToList<string>());
+                        if (edittingAvatar.LipSyncShapeKeyNames != null && 
+                            edittingAvatar.LipSyncShapeKeyNames.Count > 0)
+                        {
+                            edittingAvatar.SkinnedMeshList[i].SetExclusionBlendShapesByContains(exclusionsBlendShapes);
+                        }
                     }
                 }
 

@@ -65,7 +65,7 @@ namespace VRCAvatarEditor
         /// 名前にexclusionWordsが含まれるシェイプキーをリスト一覧表示から除外する設定にする
         /// </summary>
         /// <param name="exclusionWords"></param>
-        public void SetExclusionBlendShapesByContains(List<string> exclusionWords)
+        public void SetExclusionBlendShapesByContains(IEnumerable<string> exclusionWords)
         {
             for (int blendShapeIndex = 0; blendShapeIndex < BlendShapeNum; blendShapeIndex++)
             {
