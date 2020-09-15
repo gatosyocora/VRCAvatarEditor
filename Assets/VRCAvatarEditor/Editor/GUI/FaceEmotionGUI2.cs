@@ -15,65 +15,18 @@ namespace VRCAvatarEditor.Avatars2
     {
         public override bool DrawGUI(GUILayoutOption[] layoutOptions)
         {
-            EditorGUILayout.LabelField(LocalizeText.instance.langPair.faceEmotionTitle, EditorStyles.boldLabel);
+            base.DrawGUI(layoutOptions);
 
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
             {
-                using (new EditorGUILayout.HorizontalScope())
-                {
-                    GUILayout.FlexibleSpace();
-
-                    GatoGUILayout.Button(
-                        LocalizeText.instance.langPair.loadAnimationButtonText,
-                        () => {
-                            FaceEmotion.LoadAnimationProperties(this, parentWindow);
-                        },
-                        editAvatar.Descriptor != null);
-
-                    GatoGUILayout.Button(
-                        LocalizeText.instance.langPair.setToDefaultButtonText,
-                        () => {
-                            if (EditorUtility.DisplayDialog(
-                                    LocalizeText.instance.langPair.setToDefaultDialogTitleText,
-                                    LocalizeText.instance.langPair.setToDefaultDialogMessageText,
-                                    LocalizeText.instance.langPair.ok, LocalizeText.instance.langPair.cancel))
-                            {
-                                FaceEmotion.SetToDefaultFaceEmotion(editAvatar, originalAvatar);
-                            }
-                        },
-                        editAvatar.Descriptor != null);
-
-                    GatoGUILayout.Button(
-                        LocalizeText.instance.langPair.resetToDefaultButtonText,
-                        () => {
-                            FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
-                            ChangeSaveAnimationState();
-                        },
-                        editAvatar.Descriptor != null);
-                }
+                DrawFunctionButtons();
 
                 if (editAvatar.SkinnedMeshList != null)
                 {
                     BlendShapeListGUI();
                 }
 
-                animName = EditorGUILayout.TextField(LocalizeText.instance.langPair.animClipFileNameLabel, animName);
-
-                using (new EditorGUILayout.HorizontalScope())
-                {
-                    EditorGUILayout.LabelField(LocalizeText.instance.langPair.animClipSaveFolderLabel, originalAvatar.AnimSavedFolderPath);
-
-                    GatoGUILayout.Button(
-                        LocalizeText.instance.langPair.selectFolder,
-                        () => {
-                            originalAvatar.AnimSavedFolderPath = EditorUtility.OpenFolderPanel(LocalizeText.instance.langPair.selectFolderDialogMessageText, originalAvatar.AnimSavedFolderPath, string.Empty);
-                            originalAvatar.AnimSavedFolderPath = $"{FileUtil.GetProjectRelativePath(originalAvatar.AnimSavedFolderPath)}{Path.DirectorySeparatorChar}";
-                            if (originalAvatar.AnimSavedFolderPath == $"{Path.DirectorySeparatorChar}") originalAvatar.AnimSavedFolderPath = $"Assets{Path.DirectorySeparatorChar}";
-                            parentWindow.animationsGUI.UpdateSaveFolderPath(originalAvatar.AnimSavedFolderPath);
-                        },
-                        true,
-                        GUILayout.Width(100));
-                }
+                DrawCreatedAnimationInfo();
 
                 EditorGUILayout.Space();
 
@@ -130,6 +83,11 @@ namespace VRCAvatarEditor.Avatars2
         {
             base.OnLoadedAnimationProperties();
             ChangeSaveAnimationState();
+        }
+
+        public override void ChangeSaveAnimationState()
+        {
+            ChangeSaveAnimationState("", HandPose.HandPoseType.NoSelection, null);
         }
 
         public void ChangeSaveAnimationState(

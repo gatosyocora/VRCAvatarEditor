@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using System.IO;
 #if VRC_SDK_VRCSDK2
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
 using AnimationsGUI = VRCAvatarEditor.Avatars2.AnimationsGUI2;
@@ -50,7 +51,70 @@ namespace VRCAvatarEditor.Base
             this.animationsGUI = animationsGUI;
         }
 
-        public abstract bool DrawGUI(GUILayoutOption[] layoutOptions);
+        public virtual bool DrawGUI(GUILayoutOption[] layoutOptions) 
+        {
+            EditorGUILayout.LabelField(LocalizeText.instance.langPair.faceEmotionTitle, EditorStyles.boldLabel);
+            return false;
+        }
+
+        protected void DrawFunctionButtons()
+        {
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                GUILayout.FlexibleSpace();
+
+                GatoGUILayout.Button(
+                    LocalizeText.instance.langPair.loadAnimationButtonText,
+                    () => {
+                        FaceEmotion.LoadAnimationProperties(this, parentWindow);
+                    },
+                    editAvatar.Descriptor != null);
+
+                GatoGUILayout.Button(
+                    LocalizeText.instance.langPair.setToDefaultButtonText,
+                    () => {
+                        if (EditorUtility.DisplayDialog(
+                                LocalizeText.instance.langPair.setToDefaultDialogTitleText,
+                                LocalizeText.instance.langPair.setToDefaultDialogMessageText,
+                                LocalizeText.instance.langPair.ok, LocalizeText.instance.langPair.cancel))
+                        {
+                            FaceEmotion.SetToDefaultFaceEmotion(editAvatar, originalAvatar);
+                        }
+                    },
+                    editAvatar.Descriptor != null);
+
+                GatoGUILayout.Button(
+                    LocalizeText.instance.langPair.resetToDefaultButtonText,
+                    () => {
+                        FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
+                        ChangeSaveAnimationState();
+                    },
+                    editAvatar.Descriptor != null);
+            }
+        }
+
+        protected void DrawCreatedAnimationInfo()
+        {
+            animName = EditorGUILayout.TextField(LocalizeText.instance.langPair.animClipFileNameLabel, animName);
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUILayout.LabelField(LocalizeText.instance.langPair.animClipSaveFolderLabel, originalAvatar.AnimSavedFolderPath);
+
+                GatoGUILayout.Button(
+                    LocalizeText.instance.langPair.selectFolder,
+                    () => {
+                        originalAvatar.AnimSavedFolderPath = EditorUtility.OpenFolderPanel(LocalizeText.instance.langPair.selectFolderDialogMessageText, originalAvatar.AnimSavedFolderPath, string.Empty);
+                        originalAvatar.AnimSavedFolderPath = $"{FileUtil.GetProjectRelativePath(originalAvatar.AnimSavedFolderPath)}{Path.DirectorySeparatorChar}";
+                        if (originalAvatar.AnimSavedFolderPath == $"{Path.DirectorySeparatorChar}") originalAvatar.AnimSavedFolderPath = $"Assets{Path.DirectorySeparatorChar}";
+                        parentWindow.animationsGUI.UpdateSaveFolderPath(originalAvatar.AnimSavedFolderPath);
+                    },
+                    true,
+                    GUILayout.Width(100));
+            }
+        }
+
+        public abstract void ChangeSaveAnimationState();
 
         public void DrawSettingsGUI()
         {
