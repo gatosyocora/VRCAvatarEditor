@@ -33,10 +33,10 @@ namespace VRCAvatarEditor
             }
         }
 
-        public SkinnedMesh(SkinnedMeshRenderer m_renderer, GameObject faceMeshObj)
+        public SkinnedMesh(SkinnedMeshRenderer renderer, GameObject faceMeshObj)
         {
-            Renderer = m_renderer;
-            Mesh = m_renderer.sharedMesh;
+            Renderer = renderer;
+            Mesh = renderer.sharedMesh;
             Obj = Renderer.gameObject;
             Blendshapes = GetBlendShapes();
             BlendShapeCount = Blendshapes.Count;
