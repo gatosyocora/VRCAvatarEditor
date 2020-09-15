@@ -66,10 +66,10 @@ namespace VRCAvatarEditor.Base
             if (FaceMesh != null)
             {
                 faceMeshObj = FaceMesh.gameObject;
-                DefaultFaceEmotion = FaceEmotion.GetAvatarFaceParamaters(SkinnedMeshList);
             }
-
             SkinnedMeshList = GetSkinnedMeshList(avatarObj, faceMeshObj);
+            DefaultFaceEmotion = FaceEmotion.GetAvatarFaceParamaters(SkinnedMeshList);
+
             MeshRendererList = GatoUtility.GetMeshList(avatarObj);
         }
 
