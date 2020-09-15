@@ -141,6 +141,7 @@ namespace VRCAvatarEditor
                 UnityEngine.Object.DestroyImmediate(avatarObj);
 
             var newAvatarObj = GameObject.Instantiate(descriptor.gameObject);
+            newAvatarObj.name = descriptor.gameObject.name;
             newAvatarObj.transform.position = Vector3.zero;
             newAvatarObj.transform.rotation = Quaternion.identity;
             newAvatarObj.SetActive(true);
