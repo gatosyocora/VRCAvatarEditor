@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using VRCAvatar = VRCAvatarEditor.Base.VRCAvatarBase;
 
@@ -54,18 +55,18 @@ namespace VRCAvatarEditor
                             {
                                 int index = 0;
 
-                                if (isGettingSkinnedMeshRenderer && avatar.SkinnedMeshRendererList != null && isSettingToSkinnedMesh != null)
+                                if (isGettingSkinnedMeshRenderer && avatar.SkinnedMeshList != null && isSettingToSkinnedMesh != null)
                                 {
-                                    foreach (var skinnedMesh in avatar.SkinnedMeshRendererList)
+                                    foreach (IProbeAnchorSkinnedMesh skinnedMesh in avatar.SkinnedMeshList)
                                     {
-                                        if (skinnedMesh == null) continue;
+                                        if (skinnedMesh == null || skinnedMesh.Renderer == null) continue;
 
                                         using (new GUILayout.HorizontalScope())
                                         {
-                                            isSettingToSkinnedMesh[index] = EditorGUILayout.Toggle(skinnedMesh.gameObject.name, isSettingToSkinnedMesh[index]);
+                                            isSettingToSkinnedMesh[index] = EditorGUILayout.Toggle(skinnedMesh.Obj.name, isSettingToSkinnedMesh[index]);
                                             GatoGUILayout.Button(LocalizeText.instance.langPair.select,
                                                 () => {
-                                                    Selection.activeGameObject = skinnedMesh.gameObject;
+                                                    Selection.activeGameObject = skinnedMesh.Obj;
                                                 });
                                         }
 
@@ -121,11 +122,11 @@ namespace VRCAvatarEditor
 
         public void SettingForProbeSetter()
         {
-            if (avatar == null || avatar.SkinnedMeshRendererList == null || avatar.MeshRendererList == null)
+            if (avatar == null || avatar.SkinnedMeshList == null || avatar.MeshRendererList == null)
                 return;
 
-            isSettingToSkinnedMesh = new bool[avatar.SkinnedMeshRendererList.Count];
-            for (int i = 0; i < avatar.SkinnedMeshRendererList.Count; i++) isSettingToSkinnedMesh[i] = true;
+            isSettingToSkinnedMesh = new bool[avatar.SkinnedMeshList.Count];
+            for (int i = 0; i < avatar.SkinnedMeshList.Count; i++) isSettingToSkinnedMesh[i] = true;
             isSettingToMesh = new bool[avatar.MeshRendererList.Count];
             for (int i = 0; i < avatar.MeshRendererList.Count; i++) isSettingToMesh[i] = true;
         }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VRCAvatar = VRCAvatarEditor.Base.VRCAvatarBase;
 
@@ -68,14 +69,13 @@ namespace VRCAvatarEditor
 
         public static void SetProbeAnchorToSkinnedMeshRenderers(ref GameObject anchorTargetObj, ref VRCAvatar avatar, ref bool[] isSettingToSkinnedMesh)
         {
-            List<SkinnedMeshRenderer> skinnedMeshRendererList = avatar.SkinnedMeshRendererList;
-
-            for (int index = 0; index < skinnedMeshRendererList.Count; index++)
+            for (int index = 0; index < avatar.SkinnedMeshList.Count; index++)
             {
+                IProbeAnchorSkinnedMesh skinnedMesh = avatar.SkinnedMeshList[index];
                 if (isSettingToSkinnedMesh[index])
-                    skinnedMeshRendererList[index].probeAnchor = anchorTargetObj.transform;
+                    skinnedMesh.Renderer.probeAnchor = anchorTargetObj.transform;
                 else
-                    skinnedMeshRendererList[index].probeAnchor = null;
+                    skinnedMesh.Renderer.probeAnchor = null;
             }
         }
 

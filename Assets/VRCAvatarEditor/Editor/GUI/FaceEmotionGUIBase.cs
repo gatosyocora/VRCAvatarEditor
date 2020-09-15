@@ -176,8 +176,10 @@ namespace VRCAvatarEditor.Base
             using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos))
             {
                 scrollPos = scrollView.scrollPosition;
-                foreach (var skinnedMesh in editAvatar.SkinnedMeshList)
+                foreach (IFaceEmotionSkinnedMesh skinnedMesh in editAvatar.SkinnedMeshList)
                 {
+                    if (skinnedMesh.BlendShapeCount <= 0) continue;
+
                     skinnedMesh.IsOpenBlendShapes = EditorGUILayout.Foldout(skinnedMesh.IsOpenBlendShapes, skinnedMesh.Obj.name);
                     if (skinnedMesh.IsOpenBlendShapes)
                     {

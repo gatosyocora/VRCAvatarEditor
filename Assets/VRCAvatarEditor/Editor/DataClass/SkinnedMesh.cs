@@ -6,16 +6,15 @@ using UnityEngine;
 
 namespace VRCAvatarEditor
 {
-
-    public class SkinnedMesh
+    public class SkinnedMesh : IFaceEmotionSkinnedMesh, IProbeAnchorSkinnedMesh
     {
         public SkinnedMeshRenderer Renderer { get; set; }
         public Mesh Mesh { get; set; }
         public GameObject Obj { get; set; }
-        public int BlendShapeNum { get; set; }
-        public bool IsOpenBlendShapes { get; set; }
         public List<BlendShape> Blendshapes { get; set; }
-        public List<BlendShape> BlendshapesOrigin { get; set; } = null;　// null: blendshapesは未ソート
+        public int BlendShapeCount { get; set; }
+        private List<BlendShape> UnSortedBlendshapes { get; set; } = null;　// null: blendshapesは未ソート
+        public bool IsOpenBlendShapes { get; set; }
         public bool IsContainsAll { get; set; } = true;
 
         public class BlendShape
@@ -40,7 +39,7 @@ namespace VRCAvatarEditor
             Mesh = m_renderer.sharedMesh;
             Obj = Renderer.gameObject;
             Blendshapes = GetBlendShapes();
-            BlendShapeNum = Blendshapes.Count;
+            BlendShapeCount = Blendshapes.Count;
             // 表情のメッシュのみtrueにする
             IsOpenBlendShapes = Obj.Equals(faceMeshObj);
         }
@@ -49,17 +48,10 @@ namespace VRCAvatarEditor
         /// 特定のSkinnedMeshRendererが持つBlendShapeのリストを取得する
         /// </summary>
         /// <param name="skinnedMesh"></param>
-        public List<BlendShape> GetBlendShapes()
-        {
-            List<BlendShape> blendshapes = new List<BlendShape>();
-
-            for (int blendShapeIndex = 0; blendShapeIndex < Mesh.blendShapeCount; blendShapeIndex++)
-            {
-                blendshapes.Add(new BlendShape(blendShapeIndex, Mesh.GetBlendShapeName(blendShapeIndex), true));
-            }
-
-            return blendshapes;
-        }
+        private List<BlendShape> GetBlendShapes() =>
+            Enumerable.Range(0, Mesh.blendShapeCount)
+                .Select(i => new BlendShape(i, Mesh.GetBlendShapeName(i), true))
+                .ToList();
 
         /// <summary>
         /// 名前にexclusionWordsが含まれるシェイプキーをリスト一覧表示から除外する設定にする
@@ -67,7 +59,7 @@ namespace VRCAvatarEditor
         /// <param name="exclusionWords"></param>
         public void SetExclusionBlendShapesByContains(IEnumerable<string> exclusionWords)
         {
-            for (int blendShapeIndex = 0; blendShapeIndex < BlendShapeNum; blendShapeIndex++)
+            for (int blendShapeIndex = 0; blendShapeIndex < BlendShapeCount; blendShapeIndex++)
             {
                 Blendshapes[blendShapeIndex].IsExclusion = false;
 
@@ -89,11 +81,11 @@ namespace VRCAvatarEditor
         /// </summary>
         public void SortBlendShapesToAscending()
         {
-            if (BlendShapeNum <= 1) return;
+            if (BlendShapeCount <= 1) return;
 
             // 初期状態の並び順に戻すことがあるので初期状態のやつをコピーしておく
-            if (BlendshapesOrigin == null)
-                BlendshapesOrigin = new List<BlendShape>(Blendshapes);
+            if (UnSortedBlendshapes == null)
+                UnSortedBlendshapes = new List<BlendShape>(Blendshapes);
 
             Blendshapes = Blendshapes.OrderBy(x => x.Name).ToList<BlendShape>();
         }
@@ -103,11 +95,11 @@ namespace VRCAvatarEditor
         /// </summary>
         public void ResetDefaultSort()
         {
-            if (BlendshapesOrigin == null) return;
+            if (UnSortedBlendshapes == null) return;
 
-            Blendshapes = BlendshapesOrigin;
+            Blendshapes = UnSortedBlendshapes;
 
-            BlendshapesOrigin = null;
+            UnSortedBlendshapes = null;
         }
     }
 

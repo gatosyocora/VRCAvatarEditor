@@ -38,9 +38,9 @@ namespace VRCAvatarEditor
 
             if (fileName == "") fileName = "face_emotion";
 
-            foreach (var skinnedMesh in avatar.SkinnedMeshList)
+            foreach (IFaceEmotionSkinnedMesh skinnedMesh in avatar.SkinnedMeshList)
             {
-                if (!skinnedMesh.IsOpenBlendShapes) continue;
+                if (!skinnedMesh.IsOpenBlendShapes || skinnedMesh.BlendShapeCount <= 0) continue;
 
                 string path = AnimationUtility.CalculateTransformPath(rootObj.transform, skinnedMesh.Renderer.transform);
 
@@ -71,35 +71,13 @@ namespace VRCAvatarEditor
         }
 
         /// <summary>
-        /// 指定オブジェクト以下でBlendShapeがついているSkinnedMeshRendererのリストを取得する
-        /// </summary>
-        /// <param name="parentObj">親オブジェクト</param>
-        /// <returns>BlendShapeがついているSkinnedMeshRendererのリスト</returns>
-        public static List<SkinnedMesh> GetSkinnedMeshListOfBlendShape(GameObject parentObj, GameObject faceMeshObj)
-        {
-            var skinnedMeshList = new List<SkinnedMesh>();
-
-            var skinnedMeshes = parentObj.GetComponentsInChildren<SkinnedMeshRenderer>();
-
-            foreach (var skinnedMesh in skinnedMeshes)
-            {
-                if (skinnedMesh is null || skinnedMesh.sharedMesh is null) continue;
-
-                if (skinnedMesh.sharedMesh.blendShapeCount > 0)
-                    skinnedMeshList.Add(new SkinnedMesh(skinnedMesh, faceMeshObj));
-            }
-
-            return skinnedMeshList;
-        }
-
-        /// <summary>
         /// BlendShapeの値をすべてリセットする
         /// </summary>
         public static void ResetAllBlendShapeValues(VRCAvatar avatar)
         {
             foreach (var skinnedMesh in avatar.SkinnedMeshList)
             {
-                if (!skinnedMesh.IsOpenBlendShapes) continue;
+                if (!skinnedMesh.IsOpenBlendShapes || skinnedMesh.BlendShapeCount <= 0) continue;
 
                 foreach (var blendshape in skinnedMesh.Blendshapes)
                     if (blendshape.IsContains)
@@ -197,9 +175,12 @@ namespace VRCAvatarEditor
         {
             for (int skinnedMeshIndex = 0; skinnedMeshIndex < avatar.SkinnedMeshList.Count; skinnedMeshIndex++)
             {
-                var mesh = avatar.SkinnedMeshList[skinnedMeshIndex].Mesh;
-                var renderer = avatar.SkinnedMeshList[skinnedMeshIndex].Renderer;
-                var blendshapes = avatar.SkinnedMeshList[skinnedMeshIndex].Blendshapes;
+                IFaceEmotionSkinnedMesh skinnedMesh = avatar.SkinnedMeshList[skinnedMeshIndex];
+                if (skinnedMesh.BlendShapeCount <= 0) continue;
+
+                var mesh = skinnedMesh.Mesh;
+                var renderer = skinnedMesh.Renderer;
+                var blendshapes = skinnedMesh.Blendshapes;
 
                 if (renderer == null) continue;
 
@@ -269,8 +250,11 @@ namespace VRCAvatarEditor
 
             for (int skinnedMeshIndex = 0; skinnedMeshIndex < skinnedMeshList.Count; skinnedMeshIndex++)
             {
-                var mesh = skinnedMeshList[skinnedMeshIndex].Mesh;
-                var renderer = skinnedMeshList[skinnedMeshIndex].Renderer;
+                IFaceEmotionSkinnedMesh skinnedMesh = skinnedMeshList[skinnedMeshIndex];
+                if (skinnedMesh.BlendShapeCount <= 0) continue;
+
+                var mesh = skinnedMesh.Mesh;
+                var renderer = skinnedMesh.Renderer;
 
                 for (int blendShapeIndex = 0; blendShapeIndex < mesh.blendShapeCount; blendShapeIndex++)
                 {

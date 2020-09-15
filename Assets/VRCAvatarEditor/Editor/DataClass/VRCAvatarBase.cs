@@ -6,6 +6,7 @@ using UnityEngine;
 using VRC.Core;
 using LipSyncStyle = VRC.SDKBase.VRC_AvatarDescriptor.LipSyncStyle;
 using AnimationSet = VRC.SDKBase.VRC_AvatarDescriptor.AnimationSet;
+using System.Linq;
 
 namespace VRCAvatarEditor.Base
 {
@@ -25,7 +26,6 @@ namespace VRCAvatarEditor.Base
         public AnimationSet Sex { get; set; }
         public Enum FaceShapeKeyEnum { get; set; }
         public List<SkinnedMesh> SkinnedMeshList { get; set; }
-        public List<SkinnedMeshRenderer> SkinnedMeshRendererList { get; set; }
         public List<MeshRenderer> MeshRendererList { get; set; }
         public string AnimSavedFolderPath { get; set; }
 
@@ -62,13 +62,14 @@ namespace VRCAvatarEditor.Base
             TriangleCount = GatoUtility.GetAllTrianglesCount(avatarObj, ref triangleCountInactive);
             TriangleCountInactive = triangleCountInactive;
 
+            GameObject faceMeshObj = null;
             if (FaceMesh != null)
             {
-                SkinnedMeshList = FaceEmotion.GetSkinnedMeshListOfBlendShape(avatarObj, FaceMesh.gameObject);
+                faceMeshObj = FaceMesh.gameObject;
                 DefaultFaceEmotion = FaceEmotion.GetAvatarFaceParamaters(SkinnedMeshList);
             }
 
-            SkinnedMeshRendererList = GatoUtility.GetSkinnedMeshList(avatarObj);
+            SkinnedMeshList = GetSkinnedMeshList(avatarObj, faceMeshObj);
             MeshRendererList = GatoUtility.GetMeshList(avatarObj);
         }
 
@@ -89,6 +90,17 @@ namespace VRCAvatarEditor.Base
             var assetPath = AssetDatabase.GetAssetPath(asset);
             return $"{Path.GetDirectoryName(assetPath)}{Path.DirectorySeparatorChar}";
         }
+
+        /// <summary>
+        /// 指定オブジェクト以下のSkinnedMeshRendererのリストを取得する
+        /// </summary>
+        /// <param name="parentObj">親オブジェクト</param>
+        /// <returns>SkinnedMeshRendererのリスト</returns>
+        public static List<SkinnedMesh> GetSkinnedMeshList(GameObject parentObj, GameObject faceMeshObj) =>
+            parentObj.GetComponentsInChildren<SkinnedMeshRenderer>()
+                .Where(s => s != null && s.sharedMesh != null)
+                .Select(s => new SkinnedMesh(s, faceMeshObj))
+                .ToList();
     }
 }
 

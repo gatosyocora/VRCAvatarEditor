@@ -24,8 +24,6 @@ public interface IVRCAvatarBase
 
     Enum FaceShapeKeyEnum { get; set; }
     List<SkinnedMesh> SkinnedMeshList { get; set; }
-
-    List<SkinnedMeshRenderer> SkinnedMeshRendererList { get; set; }
     List<MeshRenderer> MeshRendererList { get; set; }
 
     string AnimSavedFolderPath { get; set; }

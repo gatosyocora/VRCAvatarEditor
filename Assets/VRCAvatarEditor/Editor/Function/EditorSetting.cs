@@ -123,6 +123,8 @@ namespace VRCAvatarEditor
 
             foreach (var skinnedMesh in edittingAvatar.SkinnedMeshList)
             {
+                if (skinnedMesh.BlendShapeCount <= 0) continue;
+
                 if (edittingAvatar.LipSyncShapeKeyNames != null && edittingAvatar.LipSyncShapeKeyNames.Count > 0)
                     skinnedMesh.SetExclusionBlendShapesByContains(faceEmotionGUI.blendshapeExclusions.Union(edittingAvatar.LipSyncShapeKeyNames).ToList<string>());
 

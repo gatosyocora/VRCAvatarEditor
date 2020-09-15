@@ -557,6 +557,8 @@ namespace VRCAvatarEditor
                 {
                     for (int i = 0; i < edittingAvatar.SkinnedMeshList.Count; i++)
                     {
+                        if (edittingAvatar.SkinnedMeshList[i].BlendShapeCount <= 0) continue;
+
                         if (edittingAvatar.LipSyncShapeKeyNames != null && 
                             edittingAvatar.LipSyncShapeKeyNames.Count > 0)
                         {
