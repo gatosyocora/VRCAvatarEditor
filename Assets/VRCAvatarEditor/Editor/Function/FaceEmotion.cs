@@ -32,7 +32,7 @@ namespace VRCAvatarEditor
         /// <summary>
         /// 指定したBlendShapeのアニメーションファイルを作成する
         /// </summary>
-        public static AnimationClip CreateBlendShapeAnimationClip(string fileName, string saveFolderPath, VRCAvatar avatar, List<string> exclusions, GameObject rootObj)
+        public static AnimationClip CreateBlendShapeAnimationClip(string fileName, string saveFolderPath, VRCAvatar avatar)
         {
             AnimationClip animClip = new AnimationClip();
 
@@ -42,7 +42,7 @@ namespace VRCAvatarEditor
             {
                 if (!skinnedMesh.IsOpenBlendShapes || skinnedMesh.BlendShapeCount <= 0) continue;
 
-                string path = AnimationUtility.CalculateTransformPath(rootObj.transform, skinnedMesh.Renderer.transform);
+                string path = AnimationUtility.CalculateTransformPath(avatar.Animator.transform, skinnedMesh.Renderer.transform);
 
                 foreach (var blendshape in skinnedMesh.Blendshapes)
                 {
