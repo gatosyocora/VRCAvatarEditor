@@ -13,70 +13,56 @@ namespace VRCAvatarEditor.Avatars2
 {
     public class FaceEmotionGUI2 : FaceEmotionGUIBase
     {
-        public override bool DrawGUI(GUILayoutOption[] layoutOptions)
+
+        protected override void DrawCreatedAnimationSettingsGUI()
         {
-            base.DrawGUI(layoutOptions);
+            base.DrawCreatedAnimationSettingsGUI();
 
-            using (new EditorGUILayout.VerticalScope(GUI.skin.box))
+            using (var check = new EditorGUI.ChangeCheckScope())
             {
-                DrawFunctionButtons();
+                selectedHandAnim = (HandPose.HandPoseType)Enum.ToObject(typeof(HandPose.HandPoseType), EditorGUILayout.Popup(
+                    LocalizeText.instance.langPair.animationOverrideLabel,
+                    (int)selectedHandAnim,
+                    Enum.GetNames(typeof(HandPose.HandPoseType)).Select((x, index) => index + ":" + x).ToArray()));
 
-                if (editAvatar.SkinnedMeshList != null)
+                if (check.changed)
                 {
-                    BlendShapeListGUI();
+                    ChangeSelectionHandAnimation();
                 }
-
-                DrawCreatedAnimationInfo();
-
-                EditorGUILayout.Space();
-
-                using (var check = new EditorGUI.ChangeCheckScope())
-                {
-                    selectedHandAnim = (HandPose.HandPoseType)Enum.ToObject(typeof(HandPose.HandPoseType), EditorGUILayout.Popup(
-                        LocalizeText.instance.langPair.animationOverrideLabel,
-                        (int)selectedHandAnim,
-                        Enum.GetNames(typeof(HandPose.HandPoseType)).Select((x, index) => index + ":" + x).ToArray()));
-
-                    if (check.changed)
-                    {
-                        ChangeSelectionHandAnimation();
-                    }
-                }
-
-                using (new EditorGUI.DisabledGroupScope(selectedHandAnim == HandPose.HandPoseType.NoSelection))
-                {
-                    handPoseAnim = GatoGUILayout.ObjectField(
-                                        LocalizeText.instance.langPair.handPoseAnimClipLabel,
-                                        handPoseAnim);
-                }
-
-                GUILayout.Space(20);
-
-                GatoGUILayout.Button(
-                    LocalizeText.instance.langPair.createAnimFileButtonText,
-                    () => {
-                        var animController = originalAvatar.StandingAnimController;
-
-                        var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, originalAvatar.AnimSavedFolderPath, editAvatar);
-                        if (selectedHandAnim != HandPose.HandPoseType.NoSelection)
-                        {
-                            HandPose.AddHandPoseAnimationKeysFromOriginClip(createdAnimClip, handPoseAnim);
-                            animController[AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]] = createdAnimClip;
-                            EditorUtility.SetDirty(animController);
-
-                            FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
-                        }
-
-                        originalAvatar.StandingAnimController = animController;
-                        editAvatar.StandingAnimController = animController;
-
-                        animationsGUI.ResetPathMissing(AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]);
-                    },
-                    selectedHandAnim != HandPose.HandPoseType.NoSelection &&
-                    handPoseAnim != null);
             }
 
-            return false;
+            using (new EditorGUI.DisabledGroupScope(selectedHandAnim == HandPose.HandPoseType.NoSelection))
+            {
+                handPoseAnim = GatoGUILayout.ObjectField(
+                                    LocalizeText.instance.langPair.handPoseAnimClipLabel,
+                                    handPoseAnim);
+            }
+        }
+
+        protected override void DrawCreateButtonGUI()
+        {
+            GatoGUILayout.Button(
+                LocalizeText.instance.langPair.createAnimFileButtonText,
+                () => {
+                    var animController = originalAvatar.StandingAnimController;
+
+                    var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(animName, originalAvatar.AnimSavedFolderPath, editAvatar);
+                    if (selectedHandAnim != HandPose.HandPoseType.NoSelection)
+                    {
+                        HandPose.AddHandPoseAnimationKeysFromOriginClip(createdAnimClip, handPoseAnim);
+                        animController[AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]] = createdAnimClip;
+                        EditorUtility.SetDirty(animController);
+
+                        FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
+                    }
+
+                    originalAvatar.StandingAnimController = animController;
+                    editAvatar.StandingAnimController = animController;
+
+                    animationsGUI.ResetPathMissing(AnimationsGUI.HANDANIMS[(int)selectedHandAnim - 1]);
+                },
+                selectedHandAnim != HandPose.HandPoseType.NoSelection &&
+                handPoseAnim != null);
         }
 
         public override void OnLoadedAnimationProperties()

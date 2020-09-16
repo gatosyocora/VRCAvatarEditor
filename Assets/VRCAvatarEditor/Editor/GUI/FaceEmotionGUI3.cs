@@ -18,191 +18,175 @@ namespace VRCAvatarEditor.Avatars3
         private int selectedStateIndex = 0;
         private bool setLeftAndRight = true;
 
-        public override bool DrawGUI(GUILayoutOption[] layoutOptions)
+        private ChildAnimatorState[] states;
+
+        protected override void DrawCreatedAnimationSettingsGUI()
         {
-            base.DrawGUI(layoutOptions);
+            base.DrawCreatedAnimationSettingsGUI();
 
-            using (new EditorGUILayout.VerticalScope(GUI.skin.box))
+            string[] stateNames;
+
+            if (editAvatar.FxController != null)
             {
-                DrawFunctionButtons();
+                var stateMachine = editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex].stateMachine;
+                states = stateMachine.states
+                            .Where(s => !(s.state.motion is BlendTree))
+                            .OrderBy(s => s.state.name)
+                            .ToArray();
+                stateNames = states.Select((s, i) => $"{i + 1}:{s.state.name}").ToArray();
 
-                if (editAvatar.SkinnedMeshList != null)
+                EditorGUILayout.LabelField("Layer", editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex].name);
+
+                // Stateがないとき、自動設定できない
+                if (states.Any())
                 {
-                    BlendShapeListGUI();
-                }
-
-                DrawCreatedAnimationInfo();
-
-                EditorGUILayout.Space();
-
-                string[] stateNames;
-                ChildAnimatorState[] states = null;
-
-                if (editAvatar.FxController != null)
-                {
-                    var stateMachine = editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex].stateMachine;
-                    states = stateMachine.states
-                                .Where(s => !(s.state.motion is BlendTree))
-                                .OrderBy(s => s.state.name)
-                                .ToArray();
-                    stateNames = states.Select((s, i) => $"{i + 1}:{s.state.name}").ToArray();
-
-                    EditorGUILayout.LabelField("Layer", editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex].name);
-
-                    // Stateがないとき、自動設定できない
-                    if (states.Any())
+                    using (var check = new EditorGUI.ChangeCheckScope())
                     {
-                        using (var check = new EditorGUI.ChangeCheckScope())
-                        {
-                            selectedStateIndex = EditorGUILayout.Popup(
-                                "State",
-                                selectedStateIndex,
-                                stateNames);
+                        selectedStateIndex = EditorGUILayout.Popup(
+                            "State",
+                            selectedStateIndex,
+                            stateNames);
 
-                            if (check.changed)
-                            {
-                                // TODO: 手のアニメーションファイルを変更する？
-                            }
+                        if (check.changed)
+                        {
+                            // TODO: 手のアニメーションファイルを変更する？
                         }
                     }
-                    else
-                    {
-                        // TODO: 日本語対応
-                        EditorGUILayout.HelpBox("Create Only (not set to AnimatorController) because exist no states in this layer.", MessageType.Info);
-                    }
-
-                    if (editAvatar.GestureController != null)
-                    {
-                        ChildAnimatorState handState = default;
-                        if (editAvatar.GestureController.layers.Length > editAvatar.TargetFxLayerIndex &&
-                            states.Any())
-                        {
-                            handState = editAvatar.GestureController.layers[editAvatar.TargetFxLayerIndex]
-                                            .stateMachine.states
-                                            .Where(s => !(s.state.motion is BlendTree) &&
-                                                        s.state.name == states[selectedStateIndex].state.name)
-                                            .SingleOrDefault();
-                        }
-
-                        // LayerまたはStateが見つからない時はGestureまわりは利用できない
-                        if (handState.state != null)
-                        {
-                            handPoseAnim = handState.state.motion as AnimationClip;
-                            using (var check = new EditorGUI.ChangeCheckScope())
-                            {
-                                handPoseAnim = GatoGUILayout.ObjectField(
-                                    LocalizeText.instance.langPair.handPoseAnimClipLabel,
-                                    handPoseAnim);
-
-                                if (check.changed)
-                                {
-                                    handState.state.motion = handPoseAnim;
-                                    EditorUtility.SetDirty(editAvatar.GestureController);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // TODO: 日本語対応
-                            EditorGUILayout.HelpBox("HandPose Animation can't be chaged because not found target layer or state.", MessageType.Info);
-                        }
-                    }
-                    else
-                    {
-                        // TODO: 日本語対応
-                        EditorGUILayout.HelpBox("No Gesture Layer Controller", MessageType.Warning);
-
-                        GatoGUILayout.Button(
-                            "Create Gesture Layer Controller",
-                            () =>
-                            {
-                                AnimationsGUI.CreateGestureController(originalAvatar, editAvatar);
-                                parentWindow.OnTabChanged();
-                            });
-                    }
-
-                    // TODO: 日本語対応
-                    setLeftAndRight = EditorGUILayout.ToggleLeft("Set to Left & Right Hand Layer", setLeftAndRight);
                 }
                 else
                 {
                     // TODO: 日本語対応
-                    EditorGUILayout.HelpBox("No Fx Layer Controller", MessageType.Error);
+                    EditorGUILayout.HelpBox("Create Only (not set to AnimatorController) because exist no states in this layer.", MessageType.Info);
+                }
+
+                if (editAvatar.GestureController != null)
+                {
+                    ChildAnimatorState handState = default;
+                    if (editAvatar.GestureController.layers.Length > editAvatar.TargetFxLayerIndex &&
+                        states.Any())
+                    {
+                        handState = editAvatar.GestureController.layers[editAvatar.TargetFxLayerIndex]
+                                        .stateMachine.states
+                                        .Where(s => !(s.state.motion is BlendTree) &&
+                                                    s.state.name == states[selectedStateIndex].state.name)
+                                        .SingleOrDefault();
+                    }
+
+                    // LayerまたはStateが見つからない時はGestureまわりは利用できない
+                    if (handState.state != null)
+                    {
+                        handPoseAnim = handState.state.motion as AnimationClip;
+                        using (var check = new EditorGUI.ChangeCheckScope())
+                        {
+                            handPoseAnim = GatoGUILayout.ObjectField(
+                                LocalizeText.instance.langPair.handPoseAnimClipLabel,
+                                handPoseAnim);
+
+                            if (check.changed)
+                            {
+                                handState.state.motion = handPoseAnim;
+                                EditorUtility.SetDirty(editAvatar.GestureController);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // TODO: 日本語対応
+                        EditorGUILayout.HelpBox("HandPose Animation can't be chaged because not found target layer or state.", MessageType.Info);
+                    }
+                }
+                else
+                {
+                    // TODO: 日本語対応
+                    EditorGUILayout.HelpBox("No Gesture Layer Controller", MessageType.Warning);
 
                     GatoGUILayout.Button(
-                        "Create Fx Layer Controller",
+                        "Create Gesture Layer Controller",
                         () =>
                         {
-                            AnimationsGUI.CreatePlayableLayerController(originalAvatar, editAvatar);
+                            AnimationsGUI.CreateGestureController(originalAvatar, editAvatar);
                             parentWindow.OnTabChanged();
                         });
                 }
 
-                GUILayout.Space(20);
+                // TODO: 日本語対応
+                setLeftAndRight = EditorGUILayout.ToggleLeft("Set to Left & Right Hand Layer", setLeftAndRight);
+            }
+            else
+            {
+                // TODO: 日本語対応
+                EditorGUILayout.HelpBox("No Fx Layer Controller", MessageType.Error);
 
                 GatoGUILayout.Button(
-                    LocalizeText.instance.langPair.createAnimFileButtonText,
+                    "Create Fx Layer Controller",
                     () =>
                     {
-                        var controller = originalAvatar.FxController;
-                        var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(
-                                                animName,
-                                                originalAvatar.AnimSavedFolderPath,
-                                                editAvatar,
-                                                blendshapeExclusions,
-                                                editAvatar.Descriptor.gameObject);
-
-                        // Stateがない場合は作成のみ
-                        if (states.Any())
-                        {
-                            states[selectedStateIndex].state.motion = createdAnimClip;
-                            EditorUtility.SetDirty(controller);
-
-                            // 可能であればもう一方の手も同じAnimationClipを設定する
-                            if (setLeftAndRight)
-                            {
-                                var layerName = editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex].name;
-                                string targetLayerName = string.Empty;
-                                if (layerName == "Left Hand")
-                                {
-                                    targetLayerName = "Right Hand";
-                                }
-                                else if (layerName == "Right Hand")
-                                {
-                                    targetLayerName = "Left Hand";
-                                }
-
-                                if (!string.IsNullOrEmpty(targetLayerName))
-                                {
-                                    var targetLayer = editAvatar.FxController.layers
-                                                        .Where(l => l.name == targetLayerName)
-                                                        .SingleOrDefault();
-
-                                    if (targetLayer != null)
-                                    {
-                                        var targetStateName = states[selectedStateIndex].state.name;
-                                        var targetState = targetLayer.stateMachine.states
-                                                            .Where(s => s.state.name == targetStateName)
-                                                            .SingleOrDefault();
-
-                                        if (targetState.state != null)
-                                        {
-                                            targetState.state.motion = createdAnimClip;
-                                            EditorUtility.SetDirty(controller);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
-                        originalAvatar.FxController = controller;
-                        editAvatar.FxController = controller;
-                    },
-                    originalAvatar.FxController != null);
+                        AnimationsGUI.CreatePlayableLayerController(originalAvatar, editAvatar);
+                        parentWindow.OnTabChanged();
+                    });
             }
+        }
 
-            return false;
+        protected override void DrawCreateButtonGUI()
+        {
+            GatoGUILayout.Button(
+               LocalizeText.instance.langPair.createAnimFileButtonText,
+               () =>
+               {
+                   var controller = originalAvatar.FxController;
+                   var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(
+                                           animName,
+                                           originalAvatar.AnimSavedFolderPath,
+                                           editAvatar);
+
+                   // Stateがない場合は作成のみ
+                   if (states.Any())
+                   {
+                       states[selectedStateIndex].state.motion = createdAnimClip;
+                       EditorUtility.SetDirty(controller);
+
+                                    // 可能であればもう一方の手も同じAnimationClipを設定する
+                                    if (setLeftAndRight)
+                       {
+                           var layerName = editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex].name;
+                           string targetLayerName = string.Empty;
+                           if (layerName == "Left Hand")
+                           {
+                               targetLayerName = "Right Hand";
+                           }
+                           else if (layerName == "Right Hand")
+                           {
+                               targetLayerName = "Left Hand";
+                           }
+
+                           if (!string.IsNullOrEmpty(targetLayerName))
+                           {
+                               var targetLayer = editAvatar.FxController.layers
+                                                   .Where(l => l.name == targetLayerName)
+                                                   .SingleOrDefault();
+
+                               if (targetLayer != null)
+                               {
+                                   var targetStateName = states[selectedStateIndex].state.name;
+                                   var targetState = targetLayer.stateMachine.states
+                                                       .Where(s => s.state.name == targetStateName)
+                                                       .SingleOrDefault();
+
+                                   if (targetState.state != null)
+                                   {
+                                       targetState.state.motion = createdAnimClip;
+                                       EditorUtility.SetDirty(controller);
+                                   }
+                               }
+                           }
+                       }
+                   }
+
+                   FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
+                   originalAvatar.FxController = controller;
+                   editAvatar.FxController = controller;
+               },
+               originalAvatar.FxController != null);
         }
 
         public override void OnLoadedAnimationProperties()

@@ -54,6 +54,23 @@ namespace VRCAvatarEditor.Base
         public virtual bool DrawGUI(GUILayoutOption[] layoutOptions) 
         {
             EditorGUILayout.LabelField(LocalizeText.instance.langPair.faceEmotionTitle, EditorStyles.boldLabel);
+
+            using (new EditorGUILayout.VerticalScope(GUI.skin.box))
+            {
+                DrawFunctionButtons();
+
+                if (editAvatar.SkinnedMeshList != null)
+                {
+                    BlendShapeListGUI();
+                }
+
+                DrawCreatedAnimationSettingsGUI();
+
+                GUILayout.Space(20);
+
+                DrawCreateButtonGUI();
+            }
+
             return false;
         }
 
@@ -93,7 +110,7 @@ namespace VRCAvatarEditor.Base
             }
         }
 
-        protected void DrawCreatedAnimationInfo()
+        protected virtual void DrawCreatedAnimationSettingsGUI()
         {
             animName = EditorGUILayout.TextField(LocalizeText.instance.langPair.animClipFileNameLabel, animName);
 
@@ -112,9 +129,11 @@ namespace VRCAvatarEditor.Base
                     true,
                     GUILayout.Width(100));
             }
+
+            EditorGUILayout.Space();
         }
 
-        public abstract void ChangeSaveAnimationState();
+        protected abstract void DrawCreateButtonGUI();
 
         public void DrawSettingsGUI()
         {
@@ -150,6 +169,8 @@ namespace VRCAvatarEditor.Base
 
             usePreviousAnimationOnHandAnimation = EditorGUILayout.ToggleLeft(LocalizeText.instance.langPair.usePreviousAnimationOnHandAnimationLabel, usePreviousAnimationOnHandAnimation);
         }
+
+        public abstract void ChangeSaveAnimationState();
 
         public void LoadSettingData(SettingData settingAsset)
         {
