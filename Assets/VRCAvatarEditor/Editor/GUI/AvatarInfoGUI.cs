@@ -95,6 +95,18 @@ namespace VRCAvatarEditor
                     // 身長
                     EditorGUILayout.LabelField(LocalizeText.instance.langPair.heightLabel, $"{avatar.Height:F2} m");
 
+                    // View Position
+                    using (var check = new EditorGUI.ChangeCheckScope())
+                    {
+                        avatar.EyePos = EditorGUILayout.Vector3Field(LocalizeText.instance.langPair.viewPositionLabel, avatar.EyePos);
+
+                        if (check.changed)
+                        {
+                            avatar.Descriptor.ViewPosition = avatar.EyePos;
+                            EditorUtility.SetDirty(avatar.Descriptor);
+                        }
+                    }
+
                     // faceMesh
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
@@ -109,19 +121,6 @@ namespace VRCAvatarEditor
                         }
                     }
 
-                    EditorGUILayout.Space();
-
-                    // View Position
-                    using (var check = new EditorGUI.ChangeCheckScope())
-                    {
-                        avatar.EyePos = EditorGUILayout.Vector3Field(LocalizeText.instance.langPair.viewPositionLabel, avatar.EyePos);
-
-                        if (check.changed)
-                        {
-                            avatar.Descriptor.ViewPosition = avatar.EyePos;
-                            EditorUtility.SetDirty(avatar.Descriptor);
-                        }
-                    }
                     /*
                     using (new EditorGUILayout.HorizontalScope())
                     using (new EditorGUI.DisabledGroupScope(avatar.faceMesh == null))
