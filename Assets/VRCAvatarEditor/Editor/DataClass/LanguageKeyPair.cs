@@ -58,6 +58,8 @@ namespace VRCAvatarEditor
         public string existMissingPathMessageText;
         public string failAutoFixMissingPathMessageText;
 
+        public string haveNoAnimationClipMessageText;
+
         [Header("AvatarInfoGUI")]
         public string genderLabel;
         public string uploadStatusLabel;

@@ -57,6 +57,7 @@ MonoBehaviour:
   existMissingPathMessageText: Exist Missing Path in AnimationClip
   failAutoFixMissingPathMessageText: Failed Auto Fix. Please Fix manually or Recreate
     AnimationClip.
+  haveNoAnimationClipMessageText: Have No AnimationClip
   genderLabel: Gender
   uploadStatusLabel: Upload Status
   newAvatarText: New Avatar

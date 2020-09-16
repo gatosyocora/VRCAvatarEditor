@@ -71,8 +71,7 @@ namespace VRCAvatarEditor.Avatars3
                                     .OrderBy(s => s.state.name)
                                     .ToArray();
 
-                    // TODO: 日本語対応
-                    GatoGUILayout.ErrorBox("Have No AnimationClip", states.Any(), MessageType.Info);
+                    GatoGUILayout.ErrorBox(LocalizeText.instance.langPair.haveNoAnimationClipMessageText, states.Any(), MessageType.Info);
 
                     AnimationClip anim;
                     for (int i = 0; i < states.Length; i++)
@@ -101,13 +100,9 @@ namespace VRCAvatarEditor.Avatars3
                 }
                 else
                 {
-                    // TODO: 日本語対応
-                    string notSettingMessage = "No Setting Fx Layer Controller";
-                    string createMessage = "Create Fx Layer Controller";
+                    EditorGUILayout.HelpBox(LocalizeText.instance.langPair.missingFxControllerMessageText, MessageType.Warning);
 
-                    EditorGUILayout.HelpBox(notSettingMessage, MessageType.Warning);
-
-                    if (GUILayout.Button(createMessage))
+                    if (GUILayout.Button(LocalizeText.instance.langPair.createFxControllerText))
                     {
                         CreatePlayableLayerController(originalAvatar, editAvatar);
                         vrcAvatarEditorGUI.OnTabChanged();
