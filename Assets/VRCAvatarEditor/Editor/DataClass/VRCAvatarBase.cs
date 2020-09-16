@@ -28,6 +28,7 @@ namespace VRCAvatarEditor.Base
         public List<SkinnedMesh> SkinnedMeshList { get; set; }
         public List<MeshRenderer> MeshRendererList { get; set; }
         public string AnimSavedFolderPath { get; set; }
+        public float Height { get; set; }
 
         public VRCAvatarBase()
         {
@@ -45,6 +46,7 @@ namespace VRCAvatarEditor.Base
             AnimSavedFolderPath = $"Assets{Path.DirectorySeparatorChar}";
             Sex = AnimationSet.None;
             LipSyncStyle = LipSyncStyle.Default;
+            Height = 0;
         }
 
         /// <summary>
@@ -71,6 +73,11 @@ namespace VRCAvatarEditor.Base
             DefaultFaceEmotion = FaceEmotion.GetAvatarFaceParamaters(SkinnedMeshList);
 
             MeshRendererList = GatoUtility.GetMeshList(avatarObj);
+
+            Height = CalculateAvatarHeight(
+                        Animator.transform.position,
+                        SkinnedMeshList.Select(s => s.Renderer),
+                        MeshRendererList);
         }
 
         /// <summary>
@@ -101,6 +108,41 @@ namespace VRCAvatarEditor.Base
                 .Where(s => s != null && s.sharedMesh != null)
                 .Select(s => new SkinnedMesh(s, faceMeshObj))
                 .ToList();
+
+        private float CalculateAvatarHeight(Vector3 footPosition, 
+                                            IEnumerable<SkinnedMeshRenderer> skinnedMeshRenderers, 
+                                            IEnumerable<MeshRenderer> meshRenderers)
+        {
+            var maxHeight = float.MinValue;
+            foreach (var skinnedMeshRenderer in skinnedMeshRenderers)
+            {
+                var meshMaxHeight = CalculateMaxPositionInMesh(
+                                            skinnedMeshRenderer.transform, 
+                                            skinnedMeshRenderer.sharedMesh);
+
+                if (maxHeight < meshMaxHeight)
+                {
+                    maxHeight = meshMaxHeight;
+                }
+            }
+            foreach (var meshRenderer in meshRenderers)
+            {
+                var meshMaxHeight = CalculateMaxPositionInMesh(
+                                            meshRenderer.transform,
+                                            meshRenderer.GetComponent<MeshFilter>().sharedMesh);
+
+                if (maxHeight < meshMaxHeight)
+                {
+                    maxHeight = meshMaxHeight;
+                }
+            }
+            return maxHeight - footPosition.y;
+        }
+
+        private float CalculateMaxPositionInMesh(Transform meshTransform, Mesh mesh)
+        {
+            return mesh.vertices.Select(v => meshTransform.TransformPoint(v).y).Max();
+        }
     }
 }
 

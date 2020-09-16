@@ -68,6 +68,7 @@ namespace VRCAvatarEditor
         public string customStandingAnimsLabel;
         public string customSittingAnimsLabel;
         public string triangleCountLabel;
+        public string heightLabel;
         public string faceMeshLabel;
         public string viewPositionLabel;
         public string lipSyncWarningMessageText;

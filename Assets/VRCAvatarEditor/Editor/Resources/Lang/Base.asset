@@ -65,6 +65,7 @@ MonoBehaviour:
   customStandingAnimsLabel: CustomStandingAnims
   customSittingAnimsLabel: CustomSittingAnims
   triangleCountLabel: TriangleCount
+  heightLabel: Height
   faceMeshLabel: FaceMesh
   viewPositionLabel: View Position
   lipSyncWarningMessageText: LipSync may not be set correctly

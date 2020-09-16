@@ -92,6 +92,9 @@ namespace VRCAvatarEditor
                     // ポリゴン数
                     EditorGUILayout.LabelField(LocalizeText.instance.langPair.triangleCountLabel, avatar.TriangleCount + "(" + (avatar.TriangleCount + avatar.TriangleCountInactive) + ")");
 
+                    // 身長
+                    EditorGUILayout.LabelField(LocalizeText.instance.langPair.heightLabel, $"{avatar.Height:F2} m");
+
                     // faceMesh
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
