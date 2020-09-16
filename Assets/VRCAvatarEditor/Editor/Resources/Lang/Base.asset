@@ -83,6 +83,15 @@ MonoBehaviour:
   createAnimFileButtonText: Create AnimFile
   setToDefaultDialogTitleText: Default FaceEmotion Setting
   setToDefaultDialogMessageText: Would you like to default your current FaceEmotion?
+  createOnlyMessageText: Create Only (not set to AnimatorController) because exist
+    no states in this layer.
+  handPoseChangeFailedMessageText: HandPose Animation can't be chaged because not
+    found target layer or state.
+  missingGestureControllerMessageText: No Gesture Layer Controller
+  createGestureControllerText: Create Gesture Layer Controller
+  setLeftAndRightHandLayerText: Set to Left & Right Hand Layer
+  missingFxControllerMessageText: No Fx Layer Controller
+  createFxControllerText: Create Fx Layer Controller
   setToSkinnedMeshRendererLabel: Set to SkinnedMeshRenderer
   setToMeshRendererLabel: Set to MeshRenderer
   targetPositionLabel: Target Position

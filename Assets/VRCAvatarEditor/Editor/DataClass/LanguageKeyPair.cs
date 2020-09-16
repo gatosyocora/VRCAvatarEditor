@@ -88,6 +88,14 @@ namespace VRCAvatarEditor
         public string setToDefaultDialogTitleText;
         public string setToDefaultDialogMessageText;
 
+        public string createOnlyMessageText;
+        public string handPoseChangeFailedMessageText;
+        public string missingGestureControllerMessageText;
+        public string createGestureControllerText;
+        public string setLeftAndRightHandLayerText;
+        public string missingFxControllerMessageText;
+        public string createFxControllerText;
+
         [Header("ProbeAnchorGUI")]
         public string setToSkinnedMeshRendererLabel;
         public string setToMeshRendererLabel;

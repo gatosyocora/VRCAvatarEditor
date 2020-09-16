@@ -55,8 +55,7 @@ namespace VRCAvatarEditor.Avatars3
                 }
                 else
                 {
-                    // TODO: 日本語対応
-                    EditorGUILayout.HelpBox("Create Only (not set to AnimatorController) because exist no states in this layer.", MessageType.Info);
+                    EditorGUILayout.HelpBox(LocalizeText.instance.langPair.createOnlyMessageText, MessageType.Info);
                 }
 
                 if (editAvatar.GestureController != null)
@@ -91,17 +90,15 @@ namespace VRCAvatarEditor.Avatars3
                     }
                     else
                     {
-                        // TODO: 日本語対応
-                        EditorGUILayout.HelpBox("HandPose Animation can't be chaged because not found target layer or state.", MessageType.Info);
+                        EditorGUILayout.HelpBox(LocalizeText.instance.langPair.handPoseChangeFailedMessageText, MessageType.Info);
                     }
                 }
                 else
                 {
-                    // TODO: 日本語対応
-                    EditorGUILayout.HelpBox("No Gesture Layer Controller", MessageType.Warning);
+                    EditorGUILayout.HelpBox(LocalizeText.instance.langPair.missingGestureControllerMessageText, MessageType.Warning);
 
                     GatoGUILayout.Button(
-                        "Create Gesture Layer Controller",
+                        LocalizeText.instance.langPair.createGestureControllerText,
                         () =>
                         {
                             AnimationsGUI.CreateGestureController(originalAvatar, editAvatar);
@@ -109,16 +106,14 @@ namespace VRCAvatarEditor.Avatars3
                         });
                 }
 
-                // TODO: 日本語対応
-                setLeftAndRight = EditorGUILayout.ToggleLeft("Set to Left & Right Hand Layer", setLeftAndRight);
+                setLeftAndRight = EditorGUILayout.ToggleLeft(LocalizeText.instance.langPair.setLeftAndRightHandLayerText, setLeftAndRight);
             }
             else
             {
-                // TODO: 日本語対応
-                EditorGUILayout.HelpBox("No Fx Layer Controller", MessageType.Error);
+                EditorGUILayout.HelpBox(LocalizeText.instance.langPair.missingFxControllerMessageText, MessageType.Error);
 
                 GatoGUILayout.Button(
-                    "Create Fx Layer Controller",
+                    LocalizeText.instance.langPair.createFxControllerText,
                     () =>
                     {
                         AnimationsGUI.CreatePlayableLayerController(originalAvatar, editAvatar);
