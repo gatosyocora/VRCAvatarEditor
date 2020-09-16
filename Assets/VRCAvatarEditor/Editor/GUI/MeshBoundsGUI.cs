@@ -35,7 +35,7 @@ namespace VRCAvatarEditor
                     GatoGUILayout.Button(
                         LocalizeText.instance.langPair.resetToBoundsToPrefabButtonText,
                         () => {
-                            MeshBounds.RevertBoundsToPrefab(targetRenderers);
+                            MeshBounds.RevertBounds(targetRenderers);
                         });
                 }
 

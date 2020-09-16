@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace VRCAvatarEditor
         /// <param name="parentObj"></param>
         public static void BoundsSetter(List<SkinnedMeshRenderer> renderers)
         {
-            RevertBoundsToPrefab(renderers);
+            RevertBounds(renderers);
             var avatarBounds = CalcAvatarBoundsSize(renderers);
             var offset = Vector3.zero;
             Transform boneTrans;
@@ -91,7 +92,7 @@ namespace VRCAvatarEditor
         /// Boundsの値をPrefabの状態に戻す
         /// </summary>
         /// <param name="renderers"></param>
-        public static void RevertBoundsToPrefab(List<SkinnedMeshRenderer> renderers)
+        private static void RevertBoundsToPrefab(List<SkinnedMeshRenderer> renderers)
         {
             foreach (var renderer in renderers)
             {
@@ -133,6 +134,31 @@ namespace VRCAvatarEditor
             }
 
             return scale;
+        }
+
+        // TODO: Prefabを頼らずにSkinnedMeshRendererのBoundsを元に戻せるように
+        private static void RevertBoundsToDefault(List<SkinnedMeshRenderer> renderers)
+        {
+            throw new NotImplementedException();
+            //for (int i = 0; i < renderers.Count(); i++)
+            //{
+            //    var mesh = renderers[i].sharedMesh;
+            //    var center = mesh.bounds.center;
+            //    var size = mesh.bounds.size;
+            //    renderers[i].localBounds = new Bounds(center, size);
+            //}
+        }
+
+        public static void RevertBounds(List<SkinnedMeshRenderer> renderers)
+        {
+            if (PrefabUtility.IsPartOfPrefabInstance(renderers.First()))
+            {
+                RevertBoundsToPrefab(renderers);
+            }
+            else
+            {
+                RevertBoundsToDefault(renderers);
+            }
         }
     }
 
