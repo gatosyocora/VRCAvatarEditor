@@ -67,7 +67,7 @@ namespace VRCAvatarEditor
             Shader,
         }
 
-        public ToolFunc currentTool;
+        public ToolFunc CurrentTool { get; set; }
 
         private GUILayoutOption[][] layoutOptions
                         = new GUILayoutOption[][]
@@ -155,13 +155,13 @@ namespace VRCAvatarEditor
             toolGUIs.Add(ToolFunc.Bounds, meshBoundsGUI);
             toolGUIs.Add(ToolFunc.Shader, shaderGUI);
 
-            avatarMonitorGUI.Initialize(currentTool);
+            avatarMonitorGUI.Initialize(CurrentTool);
             animationsGUI.Initialize(edittingAvatar, originalAvatar, saveFolder, this, faceEmotionGUI);
             avatarInfoGUI.Initialize(originalAvatar);
             probeAnchorGUI.Initialize(originalAvatar);
 
             selectedToolGUI = avatarInfoGUI;
-            currentTool = ToolFunc.AvatarInfo;
+            CurrentTool = ToolFunc.AvatarInfo;
 
             (layoutType, language) = EditorSetting.instance.LoadSettingDataFromScriptableObject(
                                             editorFolderPath, language,
@@ -303,7 +303,7 @@ namespace VRCAvatarEditor
                                 {
                                     DrawToolSwitchTab();
 
-                                    if (currentTool == ToolFunc.AvatarInfo)
+                                    if (CurrentTool == ToolFunc.AvatarInfo)
                                     {
                                         using (new EditorGUILayout.HorizontalScope())
                                         {
@@ -356,7 +356,7 @@ namespace VRCAvatarEditor
 
         void OnSceneGUI(SceneView sceneView)
         {
-            if (currentTool == ToolFunc.Bounds)
+            if (CurrentTool == ToolFunc.Bounds)
             {
                 if (meshBoundsGUI != null)
                 {
@@ -531,7 +531,7 @@ namespace VRCAvatarEditor
                 {
                     GUILayout.FlexibleSpace();
                     // タブを描画する
-                    currentTool = (ToolFunc)GUILayout.Toolbar((int)currentTool, LocalizeText.instance.toolTabTexts, "LargeButton", GUI.ToolbarButtonSize.Fixed);
+                    CurrentTool = (ToolFunc)GUILayout.Toolbar((int)CurrentTool, LocalizeText.instance.toolTabTexts, "LargeButton", GUI.ToolbarButtonSize.Fixed);
                     GUILayout.FlexibleSpace();
 
                     if (check.changed)
@@ -544,9 +544,9 @@ namespace VRCAvatarEditor
 
         public void OnTabChanged()
         {
-            selectedToolGUI = toolGUIs[currentTool];
+            selectedToolGUI = toolGUIs[CurrentTool];
 
-            if (currentTool == ToolFunc.FaceEmotion)
+            if (CurrentTool == ToolFunc.FaceEmotion)
             {
                 faceEmotionGUI.Initialize(edittingAvatar, originalAvatar, saveFolder, this, animationsGUI);
 
@@ -574,7 +574,7 @@ namespace VRCAvatarEditor
                 avatarMonitorGUI.MoveAvatarCam(false);
             }
 
-            if (currentTool == ToolFunc.Shader)
+            if (CurrentTool == ToolFunc.Shader)
             {
                 shaderGUI.Initialize(edittingAvatar, originalAvatar);
             }
@@ -595,7 +595,7 @@ namespace VRCAvatarEditor
             meshBoundsGUI.Initialize(originalAvatar);
             probeAnchorGUI.Initialize(originalAvatar);
 
-            currentTool = ToolFunc.AvatarInfo;
+            CurrentTool = ToolFunc.AvatarInfo;
         }
 
         public void OpenSubWindow()

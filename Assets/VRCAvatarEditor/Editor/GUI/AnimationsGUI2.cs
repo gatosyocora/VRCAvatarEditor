@@ -120,9 +120,9 @@ namespace VRCAvatarEditor.Avatars2
                                 pathMissing[i],
                                 anim != null,
                                 () => {
-                                    if (vrcAvatarEditorGUI.currentTool != VRCAvatarEditorGUI.ToolFunc.FaceEmotion)
+                                    if (vrcAvatarEditorGUI.CurrentTool != VRCAvatarEditorGUI.ToolFunc.FaceEmotion)
                                     {
-                                        vrcAvatarEditorGUI.currentTool = VRCAvatarEditorGUI.ToolFunc.FaceEmotion;
+                                        vrcAvatarEditorGUI.CurrentTool = VRCAvatarEditorGUI.ToolFunc.FaceEmotion;
                                         vrcAvatarEditorGUI.OnTabChanged();
                                     }
                                     FaceEmotion.ApplyAnimationProperties(controller[handPoseName], editAvatar);
