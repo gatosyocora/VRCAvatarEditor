@@ -96,14 +96,18 @@ namespace VRCAvatarEditor
                     EditorGUILayout.LabelField(LocalizeText.instance.langPair.heightLabel, $"{avatar.Height:F2} m");
 
                     // View Position
-                    using (var check = new EditorGUI.ChangeCheckScope())
+                    using (new EditorGUILayout.HorizontalScope())
                     {
-                        avatar.EyePos = EditorGUILayout.Vector3Field(LocalizeText.instance.langPair.viewPositionLabel, avatar.EyePos);
-
-                        if (check.changed)
+                        EditorGUILayout.LabelField(LocalizeText.instance.langPair.viewPositionLabel, GUILayout.Width(145f));
+                        using (var check = new EditorGUI.ChangeCheckScope())
                         {
-                            avatar.Descriptor.ViewPosition = avatar.EyePos;
-                            EditorUtility.SetDirty(avatar.Descriptor);
+                            avatar.EyePos = EditorGUILayout.Vector3Field(string.Empty, avatar.EyePos);
+
+                            if (check.changed)
+                            {
+                                avatar.Descriptor.ViewPosition = avatar.EyePos;
+                                EditorUtility.SetDirty(avatar.Descriptor);
+                            }
                         }
                     }
 
