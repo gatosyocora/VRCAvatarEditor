@@ -596,6 +596,7 @@ namespace VRCAvatarEditor
             probeAnchorGUI.Initialize(originalAvatar);
 
             CurrentTool = ToolFunc.AvatarInfo;
+            OnTabChanged();
         }
 
         public void OpenSubWindow()
