@@ -169,7 +169,7 @@ namespace VRCAvatarEditor
 
             avatarMonitorGUI.Initialize(CurrentTool);
             animationsGUI.Initialize(edittingAvatar, originalAvatar, saveFolder, this, faceEmotionGUI);
-            avatarInfoGUI.Initialize(originalAvatar);
+            avatarInfoGUI.Initialize(originalAvatar, avatarMonitorGUI);
             probeAnchorGUI.Initialize(originalAvatar);
 
             selectedToolGUI = avatarInfoGUI;
@@ -588,7 +588,7 @@ namespace VRCAvatarEditor
 
             avatarMonitorGUI.MoveAvatarCam(false);
             animationsGUI.Initialize(edittingAvatar, originalAvatar, saveFolder, this, faceEmotionGUI);
-            avatarInfoGUI.Initialize(originalAvatar);
+            avatarInfoGUI.Initialize(originalAvatar, avatarMonitorGUI);
             meshBoundsGUI.Initialize(originalAvatar);
             probeAnchorGUI.Initialize(originalAvatar);
 

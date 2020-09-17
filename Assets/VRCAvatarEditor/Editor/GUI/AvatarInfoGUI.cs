@@ -18,13 +18,16 @@ namespace VRCAvatarEditor
     {
         private VRCAvatar avatar;
 
+        private AvatarMonitorGUI monitorGUI;
+
         private bool isOpeningLipSync = false;
         private Vector2 lipSyncScrollPos = Vector2.zero;
         private const int LIPSYNC_SHYPEKEY_NUM = 15;
 
-        public void Initialize(VRCAvatar avatar)
+        public void Initialize(VRCAvatar avatar, AvatarMonitorGUI monitorGUI)
         {
             this.avatar = avatar;
+            this.monitorGUI = monitorGUI;
         }
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
@@ -109,6 +112,11 @@ namespace VRCAvatarEditor
                                 EditorUtility.SetDirty(avatar.Descriptor);
                             }
                         }
+
+                        monitorGUI.showEyePosition = EditorGUILayout.ToggleLeft(
+                                                        string.Empty,
+                                                        monitorGUI.showEyePosition,
+                                                        GUILayout.Width(30f));
                     }
 
                     // faceMesh

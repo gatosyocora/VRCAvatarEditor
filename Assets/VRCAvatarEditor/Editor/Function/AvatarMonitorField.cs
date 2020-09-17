@@ -21,6 +21,7 @@ namespace VRCAvatarEditor
         private GameObject cameraObj;
         private GameObject avatarObj;
         private GameObject lightObj;
+        private GameObject viewPositionObj;
         private Camera camera;
         private RenderTexture renderTexture;
         private int monitorSize;
@@ -55,6 +56,12 @@ namespace VRCAvatarEditor
 
             lightObj = CreateLightObj();
             AddGameObject(lightObj);
+
+            viewPositionObj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            viewPositionObj.name = "ViewPosition";
+            viewPositionObj.transform.localScale = Vector3.one * 0.03f;
+            AddGameObject(viewPositionObj);
+            viewPositionObj.SetActive(false);
         }
 
 
@@ -63,11 +70,21 @@ namespace VRCAvatarEditor
 
         }
 
-        public bool Render(int monitorSize, bool isGammaCorrection = true)
+        public bool Render(int monitorSize, bool isGammaCorrection = true, bool showViewPosition = true)
         {
             if (monitorSize != this.monitorSize || renderTexture == null)
             {
                 ResizeMonitor(monitorSize);
+            }
+
+            if (showViewPosition)
+            {
+                viewPositionObj.transform.position = descriptor.ViewPosition;
+                viewPositionObj.SetActive(true);
+            }
+            else
+            {
+                viewPositionObj.SetActive(false);
             }
 
             rect = GUILayoutUtility.GetRect(monitorSize, monitorSize);

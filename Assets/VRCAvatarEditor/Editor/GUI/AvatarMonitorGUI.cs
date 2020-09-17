@@ -50,6 +50,8 @@ namespace VRCAvatarEditor
 
         public AvatarMonitorField avatarMonitorField;
 
+        public bool showEyePosition = false;
+
         public void Initialize(VRCAvatarEditorGUI.ToolFunc currentTool)
         {
             this.currentTool = currentTool;
@@ -82,7 +84,7 @@ namespace VRCAvatarEditor
                     {
                         GUILayout.FlexibleSpace();
 
-                        if (avatarMonitorField.Render(monitorSize))
+                        if (avatarMonitorField.Render(monitorSize, true, showEyePosition))
                         {
                             return true;
                         }
