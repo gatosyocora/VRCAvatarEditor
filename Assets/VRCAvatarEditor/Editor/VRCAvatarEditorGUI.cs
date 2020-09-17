@@ -67,7 +67,19 @@ namespace VRCAvatarEditor
             Shader,
         }
 
-        public ToolFunc CurrentTool { get; set; }
+        private ToolFunc _currentTool;
+        public ToolFunc CurrentTool 
+        {
+            get 
+            {
+                return _currentTool;
+            }
+            set
+            {
+                _currentTool = value;
+                OnToolChanged();
+            } 
+        }
 
         private GUILayoutOption[][] layoutOptions
                         = new GUILayoutOption[][]
@@ -531,18 +543,18 @@ namespace VRCAvatarEditor
                 {
                     GUILayout.FlexibleSpace();
                     // タブを描画する
-                    CurrentTool = (ToolFunc)GUILayout.Toolbar((int)CurrentTool, LocalizeText.instance.toolTabTexts, "LargeButton", GUI.ToolbarButtonSize.Fixed);
+                    var currentTool = (ToolFunc)GUILayout.Toolbar((int)CurrentTool, LocalizeText.instance.toolTabTexts, "LargeButton", GUI.ToolbarButtonSize.Fixed);
                     GUILayout.FlexibleSpace();
 
                     if (check.changed)
                     {
-                        OnTabChanged();
+                        CurrentTool = currentTool;
                     }
                 }
             }
         }
 
-        public void OnTabChanged()
+        private void OnToolChanged()
         {
             selectedToolGUI = toolGUIs[CurrentTool];
 
@@ -550,22 +562,7 @@ namespace VRCAvatarEditor
             {
                 faceEmotionGUI.Initialize(edittingAvatar, originalAvatar, saveFolder, this, animationsGUI);
 
-                var exclusionsBlendShapes = faceEmotionGUI.blendshapeExclusions
-                                                .Union(edittingAvatar.LipSyncShapeKeyNames);
-
-                if (edittingAvatar.SkinnedMeshList != null)
-                {
-                    for (int i = 0; i < edittingAvatar.SkinnedMeshList.Count; i++)
-                    {
-                        if (edittingAvatar.SkinnedMeshList[i].BlendShapeCount <= 0) continue;
-
-                        if (edittingAvatar.LipSyncShapeKeyNames != null && 
-                            edittingAvatar.LipSyncShapeKeyNames.Count > 0)
-                        {
-                            edittingAvatar.SkinnedMeshList[i].SetExclusionBlendShapesByContains(exclusionsBlendShapes);
-                        }
-                    }
-                }
+                UpdateExclusitionBlendShapes();
 
                 avatarMonitorGUI.MoveAvatarCam(true);
             }
@@ -596,7 +593,6 @@ namespace VRCAvatarEditor
             probeAnchorGUI.Initialize(originalAvatar);
 
             CurrentTool = ToolFunc.AvatarInfo;
-            OnTabChanged();
         }
 
         public void OpenSubWindow()
@@ -638,6 +634,26 @@ namespace VRCAvatarEditor
                     GUILayout.FlexibleSpace();
                 }
                 GUILayout.FlexibleSpace();
+            }
+        }
+
+        public void UpdateExclusitionBlendShapes()
+        {
+            var exclusionsBlendShapes = faceEmotionGUI.blendshapeExclusions
+                                .Union(edittingAvatar.LipSyncShapeKeyNames);
+
+            if (edittingAvatar.SkinnedMeshList != null)
+            {
+                for (int i = 0; i < edittingAvatar.SkinnedMeshList.Count; i++)
+                {
+                    if (edittingAvatar.SkinnedMeshList[i].BlendShapeCount <= 0) continue;
+
+                    if (edittingAvatar.LipSyncShapeKeyNames != null &&
+                        edittingAvatar.LipSyncShapeKeyNames.Count > 0)
+                    {
+                        edittingAvatar.SkinnedMeshList[i].SetExclusionBlendShapesByContains(exclusionsBlendShapes);
+                    }
+                }
             }
         }
     }

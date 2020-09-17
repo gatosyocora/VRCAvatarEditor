@@ -123,7 +123,6 @@ namespace VRCAvatarEditor.Avatars2
                                     if (vrcAvatarEditorGUI.CurrentTool != VRCAvatarEditorGUI.ToolFunc.FaceEmotion)
                                     {
                                         vrcAvatarEditorGUI.CurrentTool = VRCAvatarEditorGUI.ToolFunc.FaceEmotion;
-                                        vrcAvatarEditorGUI.OnTabChanged();
                                     }
                                     FaceEmotion.ApplyAnimationProperties(controller[handPoseName], editAvatar);
                                     ((FaceEmotionGUI2)faceEmotionGUI).ChangeSaveAnimationState(controller[handPoseName].name,
@@ -193,8 +192,7 @@ namespace VRCAvatarEditor.Avatars2
                                 originalAvatar.LoadAvatarInfo();
                                 editAvatar.LoadAvatarInfo();
 
-                                // TODO: 除外するBlendShapeの更新のために呼び出す
-                                vrcAvatarEditorGUI.OnTabChanged();
+                                vrcAvatarEditorGUI.UpdateExclusitionBlendShapes();
                             });
 
                         if (_tab == Tab.Sitting)
@@ -208,8 +206,7 @@ namespace VRCAvatarEditor.Avatars2
                                     originalAvatar.LoadAvatarInfo();
                                     editAvatar.LoadAvatarInfo();
 
-                                        // TODO: 除外するBlendShapeの更新のために呼び出す
-                                        vrcAvatarEditorGUI.OnTabChanged();
+                                    vrcAvatarEditorGUI.UpdateExclusitionBlendShapes();
                                 },
                                 editAvatar.StandingAnimController != null);
                         }
