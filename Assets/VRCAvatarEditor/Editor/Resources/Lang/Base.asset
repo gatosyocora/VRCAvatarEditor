@@ -100,7 +100,7 @@ MonoBehaviour:
   rendererListLabel: RendererList
   probeAnchorMessageText: The Probe Anchor of the checked mesh is set
   setProbeAnchorButtonText: Set ProbeAnchor
-  resetToBoundsToPrefabButtonText: Reset to Bounds to Prefab
+  resetToBoundsToPrefabButtonText: Revert Bounds
   childObjectsLabel: Parent of ignore objects
   setBoundsButtonText: Set Bounds
   duplicateSelectedButtonText: Duplicate selected
