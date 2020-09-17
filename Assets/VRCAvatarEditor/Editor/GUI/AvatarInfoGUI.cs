@@ -16,7 +16,8 @@ namespace VRCAvatarEditor
 {
     public class AvatarInfoGUI : Editor, IVRCAvatarEditorGUI
     {
-        private VRCAvatar avatar;
+        private VRCAvatar originalAvatar;
+        private VRCAvatar editAvatar;
 
         private AvatarMonitorGUI monitorGUI;
 
@@ -24,9 +25,10 @@ namespace VRCAvatarEditor
         private Vector2 lipSyncScrollPos = Vector2.zero;
         private const int LIPSYNC_SHYPEKEY_NUM = 15;
 
-        public void Initialize(VRCAvatar avatar, AvatarMonitorGUI monitorGUI)
+        public void Initialize(VRCAvatar originalAvatar, VRCAvatar editAvatar, AvatarMonitorGUI monitorGUI)
         {
-            this.avatar = avatar;
+            this.originalAvatar = originalAvatar;
+            this.editAvatar = editAvatar;
             this.monitorGUI = monitorGUI;
         }
 
@@ -34,25 +36,25 @@ namespace VRCAvatarEditor
         {
             EditorGUILayout.LabelField(LocalizeText.instance.langPair.avatarInfoTitle, EditorStyles.boldLabel);
 
-            if (avatar != null && avatar.Descriptor != null)
+            if (originalAvatar != null && originalAvatar.Descriptor != null)
             {
                 using (new EditorGUILayout.VerticalScope(GUI.skin.box))
                 {
                     // 性別
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
-                        avatar.Sex = (AnimationSet)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.genderLabel, avatar.Sex);
+                        originalAvatar.Sex = (AnimationSet)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.genderLabel, originalAvatar.Sex);
 
                         if (check.changed)
                         {
-                            avatar.Descriptor.Animations = avatar.Sex;
-                            EditorUtility.SetDirty(avatar.Descriptor);
+                            originalAvatar.Descriptor.Animations = originalAvatar.Sex;
+                            EditorUtility.SetDirty(originalAvatar.Descriptor);
                         }
                     }
 
                     // アップロード状態
                     EditorGUILayout.LabelField(LocalizeText.instance.langPair.uploadStatusLabel,
-                        (string.IsNullOrEmpty(avatar.AvatarId)) ?
+                        (string.IsNullOrEmpty(originalAvatar.AvatarId)) ?
                             LocalizeText.instance.langPair.newAvatarText :
                             LocalizeText.instance.langPair.uploadedAvatarText);
 
@@ -60,13 +62,13 @@ namespace VRCAvatarEditor
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
 #if VRC_SDK_VRCSDK2
-                        avatar.StandingAnimController = GatoGUILayout.ObjectField(
+                        originalAvatar.StandingAnimController = GatoGUILayout.ObjectField(
                             LocalizeText.instance.langPair.customStandingAnimsLabel,
-                            avatar.StandingAnimController);
+                            originalAvatar.StandingAnimController);
 
-                        avatar.SittingAnimController = GatoGUILayout.ObjectField(
+                        originalAvatar.SittingAnimController = GatoGUILayout.ObjectField(
                             LocalizeText.instance.langPair.customSittingAnimsLabel,
-                            avatar.SittingAnimController);
+                            originalAvatar.SittingAnimController);
 #elif VRC_SDK_VRCSDK3
                         avatar.GestureController = GatoGUILayout.ObjectField(
                             "Gesture Layer",
@@ -80,23 +82,23 @@ namespace VRCAvatarEditor
                         if (check.changed)
                         {
 #if VRC_SDK_VRCSDK2
-                            avatar.Descriptor.CustomStandingAnims = avatar.StandingAnimController;
-                            avatar.Descriptor.CustomSittingAnims = avatar.SittingAnimController;
+                            originalAvatar.Descriptor.CustomStandingAnims = originalAvatar.StandingAnimController;
+                            originalAvatar.Descriptor.CustomSittingAnims = originalAvatar.SittingAnimController;
 #elif VRC_SDK_VRCSDK3
                             avatar.Descriptor.baseAnimationLayers[2].animatorController = avatar.GestureController;
                             avatar.Descriptor.baseAnimationLayers[4].animatorController = avatar.FxController;
 #endif
-                            EditorUtility.SetDirty(avatar.Descriptor);
+                            EditorUtility.SetDirty(originalAvatar.Descriptor);
 
-                            avatar.SetAnimSavedFolderPath();
+                            originalAvatar.SetAnimSavedFolderPath();
                         }
                     }
 
                     // ポリゴン数
-                    EditorGUILayout.LabelField(LocalizeText.instance.langPair.triangleCountLabel, avatar.TriangleCount + "(" + (avatar.TriangleCount + avatar.TriangleCountInactive) + ")");
+                    EditorGUILayout.LabelField(LocalizeText.instance.langPair.triangleCountLabel, originalAvatar.TriangleCount + "(" + (originalAvatar.TriangleCount + originalAvatar.TriangleCountInactive) + ")");
 
                     // 身長
-                    EditorGUILayout.LabelField(LocalizeText.instance.langPair.heightLabel, $"{avatar.Height:F2} m");
+                    EditorGUILayout.LabelField(LocalizeText.instance.langPair.heightLabel, $"{originalAvatar.Height:F2} m");
 
                     // View Position
                     using (new EditorGUILayout.HorizontalScope())
@@ -104,12 +106,14 @@ namespace VRCAvatarEditor
                         EditorGUILayout.LabelField(LocalizeText.instance.langPair.viewPositionLabel, GUILayout.Width(145f));
                         using (var check = new EditorGUI.ChangeCheckScope())
                         {
-                            avatar.EyePos = EditorGUILayout.Vector3Field(string.Empty, avatar.EyePos);
+                            originalAvatar.EyePos = EditorGUILayout.Vector3Field(string.Empty, originalAvatar.EyePos);
 
                             if (check.changed)
                             {
-                                avatar.Descriptor.ViewPosition = avatar.EyePos;
-                                EditorUtility.SetDirty(avatar.Descriptor);
+                                originalAvatar.Descriptor.ViewPosition = originalAvatar.EyePos;
+                                editAvatar.Descriptor.ViewPosition = originalAvatar.EyePos;
+                                editAvatar.EyePos = originalAvatar.EyePos;
+                                EditorUtility.SetDirty(originalAvatar.Descriptor);
                             }
                         }
 
@@ -122,14 +126,14 @@ namespace VRCAvatarEditor
                     // faceMesh
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
-                        avatar.FaceMesh = GatoGUILayout.ObjectField(
+                        originalAvatar.FaceMesh = GatoGUILayout.ObjectField(
                             LocalizeText.instance.langPair.faceMeshLabel,
-                            avatar.FaceMesh);
+                            originalAvatar.FaceMesh);
 
                         if (check.changed)
                         {
-                            avatar.Descriptor.VisemeSkinnedMesh = avatar.FaceMesh;
-                            EditorUtility.SetDirty(avatar.Descriptor);
+                            originalAvatar.Descriptor.VisemeSkinnedMesh = originalAvatar.FaceMesh;
+                            EditorUtility.SetDirty(originalAvatar.Descriptor);
                         }
                     }
 
@@ -160,13 +164,13 @@ namespace VRCAvatarEditor
                     // リップシンク
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
-                        avatar.LipSyncStyle = (LipSyncStyle)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.lipSyncTypeLabel, avatar.LipSyncStyle);
+                        originalAvatar.LipSyncStyle = (LipSyncStyle)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.lipSyncTypeLabel, originalAvatar.LipSyncStyle);
 
-                        if (check.changed) avatar.Descriptor.lipSync = avatar.LipSyncStyle;
+                        if (check.changed) originalAvatar.Descriptor.lipSync = originalAvatar.LipSyncStyle;
                     }
-                    if (avatar.LipSyncStyle == LipSyncStyle.VisemeBlendShape)
+                    if (originalAvatar.LipSyncStyle == LipSyncStyle.VisemeBlendShape)
                     {
-                        if (avatar.FaceMesh != null)
+                        if (originalAvatar.FaceMesh != null)
                         {
                             isOpeningLipSync = EditorGUILayout.Foldout(isOpeningLipSync, LocalizeText.instance.langPair.lipSyncBlendShapesLabel);
                             if (isOpeningLipSync)
@@ -178,20 +182,20 @@ namespace VRCAvatarEditor
 
                                     for (int visemeIndex = 0; visemeIndex < LIPSYNC_SHYPEKEY_NUM; visemeIndex++)
                                     {
-                                        EditorGUILayout.LabelField("Viseme:" + Enum.GetName(typeof(Viseme), visemeIndex), avatar.Descriptor.VisemeBlendShapes[visemeIndex]);
+                                        EditorGUILayout.LabelField("Viseme:" + Enum.GetName(typeof(Viseme), visemeIndex), originalAvatar.Descriptor.VisemeBlendShapes[visemeIndex]);
                                     }
                                 }
                             }
                         }
                     }
-                    if (avatar.LipSyncStyle != LipSyncStyle.VisemeBlendShape || avatar.FaceMesh == null)
+                    if (originalAvatar.LipSyncStyle != LipSyncStyle.VisemeBlendShape || originalAvatar.FaceMesh == null)
                     {
                         EditorGUILayout.HelpBox(LocalizeText.instance.langPair.lipSyncWarningMessageText, MessageType.Warning);
                         GatoGUILayout.Button(
                             LocalizeText.instance.langPair.lipSyncBlendShapesAutoDetectButtonText,
                             () => {
-                                avatar.SetLipSyncToViseme();
-                                EditorUtility.SetDirty(avatar.Descriptor);
+                                originalAvatar.SetLipSyncToViseme();
+                                EditorUtility.SetDirty(originalAvatar.Descriptor);
                             });
                     }
                 }
