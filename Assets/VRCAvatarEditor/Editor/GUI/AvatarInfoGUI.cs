@@ -70,11 +70,11 @@ namespace VRCAvatarEditor
                             LocalizeText.instance.langPair.customSittingAnimsLabel,
                             originalAvatar.SittingAnimController);
 #elif VRC_SDK_VRCSDK3
-                        avatar.GestureController = GatoGUILayout.ObjectField(
+                        originalAvatar.GestureController = GatoGUILayout.ObjectField(
                             "Gesture Layer",
                             originalAvatar.GestureController);
 
-                        avatar.FxController = GatoGUILayout.ObjectField(
+                        originalAvatar.FxController = GatoGUILayout.ObjectField(
                             "FX Layer",
                             originalAvatar.FxController);
 #endif
