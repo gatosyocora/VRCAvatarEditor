@@ -85,10 +85,9 @@ namespace VRCAvatarEditor.Avatars3
                             false,
                             anim != null && !anim.name.StartsWith("proxy_"),
                             () => {
-                                if (vrcAvatarEditorGUI.currentTool != VRCAvatarEditorGUI.ToolFunc.FaceEmotion)
+                                if (vrcAvatarEditorGUI.CurrentTool != VRCAvatarEditorGUI.ToolFunc.FaceEmotion)
                                 {
-                                    vrcAvatarEditorGUI.currentTool = VRCAvatarEditorGUI.ToolFunc.FaceEmotion;
-                                    vrcAvatarEditorGUI.OnTabChanged();
+                                    vrcAvatarEditorGUI.CurrentTool = VRCAvatarEditorGUI.ToolFunc.FaceEmotion;
                                 }
                                 FaceEmotion.ApplyAnimationProperties(anim, editAvatar);
                                 ((FaceEmotionGUI3)faceEmotionGUI).ChangeSaveAnimationState(
@@ -105,7 +104,7 @@ namespace VRCAvatarEditor.Avatars3
                     if (GUILayout.Button(LocalizeText.instance.langPair.createFxControllerText))
                     {
                         CreatePlayableLayerController(originalAvatar, editAvatar);
-                        vrcAvatarEditorGUI.OnTabChanged();
+                        vrcAvatarEditorGUI.OnToolChanged();
                     }
                 }
             }

@@ -102,7 +102,7 @@ namespace VRCAvatarEditor.Avatars3
                         () =>
                         {
                             AnimationsGUI.CreateGestureController(originalAvatar, editAvatar);
-                            parentWindow.OnTabChanged();
+                            parentWindow.OnToolChanged();
                         });
                 }
 
@@ -117,7 +117,7 @@ namespace VRCAvatarEditor.Avatars3
                     () =>
                     {
                         AnimationsGUI.CreatePlayableLayerController(originalAvatar, editAvatar);
-                        parentWindow.OnTabChanged();
+                        parentWindow.OnToolChanged();
                     });
             }
         }
