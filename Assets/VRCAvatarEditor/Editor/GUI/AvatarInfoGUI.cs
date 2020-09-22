@@ -72,11 +72,11 @@ namespace VRCAvatarEditor
 #elif VRC_SDK_VRCSDK3
                         avatar.GestureController = GatoGUILayout.ObjectField(
                             "Gesture Layer",
-                            avatar.GestureController);
+                            originalAvatar.GestureController);
 
                         avatar.FxController = GatoGUILayout.ObjectField(
                             "FX Layer",
-                            avatar.FxController);
+                            originalAvatar.FxController);
 #endif
 
                         if (check.changed)
@@ -85,8 +85,8 @@ namespace VRCAvatarEditor
                             originalAvatar.Descriptor.CustomStandingAnims = originalAvatar.StandingAnimController;
                             originalAvatar.Descriptor.CustomSittingAnims = originalAvatar.SittingAnimController;
 #elif VRC_SDK_VRCSDK3
-                            avatar.Descriptor.baseAnimationLayers[2].animatorController = avatar.GestureController;
-                            avatar.Descriptor.baseAnimationLayers[4].animatorController = avatar.FxController;
+                            originalAvatar.Descriptor.baseAnimationLayers[2].animatorController = originalAvatar.GestureController;
+                            originalAvatar.Descriptor.baseAnimationLayers[4].animatorController = originalAvatar.FxController;
 #endif
                             EditorUtility.SetDirty(originalAvatar.Descriptor);
 
