@@ -554,7 +554,7 @@ namespace VRCAvatarEditor
             }
         }
 
-        private void OnToolChanged()
+        public void OnToolChanged()
         {
             selectedToolGUI = toolGUIs[CurrentTool];
 
