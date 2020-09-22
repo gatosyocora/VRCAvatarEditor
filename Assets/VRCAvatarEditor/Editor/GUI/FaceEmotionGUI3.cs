@@ -132,7 +132,8 @@ namespace VRCAvatarEditor.Avatars3
                    var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(
                                            animName,
                                            originalAvatar.AnimSavedFolderPath,
-                                           editAvatar);
+                                           editAvatar,
+                                           true);
 
                    // Stateがない場合は作成のみ
                    if (states.Any())

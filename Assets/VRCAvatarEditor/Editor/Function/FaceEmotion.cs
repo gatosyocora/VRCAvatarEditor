@@ -32,7 +32,7 @@ namespace VRCAvatarEditor
         /// <summary>
         /// 指定したBlendShapeのアニメーションファイルを作成する
         /// </summary>
-        public static AnimationClip CreateBlendShapeAnimationClip(string fileName, string saveFolderPath, VRCAvatar avatar)
+        public static AnimationClip CreateBlendShapeAnimationClip(string fileName, string saveFolderPath, VRCAvatar avatar, bool addKeyTo0FrameOnly = false)
         {
             AnimationClip animClip = new AnimationClip();
 
@@ -55,7 +55,8 @@ namespace VRCAvatarEditor
                         curve.keys = null;
 
                         curve.AddKey(0, keyValue);
-                        curve.AddKey(1 / 60.0f, keyValue);
+                        if (!addKeyTo0FrameOnly) 
+                            curve.AddKey(1 / 60.0f, keyValue);
 
                         animClip.SetCurve(path, typeof(SkinnedMeshRenderer), "blendShape." + blendshape.Name, curve);
 
