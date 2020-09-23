@@ -575,6 +575,8 @@ namespace VRCAvatarEditor
             {
                 shaderGUI.Initialize(edittingAvatar, originalAvatar);
             }
+
+            avatarMonitorGUI.showEyePosition = false;
         }
 
         private void OnChangedAvatar()
