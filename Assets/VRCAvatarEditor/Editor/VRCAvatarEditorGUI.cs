@@ -564,11 +564,11 @@ namespace VRCAvatarEditor
 
                 UpdateExclusitionBlendShapes();
 
-                avatarMonitorGUI.MoveAvatarCam(true);
+                avatarMonitorGUI.MoveAvatarCam(true, false);
             }
             else
             {
-                avatarMonitorGUI.MoveAvatarCam(false);
+                avatarMonitorGUI.MoveAvatarCam(false, false);
             }
 
             if (CurrentTool == ToolFunc.Shader)
@@ -588,7 +588,7 @@ namespace VRCAvatarEditor
             var targetAvatarObj = targetAvatarDescriptor.gameObject;
             targetAvatarObj.SetActive(true);
 
-            avatarMonitorGUI.MoveAvatarCam(false);
+            avatarMonitorGUI.MoveAvatarCam(false, false);
             animationsGUI.Initialize(edittingAvatar, originalAvatar, saveFolder, this, faceEmotionGUI);
             avatarInfoGUI.Initialize(originalAvatar, edittingAvatar, avatarMonitorGUI);
             meshBoundsGUI.Initialize(originalAvatar);

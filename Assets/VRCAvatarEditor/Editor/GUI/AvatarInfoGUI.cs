@@ -122,6 +122,7 @@ namespace VRCAvatarEditor
                                 EditorUtility.SetDirty(originalAvatar.Descriptor);
 
                                 monitorGUI.showEyePosition = true;
+                                monitorGUI.MoveAvatarCam(false, true);
                             }
                         }
 

@@ -219,7 +219,7 @@ namespace VRCAvatarEditor
         /// <summary>
         /// AvatarCamの位置を動かす
         /// </summary>
-        public void MoveAvatarCam(bool setToFace)
+        public void MoveAvatarCam(bool setToFace, bool lookZoom = false)
         {
             if (camera == null || descriptor == null) return;
 
@@ -234,8 +234,12 @@ namespace VRCAvatarEditor
             }
             camera.transform.position = new Vector3(0, descriptor.ViewPosition.y, 1);
             cameraObj.transform.rotation = Quaternion.Euler(0, 180, 0);
-            subOrthographicSize = 0f;
-            camera.orthographicSize = mainOrthographicSize;
+
+            if (!lookZoom)
+            {
+                subOrthographicSize = 0f;
+                camera.orthographicSize = mainOrthographicSize;
+            }
         }
 
         public void ResetCameraTransform()

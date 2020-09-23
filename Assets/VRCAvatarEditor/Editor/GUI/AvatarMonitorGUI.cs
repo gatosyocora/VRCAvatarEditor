@@ -63,7 +63,7 @@ namespace VRCAvatarEditor
             MoveAvatarCam += avatarMonitorField.MoveAvatarCam;
         }
 
-        public Action<bool> MoveAvatarCam;
+        public Action<bool, bool> MoveAvatarCam;
 
         public void Dispose()
         {
