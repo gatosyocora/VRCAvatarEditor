@@ -120,6 +120,8 @@ namespace VRCAvatarEditor
                                 editAvatar.Descriptor.ViewPosition = originalAvatar.EyePos;
                                 editAvatar.EyePos = originalAvatar.EyePos;
                                 EditorUtility.SetDirty(originalAvatar.Descriptor);
+
+                                monitorGUI.showEyePosition = true;
                             }
                         }
 
