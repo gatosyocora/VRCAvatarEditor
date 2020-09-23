@@ -169,4 +169,13 @@ public static class GatoGUILayout
             EditorGUILayout.HelpBox(errorMessage, type);
         }
     }
+
+    public static bool ToggleImage(bool value, Texture onTexture, Texture offTexture, float size = 20f)
+    {
+        if(GUILayout.Button(value? onTexture : offTexture, GUIStyle.none, GUILayout.Width(size), GUILayout.Height(size)))
+        {
+            value = !value;
+        }
+        return value;
+    }
 }

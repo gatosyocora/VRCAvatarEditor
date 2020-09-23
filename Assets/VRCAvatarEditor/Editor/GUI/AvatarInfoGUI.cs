@@ -25,11 +25,17 @@ namespace VRCAvatarEditor
         private Vector2 lipSyncScrollPos = Vector2.zero;
         private const int LIPSYNC_SHYPEKEY_NUM = 15;
 
+        private Texture2D showIconTexture;
+        private Texture2D hideIconTexture;
+
         public void Initialize(VRCAvatar originalAvatar, VRCAvatar editAvatar, AvatarMonitorGUI monitorGUI)
         {
             this.originalAvatar = originalAvatar;
             this.editAvatar = editAvatar;
             this.monitorGUI = monitorGUI;
+
+            showIconTexture = Resources.Load<Texture2D>("Icon/ShowIcon");
+            hideIconTexture = Resources.Load<Texture2D>("Icon/HideIcon");
         }
 
         public bool DrawGUI(GUILayoutOption[] layoutOptions)
@@ -117,10 +123,10 @@ namespace VRCAvatarEditor
                             }
                         }
 
-                        monitorGUI.showEyePosition = EditorGUILayout.ToggleLeft(
-                                                        string.Empty,
+                        monitorGUI.showEyePosition = GatoGUILayout.ToggleImage(
                                                         monitorGUI.showEyePosition,
-                                                        GUILayout.Width(30f));
+                                                        showIconTexture,
+                                                        hideIconTexture);
                     }
 
                     // faceMesh
