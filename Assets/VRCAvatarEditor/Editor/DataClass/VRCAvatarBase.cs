@@ -141,8 +141,7 @@ namespace VRCAvatarEditor.Base
 
         private float CalculateMaxPositionInMesh(Transform meshTransform, Mesh mesh)
         {
-            if (mesh is null) return float.MinValue;
-            return mesh.vertices.Select(v => meshTransform.TransformPoint(v).y).Max();
+            return mesh.vertices.Select(v => meshTransform.TransformPoint(v).y).DefaultIfEmpty().Max();
         }
     }
 }
