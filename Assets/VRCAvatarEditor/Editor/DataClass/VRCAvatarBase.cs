@@ -113,35 +113,16 @@ namespace VRCAvatarEditor.Base
                                             IEnumerable<SkinnedMeshRenderer> skinnedMeshRenderers, 
                                             IEnumerable<MeshRenderer> meshRenderers)
         {
-            var maxHeight = float.MinValue;
-            foreach (var skinnedMeshRenderer in skinnedMeshRenderers)
-            {
-                var meshMaxHeight = CalculateMaxPositionInMesh(
-                                            skinnedMeshRenderer.transform, 
-                                            skinnedMeshRenderer.sharedMesh);
+            // アバターのすべてのメッシュの頂点位置のy座標が最も高いところを取る
+            var avatarMaxHeight = skinnedMeshRenderers
+                                    .Select(r => new { Transform = r.transform, Mesh = r.sharedMesh })
+                                    .Concat(meshRenderers.Select(r => new { Transform = r.transform, Mesh = r.GetComponent<MeshFilter>().sharedMesh }))
+                                    .SelectMany(r => r.Mesh.vertices.Select(v => r.Transform.TransformPoint(v).y))
+                                    .DefaultIfEmpty()
+                                    .Max();
 
-                if (maxHeight < meshMaxHeight)
-                {
-                    maxHeight = meshMaxHeight;
-                }
-            }
-            foreach (var meshRenderer in meshRenderers)
-            {
-                var meshMaxHeight = CalculateMaxPositionInMesh(
-                                            meshRenderer.transform,
-                                            meshRenderer.GetComponent<MeshFilter>().sharedMesh);
-
-                if (maxHeight < meshMaxHeight)
-                {
-                    maxHeight = meshMaxHeight;
-                }
-            }
-            return maxHeight - footPosition.y;
-        }
-
-        private float CalculateMaxPositionInMesh(Transform meshTransform, Mesh mesh)
-        {
-            return mesh.vertices.Select(v => meshTransform.TransformPoint(v).y).DefaultIfEmpty().Max();
+            if (avatarMaxHeight <= 0) return 0;
+            return avatarMaxHeight - footPosition.y;
         }
     }
 }
