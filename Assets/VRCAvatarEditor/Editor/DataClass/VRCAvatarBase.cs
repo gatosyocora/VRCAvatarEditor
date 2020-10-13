@@ -117,6 +117,7 @@ namespace VRCAvatarEditor.Base
             var avatarMaxHeight = skinnedMeshRenderers
                                     .Select(r => new { Transform = r.transform, Mesh = r.sharedMesh })
                                     .Concat(meshRenderers.Select(r => new { Transform = r.transform, Mesh = r.GetComponent<MeshFilter>().sharedMesh }))
+                                    .Where(p => p.Mesh != null)
                                     .SelectMany(r => r.Mesh.vertices.Select(v => r.Transform.TransformPoint(v).y))
                                     .DefaultIfEmpty()
                                     .Max();
