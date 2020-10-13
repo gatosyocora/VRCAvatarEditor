@@ -29,7 +29,7 @@ namespace VRCAvatarEditor
 {
     public class VRCAvatarEditorGUI : EditorWindow
     {
-        private const string TOOL_VERSION = "v0.6.1";
+        private const string TOOL_VERSION = "v0.6.2";
         private const string TWITTER_ID = "gatosyocora";
         private const string DISCORD_ID = "gatosyocora#9575";
         private const string MANUAL_URL = "https://docs.google.com/document/d/1DU7mP5PTvERqHzZiiCBJ9ep5CilQ1iaXC_3IoiuPEgA/edit?usp=sharing";
