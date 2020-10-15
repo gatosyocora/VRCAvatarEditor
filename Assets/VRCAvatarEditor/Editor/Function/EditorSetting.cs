@@ -126,7 +126,15 @@ namespace VRCAvatarEditor
                 if (skinnedMesh.BlendShapeCount <= 0) continue;
 
                 if (edittingAvatar.LipSyncShapeKeyNames != null && edittingAvatar.LipSyncShapeKeyNames.Count > 0)
-                    skinnedMesh.SetExclusionBlendShapesByContains(faceEmotionGUI.blendshapeExclusions.Union(edittingAvatar.LipSyncShapeKeyNames).ToList<string>());
+                {
+                    // TODO: 別のところにも同じコードがあるのでひとつにしたい
+                    var exclusionsBlendShapes = faceEmotionGUI.blendshapeExclusions
+                                                    .Select(n => new ExclusionBlendShape(n, ExclusionMatchType.Contain))
+                                                    .Union(
+                                                        edittingAvatar.LipSyncShapeKeyNames
+                                                        .Select(n => new ExclusionBlendShape(n, ExclusionMatchType.Perfect)));
+                    skinnedMesh.SetExclusionBlendShapesByContains(exclusionsBlendShapes);
+                }
 
                 if (faceEmotionGUI.selectedSortType == FaceEmotionGUIBase.SortType.AToZ)
                     skinnedMesh.SortBlendShapesToAscending();
