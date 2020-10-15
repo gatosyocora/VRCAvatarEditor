@@ -57,21 +57,32 @@ namespace VRCAvatarEditor
         /// 名前にexclusionWordsが含まれるシェイプキーをリスト一覧表示から除外する設定にする
         /// </summary>
         /// <param name="exclusionWords"></param>
-        public void SetExclusionBlendShapesByContains(IEnumerable<string> exclusionWords)
+        public void SetExclusionBlendShapesByContains(IEnumerable<ExclusionBlendShape> exclusionBlendShapes)
         {
             for (int blendShapeIndex = 0; blendShapeIndex < BlendShapeCount; blendShapeIndex++)
             {
                 Blendshapes[blendShapeIndex].IsExclusion = false;
 
                 // 除外するキーかどうか調べる
-                foreach (var exclusionWord in exclusionWords)
+                foreach (var exclusionBlendShape in exclusionBlendShapes)
                 {
-                    if (string.IsNullOrEmpty(exclusionWord)) continue;
-                    if ((Blendshapes[blendShapeIndex].Name.ToLower()).Contains(exclusionWord.ToLower()))
+                    if (exclusionBlendShape == null || string.IsNullOrEmpty(exclusionBlendShape.Name)) continue;
+                    var blendShapeLowerName = Blendshapes[blendShapeIndex].Name.ToLower();
+                    var exclusionBlendShapeLowerName = exclusionBlendShape.Name.ToLower();
+                    bool isMatch;
+                    switch (exclusionBlendShape.MatchType)
                     {
-                        Blendshapes[blendShapeIndex].IsExclusion = true;
-                        break;
+                        case ExclusionMatchType.Perfect:
+                            isMatch = blendShapeLowerName == exclusionBlendShapeLowerName;
+                            break;
+                        case ExclusionMatchType.Contain:
+                            isMatch = blendShapeLowerName.Contains(exclusionBlendShapeLowerName);
+                            break;
+                        default:
+                            isMatch = false;
+                            break;
                     }
+                    Blendshapes[blendShapeIndex].IsExclusion = isMatch;
                 }
             }
         }
