@@ -62,18 +62,18 @@ namespace VRCAvatarEditor
             for (int blendShapeIndex = 0; blendShapeIndex < BlendShapeCount; blendShapeIndex++)
             {
                 Blendshapes[blendShapeIndex].IsExclusion = false;
-
+                bool isMatch = false;
                 // 除外するキーかどうか調べる
                 foreach (var exclusionBlendShape in exclusionBlendShapes)
                 {
-                    if (exclusionBlendShape == null || string.IsNullOrEmpty(exclusionBlendShape.Name)) continue;
+                    if (exclusionBlendShape == null || string.IsNullOrEmpty(exclusionBlendShape.Name) || isMatch) continue;
                     var blendShapeLowerName = Blendshapes[blendShapeIndex].Name.ToLower();
                     var exclusionBlendShapeLowerName = exclusionBlendShape.Name.ToLower();
-                    bool isMatch;
+
                     switch (exclusionBlendShape.MatchType)
                     {
                         case ExclusionMatchType.Perfect:
-                            isMatch = blendShapeLowerName == exclusionBlendShapeLowerName;
+                            isMatch = blendShapeLowerName.Equals(exclusionBlendShapeLowerName);
                             break;
                         case ExclusionMatchType.Contain:
                             isMatch = blendShapeLowerName.Contains(exclusionBlendShapeLowerName);
@@ -82,8 +82,8 @@ namespace VRCAvatarEditor
                             isMatch = false;
                             break;
                     }
-                    Blendshapes[blendShapeIndex].IsExclusion = isMatch;
                 }
+                Blendshapes[blendShapeIndex].IsExclusion = isMatch;
             }
         }
 
