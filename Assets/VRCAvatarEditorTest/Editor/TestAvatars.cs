@@ -6,6 +6,6 @@ namespace VRCAvatarEditor.Test
     public class TestAvatars : ScriptableObject
     {
         [SerializeField]
-        private Object[] testAvatars;
+        public Object[] testAvatars;
     }
 }
