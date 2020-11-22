@@ -49,7 +49,19 @@ namespace VRCAvatarEditor
 
         private bool needRepaint = false;
 
-        private VRC_AvatarDescriptor targetAvatarDescriptor;
+        private VRC_AvatarDescriptor _targetAvatarDescriptor;
+        public VRC_AvatarDescriptor TargetAvatarDescriptor
+        {
+            get => _targetAvatarDescriptor;
+            set
+            {
+                if (_targetAvatarDescriptor != value)
+                {
+                    _targetAvatarDescriptor = value;
+                    OnChangedAvatar();
+                }
+            }
+        }
 
         private VRCAvatar edittingAvatar = null;
         private VRCAvatar originalAvatar = null;
@@ -185,10 +197,9 @@ namespace VRCAvatarEditor
                 var selectionTransform = Selection.gameObjects.Single().transform;
                 while (selectionTransform != null)
                 {
-                    targetAvatarDescriptor = selectionTransform.GetComponent<VRC_AvatarDescriptor>();
-                    if (targetAvatarDescriptor != null)
+                    TargetAvatarDescriptor = selectionTransform.GetComponent<VRC_AvatarDescriptor>();
+                    if (TargetAvatarDescriptor != null)
                     {
-                        OnChangedAvatar();
                         break;
                     }
                     selectionTransform = selectionTransform.parent;
@@ -265,21 +276,9 @@ namespace VRCAvatarEditor
                 using (new EditorGUILayout.VerticalScope())
                 {
                     // アバター選択
-                    using (var check = new EditorGUI.ChangeCheckScope())
-                    {
-                        targetAvatarDescriptor = GatoGUILayout.ObjectField(
-                            LocalizeText.instance.langPair.avatarLabel,
-                            targetAvatarDescriptor);
-
-                        if (check.changed)
-                        {
-                            // アバター変更時の処理
-                            if (targetAvatarDescriptor != null)
-                            {
-                                OnChangedAvatar();
-                            }
-                        }
-                    }
+                    TargetAvatarDescriptor = GatoGUILayout.ObjectField(
+                        LocalizeText.instance.langPair.avatarLabel,
+                        TargetAvatarDescriptor);
 
                     using (new EditorGUI.DisabledGroupScope(edittingAvatar.Descriptor == null))
                     {
@@ -581,11 +580,13 @@ namespace VRCAvatarEditor
 
         private void OnChangedAvatar()
         {
-            edittingAvatar = avatarMonitorGUI.SetAvatarPreview(targetAvatarDescriptor);
-            originalAvatar = new VRCAvatar(targetAvatarDescriptor);
+            if (TargetAvatarDescriptor == null) return;
+
+            edittingAvatar = avatarMonitorGUI.SetAvatarPreview(TargetAvatarDescriptor);
+            originalAvatar = new VRCAvatar(TargetAvatarDescriptor);
             EditorSetting.instance.ApplySettingsToEditorGUI(edittingAvatar, faceEmotionGUI);
 
-            var targetAvatarObj = targetAvatarDescriptor.gameObject;
+            var targetAvatarObj = TargetAvatarDescriptor.gameObject;
             targetAvatarObj.SetActive(true);
 
             avatarMonitorGUI.MoveAvatarCam(false, false);
