@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25ca97f7a5faf94448096a208f5c9af7, type: 3}
+  m_Name: TestAvatars
+  m_EditorClassIdentifier: 
+  testAvatars:
+  - {fileID: 1752611090282248, guid: c1b2eaaca5ab7a44ab200767d193ce1b, type: 3}
+  - {fileID: 1038720358760406, guid: 8d7765037604b9f4f8cb2eedb538a795, type: 3}
+  - {fileID: 1429119668719382, guid: 8573587aed1f75c4490190a1b99a9ee0, type: 3}
+  - {fileID: 1612588576788702, guid: c555d10fc1c9143429f3517cf57af6b5, type: 3}
+  - {fileID: 1742933471750436, guid: 9c04fdefdf0f44a43884386c9b388bbb, type: 3}
+  - {fileID: 1510931708062482, guid: 1a7210d21d17c0440bb2cc8bc095fad1, type: 3}
+  - {fileID: 1276761602465310, guid: d438a37b1f608b14181d9826581e9302, type: 3}
+  - {fileID: 1507410575402334, guid: 98d171b814bfb104da009c98321a7a6d, type: 3}
+  - {fileID: 1342087546709234224, guid: 9ec77257f251b9a48890ae0f2d5cb722, type: 3}
+  - {fileID: 7410691940657121832, guid: cf6e858a105f8fc4682a3820c2362e13, type: 3}
