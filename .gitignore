@@ -58,6 +58,7 @@ sysinfo.txt
 # VRCAvatarEditor以外は除く
 Assets/*
 !Assets/VRCAvatarEditor/
+!Assets/VRCAvatarEditorTest/
 
 # 作成したAnimationファイルは除く
 Assets/VRCAvatarEditor/Animations/*.anim
