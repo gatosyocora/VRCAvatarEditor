@@ -157,6 +157,11 @@ namespace VRCAvatarEditor.Avatars3
 
             var visemeBlendShapeNames = Enum.GetNames(typeof(Viseme));
 
+            if (Descriptor.VisemeBlendShapes == null || Descriptor.VisemeBlendShapes.Length <= 0)
+            {
+                Descriptor.VisemeBlendShapes = new string[visemeBlendShapeNames.Length - 1];
+            }
+
             for (int visemeIndex = 0; visemeIndex < visemeBlendShapeNames.Length; visemeIndex++)
             {
                 // VRC用アバターとしてよくあるシェイプキーの名前を元に自動設定
