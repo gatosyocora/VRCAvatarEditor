@@ -148,7 +148,8 @@ namespace VRCAvatarEditor.Avatars3
 
             if (FaceMesh == null)
             {
-                Descriptor.VisemeSkinnedMesh = VRCAvatarMeshUtility.GetFaceMeshRenderer(this);
+                FaceMesh = VRCAvatarMeshUtility.GetFaceMeshRenderer(this);
+                Descriptor.VisemeSkinnedMesh = FaceMesh;
             }
 
             if (FaceMesh == null) return;
