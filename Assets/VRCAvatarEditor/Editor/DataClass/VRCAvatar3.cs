@@ -189,6 +189,13 @@ namespace VRCAvatarEditor.Avatars3
                         Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
                         break;
                     }
+
+                    visemeShapeKeyName = prefix + visemeBlendShapeNames[visemeIndex] + " ";
+                    if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
+                    {
+                        Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
+                        break;
+                    }
                 }
             }
         }
