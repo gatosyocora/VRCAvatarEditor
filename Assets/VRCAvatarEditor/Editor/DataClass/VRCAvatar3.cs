@@ -10,6 +10,7 @@ using Viseme = VRC.SDKBase.VRC_AvatarDescriptor.Viseme;
 using System.Collections.Generic;
 using VRC.SDK3.Avatars.Components;
 using static VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
+using VRCAvatarEditor.Utilities;
 
 namespace VRCAvatarEditor.Avatars3
 {
@@ -147,9 +148,7 @@ namespace VRCAvatarEditor.Avatars3
 
             if (FaceMesh == null)
             {
-                var rootObj = Animator.gameObject;
-                FaceMesh = rootObj.GetComponentInChildren<SkinnedMeshRenderer>();
-                Descriptor.VisemeSkinnedMesh = FaceMesh;
+                Descriptor.VisemeSkinnedMesh = VRCAvatarMeshUtility.GetFaceMeshRenderer(this);
             }
 
             if (FaceMesh == null) return;
