@@ -96,29 +96,6 @@ namespace VRCAvatarEditor.Utilities
             return viewPos;
         }
 
-#if VRC_SDK_VRCSDK2
-        public static Vector3 RevertEyePosToPrefab(IVRCAvatarBase avatar)
-        {
-            PrefabUtility.ReconnectToLastPrefab(avatar.Descriptor.gameObject);
-
-            var so = new SerializedObject(descriptor);
-            so.Update();
-
-            var sp = so.FindProperty("ViewPosition");
-#if UNITY_2018_3_OR_NEWER
-            // Transform has 'ReflectionProbeAnchorManager::kChangeSystem' change interests present when destroying the hierarchy.
-            // 対策で一度disableにする
-            descriptor.enabled = false;
-            PrefabUtility.RevertPropertyOverride(sp, InteractionMode.UserAction);
-            descriptor.enabled = true;
-#else
-            sp.prefabOverride = false;
-            sp.serializedObject.ApplyModifiedProperties();
-#endif
-            return descriptor.ViewPosition;
-        }
-#endif
-
         private static float CalcDistanceFromMaxFarVertexTo(Transform targetBone, SkinnedMeshRenderer renderer)
         {
             var targetBoneIndex = Array.IndexOf(renderer.bones, targetBone);
