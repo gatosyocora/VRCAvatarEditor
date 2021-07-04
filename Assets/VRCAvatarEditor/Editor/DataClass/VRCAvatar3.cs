@@ -174,10 +174,39 @@ namespace VRCAvatarEditor.Avatars3
                     continue;
                 }
 
+                visemeShapeKeyName = "vrc.v_" + visemeBlendShapeNames[visemeIndex].ToLower();
+                if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
+                {
+                    Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
+                    continue;
+                }
+
+                visemeShapeKeyName = "vrc.v_" + visemeBlendShapeNames[visemeIndex].ToUpper();
+                if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
+                {
+                    Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
+                    continue;
+                }
+
                 visemeShapeKeyName = "VRC.v_" + visemeBlendShapeNames[visemeIndex];
                 if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
                 {
                     Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
+                    continue;
+                }
+
+                visemeShapeKeyName = "VRC.v_" + visemeBlendShapeNames[visemeIndex].ToLower();
+                if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
+                {
+                    Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
+                    continue;
+                }
+
+                visemeShapeKeyName = "VRC.v_" + visemeBlendShapeNames[visemeIndex].ToUpper();
+                if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
+                {
+                    Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
+                    continue;
                 }
             }
         }
