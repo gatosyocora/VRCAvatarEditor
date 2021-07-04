@@ -322,7 +322,7 @@ namespace VRCAvatarEditor
                                     .Select(index => mesh.GetBlendShapeName(index));
             foreach (var blendShapeName in blendShapeNames)
             {
-                if (blendShapeName.StartsWith(faceMeshBlendShapeNamePrefix))
+                if (blendShapeName.StartsWith(faceMeshBlendShapeNamePrefix, StringComparison.CurrentCultureIgnoreCase))
                 {
                     return true;
                 }
