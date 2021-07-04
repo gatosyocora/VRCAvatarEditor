@@ -643,10 +643,16 @@ namespace VRCAvatarEditor
         public void UpdateExclusitionBlendShapes()
         {
             var exclusionsBlendShapes = faceEmotionGUI.blendshapeExclusions
-                                            .Select(n => new ExclusionBlendShape(n, ExclusionMatchType.Contain))
+                                            .Select(n => new ExclusionBlendShape(n, ExclusionMatchType.Contain));
+
+            if (edittingAvatar.LipSyncShapeKeyNames != null)
+            {
+                exclusionsBlendShapes = exclusionsBlendShapes
                                             .Union(
                                                 edittingAvatar.LipSyncShapeKeyNames
                                                 .Select(n => new ExclusionBlendShape(n, ExclusionMatchType.Perfect)));
+            }
+
 
             if (edittingAvatar.SkinnedMeshList != null)
             {
