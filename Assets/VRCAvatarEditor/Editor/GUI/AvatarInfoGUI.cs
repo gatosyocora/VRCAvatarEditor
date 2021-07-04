@@ -207,9 +207,18 @@ namespace VRCAvatarEditor
                                 {
                                     lipSyncScrollPos = scrollView.scrollPosition;
 
+                                    var mesh = originalAvatar.FaceMesh.sharedMesh;
+                                    var blendShapeNames = Enumerable.Range(0, mesh.blendShapeCount)
+                                                            .Select(index => mesh.GetBlendShapeName(index))
+                                                            .ToArray();
                                     for (int visemeIndex = 0; visemeIndex < VRCAvatarMeshUtility.LIPSYNC_SHYPEKEY_NUM; visemeIndex++)
                                     {
-                                        EditorGUILayout.LabelField("Viseme:" + Enum.GetName(typeof(Viseme), visemeIndex), originalAvatar.Descriptor.VisemeBlendShapes[visemeIndex]);
+                                        var index = Array.IndexOf(blendShapeNames, originalAvatar.Descriptor.VisemeBlendShapes[visemeIndex]);
+                                        var newIndex = EditorGUILayout.Popup("Viseme:" + Enum.GetName(typeof(Viseme), visemeIndex), index, blendShapeNames);
+                                        if (index != newIndex)
+                                        {
+                                            originalAvatar.Descriptor.VisemeBlendShapes[visemeIndex] = blendShapeNames[newIndex];
+                                        }
                                     }
                                 }
                             }
