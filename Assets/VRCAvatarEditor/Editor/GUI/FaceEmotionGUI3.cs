@@ -141,8 +141,8 @@ namespace VRCAvatarEditor.Avatars3
                        states[selectedStateIndex].state.motion = createdAnimClip;
                        EditorUtility.SetDirty(controller);
 
-                                    // 可能であればもう一方の手も同じAnimationClipを設定する
-                                    if (setLeftAndRight)
+                        // 可能であればもう一方の手も同じAnimationClipを設定する
+                        if (setLeftAndRight)
                        {
                            var layerName = editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex].name;
                            string targetLayerName = string.Empty;
