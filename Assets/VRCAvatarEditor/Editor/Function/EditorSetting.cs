@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using VRCAvatarEditor;
 using VRCAvatarEditor.Base;
+using VRCAvatarEditor.Utilities;
 using static VRCAvatarEditor.VRCAvatarEditorGUI;
 using VRCAvatar = VRCAvatarEditor.Base.VRCAvatarBase;
 
@@ -127,12 +128,7 @@ namespace VRCAvatarEditor
 
                 if (edittingAvatar.LipSyncShapeKeyNames != null && edittingAvatar.LipSyncShapeKeyNames.Count > 0)
                 {
-                    // TODO: 別のところにも同じコードがあるのでひとつにしたい
-                    var exclusionsBlendShapes = faceEmotionGUI.blendshapeExclusions
-                                                    .Select(n => new ExclusionBlendShape(n, ExclusionMatchType.Contain))
-                                                    .Union(
-                                                        edittingAvatar.LipSyncShapeKeyNames
-                                                        .Select(n => new ExclusionBlendShape(n, ExclusionMatchType.Perfect)));
+                    var exclusionsBlendShapes = VRCAvatarMeshUtility.GetExclusionBlendShapes(edittingAvatar, faceEmotionGUI.blendshapeExclusions);
                     skinnedMesh.SetExclusionBlendShapesByContains(exclusionsBlendShapes);
                 }
 

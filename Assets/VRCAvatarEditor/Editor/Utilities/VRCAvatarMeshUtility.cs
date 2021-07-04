@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -39,6 +40,21 @@ namespace VRCAvatarEditor.Utilities
             }
 
             return null;
+        }
+
+        public static IEnumerable<ExclusionBlendShape> GetExclusionBlendShapes(IVRCAvatarBase avatar, IEnumerable<string> blendshapeExclusions)
+        {
+            var exclusions = blendshapeExclusions.Select(n => new ExclusionBlendShape(n, ExclusionMatchType.Contain));
+
+            if (avatar.LipSyncShapeKeyNames != null)
+            {
+                exclusions = exclusions
+                                .Union(
+                                    avatar.LipSyncShapeKeyNames
+                                        .Select(n => new ExclusionBlendShape(n, ExclusionMatchType.Perfect))
+                                );
+            }
+            return exclusions;
         }
 
         private static bool IsFaceMesh(Mesh mesh)
