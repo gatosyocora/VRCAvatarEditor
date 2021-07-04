@@ -167,46 +167,28 @@ namespace VRCAvatarEditor.Avatars3
             for (int visemeIndex = 0; visemeIndex < visemeBlendShapeNames.Length; visemeIndex++)
             {
                 // VRC用アバターとしてよくあるシェイプキーの名前を元に自動設定
-                var visemeShapeKeyName = "vrc.v_" + visemeBlendShapeNames[visemeIndex];
-                if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
+                foreach (var prefix in VRCAvatarMeshUtility.lipSyncBlendShapeNamePrefixPatterns)
                 {
-                    Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
-                    continue;
-                }
+                    var visemeShapeKeyName = prefix + visemeBlendShapeNames[visemeIndex];
+                    if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
+                    {
+                        Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
+                        break;
+                    }
 
-                visemeShapeKeyName = "vrc.v_" + visemeBlendShapeNames[visemeIndex].ToLower();
-                if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
-                {
-                    Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
-                    continue;
-                }
+                    visemeShapeKeyName = prefix + visemeBlendShapeNames[visemeIndex].ToLower();
+                    if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
+                    {
+                        Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
+                        break;
+                    }
 
-                visemeShapeKeyName = "vrc.v_" + visemeBlendShapeNames[visemeIndex].ToUpper();
-                if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
-                {
-                    Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
-                    continue;
-                }
-
-                visemeShapeKeyName = "VRC.v_" + visemeBlendShapeNames[visemeIndex];
-                if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
-                {
-                    Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
-                    continue;
-                }
-
-                visemeShapeKeyName = "VRC.v_" + visemeBlendShapeNames[visemeIndex].ToLower();
-                if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
-                {
-                    Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
-                    continue;
-                }
-
-                visemeShapeKeyName = "VRC.v_" + visemeBlendShapeNames[visemeIndex].ToUpper();
-                if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
-                {
-                    Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
-                    continue;
+                    visemeShapeKeyName = prefix + visemeBlendShapeNames[visemeIndex].ToUpper();
+                    if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
+                    {
+                        Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
+                        break;
+                    }
                 }
             }
         }

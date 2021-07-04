@@ -6,6 +6,13 @@ namespace VRCAvatarEditor.Utilities
 {
     public class VRCAvatarMeshUtility
     {
+        public static string[] lipSyncBlendShapeNamePrefixPatterns =
+        {
+            "vrc.v_",
+            "VRC.v_",
+            "vrc_v_", // Shaon
+        };
+
         public static SkinnedMeshRenderer GetFaceMeshRenderer(IVRCAvatarBase avatar)
         {
             var rootTransform = avatar.Animator.transform;
@@ -38,15 +45,16 @@ namespace VRCAvatarEditor.Utilities
         {
             if (mesh == null) return false;
 
-            var faceMeshBlendShapeNamePrefix = "vrc.";
-
             var blendShapeNames = Enumerable.Range(0, mesh.blendShapeCount)
                                     .Select(index => mesh.GetBlendShapeName(index));
             foreach (var blendShapeName in blendShapeNames)
             {
-                if (blendShapeName.StartsWith(faceMeshBlendShapeNamePrefix, StringComparison.CurrentCultureIgnoreCase))
+                foreach (var prefix in lipSyncBlendShapeNamePrefixPatterns)
                 {
-                    return true;
+                    if (blendShapeName.StartsWith(prefix, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
