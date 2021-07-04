@@ -133,11 +133,18 @@ namespace VRCAvatarEditor
                     }
 
                     // faceMesh
+                    using (new EditorGUILayout.HorizontalScope())
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
                         originalAvatar.FaceMesh = GatoGUILayout.ObjectField(
                             LocalizeText.instance.langPair.faceMeshLabel,
                             originalAvatar.FaceMesh);
+
+                        if (GUILayout.Button("Auto Detect", GUILayout.MaxWidth(100)))
+                        {
+                            originalAvatar.FaceMesh = GetFaceMeshRenderer(originalAvatar);
+                            GUI.changed = true;
+                        }
 
                         if (check.changed)
                         {
@@ -275,6 +282,52 @@ namespace VRCAvatarEditor
                     maxDistance = Vector3.Distance(local2WorldMatrix.MultiplyPoint3x4(vertices[index]), targetBone.position);
 
             return maxDistance;
+        }
+
+        private SkinnedMeshRenderer GetFaceMeshRenderer(VRCAvatar avatar)
+        {
+            var rootTransform = avatar.Animator.transform;
+
+            // 直下のBodyという名前のメッシュがFaceMeshであることが多い
+            var bodyMeshTransform = rootTransform.Find("Body");
+            if (bodyMeshTransform != null)
+            {
+                var bodyMeshRenderer = bodyMeshTransform.GetComponent<SkinnedMeshRenderer>();
+                if (bodyMeshRenderer != null && IsFaceMesh(bodyMeshRenderer.sharedMesh))
+                {
+                    return bodyMeshRenderer;
+                }
+            }
+
+            // 全走査する
+            var renderers = rootTransform.GetComponentsInChildren<SkinnedMeshRenderer>();
+            foreach (var renderer in renderers)
+            {
+                if (IsFaceMesh(renderer.sharedMesh))
+                {
+                    return renderer;
+                }
+            }
+
+            return null;
+        }
+           
+        private bool IsFaceMesh(Mesh mesh)
+        {
+            if (mesh == null) return false;
+
+            var faceMeshBlendShapeNamePrefix = "vrc.";
+
+            var blendShapeNames = Enumerable.Range(0, mesh.blendShapeCount)
+                                    .Select(index => mesh.GetBlendShapeName(index));
+            foreach (var blendShapeName in blendShapeNames)
+            {
+                if (blendShapeName.StartsWith(faceMeshBlendShapeNamePrefix))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
 #if VRC_SDK_VRCSDK2
