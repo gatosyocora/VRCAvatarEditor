@@ -20,6 +20,9 @@ namespace VRCAvatarEditor.Avatars3
 
         private ChildAnimatorState[] states;
 
+        private const string FX_LEFT_HAND_LAYER_NAME = "Left Hand";
+        private const string FX_RIGHT_HAND_LAYER_NAME = "Right Hand";
+
         protected override void DrawCreatedAnimationSettingsGUI()
         {
             base.DrawCreatedAnimationSettingsGUI();
@@ -146,13 +149,13 @@ namespace VRCAvatarEditor.Avatars3
                        {
                            var layerName = editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex].name;
                            string targetLayerName = string.Empty;
-                           if (layerName == "Left Hand")
+                           if (layerName == FX_LEFT_HAND_LAYER_NAME)
                            {
-                               targetLayerName = "Right Hand";
+                               targetLayerName = FX_RIGHT_HAND_LAYER_NAME;
                            }
-                           else if (layerName == "Right Hand")
+                           else if (layerName == FX_RIGHT_HAND_LAYER_NAME)
                            {
-                               targetLayerName = "Left Hand";
+                               targetLayerName = FX_LEFT_HAND_LAYER_NAME;
                            }
 
                            if (!string.IsNullOrEmpty(targetLayerName))
