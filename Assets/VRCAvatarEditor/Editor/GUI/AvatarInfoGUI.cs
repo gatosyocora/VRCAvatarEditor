@@ -207,7 +207,7 @@ namespace VRCAvatarEditor
                                 {
                                     lipSyncScrollPos = scrollView.scrollPosition;
 
-                                    for (int visemeIndex = 0; visemeIndex < LIPSYNC_SHYPEKEY_NUM; visemeIndex++)
+                                    for (int visemeIndex = 0; visemeIndex < VRCAvatarMeshUtility.LIPSYNC_SHYPEKEY_NUM; visemeIndex++)
                                     {
                                         EditorGUILayout.LabelField("Viseme:" + Enum.GetName(typeof(Viseme), visemeIndex), originalAvatar.Descriptor.VisemeBlendShapes[visemeIndex]);
                                     }

@@ -23,8 +23,6 @@ namespace VRCAvatarEditor.Avatars3
             LookingDown = 2
         }
 
-        private static int VISEME_COUNT = 15;
-
         public VRCAvatarDescriptor Descriptor { get; set; }
 
         public CustomAnimLayer GestureLayer { get; set; }
@@ -161,7 +159,7 @@ namespace VRCAvatarEditor.Avatars3
 
             if (Descriptor.VisemeBlendShapes == null || Descriptor.VisemeBlendShapes.Length <= 0)
             {
-                Descriptor.VisemeBlendShapes = new string[VISEME_COUNT];
+                Descriptor.VisemeBlendShapes = new string[VRCAvatarMeshUtility.LIPSYNC_SHYPEKEY_NUM];
             }
 
             for (int visemeIndex = 0; visemeIndex < visemeBlendShapeNames.Length; visemeIndex++)

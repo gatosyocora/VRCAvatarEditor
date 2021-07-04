@@ -7,6 +7,8 @@ namespace VRCAvatarEditor.Utilities
 {
     public class VRCAvatarMeshUtility
     {
+        public const int LIPSYNC_SHYPEKEY_NUM = 15;
+
         public static string[] lipSyncBlendShapeNamePrefixPatterns =
         {
             "vrc.v_",
