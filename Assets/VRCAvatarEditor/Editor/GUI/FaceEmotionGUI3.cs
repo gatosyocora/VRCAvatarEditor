@@ -10,6 +10,7 @@ using UnityEngine;
 using VRCAvatarEditor.Base;
 using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
 using AnimationsGUI = VRCAvatarEditor.Avatars3.AnimationsGUI3;
+using VRCAvatarEditor.Utilities;
 
 namespace VRCAvatarEditor.Avatars3
 {
@@ -22,6 +23,7 @@ namespace VRCAvatarEditor.Avatars3
 
         private const string FX_LEFT_HAND_LAYER_NAME = "Left Hand";
         private const string FX_RIGHT_HAND_LAYER_NAME = "Right Hand";
+        private const string FX_DEFAULT_LAYER_NAME = "DefaultFace";
 
         protected override void DrawCreatedAnimationSettingsGUI()
         {
@@ -132,6 +134,7 @@ namespace VRCAvatarEditor.Avatars3
                () =>
                {
                    var controller = originalAvatar.FxController;
+
                    var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(
                                            animName,
                                            originalAvatar.AnimSavedFolderPath,
@@ -179,9 +182,28 @@ namespace VRCAvatarEditor.Avatars3
                                }
                            }
                        }
-                   }
 
-                   FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
+                       // WriteDefaultオフで表情が戻らなくなる不具合の対策
+                       FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
+                       if (!VRCAvatarAnimationUtility.UseWriteDefaults(controller))
+                       {
+                           if (!VRCAvatarAnimationUtility.ExistLayer(controller, FX_DEFAULT_LAYER_NAME))
+                           {
+                               var defaultLayer = VRCAvatarAnimationUtility.InsertLayer(controller, 1, FX_DEFAULT_LAYER_NAME);
+                               var defaultState = defaultLayer.stateMachine.AddState("Reset");
+                               var defaultFaceAnimation = FaceEmotion.CreateBlendShapeAnimationClip(
+                                                           "DefaultFace",
+                                                           originalAvatar.AnimSavedFolderPath,
+                                                           editAvatar,
+                                                           true);
+                               defaultState.motion = defaultFaceAnimation;
+                               EditorUtility.SetDirty(controller);
+                           }
+                       }
+                   } else
+                   {
+                       FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
+                   }
                    originalAvatar.FxController = controller;
                    editAvatar.FxController = controller;
                },
