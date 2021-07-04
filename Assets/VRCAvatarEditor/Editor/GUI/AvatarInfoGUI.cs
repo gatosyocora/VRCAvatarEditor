@@ -131,6 +131,26 @@ namespace VRCAvatarEditor
                                                         monitorGUI.showEyePosition,
                                                         showIconTexture,
                                                         hideIconTexture);
+
+                        using (new EditorGUI.DisabledGroupScope(originalAvatar.FaceMesh == null))
+                        {
+                            if (GUILayout.Button("Auto Detect", GUILayout.MaxWidth(100)))
+                            {
+                                var eyePos = VRCAvatarMeshUtility.CalcAvatarViewPosition(originalAvatar);
+                                originalAvatar.Descriptor.ViewPosition = eyePos;
+                                editAvatar.Descriptor.ViewPosition = eyePos;
+                                originalAvatar.EyePos = eyePos;
+                                editAvatar.EyePos = eyePos;
+                                EditorUtility.SetDirty(originalAvatar.Descriptor);
+
+                                monitorGUI.showEyePosition = true;
+                                monitorGUI.MoveAvatarCam(false, true);
+                            }
+                        }
+                    }
+                    if (originalAvatar.FaceMesh == null)
+                    {
+                        EditorGUILayout.HelpBox("ViewPositionを自動設定するためにはFaceMeshを設定する必要があります", MessageType.Warning);
                     }
 
                     // faceMesh
@@ -153,28 +173,6 @@ namespace VRCAvatarEditor
                             EditorUtility.SetDirty(originalAvatar.Descriptor);
                         }
                     }
-
-                    /*
-                    using (new EditorGUILayout.HorizontalScope())
-                    using (new EditorGUI.DisabledGroupScope(avatar.faceMesh == null))
-                    {
-                        GUILayout.FlexibleSpace();
-                        if (GUILayout.Button("Auto Setting"))
-                        {
-                            avatar.eyePos = CalcAvatarViewPosition(avatar);
-                            avatar.descriptor.ViewPosition = avatar.eyePos;
-                        }
-
-                        if (GUILayout.Button("Revert to Prefab"))
-                        {
-                            avatar.eyePos = RevertEyePosToPrefab(avatar.descriptor);
-                        }
-                    }
-                    if (avatar.faceMesh == null)
-                    {
-                        EditorGUILayout.HelpBox("ViewPositionを自動設定するためにはFaceMeshを設定する必要があります", MessageType.Warning);
-                    }
-                    */
 
                     EditorGUILayout.Space();
 
@@ -226,87 +224,6 @@ namespace VRCAvatarEditor
         public void LoadSettingData(SettingData settingAsset) { }
         public void SaveSettingData(ref SettingData settingAsset) { }
         public void Dispose() { }
-
-        // TODO : モデルによっては前髪あたりまでviewpositionがいってしまう
-        private Vector3 CalcAvatarViewPosition(VRCAvatar avatar)
-        {
-            var viewPos = Vector3.zero;
-            var animator = avatar.Animator;
-            var objTrans = avatar.Animator.transform;
-
-            // leftEyeとRightEyeの位置からx, yを計算する
-            var leftEyeTrans = animator.GetBoneTransform(HumanBodyBones.LeftEye);
-            var rightEyeTrans = animator.GetBoneTransform(HumanBodyBones.RightEye);
-            viewPos = (leftEyeTrans.position + rightEyeTrans.position) / 2f;
-
-            var renderer = avatar.FaceMesh;
-            var mesh = renderer.sharedMesh;
-            var vertices = mesh.vertices;
-            var local2WorldMat = renderer.transform.localToWorldMatrix;
-
-            // 左目メッシュの頂点のうち, 左目ボーンから一番離れた頂点までの距離を計算する
-            // 右目も同様に計算し, その平均距離+eyeBoneの平均z位置をzとする
-            var leftMaxDistance = CalcDistanceFromMaxFarVertexTo(leftEyeTrans, renderer);
-            var rightMaxDistance = CalcDistanceFromMaxFarVertexTo(rightEyeTrans, renderer);
-            viewPos.z += (leftMaxDistance + rightMaxDistance) / 2f;
-
-            var leftEyeBoneIndex = Array.IndexOf(renderer.bones, leftEyeTrans);
-            var boneWeights = renderer.sharedMesh.boneWeights
-                                .Where(x => x.boneIndex0 == leftEyeBoneIndex ||
-                                            x.boneIndex1 == leftEyeBoneIndex ||
-                                            x.boneIndex2 == leftEyeBoneIndex ||
-                                            x.boneIndex3 == leftEyeBoneIndex)
-                                .ToArray();
-
-            // ローカル座標に変換
-            viewPos = objTrans.worldToLocalMatrix.MultiplyPoint3x4(viewPos);
-
-            return viewPos;
-        }
-
-        private float CalcDistanceFromMaxFarVertexTo(Transform targetBone, SkinnedMeshRenderer renderer)
-        {
-            var targetBoneIndex = Array.IndexOf(renderer.bones, targetBone);
-            var meshVertexIndices = renderer.sharedMesh.boneWeights
-                                .Select((x, index) => new { index = index, value = x })
-                                .Where(x => (x.value.boneIndex0 == targetBoneIndex && x.value.weight0 > 0f) ||
-                                            (x.value.boneIndex1 == targetBoneIndex && x.value.weight1 > 0f) ||
-                                            (x.value.boneIndex2 == targetBoneIndex && x.value.weight2 > 0f) ||
-                                            (x.value.boneIndex3 == targetBoneIndex && x.value.weight3 > 0f))
-                                .Select(x => x.index)
-                                .ToArray();
-            var maxDistance = 0f;
-            var vertices = renderer.sharedMesh.vertices;
-            var local2WorldMatrix = renderer.transform.localToWorldMatrix;
-            foreach (var index in meshVertexIndices)
-                if (maxDistance < Vector3.Distance(local2WorldMatrix.MultiplyPoint3x4(vertices[index]), targetBone.position))
-                    maxDistance = Vector3.Distance(local2WorldMatrix.MultiplyPoint3x4(vertices[index]), targetBone.position);
-
-            return maxDistance;
-        }
-
-#if VRC_SDK_VRCSDK2
-        private static Vector3 RevertEyePosToPrefab(VRC_AvatarDescriptor descriptor)
-        {
-            PrefabUtility.ReconnectToLastPrefab(descriptor.gameObject);
-
-            var so = new SerializedObject(descriptor);
-            so.Update();
-
-            var sp = so.FindProperty("ViewPosition");
-#if UNITY_2018_3_OR_NEWER
-            // Transform has 'ReflectionProbeAnchorManager::kChangeSystem' change interests present when destroying the hierarchy.
-            // 対策で一度disableにする
-            descriptor.enabled = false;
-            PrefabUtility.RevertPropertyOverride(sp, InteractionMode.UserAction);
-            descriptor.enabled = true;
-#else
-            sp.prefabOverride = false;
-            sp.serializedObject.ApplyModifiedProperties();
-#endif
-            return descriptor.ViewPosition;
-        }
-#endif
     }
 }
 
