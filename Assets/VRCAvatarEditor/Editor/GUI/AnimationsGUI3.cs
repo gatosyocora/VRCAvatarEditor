@@ -23,6 +23,10 @@ namespace VRCAvatarEditor.Avatars3
 
         private int layerIndex = 0;
 
+        private const int PLAYABLE_GESTURE_LAYER_INDEX = 2;
+        private const int PLAYABLE_FX_LAYER_INDEX = 4;
+        private const string OFFICIAL_ANIMATION_PREFIX = "proxy_";
+
         public void Initialize(VRCAvatar editAvatar,
                                VRCAvatar originalAvatar,
                                string saveFolderPath,
@@ -83,7 +87,7 @@ namespace VRCAvatarEditor.Avatars3
                             $"{i + 1}:{stateName}",
                             anim,
                             false,
-                            anim != null && !anim.name.StartsWith("proxy_"),
+                            anim != null && !anim.name.StartsWith(OFFICIAL_ANIMATION_PREFIX),
                             () => {
                                 if (vrcAvatarEditorGUI.CurrentTool != VRCAvatarEditorGUI.ToolFunc.FaceEmotion)
                                 {
@@ -151,10 +155,10 @@ namespace VRCAvatarEditor.Avatars3
                 var fileName = $"Gesture_HandsLayer_{ originalAvatar.Animator.gameObject.name}.controller";
                 var createdGestureController = InstantiateFxController(Path.Combine(saveFolderPath, fileName));
 
-                originalAvatar.Descriptor.baseAnimationLayers[2].isDefault = false;
-                editAvatar.Descriptor.baseAnimationLayers[2].isDefault = false;
-                originalAvatar.Descriptor.baseAnimationLayers[2].animatorController = createdGestureController;
-                editAvatar.Descriptor.baseAnimationLayers[2].animatorController = createdGestureController;
+                originalAvatar.Descriptor.baseAnimationLayers[PLAYABLE_GESTURE_LAYER_INDEX].isDefault = false;
+                editAvatar.Descriptor.baseAnimationLayers[PLAYABLE_GESTURE_LAYER_INDEX].isDefault = false;
+                originalAvatar.Descriptor.baseAnimationLayers[PLAYABLE_GESTURE_LAYER_INDEX].animatorController = createdGestureController;
+                editAvatar.Descriptor.baseAnimationLayers[PLAYABLE_GESTURE_LAYER_INDEX].animatorController = createdGestureController;
             }
 
             originalAvatar.LoadAvatarInfo();
@@ -181,20 +185,20 @@ namespace VRCAvatarEditor.Avatars3
                 EnableCustomPlayableLayers(originalAvatar);
                 EnableCustomPlayableLayers(editAvatar);
             }
-            originalAvatar.Descriptor.baseAnimationLayers[4].isDefault = false;
-            originalAvatar.Descriptor.baseAnimationLayers[4].animatorController = createdFxController;
-            editAvatar.Descriptor.baseAnimationLayers[4].isDefault = false;
-            editAvatar.Descriptor.baseAnimationLayers[4].animatorController = createdFxController;
+            originalAvatar.Descriptor.baseAnimationLayers[PLAYABLE_FX_LAYER_INDEX].isDefault = false;
+            originalAvatar.Descriptor.baseAnimationLayers[PLAYABLE_FX_LAYER_INDEX].animatorController = createdFxController;
+            editAvatar.Descriptor.baseAnimationLayers[PLAYABLE_FX_LAYER_INDEX].isDefault = false;
+            editAvatar.Descriptor.baseAnimationLayers[PLAYABLE_FX_LAYER_INDEX].animatorController = createdFxController;
 
             if (originalAvatar.GestureController is null)
             {
                 fileName = $"Gesture_HandsLayer_{ originalAvatar.Animator.gameObject.name}.controller";
                 var createdGestureController = InstantiateFxController(Path.Combine(saveFolderPath, fileName));
 
-                originalAvatar.Descriptor.baseAnimationLayers[2].isDefault = false;
-                originalAvatar.Descriptor.baseAnimationLayers[2].animatorController = createdGestureController;
-                editAvatar.Descriptor.baseAnimationLayers[2].isDefault = false;
-                editAvatar.Descriptor.baseAnimationLayers[2].animatorController = createdGestureController;
+                originalAvatar.Descriptor.baseAnimationLayers[PLAYABLE_GESTURE_LAYER_INDEX].isDefault = false;
+                originalAvatar.Descriptor.baseAnimationLayers[PLAYABLE_GESTURE_LAYER_INDEX].animatorController = createdGestureController;
+                editAvatar.Descriptor.baseAnimationLayers[PLAYABLE_GESTURE_LAYER_INDEX].isDefault = false;
+                editAvatar.Descriptor.baseAnimationLayers[PLAYABLE_GESTURE_LAYER_INDEX].animatorController = createdGestureController;
             }
 
             originalAvatar.LoadAvatarInfo();
