@@ -211,11 +211,16 @@ namespace VRCAvatarEditor
                                     for (int visemeIndex = 0; visemeIndex < VRCAvatarMeshUtility.LIPSYNC_SHYPEKEY_NUM; visemeIndex++)
                                     {
                                         var index = Array.IndexOf(blendShapeNames, originalAvatar.Descriptor.VisemeBlendShapes[visemeIndex]);
-                                        var newIndex = EditorGUILayout.Popup("Viseme:" + Enum.GetName(typeof(Viseme), visemeIndex), index, blendShapeNames);
-                                        if (index != newIndex)
+
+                                        using (var check = new EditorGUI.ChangeCheckScope())
                                         {
-                                            originalAvatar.Descriptor.VisemeBlendShapes[visemeIndex] = blendShapeNames[newIndex];
+                                            var newIndex = EditorGUILayout.Popup("Viseme:" + Enum.GetName(typeof(Viseme), visemeIndex), index, blendShapeNames);
+                                            if (check.changed)
+                                            {
+                                                originalAvatar.Descriptor.VisemeBlendShapes[visemeIndex] = blendShapeNames[newIndex];
+                                            }
                                         }
+
                                     }
                                 }
                             }
