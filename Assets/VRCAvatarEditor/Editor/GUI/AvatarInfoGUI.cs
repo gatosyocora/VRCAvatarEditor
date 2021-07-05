@@ -24,7 +24,6 @@ namespace VRCAvatarEditor
 
         private bool isOpeningLipSync = false;
         private Vector2 lipSyncScrollPos = Vector2.zero;
-        private const int LIPSYNC_SHYPEKEY_NUM = 15;
 
         private Texture2D showIconTexture;
         private Texture2D hideIconTexture;
