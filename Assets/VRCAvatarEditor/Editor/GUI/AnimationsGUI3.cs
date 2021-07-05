@@ -129,7 +129,35 @@ namespace VRCAvatarEditor.Avatars3
 
         private static void EnableCustomPlayableLayers(VRCAvatar avatar)
         {
+            var baseLayerTypes = new VRCAvatarDescriptor.AnimLayerType[]
+            {
+                VRCAvatarDescriptor.AnimLayerType.Base,
+                VRCAvatarDescriptor.AnimLayerType.Additive,
+                VRCAvatarDescriptor.AnimLayerType.Gesture,
+                VRCAvatarDescriptor.AnimLayerType.Action,
+                VRCAvatarDescriptor.AnimLayerType.FX
+            };
+
+            var specialLayerTypes = new VRCAvatarDescriptor.AnimLayerType[]
+            {
+                VRCAvatarDescriptor.AnimLayerType.Sitting,
+                VRCAvatarDescriptor.AnimLayerType.TPose,
+                VRCAvatarDescriptor.AnimLayerType.IKPose
+            };
+
             avatar.Descriptor.customizeAnimationLayers = true;
+            avatar.Descriptor.baseAnimationLayers = baseLayerTypes
+                                                        .Select(type => new VRCAvatarDescriptor.CustomAnimLayer
+                                                        {
+                                                            type = type
+                                                        })
+                                                        .ToArray();
+            avatar.Descriptor.specialAnimationLayers = specialLayerTypes
+                                                        .Select(type => new VRCAvatarDescriptor.CustomAnimLayer
+                                                        {
+                                                            type = type
+                                                        })
+                                                        .ToArray();
         }
 
         public static void CreateGestureController(VRCAvatar originalAvatar, VRCAvatar editAvatar)
