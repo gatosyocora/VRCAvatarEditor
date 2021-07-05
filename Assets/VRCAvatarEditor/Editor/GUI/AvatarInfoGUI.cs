@@ -131,9 +131,9 @@ namespace VRCAvatarEditor
                                                         showIconTexture,
                                                         hideIconTexture);
 
-                        using (new EditorGUI.DisabledGroupScope(originalAvatar.FaceMesh == null))
-                        {
-                            if (GUILayout.Button("Auto Detect", GUILayout.MaxWidth(100)))
+                        GatoGUILayout.Button(
+                            "Auto Detect",
+                            () => 
                             {
                                 var eyePos = VRCAvatarMeshUtility.CalcAvatarViewPosition(originalAvatar);
                                 originalAvatar.Descriptor.ViewPosition = eyePos;
@@ -144,8 +144,9 @@ namespace VRCAvatarEditor
 
                                 monitorGUI.showEyePosition = true;
                                 monitorGUI.MoveAvatarCam(false, true);
-                            }
-                        }
+                            },
+                            originalAvatar.FaceMesh != null,
+                            GUILayout.MaxWidth(100));
                     }
                     if (originalAvatar.FaceMesh == null)
                     {
@@ -160,13 +161,15 @@ namespace VRCAvatarEditor
                             LocalizeText.instance.langPair.faceMeshLabel,
                             originalAvatar.FaceMesh);
 
-                        if (GUILayout.Button("Auto Detect", GUILayout.MaxWidth(100)))
-                        {
-                            originalAvatar.FaceMesh = VRCAvatarMeshUtility.GetFaceMeshRenderer(originalAvatar);
-                        }
+                        GatoGUILayout.Button(
+                            "Auto Detect",
+                            () => { originalAvatar.FaceMesh = VRCAvatarMeshUtility.GetFaceMeshRenderer(originalAvatar); },
+                            true,
+                            GUILayout.MaxWidth(100));
 
                         if (check.changed)
                         {
+                            Debug.Log("aaa");
                             originalAvatar.Descriptor.VisemeSkinnedMesh = originalAvatar.FaceMesh;
                             EditorUtility.SetDirty(originalAvatar.Descriptor);
                         }
