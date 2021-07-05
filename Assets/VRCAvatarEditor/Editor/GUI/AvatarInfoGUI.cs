@@ -147,10 +147,10 @@ namespace VRCAvatarEditor
                             originalAvatar.FaceMesh != null,
                             GUILayout.MaxWidth(100));
                     }
-                    if (originalAvatar.FaceMesh == null)
-                    {
-                        EditorGUILayout.HelpBox("ViewPositionを自動設定するためにはFaceMeshを設定する必要があります", MessageType.Warning);
-                    }
+                    GatoGUILayout.ErrorBox(
+                        "ViewPositionを自動設定するためにはFaceMeshを設定する必要があります",
+                        originalAvatar.FaceMesh != null,
+                        MessageType.Warning);
 
                     // faceMesh
                     using (new EditorGUILayout.HorizontalScope())
@@ -223,10 +223,10 @@ namespace VRCAvatarEditor
                             }
                         }
                     }
-                    if (originalAvatar.LipSyncStyle != LipSyncStyle.VisemeBlendShape || originalAvatar.FaceMesh == null)
-                    {
-                        EditorGUILayout.HelpBox(LocalizeText.instance.langPair.lipSyncWarningMessageText, MessageType.Warning);
-                    }
+                    GatoGUILayout.ErrorBox(
+                        LocalizeText.instance.langPair.lipSyncWarningMessageText,
+                        originalAvatar.LipSyncStyle == LipSyncStyle.VisemeBlendShape && originalAvatar.FaceMesh != null,
+                        MessageType.Warning);
                 }
 
                 EditorGUILayout.Space();
