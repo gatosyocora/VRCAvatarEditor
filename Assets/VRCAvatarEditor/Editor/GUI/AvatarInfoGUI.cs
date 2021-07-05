@@ -106,6 +106,27 @@ namespace VRCAvatarEditor
                     // 身長
                     EditorGUILayout.LabelField(LocalizeText.instance.langPair.heightLabel, $"{originalAvatar.Height:F2} m");
 
+                    // faceMesh
+                    using (new EditorGUILayout.HorizontalScope())
+                    using (var check = new EditorGUI.ChangeCheckScope())
+                    {
+                        originalAvatar.FaceMesh = GatoGUILayout.ObjectField(
+                            LocalizeText.instance.langPair.faceMeshLabel,
+                            originalAvatar.FaceMesh);
+
+                        GatoGUILayout.Button(
+                            "Auto Detect",
+                            () => { originalAvatar.FaceMesh = VRCAvatarMeshUtility.GetFaceMeshRenderer(originalAvatar); },
+                            true,
+                            GUILayout.MaxWidth(100));
+
+                        if (check.changed)
+                        {
+                            originalAvatar.Descriptor.VisemeSkinnedMesh = originalAvatar.FaceMesh;
+                            EditorUtility.SetDirty(originalAvatar.Descriptor);
+                        }
+                    }
+
                     // View Position
                     using (new EditorGUILayout.HorizontalScope())
                     {
@@ -151,27 +172,6 @@ namespace VRCAvatarEditor
                         "ViewPositionを自動設定するためにはFaceMeshを設定する必要があります",
                         originalAvatar.FaceMesh != null,
                         MessageType.Warning);
-
-                    // faceMesh
-                    using (new EditorGUILayout.HorizontalScope())
-                    using (var check = new EditorGUI.ChangeCheckScope())
-                    {
-                        originalAvatar.FaceMesh = GatoGUILayout.ObjectField(
-                            LocalizeText.instance.langPair.faceMeshLabel,
-                            originalAvatar.FaceMesh);
-
-                        GatoGUILayout.Button(
-                            "Auto Detect",
-                            () => { originalAvatar.FaceMesh = VRCAvatarMeshUtility.GetFaceMeshRenderer(originalAvatar); },
-                            true,
-                            GUILayout.MaxWidth(100));
-
-                        if (check.changed)
-                        {
-                            originalAvatar.Descriptor.VisemeSkinnedMesh = originalAvatar.FaceMesh;
-                            EditorUtility.SetDirty(originalAvatar.Descriptor);
-                        }
-                    }
 
                     EditorGUILayout.Space();
 
