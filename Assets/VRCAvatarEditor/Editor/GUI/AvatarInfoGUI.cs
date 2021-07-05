@@ -163,7 +163,6 @@ namespace VRCAvatarEditor
                         if (GUILayout.Button("Auto Detect", GUILayout.MaxWidth(100)))
                         {
                             originalAvatar.FaceMesh = VRCAvatarMeshUtility.GetFaceMeshRenderer(originalAvatar);
-                            GUI.changed = true;
                         }
 
                         if (check.changed)
