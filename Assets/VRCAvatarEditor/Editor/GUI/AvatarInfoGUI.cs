@@ -181,16 +181,14 @@ namespace VRCAvatarEditor
                     {
                         originalAvatar.LipSyncStyle = (LipSyncStyle)EditorGUILayout.EnumPopup(LocalizeText.instance.langPair.lipSyncTypeLabel, originalAvatar.LipSyncStyle);
 
-                        using (new EditorGUI.DisabledGroupScope(originalAvatar.LipSyncStyle == LipSyncStyle.VisemeBlendShape && originalAvatar.FaceMesh != null))
-                        {
-                            GatoGUILayout.Button(
-                                LocalizeText.instance.langPair.lipSyncBlendShapesAutoDetectButtonText,
-                                () =>
-                                {
-                                    originalAvatar.SetLipSyncToViseme();
-                                    EditorUtility.SetDirty(originalAvatar.Descriptor);
-                                });
-                        }
+                        GatoGUILayout.Button(
+                            LocalizeText.instance.langPair.lipSyncBlendShapesAutoDetectButtonText,
+                            () =>
+                            {
+                                originalAvatar.SetLipSyncToViseme();
+                                EditorUtility.SetDirty(originalAvatar.Descriptor);
+                            },
+                            originalAvatar.LipSyncStyle != LipSyncStyle.VisemeBlendShape || originalAvatar.FaceMesh == null);
 
                         if (check.changed) originalAvatar.Descriptor.lipSync = originalAvatar.LipSyncStyle;
                     }
