@@ -168,7 +168,6 @@ namespace VRCAvatarEditor
 
                         if (check.changed)
                         {
-                            Debug.Log("aaa");
                             originalAvatar.Descriptor.VisemeSkinnedMesh = originalAvatar.FaceMesh;
                             EditorUtility.SetDirty(originalAvatar.Descriptor);
                         }
