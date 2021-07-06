@@ -20,9 +20,6 @@ namespace VRCAvatarEditor
 
         public string[] langs { get; private set; }
 
-        private string[] remoteLangs;
-        private string[] localLangs;
-
         public string[] toolTabTexts { get; private set; }
         public string[] animationTabTexts { get; private set; }
 
@@ -61,15 +58,7 @@ namespace VRCAvatarEditor
 
         public void LoadLanguageTypes(string editorFolderPath)
         {
-            localLangs = GetLanguageTypes(editorFolderPath);
-            if (remoteLangs != null)
-            {
-                langs = remoteLangs.Concat(localLangs).Distinct().ToArray();
-            }
-            else
-            {
-                langs = localLangs;
-            }
+            langs = GetLanguageTypes(editorFolderPath);
             Debug.Log($"[VRCAvatarEditor] available language {string.Join(", ", langs)}");
         }
 
@@ -80,7 +69,7 @@ namespace VRCAvatarEditor
 
         public bool ExistLanguagePack(string lang)
         {
-            return localLangs != null && localLangs.Contains(lang);
+            return langs != null && langs.Contains(lang);
         }
     }
 }
