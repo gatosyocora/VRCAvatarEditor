@@ -1,0 +1,134 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92599070e19982d438288df185044c49, type: 3}
+  m_Name: EN
+  m_EditorClassIdentifier: 
+  reset: Reset
+  open: Open
+  close: Close
+  edit: Edit
+  selectFolder: Select Folder
+  selectFolderDialogMessageText: Select Folder
+  exclusions: Exclusions
+  select: Select
+  ok: OK
+  cancel: Cancel
+  add: Add
+  remove: Remove
+  autoFix: Auto Fix
+  toggleAll: Toggle All
+  avatarLabel: Avatar
+  reloadAvatarButtonText: Reload Avatar
+  toolInfoButtonText: Tool Info
+  settingButtonText: Setting
+  resetPoseButtonText: Reset Pose
+  uploadAvatarButtonText: Upload Avatar
+  localIsLatestMessageText: VRCAvatarEditor <LocalVersion> is latest.
+  remoteIsLatestMessageText: 'Avalable new Version (Current: <LocalVersion>, Latest:
+    <RemoteVersion>).'
+  downloadLatestButtonText: Download latest
+  checkVersionDialogTitle: Check version
+  avatarInfoTitle: AvatarInfo
+  faceEmotionTitle: FaceEmotion
+  probeAnchorTitle: ProbeAnchor
+  boundsTitle: Bounds
+  shaderTitle: Shader
+  standingTabText: Standing
+  sittingTabText: Sitting
+  emoteButtonText: Emote
+  faceAndHandButtonText: Face&Hand
+  standingTitle: StandingAnims
+  sittingTitle: SittingAnims
+  noAvatarMessageText: Select No Avatar
+  noCustomStandingAnimsMessageText: Set to No CustomStandingAnims
+  noCustomSittingAnimsMessageText: Set to No CustomSittingAnims
+  createCustomStandingAnimsButtonText: Create CustomStandingAnims
+  createCustomSittingAnimsButtonText: Create CustomSittingAnims
+  setToSameAsCustomStandingAnimsButtonText: Set to same as CustomStandingAnims
+  existMissingPathMessageText: Exist Missing Path in AnimationClip
+  failAutoFixMissingPathMessageText: Failed Auto Fix. Please Fix manually or Recreate
+    AnimationClip.
+  haveNoAnimationClipMessageText: Have No AnimationClip
+  genderLabel: Gender
+  uploadStatusLabel: Upload Status
+  newAvatarText: New Avatar
+  uploadedAvatarText: Uploaded Avatar
+  customStandingAnimsLabel: CustomStandingAnims
+  customSittingAnimsLabel: CustomSittingAnims
+  triangleCountLabel: TriangleCount
+  heightLabel: Height
+  faceMeshLabel: FaceMesh
+  viewPositionLabel: View Position
+  lipSyncWarningMessageText: LipSync may not be set correctly
+  lipSyncTypeLabel: LipSync Type
+  lipSyncBlendShapesLabel: LipSync Blendshapes
+  lipSyncBlendShapesAutoDetectButtonText: Auto Detect Blendshapes for LipSync
+  loadAnimationButtonText: Load Animation
+  setToDefaultButtonText: Set to Default
+  resetToDefaultButtonText: Reset to Default
+  toggleAllLabel: ToggleAll
+  minButtonText: Min
+  maxButtonText: Max
+  animClipFileNameLabel: AnimClip FileName
+  animClipSaveFolderLabel: AnimClip SaveFolder
+  animationOverrideLabel: AnimationOverride
+  handPoseAnimClipLabel: HandPose AnimClip
+  createAnimFileButtonText: Create AnimFile
+  setToDefaultDialogTitleText: Default FaceEmotion Setting
+  setToDefaultDialogMessageText: Would you like to default your current FaceEmotion?
+  createOnlyMessageText: Create Only (not set to AnimatorController) because exist
+    no states in this layer.
+  handPoseChangeFailedMessageText: HandPose Animation can't be chaged because not
+    found target layer or state.
+  missingGestureControllerMessageText: No Gesture Layer Controller
+  createGestureControllerText: Create Gesture Layer Controller
+  setLeftAndRightHandLayerText: Set to Left & Right Hand Layer
+  missingFxControllerMessageText: No Fx Layer Controller
+  createFxControllerText: Create Fx Layer Controller
+  setToSkinnedMeshRendererLabel: Set to SkinnedMeshRenderer
+  setToMeshRendererLabel: Set to MeshRenderer
+  targetPositionLabel: Target Position
+  rendererListLabel: RendererList
+  probeAnchorMessageText: The Probe Anchor of the checked mesh is set.
+  setProbeAnchorButtonText: Set ProbeAnchor
+  resetToBoundsToPrefabButtonText: Revert Bounds
+  childObjectsLabel: Parent of ignore objects
+  setBoundsButtonText: Set Bounds
+  duplicateSelectedButtonText: Duplicate selected
+  optimizeSelectedButtonText: Optimize selected
+  useInspectorMessageText: Material property can edit in inspector
+  replaceShaderButtonText: Replace Shader
+  noSelectionText: No Selection
+  multipleText: Multiple Shaders
+  versionLabel: Version
+  openOnlineManualButtonText: Open OnlineManual
+  functionsLabel: Functions
+  readmeLabel: Readme
+  licenseLabel: License
+  usingSoftwareLicenseLabel: Using Software License
+  settingPageMessageText: The setting will be applied after the change is made and
+    until the window is closed. "Save Setting" will be applied after next time.
+  saveSettingButtonText: Save Setting
+  changeDefaultSettingButtonText: Default Setting
+  defaultCameraDistanceLabel: Default Camera Distance
+  faceCameraDistanceLabel: Face Camera Distance
+  cameraZoomStepDistanceLabel: Camera Zoom Step Distance
+  gammaCorrectionLabel: Gamma Correction
+  monitorBackgroundColorLabel: Monitor BackgroundColor
+  monitorSizeTypeLabel: MonitorSize
+  monitorSizeLabel: CustomSize
+  sortTypeLabel: SortType
+  blendShapeExclusionsLabel: Blendshape Exclusions
+  usePreviousAnimationOnHandAnimationLabel: Use Previous Animation on HandAnimation
+  otherLabel: Other
+  layoutTypeLabel: LayoutType
+  languageLabel: Language
