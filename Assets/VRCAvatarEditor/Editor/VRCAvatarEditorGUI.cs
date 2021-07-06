@@ -508,8 +508,7 @@ namespace VRCAvatarEditor
                 if (check.changed)
                 {
                     language = languagePacks[index];
-                    // TODO: 失敗している場合はBaseが入っているので表示もそうしないといけない
-                    _ = LocalizeText.instance.LoadLanguage(language);
+                    LocalizeText.instance.LoadLanguage(language);
                     Repaint();
                 }
             }
