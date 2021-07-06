@@ -98,9 +98,7 @@ namespace VRCAvatarEditor
 
         public void LoadLanguageTypesFromLocal(string editorFolderPath)
         {
-            localLangs = Directory.GetFiles($"{editorFolderPath}{LANG_ASSET_FOLDER_PATH}", "*.asset")
-                            .Select(f => Path.GetFileNameWithoutExtension(f))
-                            .ToArray();
+            localLangs = GetLanguageTypes(editorFolderPath);
             if (remoteLangs != null)
             {
                 langs = remoteLangs.Concat(localLangs).Distinct().ToArray();
@@ -111,6 +109,11 @@ namespace VRCAvatarEditor
             }
             Debug.Log($"[VRCAvatarEditor] available language {string.Join(", ", langs)}");
         }
+
+        private string[] GetLanguageTypes(string editorFolderPath)
+            => Directory.GetFiles($"{editorFolderPath}{LANG_ASSET_FOLDER_PATH}", "*.asset")
+                            .Select(f => Path.GetFileNameWithoutExtension(f))
+                            .ToArray();
 
         private async Task LoadLanguageTypesFromRemote()
         {
