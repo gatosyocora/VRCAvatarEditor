@@ -31,7 +31,7 @@ namespace VRCAvatarEditor
 
         public void LoadLanguage(string lang)
         {
-            if (!ExistLanguagePack(lang)) return;
+            if (!ExistLanguagePack(lang)) lang = BASE_LANGUAGE_PACK;
 
             langPair = Resources.Load<LanguageKeyPair>($"Lang/{lang}");
 
