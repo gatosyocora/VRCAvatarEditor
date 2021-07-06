@@ -38,7 +38,7 @@ namespace VRCAvatarEditor
 
         public void LoadLanguage(string lang)
         {
-            if (!ExistLanguagePackInLocal(lang)) return;
+            if (!ExistLanguagePack(lang)) return;
 
             langPair = Resources.Load<LanguageKeyPair>($"Lang/{lang}");
 
@@ -59,7 +59,7 @@ namespace VRCAvatarEditor
             };
         }
 
-        public void LoadLanguageTypesFromLocal(string editorFolderPath)
+        public void LoadLanguageTypes(string editorFolderPath)
         {
             localLangs = GetLanguageTypes(editorFolderPath);
             if (remoteLangs != null)
@@ -78,7 +78,7 @@ namespace VRCAvatarEditor
                             .Select(f => Path.GetFileNameWithoutExtension(f))
                             .ToArray();
 
-        public bool ExistLanguagePackInLocal(string lang)
+        public bool ExistLanguagePack(string lang)
         {
             return localLangs != null && localLangs.Contains(lang);
         }

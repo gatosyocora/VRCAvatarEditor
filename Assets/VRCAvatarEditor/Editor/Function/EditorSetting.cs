@@ -43,7 +43,7 @@ namespace VRCAvatarEditor
         {
             instance.LoadSettingData();
 
-            LocalizeText.instance.LoadLanguageTypesFromLocal(editorFolderPath);
+            LocalizeText.instance.LoadLanguageTypes(editorFolderPath);
 
             if (LocalizeText.instance.langPair == null)
             {
