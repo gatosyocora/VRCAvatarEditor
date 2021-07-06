@@ -1,12 +1,8 @@
-﻿using Amazon.Auth.AccessControlPolicy;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace VRCAvatarEditor
 {
