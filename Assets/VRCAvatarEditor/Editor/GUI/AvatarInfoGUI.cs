@@ -156,14 +156,17 @@ namespace VRCAvatarEditor
                             () => 
                             {
                                 var eyePos = VRCAvatarMeshUtility.CalcAvatarViewPosition(originalAvatar);
-                                originalAvatar.Descriptor.ViewPosition = eyePos;
-                                editAvatar.Descriptor.ViewPosition = eyePos;
-                                originalAvatar.EyePos = eyePos;
-                                editAvatar.EyePos = eyePos;
-                                EditorUtility.SetDirty(originalAvatar.Descriptor);
+                                if (eyePos != Vector3.zero)
+                                {
+                                    originalAvatar.Descriptor.ViewPosition = eyePos;
+                                    editAvatar.Descriptor.ViewPosition = eyePos;
+                                    originalAvatar.EyePos = eyePos;
+                                    editAvatar.EyePos = eyePos;
+                                    EditorUtility.SetDirty(originalAvatar.Descriptor);
 
-                                monitorGUI.showEyePosition = true;
-                                monitorGUI.MoveAvatarCam(false, true);
+                                    monitorGUI.showEyePosition = true;
+                                    monitorGUI.MoveAvatarCam(false, true);
+                                }
                             },
                             originalAvatar.FaceMesh != null,
                             GUILayout.MaxWidth(100));

@@ -69,6 +69,8 @@ namespace VRCAvatarEditor.Utilities
             // leftEyeとRightEyeの位置からx, yを計算する
             var leftEyeTrans = animator.GetBoneTransform(HumanBodyBones.LeftEye);
             var rightEyeTrans = animator.GetBoneTransform(HumanBodyBones.RightEye);
+            // 目のボーンが見つからなかったら計算できない
+            if (leftEyeTrans == null || leftEyeTrans == null) return Vector3.zero;
             viewPos = (leftEyeTrans.position + rightEyeTrans.position) / 2f;
 
             var renderer = avatar.FaceMesh;
