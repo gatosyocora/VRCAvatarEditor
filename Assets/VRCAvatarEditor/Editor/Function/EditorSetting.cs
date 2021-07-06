@@ -52,8 +52,7 @@ namespace VRCAvatarEditor
 
             if (string.IsNullOrEmpty(language) || instance.Data.language != LocalizeText.instance.langPair.name)
             {
-                // awaitするとUIスレッドが止まっておかしくなるのでawaitしない
-                _ = LocalizeText.instance.LoadLanguage(instance.Data.language);
+                LocalizeText.instance.LoadLanguage(instance.Data.language);
             }
 
             var layoutType = instance.Data.layoutType;
