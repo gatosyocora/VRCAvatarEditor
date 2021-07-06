@@ -35,8 +35,6 @@ namespace VRCAvatarEditor
 
             langPair = Resources.Load<LanguageKeyPair>($"Lang/{lang}");
 
-            Debug.Log($"[VRCAvatarEditor] Loaded LanguagePack {lang}.");
-
             toolTabTexts = new string[]
             {
                 langPair.avatarInfoTitle,
@@ -55,7 +53,6 @@ namespace VRCAvatarEditor
         public void LoadLanguageTypes(string editorFolderPath)
         {
             langs = GetLanguageTypes(editorFolderPath);
-            Debug.Log($"[VRCAvatarEditor] available language {string.Join(", ", langs)}");
         }
 
         private string[] GetLanguageTypes(string editorFolderPath)
