@@ -194,6 +194,15 @@ namespace VRCAvatarEditor.Avatars3
                         Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
                         break;
                     }
+
+                    // Shacloのvrc.v_ee用
+                    visemeShapeKeyName = prefix + visemeBlendShapeNames[visemeIndex].ToLower();
+                    visemeShapeKeyName += visemeShapeKeyName.Last();
+                    if (mesh.GetBlendShapeIndex(visemeShapeKeyName) != -1)
+                    {
+                        Descriptor.VisemeBlendShapes[visemeIndex] = visemeShapeKeyName;
+                        break;
+                    }
                 }
             }
         }
