@@ -247,7 +247,7 @@ namespace VRCAvatarEditor.Avatars3
 
                     var control = state.state.AddStateMachineBehaviour(typeof(VRCAnimatorTrackingControl)) as VRCAnimatorTrackingControl;
 
-                    if (stateName == "Idle")
+                    if (stateName == VRCAvatarAnimationUtility.IDLE_STATE_NAME)
                     {
                         control.trackingEyes = VRC.SDKBase.VRC_AnimatorTrackingControl.TrackingType.Tracking;
                     }

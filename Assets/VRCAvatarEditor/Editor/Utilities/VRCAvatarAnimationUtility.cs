@@ -6,6 +6,7 @@ namespace VRCAvatarEditor.Utilities
 {
     public class VRCAvatarAnimationUtility
     {
+        public const string IDLE_STATE_NAME = "Idle";
         public static bool UseWriteDefaults(AnimatorController controller)
         {
             return controller.layers.Select(layer => layer.stateMachine)
