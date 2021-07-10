@@ -17,7 +17,7 @@ namespace VRCAvatarEditor.Avatars3
         private VRCAvatar editAvatar;
         private VRCAvatar originalAvatar;
 
-        public static readonly string[] EMOTIONSTATES = { "Idle", "Fist", "Open", "Point", "Peace", "RocknRoll", "Gun", "Thumbs up" };
+        public static readonly string[] EMOTIONSTATES = { "Idle", "Fist", "Open", "Point", "Peace", "RockNRoll", "Gun", "Thumbs up" };
 
         private AnimatorController fxController;
 
