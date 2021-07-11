@@ -200,6 +200,32 @@ namespace VRCAvatarEditor.Avatars3
                                defaultState.motion = defaultFaceAnimation;
                                EditorUtility.SetDirty(controller);
                            }
+
+                           // Idleステートに何かしらが入っていないとバグるので対策
+                           var fxLeftHandIdleState = editAvatar.FxController.layers
+                                                        .Where(l => l.name == FX_LEFT_HAND_LAYER_NAME)
+                                                        .SelectMany(l => l.stateMachine.states)
+                                                        .Where(s => s.state.name == VRCAvatarAnimationUtility.IDLE_STATE_NAME)
+                                                        .SingleOrDefault();
+                           var fxRightHandIdleState = editAvatar.FxController.layers
+                                                         .Where(l => l.name == FX_RIGHT_HAND_LAYER_NAME)
+                                                         .SelectMany(l => l.stateMachine.states)
+                                                         .Where(s => s.state.name == VRCAvatarAnimationUtility.IDLE_STATE_NAME)
+                                                         .SingleOrDefault();
+                           if (fxLeftHandIdleState.state.motion == null || fxRightHandIdleState.state.motion == null)
+                           {
+                               var emptyAnimation = VRCAvatarAnimationUtility.GetOrCreateEmptyAnimation(originalAvatar);
+                               if (fxLeftHandIdleState.state.motion == null)
+                               {
+                                   fxLeftHandIdleState.state.motion = emptyAnimation;
+                               }
+                               if (fxRightHandIdleState.state.motion == null)
+                               {
+                                   fxRightHandIdleState.state.motion = emptyAnimation;
+                               }
+                               EditorUtility.SetDirty(originalAvatar.FxController);
+                               EditorUtility.SetDirty(editAvatar.FxController);
+                           }
                        }
                    } else
                    {
