@@ -23,7 +23,6 @@ namespace VRCAvatarEditor.Avatars3
 
         private const string FX_LEFT_HAND_LAYER_NAME = "Left Hand";
         private const string FX_RIGHT_HAND_LAYER_NAME = "Right Hand";
-        private const string FX_DEFAULT_LAYER_NAME = "DefaultFace";
 
         protected override void DrawCreatedAnimationSettingsGUI()
         {
@@ -187,18 +186,9 @@ namespace VRCAvatarEditor.Avatars3
                        FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
                        if (!VRCAvatarAnimationUtility.UseWriteDefaults(controller))
                        {
-                           if (!VRCAvatarAnimationUtility.ExistLayer(controller, FX_DEFAULT_LAYER_NAME))
+                           if (!VRCAvatarAnimationUtility.ExistLayer(controller, VRCAvatarAnimationUtility.FX_DEFAULT_LAYER_NAME))
                            {
-                               var defaultLayer = VRCAvatarAnimationUtility.InsertLayer(controller, 1, FX_DEFAULT_LAYER_NAME);
-                               var defaultState = defaultLayer.stateMachine.AddState("Reset");
-                               defaultState.writeDefaultValues = false;
-                               var defaultFaceAnimation = FaceEmotion.CreateBlendShapeAnimationClip(
-                                                           "DefaultFace",
-                                                           originalAvatar.AnimSavedFolderPath,
-                                                           editAvatar,
-                                                           true);
-                               defaultState.motion = defaultFaceAnimation;
-                               EditorUtility.SetDirty(controller);
+                               VRCAvatarAnimationUtility.AddDefaultFaceLayer(controller, originalAvatar, editAvatar);
                            }
 
                            // Idleステートに何かしらが入っていないとバグるので対策

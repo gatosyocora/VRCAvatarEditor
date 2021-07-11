@@ -11,6 +11,7 @@ namespace VRCAvatarEditor.Utilities
     {
         public const string IDLE_STATE_NAME = "Idle";
         public const string EMPTY_ANIMATION_NAME = "Empty";
+        public const string FX_DEFAULT_LAYER_NAME = "DefaultFace";
 
         public static bool UseWriteDefaults(AnimatorController controller)
         {
@@ -52,6 +53,20 @@ namespace VRCAvatarEditor.Utilities
             AssetDatabase.CreateAsset(emptyAnimation, animationFilePath);
             AssetDatabase.SaveAssets();
             return emptyAnimation;
+        }
+
+        public static void AddDefaultFaceLayer(AnimatorController controller, VRCAvatarBase originalAvatar, VRCAvatarBase editAvatar)
+        {
+            var defaultLayer = InsertLayer(controller, 1, FX_DEFAULT_LAYER_NAME);
+            var defaultState = defaultLayer.stateMachine.AddState("Reset");
+            defaultState.writeDefaultValues = false;
+            var defaultFaceAnimation = FaceEmotion.CreateBlendShapeAnimationClip(
+                                        "DefaultFace",
+                                        originalAvatar.AnimSavedFolderPath,
+                                        editAvatar,
+                                        true);
+            defaultState.motion = defaultFaceAnimation;
+            EditorUtility.SetDirty(controller);
         }
     }
 }
