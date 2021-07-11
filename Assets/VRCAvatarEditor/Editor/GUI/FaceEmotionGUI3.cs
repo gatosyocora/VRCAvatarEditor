@@ -191,6 +191,7 @@ namespace VRCAvatarEditor.Avatars3
                            {
                                var defaultLayer = VRCAvatarAnimationUtility.InsertLayer(controller, 1, FX_DEFAULT_LAYER_NAME);
                                var defaultState = defaultLayer.stateMachine.AddState("Reset");
+                               defaultState.writeDefaultValues = false;
                                var defaultFaceAnimation = FaceEmotion.CreateBlendShapeAnimationClip(
                                                            "DefaultFace",
                                                            originalAvatar.AnimSavedFolderPath,
