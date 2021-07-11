@@ -208,6 +208,15 @@ namespace VRCAvatarEditor.Avatars3
             // まばたき防止機構をつける
             SetNoBlink(createdFxController);
 
+            // WriteDefaultsがオフによる不具合を防止する機構をつける
+            if (!VRCAvatarAnimationUtility.UseWriteDefaults(createdFxController))
+            {
+                if (!VRCAvatarAnimationUtility.ExistLayer(createdFxController, VRCAvatarAnimationUtility.FX_DEFAULT_LAYER_NAME))
+                {
+                    VRCAvatarAnimationUtility.AddDefaultFaceLayer(createdFxController, originalAvatar, editAvatar);
+                }
+            }
+
             if (!originalAvatar.Descriptor.customizeAnimationLayers)
             {
                 EnableCustomPlayableLayers(originalAvatar);
