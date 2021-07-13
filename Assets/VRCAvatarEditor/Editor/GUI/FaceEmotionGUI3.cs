@@ -61,11 +61,18 @@ namespace VRCAvatarEditor.Avatars3
                     if (editAvatar.GestureController.layers.Length > editAvatar.TargetFxLayerIndex &&
                         states.Any())
                     {
-                        handState = editAvatar.GestureController.layers[editAvatar.TargetFxLayerIndex]
-                                        .stateMachine.states
-                                        .Where(s => !(s.state.motion is BlendTree) &&
-                                                    s.state.name == states[selectedStateIndex].state.name)
-                                        .SingleOrDefault();
+                        var targetLayer = editAvatar.GestureController.layers
+                                            .Where(l => l.name == editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex].name)
+                                            .SingleOrDefault();
+
+                        if (targetLayer != null)
+                        {
+                            handState = targetLayer
+                                            .stateMachine.states
+                                            .Where(s => !(s.state.motion is BlendTree) &&
+                                                        s.state.name == states[selectedStateIndex].state.name)
+                                            .SingleOrDefault();
+                        }
                     }
 
                     // LayerまたはStateが見つからない時はGestureまわりは利用できない
