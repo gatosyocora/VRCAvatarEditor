@@ -206,6 +206,7 @@ namespace VRCAvatarEditor.Avatars3
                 if (!VRCAvatarAnimationUtility.ExistLayer(createdFxController, VRCAvatarAnimationUtility.FX_DEFAULT_LAYER_NAME))
                 {
                     VRCAvatarAnimationUtility.AddDefaultFaceLayer(createdFxController, originalAvatar, editAvatar);
+                    editAvatar.TargetFxLayerIndex++;
                 }
             }
 

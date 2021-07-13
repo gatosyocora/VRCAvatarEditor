@@ -185,6 +185,7 @@ namespace VRCAvatarEditor.Avatars3
                            if (!VRCAvatarAnimationUtility.ExistLayer(controller, VRCAvatarAnimationUtility.FX_DEFAULT_LAYER_NAME))
                            {
                                VRCAvatarAnimationUtility.AddDefaultFaceLayer(controller, originalAvatar, editAvatar);
+                               editAvatar.TargetFxLayerIndex++;
                            }
 
                            // Idleステートに何かしらが入っていないとバグるので対策
