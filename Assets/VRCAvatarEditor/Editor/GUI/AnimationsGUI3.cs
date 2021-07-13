@@ -72,6 +72,7 @@ namespace VRCAvatarEditor.Avatars3
                     var states = fxController.layers[editAvatar.TargetFxLayerIndex]
                                     .stateMachine.states
                                     .Where(s => !(s.state.motion is BlendTree))
+                                    .Where(s => s.state.name != VRCAvatarAnimationUtility.IDLE_STATE_NAME)
                                     .OrderBy(s => s.state.name)
                                     .ToArray();
 
