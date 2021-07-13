@@ -58,8 +58,7 @@ namespace VRCAvatarEditor.Avatars3
                 if (editAvatar.GestureController != null)
                 {
                     ChildAnimatorState handState = default;
-                    if (editAvatar.GestureController.layers.Length > editAvatar.TargetFxLayerIndex &&
-                        states.Any())
+                    if (states.Any())
                     {
                         var targetLayer = editAvatar.GestureController.layers
                                             .Where(l => l.name == editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex].name)
