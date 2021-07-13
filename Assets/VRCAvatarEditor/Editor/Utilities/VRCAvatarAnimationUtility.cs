@@ -10,10 +10,6 @@ namespace VRCAvatarEditor.Utilities
 {
     public class VRCAvatarAnimationUtility
     {
-        public const string IDLE_STATE_NAME = "Idle";
-        public const string EMPTY_ANIMATION_NAME = "Empty";
-        public const string FX_DEFAULT_LAYER_NAME = "DefaultFace";
-
         public static bool UseWriteDefaults(AnimatorController controller)
         {
             return controller.layers.Select(layer => layer.stateMachine)
@@ -43,13 +39,13 @@ namespace VRCAvatarEditor.Utilities
 
         public static AnimationClip GetOrCreateEmptyAnimation(VRCAvatarBase avatar)
         {
-            var animationFilePath = Path.Combine(avatar.AnimSavedFolderPath, $"{EMPTY_ANIMATION_NAME}.anim");
+            var animationFilePath = Path.Combine(avatar.AnimSavedFolderPath, $"{VRCAvatarConstants.EMPTY_ANIMATION_NAME}.anim");
             var emptyAnimation = AssetDatabase.LoadAssetAtPath<AnimationClip>(animationFilePath);
             if (emptyAnimation != null) return emptyAnimation;
 
             emptyAnimation = new AnimationClip
             {
-                name = EMPTY_ANIMATION_NAME
+                name = VRCAvatarConstants.EMPTY_ANIMATION_NAME
             };
             AssetDatabase.CreateAsset(emptyAnimation, animationFilePath);
             AssetDatabase.SaveAssets();
@@ -58,7 +54,7 @@ namespace VRCAvatarEditor.Utilities
 
         public static void AddDefaultFaceLayer(AnimatorController controller, VRCAvatarBase originalAvatar, VRCAvatarBase editAvatar)
         {
-            var defaultLayer = InsertLayer(controller, 1, FX_DEFAULT_LAYER_NAME);
+            var defaultLayer = InsertLayer(controller, 1, VRCAvatarConstants.FX_DEFAULT_LAYER_NAME);
             var defaultState = defaultLayer.stateMachine.AddState("Reset");
             defaultState.writeDefaultValues = false;
             var defaultFaceAnimation = FaceEmotion.CreateBlendShapeAnimationClip(
@@ -73,7 +69,7 @@ namespace VRCAvatarEditor.Utilities
         public static ChildAnimatorState[] GetStates(AnimatorControllerLayer layer)
             => layer.stateMachine.states
                     .Where(s => !(s.state.motion is BlendTree))
-                    .Where(s => s.state.name != IDLE_STATE_NAME)
+                    .Where(s => s.state.name != VRCAvatarConstants.IDLE_STATE_NAME)
                     .OrderBy(s => s.state.name)
                     .ToArray();
     }

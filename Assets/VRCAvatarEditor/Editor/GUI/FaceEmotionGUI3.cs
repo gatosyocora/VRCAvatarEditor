@@ -179,7 +179,7 @@ namespace VRCAvatarEditor.Avatars3
                        FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
                        if (!VRCAvatarAnimationUtility.UseWriteDefaults(controller))
                        {
-                           if (!VRCAvatarAnimationUtility.ExistLayer(controller, VRCAvatarAnimationUtility.FX_DEFAULT_LAYER_NAME))
+                           if (!VRCAvatarAnimationUtility.ExistLayer(controller, VRCAvatarConstants.FX_DEFAULT_LAYER_NAME))
                            {
                                VRCAvatarAnimationUtility.AddDefaultFaceLayer(controller, originalAvatar, editAvatar);
                                editAvatar.TargetFxLayerIndex++;
@@ -189,12 +189,12 @@ namespace VRCAvatarEditor.Avatars3
                            var fxLeftHandIdleState = editAvatar.FxController.layers
                                                         .Where(l => l.name == VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME)
                                                         .SelectMany(l => l.stateMachine.states)
-                                                        .Where(s => s.state.name == VRCAvatarAnimationUtility.IDLE_STATE_NAME)
+                                                        .Where(s => s.state.name == VRCAvatarConstants.IDLE_STATE_NAME)
                                                         .SingleOrDefault();
                            var fxRightHandIdleState = editAvatar.FxController.layers
                                                          .Where(l => l.name == VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME)
                                                          .SelectMany(l => l.stateMachine.states)
-                                                         .Where(s => s.state.name == VRCAvatarAnimationUtility.IDLE_STATE_NAME)
+                                                         .Where(s => s.state.name == VRCAvatarConstants.IDLE_STATE_NAME)
                                                          .SingleOrDefault();
                            if (fxLeftHandIdleState.state.motion == null || fxRightHandIdleState.state.motion == null)
                            {

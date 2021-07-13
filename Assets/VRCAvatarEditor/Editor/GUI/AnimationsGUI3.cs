@@ -203,7 +203,7 @@ namespace VRCAvatarEditor.Avatars3
             // WriteDefaultsがオフによる不具合を防止する機構をつける
             if (!VRCAvatarAnimationUtility.UseWriteDefaults(createdFxController))
             {
-                if (!VRCAvatarAnimationUtility.ExistLayer(createdFxController, VRCAvatarAnimationUtility.FX_DEFAULT_LAYER_NAME))
+                if (!VRCAvatarAnimationUtility.ExistLayer(createdFxController, VRCAvatarConstants.FX_DEFAULT_LAYER_NAME))
                 {
                     VRCAvatarAnimationUtility.AddDefaultFaceLayer(createdFxController, originalAvatar, editAvatar);
                     editAvatar.TargetFxLayerIndex++;
@@ -249,7 +249,7 @@ namespace VRCAvatarEditor.Avatars3
 
                     var control = state.state.AddStateMachineBehaviour(typeof(VRCAnimatorTrackingControl)) as VRCAnimatorTrackingControl;
 
-                    if (stateName == VRCAvatarAnimationUtility.IDLE_STATE_NAME)
+                    if (stateName == VRCAvatarConstants.IDLE_STATE_NAME)
                     {
                         control.trackingEyes = VRC.SDKBase.VRC_AnimatorTrackingControl.TrackingType.Tracking;
                     }
