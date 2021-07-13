@@ -237,7 +237,9 @@ namespace VRCAvatarEditor.Avatars3
 
         private static void SetNoBlink(AnimatorController fxController)
         {
-            var layers = fxController.layers.Where(l => l.name == "Left Hand" || l.name == "Right Hand");
+            var layers = fxController.layers.Where(
+                            l => l.name == VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME || 
+                            l.name == VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME);
             foreach (var layer in layers)
             {
                 var states = layer.stateMachine.states;

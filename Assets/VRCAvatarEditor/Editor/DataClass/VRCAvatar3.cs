@@ -77,11 +77,11 @@ namespace VRCAvatarEditor.Avatars3
             if (FxController != null)
             {
                 var layerNames = FxController.layers.Select(l => l.name).ToArray();
-                TargetFxLayerIndex = Array.IndexOf(layerNames, "Left Hand");
+                TargetFxLayerIndex = Array.IndexOf(layerNames, VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME);
 
                 if (TargetFxLayerIndex == -1)
                 {
-                    TargetFxLayerIndex = Array.IndexOf(layerNames, "Right Hand");
+                    TargetFxLayerIndex = Array.IndexOf(layerNames, VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME);
                     if (TargetFxLayerIndex == -1) TargetFxLayerIndex = 0;
                 }
             }
