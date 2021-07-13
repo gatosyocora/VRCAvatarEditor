@@ -69,12 +69,7 @@ namespace VRCAvatarEditor.Avatars3
                 {
                     var layerNames = fxController.layers.Select(l => l.name).ToArray();
                     editAvatar.TargetFxLayerIndex = EditorGUILayout.Popup("Layer", editAvatar.TargetFxLayerIndex, layerNames);
-                    var states = fxController.layers[editAvatar.TargetFxLayerIndex]
-                                    .stateMachine.states
-                                    .Where(s => !(s.state.motion is BlendTree))
-                                    .Where(s => s.state.name != VRCAvatarAnimationUtility.IDLE_STATE_NAME)
-                                    .OrderBy(s => s.state.name)
-                                    .ToArray();
+                    var states = VRCAvatarAnimationUtility.GetStates(fxController.layers[editAvatar.TargetFxLayerIndex]);
 
                     GatoGUILayout.ErrorBox(LocalizeText.instance.langPair.haveNoAnimationClipMessageText, states.Any(), MessageType.Info);
 

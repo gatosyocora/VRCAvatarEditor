@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -68,5 +69,12 @@ namespace VRCAvatarEditor.Utilities
             defaultState.motion = defaultFaceAnimation;
             EditorUtility.SetDirty(controller);
         }
+
+        public static ChildAnimatorState[] GetStates(AnimatorControllerLayer layer)
+            => layer.stateMachine.states
+                    .Where(s => !(s.state.motion is BlendTree))
+                    .Where(s => s.state.name != IDLE_STATE_NAME)
+                    .OrderBy(s => s.state.name)
+                    .ToArray();
     }
 }
