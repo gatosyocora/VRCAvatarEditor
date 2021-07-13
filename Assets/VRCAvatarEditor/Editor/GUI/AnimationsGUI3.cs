@@ -25,7 +25,6 @@ namespace VRCAvatarEditor.Avatars3
 
         private const int PLAYABLE_GESTURE_LAYER_INDEX = 2;
         private const int PLAYABLE_FX_LAYER_INDEX = 4;
-        private const string OFFICIAL_ANIMATION_PREFIX = "proxy_";
 
         public void Initialize(VRCAvatar editAvatar,
                                VRCAvatar originalAvatar,
@@ -82,7 +81,7 @@ namespace VRCAvatarEditor.Avatars3
                             $"{i + 1}:{states[i].state.name}",
                             anim,
                             false,
-                            anim != null && !anim.name.StartsWith(OFFICIAL_ANIMATION_PREFIX),
+                            anim != null && !anim.name.StartsWith(VRCAvatarConstants.OFFICIAL_ANIMATION_PREFIX),
                             () => {
                                 if (vrcAvatarEditorGUI.CurrentTool != VRCAvatarEditorGUI.ToolFunc.FaceEmotion)
                                 {

@@ -13,6 +13,8 @@ namespace VRCAvatarEditor
         public const string FX_DEFAULT_LAYER_NAME = "DefaultFace";
         public const string DEFAULT_FACE_STATE_NAME = "Reset";
         public const string DEFAULT_FACE_ANIMATION_NAME = "DefaultFace";
+
+        public const string OFFICIAL_ANIMATION_PREFIX = "proxy_";
     }
 }
 
