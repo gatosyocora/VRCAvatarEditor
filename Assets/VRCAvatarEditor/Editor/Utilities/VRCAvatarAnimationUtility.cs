@@ -55,10 +55,10 @@ namespace VRCAvatarEditor.Utilities
         public static void AddDefaultFaceLayer(AnimatorController controller, VRCAvatarBase originalAvatar, VRCAvatarBase editAvatar)
         {
             var defaultLayer = InsertLayer(controller, 1, VRCAvatarConstants.FX_DEFAULT_LAYER_NAME);
-            var defaultState = defaultLayer.stateMachine.AddState("Reset");
+            var defaultState = defaultLayer.stateMachine.AddState(VRCAvatarConstants.DEFAULT_FACE_STATE_NAME);
             defaultState.writeDefaultValues = false;
             var defaultFaceAnimation = FaceEmotion.CreateBlendShapeAnimationClip(
-                                        "DefaultFace",
+                                        VRCAvatarConstants.DEFAULT_FACE_ANIMATION_NAME,
                                         originalAvatar.AnimSavedFolderPath,
                                         editAvatar,
                                         true);
