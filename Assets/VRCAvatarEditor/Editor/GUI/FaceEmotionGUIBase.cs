@@ -95,7 +95,7 @@ namespace VRCAvatarEditor.Base
                                 LocalizeText.instance.langPair.setToDefaultDialogMessageText,
                                 LocalizeText.instance.langPair.ok, LocalizeText.instance.langPair.cancel))
                         {
-                            FaceEmotion.SetToDefaultFaceEmotion(editAvatar, originalAvatar);
+                            OnSetToDefaultButtonClick(editAvatar, originalAvatar);
                         }
                     },
                     editAvatar.Descriptor != null);
@@ -168,6 +168,11 @@ namespace VRCAvatarEditor.Base
             }
 
             usePreviousAnimationOnHandAnimation = EditorGUILayout.ToggleLeft(LocalizeText.instance.langPair.usePreviousAnimationOnHandAnimationLabel, usePreviousAnimationOnHandAnimation);
+        }
+
+        public virtual void OnSetToDefaultButtonClick(VRCAvatar editAvatar, VRCAvatar originalAvatar)
+        {
+            FaceEmotion.SetToDefaultFaceEmotion(editAvatar, originalAvatar);
         }
 
         public abstract void ChangeSaveAnimationState();
