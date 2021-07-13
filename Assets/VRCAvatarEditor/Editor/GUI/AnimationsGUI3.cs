@@ -81,11 +81,10 @@ namespace VRCAvatarEditor.Avatars3
                     AnimationClip anim;
                     for (int i = 0; i < states.Length; i++)
                     {
-                        var stateName = states[i].state.name;
                         anim = states[i].state.motion as AnimationClip;
 
                         states[i].state.motion = EdittableAnimationField(
-                            $"{i + 1}:{stateName}",
+                            $"{i + 1}:{states[i].state.name}",
                             anim,
                             false,
                             anim != null && !anim.name.StartsWith(OFFICIAL_ANIMATION_PREFIX),
