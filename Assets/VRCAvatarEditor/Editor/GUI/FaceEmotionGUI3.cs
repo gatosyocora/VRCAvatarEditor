@@ -21,9 +21,6 @@ namespace VRCAvatarEditor.Avatars3
 
         private ChildAnimatorState[] states;
 
-        private const string FX_LEFT_HAND_LAYER_NAME = "Left Hand";
-        private const string FX_RIGHT_HAND_LAYER_NAME = "Right Hand";
-
         protected override void DrawCreatedAnimationSettingsGUI()
         {
             base.DrawCreatedAnimationSettingsGUI();
@@ -147,13 +144,13 @@ namespace VRCAvatarEditor.Avatars3
                        {
                            var layerName = editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex].name;
                            string targetLayerName = string.Empty;
-                           if (layerName == FX_LEFT_HAND_LAYER_NAME)
+                           if (layerName == VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME)
                            {
-                               targetLayerName = FX_RIGHT_HAND_LAYER_NAME;
+                               targetLayerName = VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME;
                            }
-                           else if (layerName == FX_RIGHT_HAND_LAYER_NAME)
+                           else if (layerName == VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME)
                            {
-                               targetLayerName = FX_LEFT_HAND_LAYER_NAME;
+                               targetLayerName = VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME;
                            }
 
                            if (!string.IsNullOrEmpty(targetLayerName))
@@ -190,12 +187,12 @@ namespace VRCAvatarEditor.Avatars3
 
                            // Idleステートに何かしらが入っていないとバグるので対策
                            var fxLeftHandIdleState = editAvatar.FxController.layers
-                                                        .Where(l => l.name == FX_LEFT_HAND_LAYER_NAME)
+                                                        .Where(l => l.name == VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME)
                                                         .SelectMany(l => l.stateMachine.states)
                                                         .Where(s => s.state.name == VRCAvatarAnimationUtility.IDLE_STATE_NAME)
                                                         .SingleOrDefault();
                            var fxRightHandIdleState = editAvatar.FxController.layers
-                                                         .Where(l => l.name == FX_RIGHT_HAND_LAYER_NAME)
+                                                         .Where(l => l.name == VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME)
                                                          .SelectMany(l => l.stateMachine.states)
                                                          .Where(s => s.state.name == VRCAvatarAnimationUtility.IDLE_STATE_NAME)
                                                          .SingleOrDefault();
