@@ -32,11 +32,7 @@ namespace VRCAvatarEditor.Avatars3
 
             if (editAvatar.FxController != null)
             {
-                var stateMachine = editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex].stateMachine;
-                states = stateMachine.states
-                            .Where(s => !(s.state.motion is BlendTree))
-                            .OrderBy(s => s.state.name)
-                            .ToArray();
+                states = VRCAvatarAnimationUtility.GetStates(editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex]);
                 stateNames = states.Select((s, i) => $"{i + 1}:{s.state.name}").ToArray();
 
                 EditorGUILayout.LabelField("Layer", editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex].name);
