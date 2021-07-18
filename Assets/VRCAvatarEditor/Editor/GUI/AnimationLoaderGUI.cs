@@ -40,7 +40,7 @@ namespace VRCAvatarEditor
                     using (new EditorGUILayout.HorizontalScope())
                     {
                         animParamList[i].IsSelect = EditorGUILayout.ToggleLeft(animParamList[i].BlendShapeName, animParamList[i].IsSelect);
-                        GUILayout.Label(animParamList[i].Value + "");
+                        EditorGUILayout.LabelField($"{animParamList[i].Value}");
                     }
                 }
             }

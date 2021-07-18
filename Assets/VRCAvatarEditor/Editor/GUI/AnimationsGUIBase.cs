@@ -35,7 +35,7 @@ namespace VRCAvatarEditor.Base
             AnimationClip retClip;
             using (new EditorGUILayout.HorizontalScope(GUILayout.Width(350)))
             {
-                GUILayout.Label(label, hasError ? errorStyle : normalStyle, GUILayout.Width(100));
+                EditorGUILayout.LabelField(label, hasError ? errorStyle : normalStyle, GUILayout.Width(100));
 
                 retClip = GatoGUILayout.ObjectField(
                     string.Empty,

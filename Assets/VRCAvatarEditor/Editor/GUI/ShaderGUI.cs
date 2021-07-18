@@ -164,7 +164,7 @@ namespace VRCAvatarEditor
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     EditorGUILayout.LabelField(LocalizeIfNeeded(currentShaderKindName));
-                    GUILayout.Label("=>");
+                    EditorGUILayout.LabelField("=>", GUILayout.Width(30));
                     shaderKindIndex = EditorGUILayout.Popup(shaderKindIndex, shaderKindNames);
 
                     using (new EditorGUI.DisabledGroupScope(shaderKindIndex == -1 || currentShaderKindName == NOSELECTION || currentShaderKindName == shaderKindNames[shaderKindIndex]))
