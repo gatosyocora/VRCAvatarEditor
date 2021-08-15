@@ -16,14 +16,14 @@ namespace VRCAvatarEditor
         public bool isGammaCorrection = true;
         public Color monitorBgColor = new Color(0.95f, 0.95f, 0.95f, 1);
 
-        public FaceEmotionGUIBase.SortType selectedSortType = FaceEmotionGUIBase.SortType.UnSort;
+        public FaceEmotionViewBase.SortType selectedSortType = FaceEmotionViewBase.SortType.UnSort;
         public List<string> blendshapeExclusions = new List<string> { "vrc.blink_", "vrc.lowerlid_", "mmd" };
         public bool usePreviousAnimationOnHandAnimation = false;
 
-        public VRCAvatarEditorGUI.LayoutType layoutType = VRCAvatarEditorGUI.LayoutType.Default;
+        public VRCAvatarEditorView.LayoutType layoutType = VRCAvatarEditorView.LayoutType.Default;
         public string language = "EN";
 
-        public AvatarMonitorGUI.MonitorSize monitorSizeType = AvatarMonitorGUI.MonitorSize.Small;
+        public AvatarMonitorView.MonitorSize monitorSizeType = AvatarMonitorView.MonitorSize.Small;
         public int monitorSize = 0;
     }
 }

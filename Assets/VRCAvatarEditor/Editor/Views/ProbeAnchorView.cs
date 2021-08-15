@@ -5,7 +5,7 @@ using VRCAvatar = VRCAvatarEditor.Base.VRCAvatarBase;
 
 namespace VRCAvatarEditor
 {
-    public class ProbeAnchorGUI : Editor, IVRCAvatarEditorGUI
+    public class ProbeAnchorView : Editor, IVRCAvatarEditorView
     {
         private VRCAvatar avatar;
 

@@ -7,7 +7,7 @@ using UnityEngine;
 using VRCAvatarEditor;
 using VRCAvatarEditor.Base;
 using VRCAvatarEditor.Utilities;
-using static VRCAvatarEditor.VRCAvatarEditorGUI;
+using static VRCAvatarEditor.VRCAvatarEditorView;
 using VRCAvatar = VRCAvatarEditor.Base.VRCAvatarBase;
 
 namespace VRCAvatarEditor
@@ -39,7 +39,7 @@ namespace VRCAvatarEditor
         /// 設定情報を読み込む
         /// </summary>
         public (LayoutType, string) LoadSettingDataFromScriptableObject(string editorFolderPath, string language,
-                                                                        AvatarMonitorGUI avatarMonitorGUI, FaceEmotionGUIBase faceEmotionGUI)
+                                                                        AvatarMonitorView avatarMonitorGUI, FaceEmotionViewBase faceEmotionGUI)
         {
             instance.LoadSettingData();
 
@@ -68,7 +68,7 @@ namespace VRCAvatarEditor
         /// 設定情報を保存する
         /// </summary>
         public void SaveSettingDataToScriptableObject(LayoutType layoutType, string language,
-                                                        AvatarMonitorGUI avatarMonitorGUI, FaceEmotionGUIBase faceEmotionGUI)
+                                                        AvatarMonitorView avatarMonitorGUI, FaceEmotionViewBase faceEmotionGUI)
         {
             bool newCreated = false;
             var settingAsset = Resources.Load<SettingData>("CustomSettingData");
@@ -117,7 +117,7 @@ namespace VRCAvatarEditor
         /// <summary>
         /// 設定を反映する
         /// </summary>
-        public void ApplySettingsToEditorGUI(VRCAvatar edittingAvatar, FaceEmotionGUIBase faceEmotionGUI)
+        public void ApplySettingsToEditorGUI(VRCAvatar edittingAvatar, FaceEmotionViewBase faceEmotionGUI)
         {
             if (edittingAvatar.Animator == null) return;
 
@@ -131,7 +131,7 @@ namespace VRCAvatarEditor
                     skinnedMesh.SetExclusionBlendShapesByContains(exclusionsBlendShapes);
                 }
 
-                if (faceEmotionGUI.selectedSortType == FaceEmotionGUIBase.SortType.AToZ)
+                if (faceEmotionGUI.selectedSortType == FaceEmotionViewBase.SortType.AToZ)
                     skinnedMesh.SortBlendShapesToAscending();
                 else
                     skinnedMesh.ResetDefaultSort();

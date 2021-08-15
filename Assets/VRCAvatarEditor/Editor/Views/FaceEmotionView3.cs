@@ -9,12 +9,12 @@ using UnityEditor.Animations;
 using UnityEngine;
 using VRCAvatarEditor.Base;
 using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
-using AnimationsGUI = VRCAvatarEditor.Avatars3.AnimationsGUI3;
+using AnimationsGUI = VRCAvatarEditor.Avatars3.AnimationsView3;
 using VRCAvatarEditor.Utilities;
 
 namespace VRCAvatarEditor.Avatars3
 {
-    public class FaceEmotionGUI3 : FaceEmotionGUIBase
+    public class FaceEmotionView3 : FaceEmotionViewBase
     {
         private int selectedStateIndex = 0;
         private bool setLeftAndRight = true;

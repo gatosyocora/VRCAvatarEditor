@@ -2,7 +2,7 @@
 
 namespace VRCAvatarEditor
 {
-    public interface IVRCAvatarEditorGUI
+    public interface IVRCAvatarEditorView
     {
         bool DrawGUI(GUILayoutOption[] layoutOptions);
         void DrawSettingsGUI();

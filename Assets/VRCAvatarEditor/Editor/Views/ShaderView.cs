@@ -7,7 +7,7 @@ using VRCAvatar = VRCAvatarEditor.Base.VRCAvatarBase;
 
 namespace VRCAvatarEditor
 {
-    public class ShaderGUI : Editor, IVRCAvatarEditorGUI
+    public class ShaderView : Editor, IVRCAvatarEditorView
     {
         private VRCAvatar edittingAvatar;
         private VRCAvatar originalAvatar;

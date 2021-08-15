@@ -12,7 +12,7 @@ using VRC.SDK3.Avatars.Components;
 
 namespace VRCAvatarEditor.Avatars3
 {
-    public class AnimationsGUI3 : AnimationsGUIBase
+    public class AnimationsView3 : AnimationsViewBase
     {
         private VRCAvatar editAvatar;
         private VRCAvatar originalAvatar;
@@ -29,8 +29,8 @@ namespace VRCAvatarEditor.Avatars3
         public void Initialize(VRCAvatar editAvatar,
                                VRCAvatar originalAvatar,
                                string saveFolderPath,
-                               VRCAvatarEditorGUI vrcAvatarEditorGUI,
-                               FaceEmotionGUI3 faceEmotionGUI)
+                               VRCAvatarEditorView vrcAvatarEditorGUI,
+                               FaceEmotionView3 faceEmotionGUI)
         {
             this.editAvatar = editAvatar;
             this.originalAvatar = originalAvatar;
@@ -83,12 +83,12 @@ namespace VRCAvatarEditor.Avatars3
                             false,
                             anim != null && !anim.name.StartsWith(VRCAvatarConstants.OFFICIAL_ANIMATION_PREFIX),
                             () => {
-                                if (vrcAvatarEditorGUI.CurrentTool != VRCAvatarEditorGUI.ToolFunc.FaceEmotion)
+                                if (vrcAvatarEditorGUI.CurrentTool != VRCAvatarEditorView.ToolFunc.FaceEmotion)
                                 {
-                                    vrcAvatarEditorGUI.CurrentTool = VRCAvatarEditorGUI.ToolFunc.FaceEmotion;
+                                    vrcAvatarEditorGUI.CurrentTool = VRCAvatarEditorView.ToolFunc.FaceEmotion;
                                 }
                                 FaceEmotion.ApplyAnimationProperties(anim, editAvatar);
-                                ((FaceEmotionGUI3)faceEmotionGUI).ChangeSaveAnimationState(anim.name, i, anim);
+                                ((FaceEmotionView3)faceEmotionGUI).ChangeSaveAnimationState(anim.name, i, anim);
                             });
                     }
                 }

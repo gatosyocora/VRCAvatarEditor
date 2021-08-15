@@ -19,15 +19,15 @@ using FaceEmotionGUI = VRCAvatarEditor.Avatars2.FaceEmotionGUI2;
 using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
 using VRC.SDK3.Avatars.Components;
 using VRC_AvatarDescriptor = VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
-using AnimationsGUI = VRCAvatarEditor.Avatars3.AnimationsGUI3;
-using FaceEmotionGUI = VRCAvatarEditor.Avatars3.FaceEmotionGUI3;
+using AnimationsGUI = VRCAvatarEditor.Avatars3.AnimationsView3;
+using FaceEmotionGUI = VRCAvatarEditor.Avatars3.FaceEmotionView3;
 #endif
 
 // Copyright (c) 2019 gatosyocora
 
 namespace VRCAvatarEditor
 {
-    public class VRCAvatarEditorGUI : EditorWindow
+    public class VRCAvatarEditorView : EditorWindow
     {
         private const string TOOL_VERSION = "v0.6.3";
         private const string TWITTER_ID = "gatosyocora";
@@ -37,15 +37,15 @@ namespace VRCAvatarEditor
         private const string BOOTH_ITEM_URL = "https://booth.pm/ja/items/1258744";
         private static readonly string GITHUB_LATEST_RELEASE_API_URL = "https://api.github.com/repos/gatosyocora/VRCAvatarEditor/releases/latest";
 
-        private AvatarMonitorGUI avatarMonitorGUI;
+        private AvatarMonitorView avatarMonitorGUI;
         public AnimationsGUI animationsGUI;
-        private AvatarInfoGUI avatarInfoGUI;
+        private AvatarInfoView avatarInfoGUI;
         private FaceEmotionGUI faceEmotionGUI;
-        private ProbeAnchorGUI probeAnchorGUI;
-        private MeshBoundsGUI meshBoundsGUI;
-        private ShaderGUI shaderGUI;
-        private IVRCAvatarEditorGUI selectedToolGUI;
-        private Dictionary<ToolFunc, IVRCAvatarEditorGUI> toolGUIs = new Dictionary<ToolFunc, IVRCAvatarEditorGUI>();
+        private ProbeAnchorView probeAnchorGUI;
+        private MeshBoundsView meshBoundsGUI;
+        private ShaderView shaderGUI;
+        private IVRCAvatarEditorView selectedToolGUI;
+        private Dictionary<ToolFunc, IVRCAvatarEditorView> toolGUIs = new Dictionary<ToolFunc, IVRCAvatarEditorView>();
 
         private bool needRepaint = false;
 
@@ -146,7 +146,7 @@ namespace VRCAvatarEditor
         [MenuItem("VRCAvatarEditor/Editor")]
         public static void Create()
         {
-            var window = GetWindow<VRCAvatarEditorGUI>("VRCAvatarEditor");
+            var window = GetWindow<VRCAvatarEditorView>("VRCAvatarEditor");
             window.minSize = new Vector2(700f, 500f);
         }
 
@@ -165,13 +165,13 @@ namespace VRCAvatarEditor
             readmeText = FileUtility.GetFileTexts(editorFolderPath + README_FILE_NAME);
             usingSoftwareLicenseText = FileUtility.GetFileTexts(editorFolderPath + USING_SOFTWARE_FILE_NAME);
 
-            avatarMonitorGUI = ScriptableObject.CreateInstance<AvatarMonitorGUI>();
+            avatarMonitorGUI = ScriptableObject.CreateInstance<AvatarMonitorView>();
             animationsGUI = ScriptableObject.CreateInstance<AnimationsGUI>();
-            avatarInfoGUI = ScriptableObject.CreateInstance<AvatarInfoGUI>();
+            avatarInfoGUI = ScriptableObject.CreateInstance<AvatarInfoView>();
             faceEmotionGUI = ScriptableObject.CreateInstance<FaceEmotionGUI>();
-            probeAnchorGUI = ScriptableObject.CreateInstance<ProbeAnchorGUI>();
-            meshBoundsGUI = ScriptableObject.CreateInstance<MeshBoundsGUI>();
-            shaderGUI = ScriptableObject.CreateInstance<ShaderGUI>();
+            probeAnchorGUI = ScriptableObject.CreateInstance<ProbeAnchorView>();
+            meshBoundsGUI = ScriptableObject.CreateInstance<MeshBoundsView>();
+            shaderGUI = ScriptableObject.CreateInstance<ShaderView>();
 
             toolGUIs.Add(ToolFunc.AvatarInfo, avatarInfoGUI);
             toolGUIs.Add(ToolFunc.FaceEmotion, faceEmotionGUI);
@@ -599,7 +599,7 @@ namespace VRCAvatarEditor
 
         public void OpenSubWindow()
         {
-            GetWindow<AnimationLoaderGUI>("Animation Loader", typeof(VRCAvatarEditorGUI));
+            GetWindow<AnimationLoaderView>("Animation Loader", typeof(VRCAvatarEditorView));
         }
 
         [MenuItem("VRCAvatarEditor/Check for Updates")]

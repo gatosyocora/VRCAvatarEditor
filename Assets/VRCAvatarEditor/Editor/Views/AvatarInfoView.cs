@@ -15,12 +15,12 @@ using VRCAvatarEditor.Utilities;
 
 namespace VRCAvatarEditor
 {
-    public class AvatarInfoGUI : Editor, IVRCAvatarEditorGUI
+    public class AvatarInfoView : Editor, IVRCAvatarEditorView
     {
         private VRCAvatar originalAvatar;
         private VRCAvatar editAvatar;
 
-        private AvatarMonitorGUI monitorGUI;
+        private AvatarMonitorView monitorGUI;
 
         private bool isOpeningLipSync = false;
         private Vector2 lipSyncScrollPos = Vector2.zero;
@@ -28,7 +28,7 @@ namespace VRCAvatarEditor
         private Texture2D showIconTexture;
         private Texture2D hideIconTexture;
 
-        public void Initialize(VRCAvatar originalAvatar, VRCAvatar editAvatar, AvatarMonitorGUI monitorGUI)
+        public void Initialize(VRCAvatar originalAvatar, VRCAvatar editAvatar, AvatarMonitorView monitorGUI)
         {
             this.originalAvatar = originalAvatar;
             this.editAvatar = editAvatar;

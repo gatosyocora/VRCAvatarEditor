@@ -8,16 +8,16 @@ using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
 using AnimationsGUI = VRCAvatarEditor.Avatars2.AnimationsGUI2;
 #else
 using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
-using AnimationsGUI = VRCAvatarEditor.Avatars3.AnimationsGUI3;
+using AnimationsGUI = VRCAvatarEditor.Avatars3.AnimationsView3;
 #endif
 
 namespace VRCAvatarEditor.Base
 {
-    public abstract class FaceEmotionGUIBase : Editor, IVRCAvatarEditorGUI
+    public abstract class FaceEmotionViewBase : Editor, IVRCAvatarEditorView
     {
         protected VRCAvatar editAvatar;
         protected VRCAvatar originalAvatar;
-        protected VRCAvatarEditorGUI parentWindow;
+        protected VRCAvatarEditorView parentWindow;
         protected AnimationsGUI animationsGUI;
 
         protected static readonly string DEFAULT_ANIM_NAME = "faceAnim";
@@ -47,7 +47,7 @@ namespace VRCAvatarEditor.Base
             this.editAvatar = editAvatar;
             this.originalAvatar = originalAvatar;
             animName = DEFAULT_ANIM_NAME;
-            this.parentWindow = window as VRCAvatarEditorGUI;
+            this.parentWindow = window as VRCAvatarEditorView;
             this.animationsGUI = animationsGUI;
         }
 

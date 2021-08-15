@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace VRCAvatarEditor
 {
-    public class AnimationLoaderGUI : EditorWindow
+    public class AnimationLoaderView : EditorWindow
     {
 
         private string filePath;

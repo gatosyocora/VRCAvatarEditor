@@ -12,10 +12,10 @@ using VRC_AvatarDescriptor = VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
 
 namespace VRCAvatarEditor
 {
-    public class AvatarMonitorGUI : Editor, IVRCAvatarEditorGUI
+    public class AvatarMonitorView : Editor, IVRCAvatarEditorView
     {
         private VRCAvatar avatar;
-        private VRCAvatarEditorGUI.ToolFunc currentTool;
+        private VRCAvatarEditorView.ToolFunc currentTool;
 
         private RenderTexture avatarCamTexture;
         private bool isGammaCorrection = true;
@@ -52,7 +52,7 @@ namespace VRCAvatarEditor
 
         public bool showEyePosition = false;
 
-        public void Initialize(VRCAvatarEditorGUI.ToolFunc currentTool)
+        public void Initialize(VRCAvatarEditorView.ToolFunc currentTool)
         {
             this.currentTool = currentTool;
 

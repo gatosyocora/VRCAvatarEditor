@@ -6,7 +6,7 @@ using VRCAvatar = VRCAvatarEditor.Base.VRCAvatarBase;
 
 namespace VRCAvatarEditor
 {
-    public class MeshBoundsGUI : Editor, IVRCAvatarEditorGUI
+    public class MeshBoundsView : Editor, IVRCAvatarEditorView
     {
         private VRCAvatar avatar;
 

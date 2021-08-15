@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace VRCAvatarEditor.Base
 {
-    public abstract class AnimationsGUIBase : Editor, IVRCAvatarEditorGUI
+    public abstract class AnimationsViewBase : Editor, IVRCAvatarEditorView
     {
-        protected VRCAvatarEditorGUI vrcAvatarEditorGUI;
-        protected FaceEmotionGUIBase faceEmotionGUI;
+        protected VRCAvatarEditorView vrcAvatarEditorGUI;
+        protected FaceEmotionViewBase faceEmotionGUI;
 
         protected string saveFolderPath;
 
