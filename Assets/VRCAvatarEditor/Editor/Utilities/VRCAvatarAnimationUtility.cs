@@ -37,6 +37,12 @@ namespace VRCAvatarEditor.Utilities
         public static bool ExistLayer(AnimatorController controller, string layerName)
             => controller.layers.Any(layer => layer.name == layerName);
 
+        public static AnimatorState AddState(AnimatorStateMachine stateMachine, string stateName, bool useWriteDefault) {
+            var state = stateMachine.AddState(stateName);
+            state.writeDefaultValues = useWriteDefault;
+            return state;
+        }
+
         public static AnimationClip GetOrCreateEmptyAnimation(VRCAvatarBase avatar)
         {
             var animationFilePath = Path.Combine(avatar.AnimSavedFolderPath, $"{VRCAvatarConstants.EMPTY_ANIMATION_NAME}.anim");
@@ -55,8 +61,7 @@ namespace VRCAvatarEditor.Utilities
         public static void AddDefaultFaceLayer(AnimatorController controller, VRCAvatarBase originalAvatar, VRCAvatarBase editAvatar)
         {
             var defaultLayer = InsertLayer(controller, 1, VRCAvatarConstants.FX_DEFAULT_LAYER_NAME);
-            var defaultState = defaultLayer.stateMachine.AddState(VRCAvatarConstants.DEFAULT_FACE_STATE_NAME);
-            defaultState.writeDefaultValues = false;
+            var defaultState = AddState(defaultLayer.stateMachine, VRCAvatarConstants.DEFAULT_FACE_STATE_NAME, false);
             var defaultFaceAnimation = FaceEmotion.CreateBlendShapeAnimationClip(
                                         VRCAvatarConstants.DEFAULT_FACE_ANIMATION_NAME,
                                         originalAvatar.AnimSavedFolderPath,
