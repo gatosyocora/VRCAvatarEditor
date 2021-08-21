@@ -40,6 +40,25 @@ namespace VRCAvatarEditor.Test
 
         [TestCaseSource("avatarPrefabs")]
         public void GetFXLayerIdleStateでIdleStateが取得できる(GameObject avatarPrefab)
+        public void GetLayerWithHandChangedでFXLayerのLeftHandLayerが取得できる(GameObject avatarPrefab)
+        {
+            var avatarObject = PrefabUtility.InstantiatePrefab(avatarPrefab) as GameObject;
+            var descripter = avatarObject.GetComponent<VRCAvatarDescriptor>();
+            var fxController = VRCAvatarAnimationUtility.GetPlayableLayer(descripter, VRCAvatarDescriptor.AnimLayerType.FX).animatorController as AnimatorController;
+            var leftHandlayer = VRCAvatarAnimationUtility.GetLayerWithHandChanged(fxController, VRCAvatarAnimationUtility.HandType.LEFT);
+            Assert.IsNotNull(leftHandlayer);
+        }
+
+        [TestCaseSource("avatarPrefabs")]
+        public void GetLayerWithHandChangedでFXLayerのRightHandLayerが取得できる(GameObject avatarPrefab)
+        {
+            var avatarObject = PrefabUtility.InstantiatePrefab(avatarPrefab) as GameObject;
+            var descripter = avatarObject.GetComponent<VRCAvatarDescriptor>();
+            var fxController = VRCAvatarAnimationUtility.GetPlayableLayer(descripter, VRCAvatarDescriptor.AnimLayerType.FX).animatorController as AnimatorController;
+            var rightHandLayer = VRCAvatarAnimationUtility.GetLayerWithHandChanged(fxController, VRCAvatarAnimationUtility.HandType.RIGHT);
+            Assert.IsNotNull(rightHandLayer);
+        }
+
         {
             var avatarObject = PrefabUtility.InstantiatePrefab(avatarPrefab) as GameObject;
             var descripter = avatarObject.GetComponent<VRCAvatarDescriptor>();
