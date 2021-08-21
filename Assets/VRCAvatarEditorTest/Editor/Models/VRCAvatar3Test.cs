@@ -20,6 +20,15 @@ namespace VRCAvatarEditor.Test
         }
 
         [TestCaseSource("avatarPrefabs")]
+        public void LoadAvatarInfoでエラーが発生しない(GameObject avatarPrefab)
+        {
+            var avatarObject = PrefabUtility.InstantiatePrefab(avatarPrefab) as GameObject;
+            var descripter = avatarObject.GetComponent<VRCAvatarDescriptor>();
+            var avatar = new VRCAvatar3();
+            Assert.DoesNotThrow(() => avatar.LoadAvatarInfo(descripter));
+        }
+
+        [TestCaseSource("avatarPrefabs")]
         public void リップシンクが設定できる(GameObject avatarPrefab)
         {
             var avatarObject = PrefabUtility.InstantiatePrefab(avatarPrefab) as GameObject;
