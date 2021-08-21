@@ -89,14 +89,13 @@ namespace VRCAvatarEditor.Utilities
         public static AnimatorControllerLayer GetLayerWithHandChanged(AnimatorController controller, HandType handType)
         {
             var layerName = handType == HandType.LEFT ? VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME : VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME;
-            return controller.layers.Where(l => l.name == layerName).SingleOrDefault();
+            return controller.layers.SingleOrDefault(l => l.name == layerName);
         }
 
         public static ChildAnimatorState GetFXLayerIdleState(AnimatorController controller, HandType handType)
             => GetLayerWithHandChanged(controller, handType)
                 .stateMachine.states
-                .Where(s => s.state.name == VRCAvatarConstants.IDLE_STATE_NAME)
-                .SingleOrDefault();
+                .SingleOrDefault(s => s.state.name == VRCAvatarConstants.IDLE_STATE_NAME);
 
 #if VRC_SDK_VRCSDK3
         public static CustomAnimLayer GetPlayableLayer(VRCAvatarDescriptor descripter, AnimLayerType layerType)
