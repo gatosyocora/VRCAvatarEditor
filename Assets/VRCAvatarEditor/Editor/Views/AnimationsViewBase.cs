@@ -13,8 +13,8 @@ namespace VRCAvatarEditor.Base
 
         protected string saveFolderPath;
 
-        private GUIStyle normalStyle = new GUIStyle();
-        private GUIStyle errorStyle = new GUIStyle();
+        private GUIStyle normalStyle = EditorStyles.label;
+        private GUIStyle errorStyle = EditorStyles.label;
 
         protected void Initialize(string saveFolderPath)
         {
