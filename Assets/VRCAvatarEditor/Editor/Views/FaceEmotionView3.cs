@@ -129,67 +129,7 @@ namespace VRCAvatarEditor.Avatars3
         {
             GatoGUILayout.Button(
                LocalizeText.instance.langPair.createAnimFileButtonText,
-               () =>
-               {
-                   var controller = originalAvatar.FxController;
-
-                   var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(
-                                           animName,
-                                           originalAvatar.AnimSavedFolderPath,
-                                           editAvatar);
-
-                   // Stateがない場合は作成のみ
-                   if (states.Any())
-                   {
-                       states[selectedStateIndex].state.motion = createdAnimClip;
-                       EditorUtility.SetDirty(controller);
-
-                        // 可能であればもう一方の手も同じAnimationClipを設定する
-                        if (setLeftAndRight)
-                       {
-                           var layerName = editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex].name;
-                           string targetLayerName = string.Empty;
-                           if (layerName == VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME)
-                           {
-                               targetLayerName = VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME;
-                           }
-                           else if (layerName == VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME)
-                           {
-                               targetLayerName = VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME;
-                           }
-
-                           if (!string.IsNullOrEmpty(targetLayerName))
-                           {
-                               var targetLayer = editAvatar.FxController.layers
-                                                   .Where(l => l.name == targetLayerName)
-                                                   .SingleOrDefault();
-
-                               if (targetLayer != null)
-                               {
-                                   var targetStateName = states[selectedStateIndex].state.name;
-                                   var targetState = targetLayer.stateMachine.states
-                                                       .Where(s => s.state.name == targetStateName)
-                                                       .SingleOrDefault();
-
-                                   if (targetState.state != null)
-                                   {
-                                       targetState.state.motion = createdAnimClip;
-                                       EditorUtility.SetDirty(controller);
-                                   }
-                               }
-                           }
-                       }
-
-                       // WriteDefaultオフで表情が戻らなくなる不具合の対策
-                       FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
-                       SetupForNoUseWriteDefaultIfNeeded(controller, originalAvatar, editAvatar);
-                   } else
-                   {
-                       FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
-                   }
-                   originalAvatar.FxController = controller;
-                   editAvatar.FxController = controller;
-               },
+               () => OnCreateButtonClicked(originalAvatar, editAvatar, animName, states, selectedStateIndex, setLeftAndRight),
                originalAvatar.FxController != null);
         }
 
@@ -237,6 +177,69 @@ namespace VRCAvatarEditor.Avatars3
         public override void ChangeSaveAnimationState()
         {
             ChangeSaveAnimationState("", 0, null);
+        }
+
+        private void OnCreateButtonClicked(VRCAvatar originalAvatar, VRCAvatar editAvatar, string animName, ChildAnimatorState[] states, int selectedStateIndex, bool setLeftAndRight)
+        {
+            var controller = originalAvatar.FxController;
+
+            var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(
+                                    animName,
+                                    originalAvatar.AnimSavedFolderPath,
+                                    editAvatar);
+
+            // Stateがない場合は作成のみ
+            if (states.Any())
+            {
+                states[selectedStateIndex].state.motion = createdAnimClip;
+                EditorUtility.SetDirty(controller);
+
+                // 可能であればもう一方の手も同じAnimationClipを設定する
+                if (setLeftAndRight)
+                {
+                    var layerName = editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex].name;
+                    string targetLayerName = string.Empty;
+                    if (layerName == VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME)
+                    {
+                        targetLayerName = VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME;
+                    }
+                    else if (layerName == VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME)
+                    {
+                        targetLayerName = VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME;
+                    }
+
+                    if (!string.IsNullOrEmpty(targetLayerName))
+                    {
+                        var targetLayer = editAvatar.FxController.layers
+                                            .Where(l => l.name == targetLayerName)
+                                            .SingleOrDefault();
+
+                        if (targetLayer != null)
+                        {
+                            var targetStateName = states[selectedStateIndex].state.name;
+                            var targetState = targetLayer.stateMachine.states
+                                                .Where(s => s.state.name == targetStateName)
+                                                .SingleOrDefault();
+
+                            if (targetState.state != null)
+                            {
+                                targetState.state.motion = createdAnimClip;
+                                EditorUtility.SetDirty(controller);
+                            }
+                        }
+                    }
+                }
+
+                // WriteDefaultオフで表情が戻らなくなる不具合の対策
+                FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
+                SetupForNoUseWriteDefaultIfNeeded(controller, originalAvatar, editAvatar);
+            }
+            else
+            {
+                FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
+            }
+            originalAvatar.FxController = controller;
+            editAvatar.FxController = controller;
         }
 
         public void ChangeSaveAnimationState(
