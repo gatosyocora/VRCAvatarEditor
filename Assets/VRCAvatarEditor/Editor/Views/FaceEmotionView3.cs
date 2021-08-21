@@ -129,7 +129,10 @@ namespace VRCAvatarEditor.Avatars3
         {
             GatoGUILayout.Button(
                LocalizeText.instance.langPair.createAnimFileButtonText,
-               () => OnCreateButtonClicked(originalAvatar, editAvatar, animName, states, selectedStateIndex, setLeftAndRight),
+               () => {
+                   var targetState = states.Any() ? states[selectedStateIndex].state : null;
+                   OnCreateButtonClicked(originalAvatar, editAvatar, animName, targetState, setLeftAndRight);
+               },
                originalAvatar.FxController != null);
         }
 
@@ -179,7 +182,7 @@ namespace VRCAvatarEditor.Avatars3
             ChangeSaveAnimationState("", 0, null);
         }
 
-        private void OnCreateButtonClicked(VRCAvatar originalAvatar, VRCAvatar editAvatar, string animName, ChildAnimatorState[] states, int selectedStateIndex, bool setLeftAndRight)
+        private void OnCreateButtonClicked(VRCAvatar originalAvatar, VRCAvatar editAvatar, string animName, AnimatorState state, bool setLeftAndRight)
         {
             var controller = originalAvatar.FxController;
 
@@ -189,9 +192,9 @@ namespace VRCAvatarEditor.Avatars3
                                     editAvatar);
 
             // Stateがない場合は作成のみ
-            if (states.Any())
+            if (state != null)
             {
-                states[selectedStateIndex].state.motion = createdAnimClip;
+                state.motion = createdAnimClip;
                 EditorUtility.SetDirty(controller);
 
                 // 可能であればもう一方の手も同じAnimationClipを設定する
@@ -216,7 +219,7 @@ namespace VRCAvatarEditor.Avatars3
 
                         if (targetLayer != null)
                         {
-                            var targetStateName = states[selectedStateIndex].state.name;
+                            var targetStateName = state.name;
                             var targetState = targetLayer.stateMachine.states
                                                 .Where(s => s.state.name == targetStateName)
                                                 .SingleOrDefault();
