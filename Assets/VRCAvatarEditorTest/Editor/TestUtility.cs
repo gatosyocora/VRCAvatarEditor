@@ -21,5 +21,12 @@ namespace VRCAvatarEditor.Test
                 "Assets/VRCAvatarEditorTest/Editor/TestAvatars.asset"
             );
         }
+
+        public static T ResetComponent<T>(GameObject gameObject) where T : MonoBehaviour {
+            var behaviour = gameObject.GetComponent<T>();
+            if (behaviour == null) return null;
+            Object.DestroyImmediate(behaviour);
+            return gameObject.AddComponent<T>();
+        }
     }
 }
