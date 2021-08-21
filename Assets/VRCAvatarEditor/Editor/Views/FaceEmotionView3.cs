@@ -232,10 +232,6 @@ namespace VRCAvatarEditor.Avatars3
                         }
                     }
                 }
-
-                // WriteDefaultオフで表情が戻らなくなる不具合の対策
-                FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
-                SetupForNoUseWriteDefaultIfNeeded(controller, originalAvatar, editAvatar);
             }
             else
             {
