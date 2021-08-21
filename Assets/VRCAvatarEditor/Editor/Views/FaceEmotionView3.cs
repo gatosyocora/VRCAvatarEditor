@@ -146,35 +146,35 @@ namespace VRCAvatarEditor.Avatars3
         {
             base.OnSetToDefaultButtonClick(editAvatar, originalAvatar);
 
-            // DefaultFaceレイヤーを使っているときにそのAnimationファイルも更新する
-            if (originalAvatar.FxController.layers.Any(l => l.name == VRCAvatarConstants.RESET_LAYER_NAME))
-            {
-                var defaultLayer = originalAvatar.FxController.layers
-                                        .SingleOrDefault(l => l.name == VRCAvatarConstants.RESET_LAYER_NAME);
+            //// DefaultFaceレイヤーを使っているときにそのAnimationファイルも更新する
+            //if (originalAvatar.FxController.layers.Any(l => l.name == VRCAvatarConstants.RESET_LAYER_NAME))
+            //{
+            //    var defaultLayer = originalAvatar.FxController.layers
+            //                            .SingleOrDefault(l => l.name == VRCAvatarConstants.RESET_LAYER_NAME);
 
-                if (defaultLayer == null)
-                {
-                    Debug.LogError("Not Found Default Face Layer");
-                    return;
-                }
+            //    if (defaultLayer == null)
+            //    {
+            //        Debug.LogError("Not Found Default Face Layer");
+            //        return;
+            //    }
 
-                var targetState = defaultLayer.stateMachine.states
-                                    .SingleOrDefault(s => s.state.name == VRCAvatarConstants.RESET_FACE_STATE_NAME);
+            //    var targetState = defaultLayer.stateMachine.states
+            //                        .SingleOrDefault(s => s.state.name == VRCAvatarConstants.RESET_FACE_STATE_NAME);
 
-                if (targetState.state == null)
-                {
-                    Debug.LogError("Not Found Default Face State");
-                    return;
-                }
+            //    if (targetState.state == null)
+            //    {
+            //        Debug.LogError("Not Found Default Face State");
+            //        return;
+            //    }
 
-                var defaultFaceAnimation = FaceEmotion.CreateBlendShapeAnimationClip(
-                                                VRCAvatarConstants.DEFAULT_FACE_ANIMATION_NAME,
-                                                originalAvatar.AnimSavedFolderPath,
-                                                editAvatar);
+            //    var defaultFaceAnimation = FaceEmotion.CreateBlendShapeAnimationClip(
+            //                                    VRCAvatarConstants.DEFAULT_FACE_ANIMATION_NAME,
+            //                                    originalAvatar.AnimSavedFolderPath,
+            //                                    editAvatar);
 
-                targetState.state.motion = defaultFaceAnimation;
-                EditorUtility.SetDirty(originalAvatar.FxController);
-            }
+            //    targetState.state.motion = defaultFaceAnimation;
+            //    EditorUtility.SetDirty(originalAvatar.FxController);
+            //}
         }
 
         public override void ChangeSaveAnimationState()
