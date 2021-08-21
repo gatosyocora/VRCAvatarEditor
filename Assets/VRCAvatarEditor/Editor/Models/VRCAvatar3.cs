@@ -66,13 +66,16 @@ namespace VRCAvatarEditor.Avatars3
             if (descriptor == null) return;
             Descriptor = descriptor;
 
-            GestureLayer = Descriptor.baseAnimationLayers
-                                .FirstOrDefault(l => l.type == AnimLayerType.Gesture);
-            GestureController = GestureLayer.animatorController as AnimatorController;
+            if (Descriptor.baseAnimationLayers != null)
+            {
+                GestureLayer = Descriptor.baseAnimationLayers
+                    .FirstOrDefault(l => l.type == AnimLayerType.Gesture);
+                GestureController = GestureLayer.animatorController as AnimatorController;
 
-            FxLayer = Descriptor.baseAnimationLayers
-                    .FirstOrDefault(l => l.type == AnimLayerType.FX);
-            FxController = FxLayer.animatorController as AnimatorController;
+                FxLayer = Descriptor.baseAnimationLayers
+                        .FirstOrDefault(l => l.type == AnimLayerType.FX);
+                FxController = FxLayer.animatorController as AnimatorController;
+            }
 
             if (FxController != null)
             {
