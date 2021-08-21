@@ -1,8 +1,4 @@
 ﻿#if VRC_SDK_VRCSDK3
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -146,6 +142,7 @@ namespace VRCAvatarEditor.Avatars3
         {
             base.OnSetToDefaultButtonClick(editAvatar, originalAvatar);
 
+            // TODO: WriteDefaultsオフのときに対応しないといけない
             //// DefaultFaceレイヤーを使っているときにそのAnimationファイルも更新する
             //if (originalAvatar.FxController.layers.Any(l => l.name == VRCAvatarConstants.RESET_LAYER_NAME))
             //{
