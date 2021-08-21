@@ -183,40 +183,7 @@ namespace VRCAvatarEditor.Avatars3
 
                        // WriteDefaultオフで表情が戻らなくなる不具合の対策
                        FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
-                       if (!VRCAvatarAnimationUtility.UseWriteDefaults(controller))
-                       {
-                           if (!VRCAvatarAnimationUtility.ExistLayer(controller, VRCAvatarConstants.FX_DEFAULT_LAYER_NAME))
-                           {
-                               VRCAvatarAnimationUtility.AddDefaultFaceLayer(controller, originalAvatar, editAvatar);
-                               editAvatar.TargetFxLayerIndex++;
-                           }
-
-                           // Idleステートに何かしらが入っていないとバグるので対策
-                           var fxLeftHandIdleState = editAvatar.FxController.layers
-                                                        .Where(l => l.name == VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME)
-                                                        .SelectMany(l => l.stateMachine.states)
-                                                        .Where(s => s.state.name == VRCAvatarConstants.IDLE_STATE_NAME)
-                                                        .SingleOrDefault();
-                           var fxRightHandIdleState = editAvatar.FxController.layers
-                                                         .Where(l => l.name == VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME)
-                                                         .SelectMany(l => l.stateMachine.states)
-                                                         .Where(s => s.state.name == VRCAvatarConstants.IDLE_STATE_NAME)
-                                                         .SingleOrDefault();
-                           if (fxLeftHandIdleState.state.motion == null || fxRightHandIdleState.state.motion == null)
-                           {
-                               var emptyAnimation = VRCAvatarAnimationUtility.GetOrCreateEmptyAnimation(originalAvatar);
-                               if (fxLeftHandIdleState.state.motion == null)
-                               {
-                                   fxLeftHandIdleState.state.motion = emptyAnimation;
-                               }
-                               if (fxRightHandIdleState.state.motion == null)
-                               {
-                                   fxRightHandIdleState.state.motion = emptyAnimation;
-                               }
-                               EditorUtility.SetDirty(originalAvatar.FxController);
-                               EditorUtility.SetDirty(editAvatar.FxController);
-                           }
-                       }
+                       SetupForNoUseWriteDefaultIfNeeded(controller, originalAvatar, editAvatar);
                    } else
                    {
                        FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
@@ -296,6 +263,44 @@ namespace VRCAvatarEditor.Avatars3
             else
             {
                 handPoseAnim = HandPose.GetHandAnimationClip(selectedHandAnim);
+            }
+        }
+
+        private void SetupForNoUseWriteDefaultIfNeeded(AnimatorController controller, VRCAvatar originalAvatar, VRCAvatar editAvatar)
+        {
+            if (!VRCAvatarAnimationUtility.UseWriteDefaults(controller))
+            {
+                if (!VRCAvatarAnimationUtility.ExistLayer(controller, VRCAvatarConstants.FX_DEFAULT_LAYER_NAME))
+                {
+                    VRCAvatarAnimationUtility.AddDefaultFaceLayer(controller, originalAvatar, editAvatar);
+                    editAvatar.TargetFxLayerIndex++;
+                }
+
+                // Idleステートに何かしらが入っていないとバグるので対策
+                var fxLeftHandIdleState = editAvatar.FxController.layers
+                                             .Where(l => l.name == VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME)
+                                             .SelectMany(l => l.stateMachine.states)
+                                             .Where(s => s.state.name == VRCAvatarConstants.IDLE_STATE_NAME)
+                                             .SingleOrDefault();
+                var fxRightHandIdleState = editAvatar.FxController.layers
+                                              .Where(l => l.name == VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME)
+                                              .SelectMany(l => l.stateMachine.states)
+                                              .Where(s => s.state.name == VRCAvatarConstants.IDLE_STATE_NAME)
+                                              .SingleOrDefault();
+                if (fxLeftHandIdleState.state.motion == null || fxRightHandIdleState.state.motion == null)
+                {
+                    var emptyAnimation = VRCAvatarAnimationUtility.GetOrCreateEmptyAnimation(originalAvatar);
+                    if (fxLeftHandIdleState.state.motion == null)
+                    {
+                        fxLeftHandIdleState.state.motion = emptyAnimation;
+                    }
+                    if (fxRightHandIdleState.state.motion == null)
+                    {
+                        fxRightHandIdleState.state.motion = emptyAnimation;
+                    }
+                    EditorUtility.SetDirty(originalAvatar.FxController);
+                    EditorUtility.SetDirty(editAvatar.FxController);
+                }
             }
         }
     }
