@@ -88,8 +88,8 @@ namespace VRCAvatarEditor.Utilities
 
         public static AnimatorControllerLayer GetLayerWithHandChanged(AnimatorController controller, HandType handType)
         {
-            var layerName = handType == HandType.LEFT ? VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME : VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME;
-            return controller.layers.SingleOrDefault(l => l.name == layerName);
+            var layerNames = handType == HandType.LEFT ? VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME_PATTERNS : VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME_PATTERNS;
+            return controller.layers.SingleOrDefault(l => layerNames.Contains(l.name));
         }
 
         public static ChildAnimatorState GetFXLayerIdleState(AnimatorController controller, HandType handType)
