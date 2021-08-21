@@ -277,16 +277,8 @@ namespace VRCAvatarEditor.Avatars3
                 }
 
                 // Idleステートに何かしらが入っていないとバグるので対策
-                var fxLeftHandIdleState = editAvatar.FxController.layers
-                                             .Where(l => l.name == VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME)
-                                             .SelectMany(l => l.stateMachine.states)
-                                             .Where(s => s.state.name == VRCAvatarConstants.IDLE_STATE_NAME)
-                                             .SingleOrDefault();
-                var fxRightHandIdleState = editAvatar.FxController.layers
-                                              .Where(l => l.name == VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME)
-                                              .SelectMany(l => l.stateMachine.states)
-                                              .Where(s => s.state.name == VRCAvatarConstants.IDLE_STATE_NAME)
-                                              .SingleOrDefault();
+                var fxLeftHandIdleState = VRCAvatarAnimationUtility.GetFXLayerIdleState(editAvatar.FxController, VRCAvatarAnimationUtility.HandType.LEFT);
+                var fxRightHandIdleState = VRCAvatarAnimationUtility.GetFXLayerIdleState(editAvatar.FxController, VRCAvatarAnimationUtility.HandType.RIGHT);
                 if (fxLeftHandIdleState.state.motion == null || fxRightHandIdleState.state.motion == null)
                 {
                     var emptyAnimation = VRCAvatarAnimationUtility.GetOrCreateEmptyAnimation(originalAvatar);

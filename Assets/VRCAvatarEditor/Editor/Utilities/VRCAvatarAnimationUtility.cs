@@ -10,6 +10,11 @@ namespace VRCAvatarEditor.Utilities
 {
     public class VRCAvatarAnimationUtility
     {
+        public enum HandType
+        {
+            LEFT, RIGHT
+        }
+
         public static bool UseWriteDefaults(AnimatorController controller)
         {
             return controller.layers.Select(layer => layer.stateMachine)
@@ -77,5 +82,15 @@ namespace VRCAvatarEditor.Utilities
                     .Where(s => s.state.name != VRCAvatarConstants.IDLE_STATE_NAME)
                     .OrderBy(s => s.state.name)
                     .ToArray();
+
+        public static ChildAnimatorState GetFXLayerIdleState(AnimatorController controller, HandType handType)
+        {
+            var layerName = handType == HandType.LEFT? VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME : VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME;
+            return controller.layers
+                    .Where(l => l.name == layerName)
+                    .SelectMany(l => l.stateMachine.states)
+                    .Where(s => s.state.name == VRCAvatarConstants.IDLE_STATE_NAME)
+                    .SingleOrDefault();
+        }
     }
 }
