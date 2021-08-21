@@ -205,10 +205,10 @@ namespace VRCAvatarEditor.Avatars3
             base.OnSetToDefaultButtonClick(editAvatar, originalAvatar);
 
             // DefaultFaceレイヤーを使っているときにそのAnimationファイルも更新する
-            if (originalAvatar.FxController.layers.Any(l => l.name == VRCAvatarConstants.FX_DEFAULT_LAYER_NAME))
+            if (originalAvatar.FxController.layers.Any(l => l.name == VRCAvatarConstants.RESET_LAYER_NAME))
             {
                 var defaultLayer = originalAvatar.FxController.layers
-                                        .SingleOrDefault(l => l.name == VRCAvatarConstants.FX_DEFAULT_LAYER_NAME);
+                                        .SingleOrDefault(l => l.name == VRCAvatarConstants.RESET_LAYER_NAME);
 
                 if (defaultLayer == null)
                 {
@@ -217,7 +217,7 @@ namespace VRCAvatarEditor.Avatars3
                 }
 
                 var targetState = defaultLayer.stateMachine.states
-                                    .SingleOrDefault(s => s.state.name == VRCAvatarConstants.DEFAULT_FACE_STATE_NAME);
+                                    .SingleOrDefault(s => s.state.name == VRCAvatarConstants.RESET_FACE_STATE_NAME);
 
                 if (targetState.state == null)
                 {
@@ -270,7 +270,7 @@ namespace VRCAvatarEditor.Avatars3
         {
             if (!VRCAvatarAnimationUtility.UseWriteDefaults(controller))
             {
-                if (!VRCAvatarAnimationUtility.ExistLayer(controller, VRCAvatarConstants.FX_DEFAULT_LAYER_NAME))
+                if (!VRCAvatarAnimationUtility.ExistLayer(controller, VRCAvatarConstants.RESET_LAYER_NAME))
                 {
                     VRCAvatarAnimationUtility.AddDefaultFaceLayer(controller, originalAvatar, editAvatar);
                     editAvatar.TargetFxLayerIndex++;
