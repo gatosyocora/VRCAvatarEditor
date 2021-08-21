@@ -5,6 +5,10 @@ using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 using VRCAvatarEditor.Base;
+#if VRC_SDK_VRCSDK3
+using VRC.SDK3.Avatars.Components;
+using static VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
+#endif
 
 namespace VRCAvatarEditor.Utilities
 {
@@ -91,5 +95,10 @@ namespace VRCAvatarEditor.Utilities
                     .Where(s => s.state.name == VRCAvatarConstants.IDLE_STATE_NAME)
                     .SingleOrDefault();
         }
+
+#if VRC_SDK_VRCSDK3
+        public static CustomAnimLayer GetPlayableLayer(VRCAvatarDescriptor descripter, AnimLayerType layerType)
+            => descripter.baseAnimationLayers.FirstOrDefault(l => l.type == layerType);
     }
+#endif
 }
