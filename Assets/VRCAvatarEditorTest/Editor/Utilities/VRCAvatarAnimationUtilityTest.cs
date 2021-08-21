@@ -37,5 +37,17 @@ namespace VRCAvatarEditor.Test
             var gestureLayer = VRCAvatarAnimationUtility.GetPlayableLayer(descripter, VRCAvatarDescriptor.AnimLayerType.Gesture);
             Assert.IsNotNull(gestureLayer);
         }
+
+        [TestCaseSource("avatarPrefabs")]
+        public void GetFXLayerIdleStateでIdleStateが取得できる(GameObject avatarPrefab)
+        {
+            var avatarObject = PrefabUtility.InstantiatePrefab(avatarPrefab) as GameObject;
+            var descripter = avatarObject.GetComponent<VRCAvatarDescriptor>();
+            var fxController = VRCAvatarAnimationUtility.GetPlayableLayer(descripter, VRCAvatarDescriptor.AnimLayerType.FX).animatorController as AnimatorController;
+            var leftIdleState = VRCAvatarAnimationUtility.GetFXLayerIdleState(fxController, VRCAvatarAnimationUtility.HandType.LEFT);
+            Assert.IsNotNull(leftIdleState);
+            var rightIdleState = VRCAvatarAnimationUtility.GetFXLayerIdleState(fxController, VRCAvatarAnimationUtility.HandType.LEFT);
+            Assert.IsNotNull(rightIdleState);
+        }
     }
 }
