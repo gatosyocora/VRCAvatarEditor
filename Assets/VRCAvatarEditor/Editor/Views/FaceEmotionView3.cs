@@ -136,8 +136,7 @@ namespace VRCAvatarEditor.Avatars3
                    var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(
                                            animName,
                                            originalAvatar.AnimSavedFolderPath,
-                                           editAvatar,
-                                           true);
+                                           editAvatar);
 
                    // Stateがない場合は作成のみ
                    if (states.Any())
@@ -228,8 +227,7 @@ namespace VRCAvatarEditor.Avatars3
                 var defaultFaceAnimation = FaceEmotion.CreateBlendShapeAnimationClip(
                                                 VRCAvatarConstants.DEFAULT_FACE_ANIMATION_NAME,
                                                 originalAvatar.AnimSavedFolderPath,
-                                                editAvatar,
-                                                true);
+                                                editAvatar);
 
                 targetState.state.motion = defaultFaceAnimation;
                 EditorUtility.SetDirty(originalAvatar.FxController);

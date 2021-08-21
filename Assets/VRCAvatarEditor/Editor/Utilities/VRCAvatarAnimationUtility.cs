@@ -70,8 +70,7 @@ namespace VRCAvatarEditor.Utilities
             var defaultFaceAnimation = FaceEmotion.CreateBlendShapeAnimationClip(
                                         VRCAvatarConstants.DEFAULT_FACE_ANIMATION_NAME,
                                         originalAvatar.AnimSavedFolderPath,
-                                        editAvatar,
-                                        true);
+                                        editAvatar);
             defaultState.motion = defaultFaceAnimation;
             EditorUtility.SetDirty(controller);
         }
