@@ -99,7 +99,9 @@ namespace VRCAvatarEditor.Utilities
 
 #if VRC_SDK_VRCSDK3
         public static CustomAnimLayer GetPlayableLayer(VRCAvatarDescriptor descripter, AnimLayerType layerType)
-            => descripter.baseAnimationLayers.FirstOrDefault(l => l.type == layerType);
+            => descripter.baseAnimationLayers
+                .Where(l => l.type == layerType)
+                .FirstOrDefault(l => l.animatorController != null);
     }
 #endif
 }
