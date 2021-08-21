@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83636cb7f7ff2b54f924fe178dd9042b, type: 3}
   m_Name: TestAvatars
   m_EditorClassIdentifier: 
-  avatarPrefabs: []
+  avatarPrefabs:
+  - {fileID: 6637110063297596605, guid: 940b5e4410c5a2040aa7408da5eb3712, type: 3}
+  - {fileID: 2294853030857098376, guid: 51780795be4f5564ca4e503cc182d3a7, type: 3}
+  - {fileID: 1589575523900264491, guid: 869a1d43742970443a7a34a14fbb517b, type: 3}
+  - {fileID: 4396836536218429893, guid: cbf7941976e59a74a83827b4988dde9a, type: 3}
+  - {fileID: 4163372037679617132, guid: 40fc24b0d62dff84c8d4e98da7742ef7, type: 3}
