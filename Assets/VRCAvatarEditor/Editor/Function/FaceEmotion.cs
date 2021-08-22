@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using VRCAvatarEditor.Base;
@@ -63,7 +64,10 @@ namespace VRCAvatarEditor
                 }
             }
 
-            AssetDatabase.CreateAsset(animClip, AssetDatabase.GenerateUniqueAssetPath(saveFolderPath + fileName + ".anim"));
+            var saveFilePath = AssetDatabase.GenerateUniqueAssetPath(
+                Path.Combine(saveFolderPath, $"{fileName}.anim")
+            );
+            AssetDatabase.CreateAsset(animClip, saveFilePath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
