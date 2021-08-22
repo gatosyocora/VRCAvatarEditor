@@ -3,6 +3,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using VRCAvatarEditor.Base;
+using VRCAvatarEditor.Interfaces;
 using VRCAvatar = VRCAvatarEditor.Base.VRCAvatarBase;
 
 // Copyright (c) 2019 gatosyocora
@@ -10,7 +11,7 @@ using VRCAvatar = VRCAvatarEditor.Base.VRCAvatarBase;
 namespace VRCAvatarEditor
 {
 
-    public class FaceEmotion
+    public class FaceEmotion : IFaceEmotion
     {
         public readonly string SENDDATAASSET_PATH = "Assets/SendData.asset";
 
