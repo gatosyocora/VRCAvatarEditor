@@ -38,5 +38,20 @@ namespace VRCAvatarEditor.Test
         {
             view.Initialize(null, null, TestUtility.CACHE_FOLDER_PATH, parentWindow, animationsGUI);
         }
+
+        [TestCaseSource("avatarPrefabs")]
+        public void OnCreateButtonClicked実行時にエラーが発生しない_CreateAnimationOnly(GameObject avatarPrefab)
+        {
+            var avatarObject = PrefabUtility.InstantiatePrefab(avatarPrefab) as GameObject;
+            var descripter = avatarObject.GetComponent<VRCAvatarDescriptor>();
+
+            var originalAvatar = new VRCAvatar3(descripter);
+            originalAvatar.FxController = TestUtility.DuplicateAssetToCache<AnimatorController>(originalAvatar.FxController);
+            originalAvatar.AnimSavedFolderPath = TestUtility.CACHE_FOLDER_PATH;
+
+            var editAvatar = new VRCAvatar3();
+            
+            Assert.DoesNotThrow(() => view.OnCreateButtonClicked(originalAvatar, editAvatar, "testAnimation"));
+        }
     }
 }
