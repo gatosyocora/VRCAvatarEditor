@@ -77,7 +77,7 @@ namespace VRCAvatarEditor.Test
 
             AnimationClip IFaceEmotion.CreateBlendShapeAnimationClip(string fileName, string saveFolderPath, VRCAvatarBase avatar)
             {
-                throw new System.NotImplementedException();
+                return TestUtility.LoadAssetFromName<AnimationClip>("DummyAnimation.anim");
             }
 
             List<AnimParam> IFaceEmotion.GetAnimationParamaters(AnimationClip clip)
