@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.IO;
+using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,10 +8,14 @@ namespace VRCAvatarEditor.Test
 {
     public static class TestUtility
     {
+        private const string TEST_FOLDER_PATH = "Assets/VRCAvatarEditorTest/Editor";
+        private static readonly string TEST_SCENE_PATH = Path.Combine(TEST_FOLDER_PATH, "TestScene.unity");
+        private static readonly string TEST_AVATARS_ASSET_PATH = Path.Combine(TEST_FOLDER_PATH, "TestAvatars.asset");
+
         public static Scene OpenTestScene()
         {
             return EditorSceneManager.OpenScene(
-                "Assets/VRCAvatarEditorTest/Editor/TestScene.unity",
+                TEST_SCENE_PATH,
                 OpenSceneMode.Single
             );
         }
@@ -18,7 +23,7 @@ namespace VRCAvatarEditor.Test
         public static TestAvatars GetTestAvatars()
         {
             return AssetDatabase.LoadAssetAtPath<TestAvatars>(
-                "Assets/VRCAvatarEditorTest/Editor/TestAvatars.asset"
+                TEST_AVATARS_ASSET_PATH
             );
         }
 
