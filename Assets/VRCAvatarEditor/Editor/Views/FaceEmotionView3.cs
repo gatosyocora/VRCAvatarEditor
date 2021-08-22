@@ -179,7 +179,7 @@ namespace VRCAvatarEditor.Avatars3
             ChangeSaveAnimationState("", 0, null);
         }
 
-        private void OnCreateButtonClicked(VRCAvatar originalAvatar, VRCAvatar editAvatar, string animName, AnimatorState state, bool setLeftAndRight)
+        public void OnCreateButtonClicked(VRCAvatar originalAvatar, VRCAvatar editAvatar, string animName, AnimatorState state = null, bool setLeftAndRight = true)
         {
             var controller = originalAvatar.FxController;
 
