@@ -255,9 +255,7 @@ namespace VRCAvatarEditor.Base
 
                                         GatoGUILayout.Button(
                                             LocalizeText.instance.langPair.maxButtonText,
-                                            () => {
-                                                faceEmotion.SetBlendShapeMaxValue(skinnedMesh.Renderer, blendshape.Id);
-                                            },
+                                            () => OnBlendShapeMaxButtonClicked(faceEmotion, skinnedMesh, blendshape),
                                             true,
                                             GUILayout.MaxWidth(50));
                                     }
@@ -282,6 +280,11 @@ namespace VRCAvatarEditor.Base
         public void OnBlendShapeMinButtonClicked(IFaceEmotion faceEmotion, IFaceEmotionSkinnedMesh skinnedMesh, SkinnedMesh.BlendShape blendShape)
         {
             faceEmotion.SetBlendShapeMinValue(skinnedMesh.Renderer, blendShape.Id);
+        }
+
+        public void OnBlendShapeMaxButtonClicked(IFaceEmotion faceEmotion, IFaceEmotionSkinnedMesh skinnedMesh, SkinnedMesh.BlendShape blendShape)
+        {
+            faceEmotion.SetBlendShapeMaxValue(skinnedMesh.Renderer, blendShape.Id);
         }
     }
 }
