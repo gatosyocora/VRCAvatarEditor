@@ -197,7 +197,8 @@ namespace VRCAvatarEditor.Avatars3
                 // 可能であればもう一方の手も同じAnimationClipを設定する
                 if (setLeftAndRight)
                 {
-                    var layerName = editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex].name;
+                    var layer = editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex];
+                    var layerName = layer.name;
                     string targetLayerName = string.Empty;
                     if (layerName == VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME)
                     {
@@ -208,24 +209,26 @@ namespace VRCAvatarEditor.Avatars3
                         targetLayerName = VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME;
                     }
 
+                    AnimatorControllerLayer targetLayer = null;
+
                     if (!string.IsNullOrEmpty(targetLayerName))
                     {
-                        var targetLayer = editAvatar.FxController.layers
-                                            .Where(l => l.name == targetLayerName)
+                        targetLayer = editAvatar.FxController.layers
+                                        .Where(l => l.name == targetLayerName)
+                                        .SingleOrDefault();
+                    }
+
+                    if (targetLayer != null)
+                    {
+                        var targetStateName = state.name;
+                        var targetState = targetLayer.stateMachine.states
+                                            .Where(s => s.state.name == targetStateName)
                                             .SingleOrDefault();
 
-                        if (targetLayer != null)
+                        if (targetState.state != null)
                         {
-                            var targetStateName = state.name;
-                            var targetState = targetLayer.stateMachine.states
-                                                .Where(s => s.state.name == targetStateName)
-                                                .SingleOrDefault();
-
-                            if (targetState.state != null)
-                            {
-                                targetState.state.motion = createdAnimClip;
-                                EditorUtility.SetDirty(controller);
-                            }
+                            targetState.state.motion = createdAnimClip;
+                            EditorUtility.SetDirty(controller);
                         }
                     }
                 }
