@@ -21,8 +21,6 @@ namespace VRCAvatarEditor.Avatars3
 
         private AnimatorController fxController;
 
-        private int layerIndex = 0;
-
         private const int PLAYABLE_GESTURE_LAYER_INDEX = 2;
         private const int PLAYABLE_FX_LAYER_INDEX = 4;
 

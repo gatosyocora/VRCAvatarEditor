@@ -8,7 +8,6 @@ namespace VRCAvatarEditor
 {
     public class LocalizeText : ScriptableSingleton<LocalizeText>
     {
-        private readonly static string SPREAD_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbw-TO0isxWGraxcYj66BTG0KHfWqvf1NScNh7gOd7Ku6cHfDavo/exec";
         private readonly static string LANG_ASSET_FOLDER_PATH = "Editor/Resources/Lang";
         private readonly static string BASE_LANGUAGE_PACK = "Base";
 
