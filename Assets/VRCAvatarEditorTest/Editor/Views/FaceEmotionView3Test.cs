@@ -44,7 +44,7 @@ namespace VRCAvatarEditor.Test
         }
 
         [TestCaseSource("avatarPrefabs")]
-        public void OnCreateButtonClicked実行時にエラーが発生しない_CreateAnimationOnly(GameObject avatarPrefab)
+        public void OnCreateButtonClicked実行時にエラーが発生しない_アニメーション作成のみ(GameObject avatarPrefab)
         {
             var avatarObject = PrefabUtility.InstantiatePrefab(avatarPrefab) as GameObject;
             var descripter = avatarObject.GetComponent<VRCAvatarDescriptor>();
