@@ -198,25 +198,7 @@ namespace VRCAvatarEditor.Avatars3
                 if (setLeftAndRight)
                 {
                     var layer = editAvatar.FxController.layers[editAvatar.TargetFxLayerIndex];
-                    var layerName = layer.name;
-                    string targetLayerName = string.Empty;
-                    if (layerName == VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME)
-                    {
-                        targetLayerName = VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME;
-                    }
-                    else if (layerName == VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME)
-                    {
-                        targetLayerName = VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME;
-                    }
-
-                    AnimatorControllerLayer targetLayer = null;
-
-                    if (!string.IsNullOrEmpty(targetLayerName))
-                    {
-                        targetLayer = editAvatar.FxController.layers
-                                        .Where(l => l.name == targetLayerName)
-                                        .SingleOrDefault();
-                    }
+                    var targetLayer = VRCAvatarAnimationUtility.DetectCorrespondenceLayer(layer, editAvatar.FxController);
 
                     if (targetLayer != null)
                     {

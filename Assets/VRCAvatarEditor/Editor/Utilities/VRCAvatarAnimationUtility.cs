@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 using VRCAvatarEditor.Base;
+using VRCAvatarEditor.Avatars3;
 #if VRC_SDK_VRCSDK3
 using VRC.SDK3.Avatars.Components;
 using static VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
@@ -102,6 +103,26 @@ namespace VRCAvatarEditor.Utilities
             => descripter.baseAnimationLayers
                 .Where(l => l.type == layerType)
                 .FirstOrDefault(l => l.animatorController != null);
+
+        public static AnimatorControllerLayer DetectCorrespondenceLayer(AnimatorControllerLayer layer, AnimatorController controller)
+        {
+            var layerName = layer.name;
+            string targetLayerName = string.Empty;
+            if (layerName == VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME)
+            {
+                targetLayerName = VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME;
+            }
+            else if (layerName == VRCAvatarConstants.FX_RIGHT_HAND_LAYER_NAME)
+            {
+                targetLayerName = VRCAvatarConstants.FX_LEFT_HAND_LAYER_NAME;
+            }
+
+            if (string.IsNullOrEmpty(targetLayerName)) return null;
+
+            return controller.layers
+                    .Where(l => l.name == targetLayerName)
+                    .SingleOrDefault();
+        }
     }
 #endif
 }
