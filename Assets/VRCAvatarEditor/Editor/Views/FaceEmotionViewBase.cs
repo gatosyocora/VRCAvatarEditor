@@ -234,7 +234,11 @@ namespace VRCAvatarEditor.Base
                                 {
                                     using (new EditorGUILayout.HorizontalScope())
                                     {
-                                        blendshape.IsContains = EditorGUILayout.ToggleLeft(string.Empty, blendshape.IsContains, GUILayout.Width(45));
+                                        using (var check = new EditorGUI.ChangeCheckScope())
+                                        {
+                                            var value = EditorGUILayout.ToggleLeft(string.Empty, blendshape.IsContains, GUILayout.Width(45));
+                                            if (check.changed) OnBlendShapeToggleClicked(blendshape, value);
+                                        }
 
                                         EditorGUILayout.SelectableLabel(blendshape.Name, GUILayout.Height(20));
                                         using (var check = new EditorGUI.ChangeCheckScope())
@@ -272,6 +276,11 @@ namespace VRCAvatarEditor.Base
         public void OnBlendShapeSelectToggleButtonClicked(IFaceEmotion faceEmotion, IFaceEmotionSkinnedMesh skinnedMesh)
         {
             faceEmotion.SetContainsAll(skinnedMesh.IsContainsAll, skinnedMesh.Blendshapes);
+        }
+
+        public void OnBlendShapeToggleClicked(SkinnedMesh.BlendShape blendShape, bool value)
+        {
+            blendShape.IsContains = value;
         }
 
         public void OnBlendShapeSliderChanged(IFaceEmotionSkinnedMesh skinnedMesh, SkinnedMesh.BlendShape blendShape, float value)
