@@ -206,13 +206,13 @@ namespace VRCAvatarEditor
                 }
             }
 
-            SceneView.onSceneGUIDelegate += OnSceneGUI;
+            SceneView.duringSceneGui += OnSceneGUI;
         }
 
         private void OnDisable()
         {
             avatarMonitorGUI.Dispose();
-            SceneView.onSceneGUIDelegate -= OnSceneGUI;
+            SceneView.duringSceneGui -= OnSceneGUI;
         }
 
         private void OnDestroy()
