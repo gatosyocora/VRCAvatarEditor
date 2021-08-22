@@ -6,6 +6,8 @@ using UnityEditor.Animations;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using VRCAvatarEditor.Avatars3;
+using VRCAvatarEditor.Base;
+using VRCAvatarEditor.Interfaces;
 
 namespace VRCAvatarEditor.Test
 {
@@ -16,6 +18,8 @@ namespace VRCAvatarEditor.Test
         private FaceEmotionView3 view;
         private VRCAvatarEditorView parentWindow;
         private AnimationsView3 animationsGUI;
+
+        private IFaceEmotion mockFaceEmotion = new MockFaceEmotion();
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -36,7 +40,7 @@ namespace VRCAvatarEditor.Test
         [SetUp]
         public void SetUp()
         {
-            view.Initialize(null, null, TestUtility.CACHE_FOLDER_PATH, parentWindow, animationsGUI);
+            view.Initialize(mockFaceEmotion, null, null, TestUtility.CACHE_FOLDER_PATH, parentWindow, animationsGUI);
         }
 
         [TestCaseSource("avatarPrefabs")]
@@ -52,6 +56,74 @@ namespace VRCAvatarEditor.Test
             var editAvatar = new VRCAvatar3();
             
             Assert.DoesNotThrow(() => view.OnCreateButtonClicked(originalAvatar, editAvatar, "testAnimation"));
+        }
+
+        public class MockFaceEmotion : IFaceEmotion
+        {
+            void IFaceEmotion.ApplyAnimationProperties(List<AnimParam> animProperties, VRCAvatarBase avatar)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            void IFaceEmotion.ApplyAnimationProperties(AnimationClip clip, VRCAvatarBase avatar)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            void IFaceEmotion.CopyAnimationKeysFromOriginClip(AnimationClip originClip, AnimationClip targetClip)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            AnimationClip IFaceEmotion.CreateBlendShapeAnimationClip(string fileName, string saveFolderPath, VRCAvatarBase avatar)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            List<AnimParam> IFaceEmotion.GetAnimationParamaters(AnimationClip clip)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            List<AnimParam> IFaceEmotion.GetAvatarFaceParamaters(List<SkinnedMesh> skinnedMeshList)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            void IFaceEmotion.LoadAnimationProperties(FaceEmotionViewBase faceEmotionGUI, VRCAvatarEditorView editorGUI)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            void IFaceEmotion.ResetAllBlendShapeValues(VRCAvatarBase avatar)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            void IFaceEmotion.ResetToDefaultFaceEmotion(VRCAvatarBase avatar)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            bool IFaceEmotion.SetBlendShapeMaxValue(SkinnedMeshRenderer renderer, int id)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            bool IFaceEmotion.SetBlendShapeMinValue(SkinnedMeshRenderer renderer, int id)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            bool IFaceEmotion.SetContainsAll(bool value, List<SkinnedMesh.BlendShape> blendshapes)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            void IFaceEmotion.SetToDefaultFaceEmotion(VRCAvatarBase editAvatar, VRCAvatarBase originalAvatar)
+            {
+                throw new System.NotImplementedException();
+            }
         }
     }
 }
