@@ -244,8 +244,7 @@ namespace VRCAvatarEditor.Base
                                         {
                                             var value = skinnedMesh.Renderer.GetBlendShapeWeight(blendshape.Id);
                                             value = EditorGUILayout.Slider(value, 0, 100);
-                                            if (check.changed)
-                                                skinnedMesh.Renderer.SetBlendShapeWeight(blendshape.Id, value);
+                                            if (check.changed) OnBlendShapeSliderChanged(skinnedMesh, blendshape, value);
                                         }
 
                                         GatoGUILayout.Button(
@@ -275,6 +274,11 @@ namespace VRCAvatarEditor.Base
         public virtual void OnLoadedAnimationProperties()
         {
             faceEmotion.ApplyAnimationProperties(ScriptableSingleton<SendData>.instance.loadingProperties, editAvatar);
+        }
+
+        public void OnBlendShapeSliderChanged(IFaceEmotionSkinnedMesh skinnedMesh, SkinnedMesh.BlendShape blendShape, float value)
+        {
+            skinnedMesh.Renderer.SetBlendShapeWeight(blendShape.Id, value);
         }
     }
 }
