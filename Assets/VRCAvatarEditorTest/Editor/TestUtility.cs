@@ -11,6 +11,7 @@ namespace VRCAvatarEditor.Test
         private const string TEST_FOLDER_PATH = "Assets/VRCAvatarEditorTest/Editor";
         private const string CACHE_FOLDER_NAME = "Cache";
         public static readonly string CACHE_FOLDER_PATH = Path.Combine(TEST_FOLDER_PATH, CACHE_FOLDER_NAME);
+        private static readonly string TEST_ASSETS_FOLDER_PATH = Path.Combine(TEST_FOLDER_PATH, "TestAssets");
         private static readonly string TEST_SCENE_PATH = Path.Combine(TEST_FOLDER_PATH, "TestScene.unity");
         private static readonly string TEST_AVATARS_ASSET_PATH = Path.Combine(TEST_FOLDER_PATH, "TestAvatars.asset");
 
@@ -34,6 +35,11 @@ namespace VRCAvatarEditor.Test
             if (behaviour == null) return null;
             Object.DestroyImmediate(behaviour);
             return gameObject.AddComponent<T>();
+        }
+
+        public static T LoadAssetFromName<T>(string name) where T : Object
+        {
+            return AssetDatabase.LoadAssetAtPath<T>(Path.Combine(TEST_ASSETS_FOLDER_PATH, name));
         }
 
         public static string CreateCacheFolder()
