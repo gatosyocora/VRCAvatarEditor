@@ -87,7 +87,7 @@ namespace VRCAvatarEditor.Avatars3
                                 {
                                     vrcAvatarEditorGUI.CurrentTool = VRCAvatarEditorView.ToolFunc.FaceEmotion;
                                 }
-                                FaceEmotion.ApplyAnimationProperties(anim, editAvatar);
+                                new FaceEmotion().ApplyAnimationProperties(anim, editAvatar);
                                 ((FaceEmotionView3)faceEmotionGUI).ChangeSaveAnimationState(anim.name, i, anim);
                             });
                     }

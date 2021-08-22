@@ -23,7 +23,7 @@ namespace VRCAvatarEditor
             fileName = Path.GetFileName(filePath);
 
             var anim = AssetDatabase.LoadAssetAtPath(filePath, typeof(AnimationClip)) as AnimationClip;
-            animParamList = FaceEmotion.GetAnimationParamaters(anim);
+            animParamList = new FaceEmotion().GetAnimationParamaters(anim);
         }
 
         void OnGUI()

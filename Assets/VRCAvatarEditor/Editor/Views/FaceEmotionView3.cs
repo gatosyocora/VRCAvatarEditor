@@ -183,7 +183,7 @@ namespace VRCAvatarEditor.Avatars3
         {
             var controller = originalAvatar.FxController;
 
-            var createdAnimClip = FaceEmotion.CreateBlendShapeAnimationClip(
+            var createdAnimClip = faceEmotion.CreateBlendShapeAnimationClip(
                                     animName,
                                     originalAvatar.AnimSavedFolderPath,
                                     editAvatar);
@@ -232,7 +232,7 @@ namespace VRCAvatarEditor.Avatars3
             }
             else
             {
-                FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
+                faceEmotion.ResetToDefaultFaceEmotion(editAvatar);
             }
             originalAvatar.FxController = controller;
             editAvatar.FxController = controller;
