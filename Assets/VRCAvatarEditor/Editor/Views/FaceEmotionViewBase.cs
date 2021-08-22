@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using System.IO;
+using VRCAvatarEditor.Interfaces;
 #if VRC_SDK_VRCSDK2
 using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
 using AnimationsGUI = VRCAvatarEditor.Avatars2.AnimationsGUI2;
@@ -15,7 +16,7 @@ namespace VRCAvatarEditor.Base
 {
     public abstract class FaceEmotionViewBase : Editor, IVRCAvatarEditorView
     {
-        protected FaceEmotion faceEmotion;
+        protected IFaceEmotion faceEmotion;
 
         protected VRCAvatar editAvatar;
         protected VRCAvatar originalAvatar;
@@ -49,7 +50,7 @@ namespace VRCAvatarEditor.Base
             Initialize(new FaceEmotion(), editAvatar, originalAvatar, saveFolderPath, window, animationsGUI);
         }
 
-        public void Initialize(FaceEmotion faceEmotion, VRCAvatar editAvatar, VRCAvatar originalAvatar, string saveFolderPath, EditorWindow window, AnimationsGUI animationsGUI)
+        public void Initialize(IFaceEmotion faceEmotion, VRCAvatar editAvatar, VRCAvatar originalAvatar, string saveFolderPath, EditorWindow window, AnimationsGUI animationsGUI)
         {
             this.faceEmotion = faceEmotion;
             this.editAvatar = editAvatar;
