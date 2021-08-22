@@ -102,7 +102,6 @@ namespace VRCAvatarEditor.Test
 
             void IFaceEmotion.ResetToDefaultFaceEmotion(VRCAvatarBase avatar)
             {
-                throw new System.NotImplementedException();
             }
 
             bool IFaceEmotion.SetBlendShapeMaxValue(SkinnedMeshRenderer renderer, int id)
