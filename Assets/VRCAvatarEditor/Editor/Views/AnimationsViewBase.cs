@@ -13,13 +13,11 @@ namespace VRCAvatarEditor.Base
 
         protected string saveFolderPath;
 
-        private GUIStyle normalStyle = new GUIStyle(EditorStyles.label);
-        private GUIStyle errorStyle = new GUIStyle(EditorStyles.label);
+        private GUIStyle normalStyle;
+        private GUIStyle errorStyle;
 
         protected void Initialize(string saveFolderPath)
         {
-            errorStyle.normal.textColor = Color.red;
-
             UpdateSaveFolderPath(saveFolderPath);
         }
 
@@ -32,6 +30,13 @@ namespace VRCAvatarEditor.Base
 
         protected AnimationClip ValidatableAnimationField(string label, AnimationClip clip, bool hasError, Action contents = null)
         {
+            if (normalStyle == null)
+            {
+                normalStyle = new GUIStyle(EditorStyles.label);
+                errorStyle = new GUIStyle(EditorStyles.label);
+                errorStyle.normal.textColor = Color.red;
+            }
+
             AnimationClip retClip;
             using (new EditorGUILayout.HorizontalScope(GUILayout.Width(350)))
             {
