@@ -58,6 +58,22 @@ namespace VRCAvatarEditor.Test
             Assert.DoesNotThrow(() => view.OnCreateButtonClicked(originalAvatar, editAvatar, "testAnimation"));
         }
 
+        [TestCaseSource("avatarPrefabs")]
+        public void OnCreateButtonClicked実行時にエラーが発生しない_任意のStateに自動設定(GameObject avatarPrefab)
+        {
+            var avatarObject = PrefabUtility.InstantiatePrefab(avatarPrefab) as GameObject;
+            var descripter = avatarObject.GetComponent<VRCAvatarDescriptor>();
+
+            var originalAvatar = new VRCAvatar3(descripter);
+            originalAvatar.FxController = TestUtility.DuplicateAssetToCache<AnimatorController>(originalAvatar.FxController);
+            originalAvatar.AnimSavedFolderPath = TestUtility.CACHE_FOLDER_PATH;
+
+            var editAvatar = new VRCAvatar3();
+
+            var targetState = originalAvatar.FxController.layers.SelectMany(l => l.stateMachine.states).First().state;
+            Assert.DoesNotThrow(() => view.OnCreateButtonClicked(originalAvatar, editAvatar, "testAnimation", targetState, false));
+        }
+
         public class MockFaceEmotion : IFaceEmotion
         {
             void IFaceEmotion.ApplyAnimationProperties(List<AnimParam> animProperties, VRCAvatarBase avatar)
