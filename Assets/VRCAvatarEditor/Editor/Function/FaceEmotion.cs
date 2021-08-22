@@ -12,12 +12,12 @@ namespace VRCAvatarEditor
 
     public class FaceEmotion
     {
-        public static readonly string SENDDATAASSET_PATH = "Assets/SendData.asset";
+        public readonly string SENDDATAASSET_PATH = "Assets/SendData.asset";
 
         /// <summary>
         /// 指定したBlendShapeのアニメーションファイルを作成する
         /// </summary>
-        public static AnimationClip CreateBlendShapeAnimationClip(string fileName, string saveFolderPath, VRCAvatar avatar)
+        public AnimationClip CreateBlendShapeAnimationClip(string fileName, string saveFolderPath, VRCAvatar avatar)
         {
             AnimationClip animClip = new AnimationClip();
 
@@ -61,7 +61,7 @@ namespace VRCAvatarEditor
         /// <summary>
         /// BlendShapeの値をすべてリセットする
         /// </summary>
-        public static void ResetAllBlendShapeValues(VRCAvatar avatar)
+        public void ResetAllBlendShapeValues(VRCAvatar avatar)
         {
             foreach (var skinnedMesh in avatar.SkinnedMeshList)
             {
@@ -76,7 +76,7 @@ namespace VRCAvatarEditor
         /// <summary>
         /// BlendShapeの値を最大値にする
         /// </summary>
-        public static bool SetBlendShapeMaxValue(SkinnedMeshRenderer renderer, int id)
+        public bool SetBlendShapeMaxValue(SkinnedMeshRenderer renderer, int id)
         {
             float maxValue = 0f;
 
@@ -98,7 +98,7 @@ namespace VRCAvatarEditor
 
         /// <summary>
         /// BlendShapeの値を最小値にする
-        public static bool SetBlendShapeMinValue(SkinnedMeshRenderer renderer, int id)
+        public bool SetBlendShapeMinValue(SkinnedMeshRenderer renderer, int id)
         {
             float minValue = 0f;
 
@@ -122,7 +122,7 @@ namespace VRCAvatarEditor
         /// </summary>
         /// <param name="value"></param>
         /// <param name="blendshapes"></param>
-        public static bool SetContainsAll(bool value, List<SkinnedMesh.BlendShape> blendshapes)
+        public bool SetContainsAll(bool value, List<SkinnedMesh.BlendShape> blendshapes)
         {
             if (blendshapes == null) return false;
 
@@ -138,7 +138,7 @@ namespace VRCAvatarEditor
         /// </summary>
         /// <param name="sendData"></param>
         /// <param name="preWindow"></param>
-        public static void LoadAnimationProperties(FaceEmotionViewBase faceEmotionGUI, VRCAvatarEditorView editorGUI)
+        public void LoadAnimationProperties(FaceEmotionViewBase faceEmotionGUI, VRCAvatarEditorView editorGUI)
         {
 
             string animFilePath = EditorUtility.OpenFilePanel("Select Loading Animation File", "Assets", "anim");
@@ -159,7 +159,7 @@ namespace VRCAvatarEditor
         /// </summary>
         /// <param name="animProperties"></param>
         /// <param name="skinnedMeshes"></param>
-        public static void ApplyAnimationProperties(List<AnimParam> animProperties, VRCAvatar avatar)
+        public void ApplyAnimationProperties(List<AnimParam> animProperties, VRCAvatar avatar)
         {
             for (int skinnedMeshIndex = 0; skinnedMeshIndex < avatar.SkinnedMeshList.Count; skinnedMeshIndex++)
             {
@@ -196,27 +196,27 @@ namespace VRCAvatarEditor
             }
         }
 
-        public static void ApplyAnimationProperties(AnimationClip clip, VRCAvatar avatar)
+        public void ApplyAnimationProperties(AnimationClip clip, VRCAvatar avatar)
         {
             var paramList = GetAnimationParamaters(clip);
             ApplyAnimationProperties(paramList, avatar);
         }
 
-        public static void SetToDefaultFaceEmotion(VRCAvatar editAvatar, VRCAvatar originalAvatar)
+        public void SetToDefaultFaceEmotion(VRCAvatar editAvatar, VRCAvatar originalAvatar)
         {
             var defaultFaceEmotion = GetAvatarFaceParamaters(editAvatar.SkinnedMeshList);
             editAvatar.DefaultFaceEmotion = defaultFaceEmotion;
             ApplyAnimationProperties(defaultFaceEmotion, originalAvatar);
         }
 
-        public static void ResetToDefaultFaceEmotion(VRCAvatar avatar)
+        public void ResetToDefaultFaceEmotion(VRCAvatar avatar)
         {
             if (avatar == null) return;
 
             ApplyAnimationProperties(avatar.DefaultFaceEmotion, avatar);
         }
 
-        public static List<AnimParam> GetAnimationParamaters(AnimationClip clip)
+        public List<AnimParam> GetAnimationParamaters(AnimationClip clip)
         {
             var bindings = AnimationUtility.GetCurveBindings(clip);
             var animParamList = new List<AnimParam>();
@@ -232,7 +232,7 @@ namespace VRCAvatarEditor
             return animParamList;
         }
 
-        public static List<AnimParam> GetAvatarFaceParamaters(List<SkinnedMesh> skinnedMeshList)
+        public List<AnimParam> GetAvatarFaceParamaters(List<SkinnedMesh> skinnedMeshList)
         {
             var animParamList = new List<AnimParam>();
 
@@ -260,7 +260,7 @@ namespace VRCAvatarEditor
         /// <summary>
         /// originClipに設定されたAnimationKeyをすべてtargetclipにコピーする
         /// </summary>
-        public static void CopyAnimationKeysFromOriginClip(AnimationClip originClip, AnimationClip targetClip)
+        public void CopyAnimationKeysFromOriginClip(AnimationClip originClip, AnimationClip targetClip)
         {
             foreach (var binding in AnimationUtility.GetCurveBindings(originClip))
                 AnimationUtility.SetEditorCurve(targetClip, binding, AnimationUtility.GetEditorCurve(originClip, binding));

@@ -15,6 +15,8 @@ namespace VRCAvatarEditor.Base
 {
     public abstract class FaceEmotionViewBase : Editor, IVRCAvatarEditorView
     {
+        protected FaceEmotion faceEmotion;
+
         protected VRCAvatar editAvatar;
         protected VRCAvatar originalAvatar;
         protected VRCAvatarEditorView parentWindow;
@@ -44,6 +46,12 @@ namespace VRCAvatarEditor.Base
 
         public void Initialize(VRCAvatar editAvatar, VRCAvatar originalAvatar, string saveFolderPath, EditorWindow window, AnimationsGUI animationsGUI)
         {
+            Initialize(new FaceEmotion(), editAvatar, originalAvatar, saveFolderPath, window, animationsGUI);
+        }
+
+        public void Initialize(FaceEmotion faceEmotion, VRCAvatar editAvatar, VRCAvatar originalAvatar, string saveFolderPath, EditorWindow window, AnimationsGUI animationsGUI)
+        {
+            this.faceEmotion = faceEmotion;
             this.editAvatar = editAvatar;
             this.originalAvatar = originalAvatar;
             animName = DEFAULT_ANIM_NAME;
@@ -83,7 +91,7 @@ namespace VRCAvatarEditor.Base
                 GatoGUILayout.Button(
                     LocalizeText.instance.langPair.loadAnimationButtonText,
                     () => {
-                        FaceEmotion.LoadAnimationProperties(this, parentWindow);
+                        faceEmotion.LoadAnimationProperties(this, parentWindow);
                     },
                     editAvatar.Descriptor != null);
 
@@ -103,7 +111,7 @@ namespace VRCAvatarEditor.Base
                 GatoGUILayout.Button(
                     LocalizeText.instance.langPair.resetToDefaultButtonText,
                     () => {
-                        FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
+                        faceEmotion.ResetToDefaultFaceEmotion(editAvatar);
                         ChangeSaveAnimationState();
                     },
                     editAvatar.Descriptor != null);
@@ -172,7 +180,7 @@ namespace VRCAvatarEditor.Base
 
         public virtual void OnSetToDefaultButtonClick(VRCAvatar editAvatar, VRCAvatar originalAvatar)
         {
-            FaceEmotion.SetToDefaultFaceEmotion(editAvatar, originalAvatar);
+            faceEmotion.SetToDefaultFaceEmotion(editAvatar, originalAvatar);
         }
 
         public abstract void ChangeSaveAnimationState();
@@ -193,7 +201,7 @@ namespace VRCAvatarEditor.Base
 
         public void Dispose()
         {
-            FaceEmotion.ResetToDefaultFaceEmotion(editAvatar);
+            faceEmotion.ResetToDefaultFaceEmotion(editAvatar);
         }
 
         protected void BlendShapeListGUI()
@@ -218,7 +226,7 @@ namespace VRCAvatarEditor.Base
                                     skinnedMesh.IsContainsAll = EditorGUILayout.ToggleLeft(string.Empty, skinnedMesh.IsContainsAll, GUILayout.Width(45));
                                     if (check.changed)
                                     {
-                                        FaceEmotion.SetContainsAll(skinnedMesh.IsContainsAll, skinnedMesh.Blendshapes);
+                                        faceEmotion.SetContainsAll(skinnedMesh.IsContainsAll, skinnedMesh.Blendshapes);
                                     }
                                 }
                                 EditorGUILayout.LabelField(LocalizeText.instance.langPair.toggleAllLabel, GUILayout.Height(20));
@@ -244,7 +252,7 @@ namespace VRCAvatarEditor.Base
                                         GatoGUILayout.Button(
                                             LocalizeText.instance.langPair.minButtonText,
                                             () => {
-                                                FaceEmotion.SetBlendShapeMinValue(skinnedMesh.Renderer, blendshape.Id);
+                                                faceEmotion.SetBlendShapeMinValue(skinnedMesh.Renderer, blendshape.Id);
                                             },
                                             true,
                                             GUILayout.MaxWidth(50));
@@ -252,7 +260,7 @@ namespace VRCAvatarEditor.Base
                                         GatoGUILayout.Button(
                                             LocalizeText.instance.langPair.maxButtonText,
                                             () => {
-                                                FaceEmotion.SetBlendShapeMaxValue(skinnedMesh.Renderer, blendshape.Id);
+                                                faceEmotion.SetBlendShapeMaxValue(skinnedMesh.Renderer, blendshape.Id);
                                             },
                                             true,
                                             GUILayout.MaxWidth(50));
@@ -267,7 +275,7 @@ namespace VRCAvatarEditor.Base
 
         public virtual void OnLoadedAnimationProperties()
         {
-            FaceEmotion.ApplyAnimationProperties(ScriptableSingleton<SendData>.instance.loadingProperties, editAvatar);
+            faceEmotion.ApplyAnimationProperties(ScriptableSingleton<SendData>.instance.loadingProperties, editAvatar);
         }
     }
 }
