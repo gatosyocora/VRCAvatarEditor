@@ -249,9 +249,7 @@ namespace VRCAvatarEditor.Base
 
                                         GatoGUILayout.Button(
                                             LocalizeText.instance.langPair.minButtonText,
-                                            () => {
-                                                faceEmotion.SetBlendShapeMinValue(skinnedMesh.Renderer, blendshape.Id);
-                                            },
+                                            () => OnBlendShapeMinButtonClicked(faceEmotion, skinnedMesh, blendshape),
                                             true,
                                             GUILayout.MaxWidth(50));
 
@@ -279,6 +277,11 @@ namespace VRCAvatarEditor.Base
         public void OnBlendShapeSliderChanged(IFaceEmotionSkinnedMesh skinnedMesh, SkinnedMesh.BlendShape blendShape, float value)
         {
             skinnedMesh.Renderer.SetBlendShapeWeight(blendShape.Id, value);
+        }
+
+        public void OnBlendShapeMinButtonClicked(IFaceEmotion faceEmotion, IFaceEmotionSkinnedMesh skinnedMesh, SkinnedMesh.BlendShape blendShape)
+        {
+            faceEmotion.SetBlendShapeMinValue(skinnedMesh.Renderer, blendShape.Id);
         }
     }
 }
