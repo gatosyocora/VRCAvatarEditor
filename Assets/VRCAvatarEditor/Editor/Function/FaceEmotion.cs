@@ -14,22 +14,6 @@ namespace VRCAvatarEditor
     {
         public static readonly string SENDDATAASSET_PATH = "Assets/SendData.asset";
 
-        public class AnimParam
-        {
-            public string ObjPath { set; get; }
-            public string BlendShapeName { set; get; }
-            public float Value { set; get; }
-            public bool IsSelect { set; get; }
-
-            public AnimParam(string path, string propertyName, float value)
-            {
-                ObjPath = path;
-                this.BlendShapeName = propertyName.Replace("blendShape.", "");
-                this.Value = value;
-                IsSelect = true;
-            }
-        }
-
         /// <summary>
         /// 指定したBlendShapeのアニメーションファイルを作成する
         /// </summary>

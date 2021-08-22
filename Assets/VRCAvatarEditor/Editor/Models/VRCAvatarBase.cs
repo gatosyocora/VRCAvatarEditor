@@ -12,7 +12,7 @@ namespace VRCAvatarEditor.Base
 {
     public abstract class VRCAvatarBase : IVRCAvatarBase
     {
-        public List<FaceEmotion.AnimParam> DefaultFaceEmotion { get; set; }
+        public List<AnimParam> DefaultFaceEmotion { get; set; }
         public Animator Animator { get; set; }
         public Vector3 EyePos { get; set; }
         public string AvatarId { get; set; }

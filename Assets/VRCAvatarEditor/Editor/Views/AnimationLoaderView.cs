@@ -12,7 +12,7 @@ namespace VRCAvatarEditor
         private string filePath;
         private string fileName;
 
-        private List<FaceEmotion.AnimParam> animParamList;
+        private List<AnimParam> animParamList;
 
         private Vector2 scrollPos = Vector2.zero;
 
