@@ -223,10 +223,7 @@ namespace VRCAvatarEditor.Base
                                 using (var check = new EditorGUI.ChangeCheckScope())
                                 {
                                     skinnedMesh.IsContainsAll = EditorGUILayout.ToggleLeft(string.Empty, skinnedMesh.IsContainsAll, GUILayout.Width(45));
-                                    if (check.changed)
-                                    {
-                                        faceEmotion.SetContainsAll(skinnedMesh.IsContainsAll, skinnedMesh.Blendshapes);
-                                    }
+                                    if (check.changed) OnBlendShapeSelectToggleButtonClicked(faceEmotion, skinnedMesh);
                                 }
                                 EditorGUILayout.LabelField(LocalizeText.instance.langPair.toggleAllLabel, GUILayout.Height(20));
                             }
@@ -270,6 +267,11 @@ namespace VRCAvatarEditor.Base
         public virtual void OnLoadedAnimationProperties()
         {
             faceEmotion.ApplyAnimationProperties(ScriptableSingleton<SendData>.instance.loadingProperties, editAvatar);
+        }
+
+        public void OnBlendShapeSelectToggleButtonClicked(IFaceEmotion faceEmotion, IFaceEmotionSkinnedMesh skinnedMesh)
+        {
+            faceEmotion.SetContainsAll(skinnedMesh.IsContainsAll, skinnedMesh.Blendshapes);
         }
 
         public void OnBlendShapeSliderChanged(IFaceEmotionSkinnedMesh skinnedMesh, SkinnedMesh.BlendShape blendShape, float value)
