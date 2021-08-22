@@ -47,6 +47,8 @@ namespace VRCAvatarEditor
         private IVRCAvatarEditorView selectedToolGUI;
         private Dictionary<ToolFunc, IVRCAvatarEditorView> toolGUIs = new Dictionary<ToolFunc, IVRCAvatarEditorView>();
 
+        private FaceEmotion faceEmotion;
+
         private bool needRepaint = false;
 
         private VRC_AvatarDescriptor _targetAvatarDescriptor;
@@ -172,6 +174,8 @@ namespace VRCAvatarEditor
             probeAnchorGUI = ScriptableObject.CreateInstance<ProbeAnchorView>();
             meshBoundsGUI = ScriptableObject.CreateInstance<MeshBoundsView>();
             shaderGUI = ScriptableObject.CreateInstance<ShaderView>();
+
+            faceEmotion = new FaceEmotion();
 
             toolGUIs.Add(ToolFunc.AvatarInfo, avatarInfoGUI);
             toolGUIs.Add(ToolFunc.FaceEmotion, faceEmotionGUI);
@@ -558,7 +562,7 @@ namespace VRCAvatarEditor
 
             if (CurrentTool == ToolFunc.FaceEmotion)
             {
-                faceEmotionGUI.Initialize(edittingAvatar, originalAvatar, saveFolder, this, animationsGUI);
+                faceEmotionGUI.Initialize(faceEmotion, edittingAvatar, originalAvatar, saveFolder, this, animationsGUI);
 
                 UpdateExclusitionBlendShapes();
 

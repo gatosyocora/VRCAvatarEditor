@@ -45,11 +45,6 @@ namespace VRCAvatarEditor.Base
 
         protected bool usePreviousAnimationOnHandAnimation;
 
-        public void Initialize(VRCAvatar editAvatar, VRCAvatar originalAvatar, string saveFolderPath, EditorWindow window, AnimationsGUI animationsGUI)
-        {
-            Initialize(new FaceEmotion(), editAvatar, originalAvatar, saveFolderPath, window, animationsGUI);
-        }
-
         public void Initialize(IFaceEmotion faceEmotion, VRCAvatar editAvatar, VRCAvatar originalAvatar, string saveFolderPath, EditorWindow window, AnimationsGUI animationsGUI)
         {
             this.faceEmotion = faceEmotion;
@@ -202,7 +197,10 @@ namespace VRCAvatarEditor.Base
 
         public void Dispose()
         {
-            faceEmotion.ResetToDefaultFaceEmotion(editAvatar);
+            if (faceEmotion != null)
+            {
+                faceEmotion.ResetToDefaultFaceEmotion(editAvatar);
+            }
         }
 
         protected void BlendShapeListGUI()
