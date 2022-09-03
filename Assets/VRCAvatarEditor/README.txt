@@ -1,7 +1,7 @@
 VRChatで使用するアバターの作成・編集を支援するエディタ拡張です。
 
 導入方法や各種機能の説明などの詳しい説明はオンラインマニュアルをご覧ください。
-https://docs.google.com/document/d/1DU7mP5PTvERqHzZiiCBJ9ep5CilQ1iaXC_3IoiuPEgA/edit?usp=sharing
+https://cream-period-a2e.notion.site/VRCAvatarEditor-071113bf7e814a51bf135155e85746ef
 
 また、README.txtやマニュアル等に内容に矛盾が発生していた場合は
 オンラインマニュアルの内容を最優先とします。
