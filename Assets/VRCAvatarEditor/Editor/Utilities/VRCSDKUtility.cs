@@ -21,7 +21,7 @@ namespace VRCAvatarEditor.Utilities
                         .FirstOrDefault();
         }
 
-        public static void UploadAvatar(bool newSDKUI)
+        public static void UploadAvatar()
         {
             EditorApplication.ExecuteMenuItem("VRChat SDK/Show Control Panel");
         }
