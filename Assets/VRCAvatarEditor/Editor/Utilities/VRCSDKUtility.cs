@@ -23,14 +23,7 @@ namespace VRCAvatarEditor.Utilities
 
         public static void UploadAvatar(bool newSDKUI)
         {
-            if (newSDKUI)
-            {
-                EditorApplication.ExecuteMenuItem("VRChat SDK/Show Control Panel");
-            }
-            else
-            {
-                EditorApplication.ExecuteMenuItem("VRChat SDK/Show Build Control Panel");
-            }
+            EditorApplication.ExecuteMenuItem("VRChat SDK/Show Control Panel");
         }
     }
 }
