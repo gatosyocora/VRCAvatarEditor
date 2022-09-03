@@ -6,6 +6,8 @@ namespace VRCAvatarEditor.Utilities
 {
     public class VRCSDKUtility
     {
+        public const string ASSETS_FOLDER_PATH = "Packages/com.vrchat.avatars/Samples/AV3 Demo Assets/";
+
         /// <summary>
         /// VRCSDKに含まれるファイルを取得する
         /// </summary>
@@ -13,12 +15,7 @@ namespace VRCAvatarEditor.Utilities
         /// <returns></returns>
         public static string GetVRCSDKFilePath(string fileName)
         {
-            // VRCSDKフォルダが移動されている可能性があるため対象ファイルを探す
-            return AssetDatabase.FindAssets(fileName)
-                        .Select(g => AssetDatabase.GUIDToAssetPath(g))
-                        .Where(p => p.Contains("/VRCSDK/") || p.Contains("VRChat Examples"))
-                        .OrderBy(p => Path.GetFileName(p).Count())
-                        .FirstOrDefault();
+            return Path.Combine(ASSETS_FOLDER_PATH, fileName);
         }
 
         public static void UploadAvatar()

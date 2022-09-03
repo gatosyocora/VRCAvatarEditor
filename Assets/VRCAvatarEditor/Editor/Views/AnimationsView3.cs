@@ -107,7 +107,7 @@ namespace VRCAvatarEditor.Avatars3
 
         private static AnimatorController InstantiateFxController(string newFilePath)
         {
-            string path = VRCSDKUtility.GetVRCSDKFilePath("vrc_AvatarV3HandsLayer");
+            string path = VRCSDKUtility.GetVRCSDKFilePath("Animation/Controllers/vrc_AvatarV3HandsLayer.controller");
 
             newFilePath = AssetDatabase.GenerateUniqueAssetPath(newFilePath);
             AssetDatabase.CopyAsset(path, newFilePath);
