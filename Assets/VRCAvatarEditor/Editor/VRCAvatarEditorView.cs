@@ -352,7 +352,7 @@ namespace VRCAvatarEditor
                         GatoGUILayout.Button(
                             LocalizeText.instance.langPair.uploadAvatarButtonText,
                             () => {
-                                VRCSDKUtility.UploadAvatar(VRCSDKUtility.IsNewSDKUI());
+                                VRCSDKUtility.UploadAvatar(true);
                             });
                     }
                 }
