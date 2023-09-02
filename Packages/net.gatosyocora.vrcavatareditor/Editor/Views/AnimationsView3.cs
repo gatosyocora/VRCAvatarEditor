@@ -207,6 +207,13 @@ namespace VRCAvatarEditor.Avatars3
                 }
             }
 
+            // FXレイヤーの不具合で一番上のレイヤーのAvatarMaskが設定されているとハンドアニメーションがうまくいかなくなるので対策
+            createdFxController.layers = createdFxController.layers.Select((x, index) =>
+            {
+                if (index == 0) x.avatarMask = null;
+                return x;
+            }).ToArray();
+
             if (!originalAvatar.Descriptor.customizeAnimationLayers)
             {
                 EnableCustomPlayableLayers(originalAvatar);
