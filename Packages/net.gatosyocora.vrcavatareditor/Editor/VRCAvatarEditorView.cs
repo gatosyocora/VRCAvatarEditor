@@ -34,7 +34,6 @@ namespace VRCAvatarEditor
         private const string MANUAL_URL = "https://gatosyocora.notion.site/VRCAvatarEditor-071113bf7e814a51bf135155e85746ef";
         private const string BOOTH_URL = "gatosyocora.booth.pm";
         private const string BOOTH_ITEM_URL = "https://booth.pm/ja/items/1258744";
-        private static readonly string GITHUB_LATEST_RELEASE_API_URL = "https://api.github.com/repos/gatosyocora/VRCAvatarEditor/releases/latest";
 
         private AvatarMonitorView avatarMonitorGUI;
         public AnimationsGUI animationsGUI;
@@ -603,23 +602,6 @@ namespace VRCAvatarEditor
         public void OpenSubWindow()
         {
             GetWindow<AnimationLoaderView>("Animation Loader", typeof(VRCAvatarEditorView));
-        }
-
-        [MenuItem("VRCAvatarEditor/Check for Updates")]
-        public static async void CheckForUpdates()
-        {
-            var remoteVersion = await VersionCheckUtility.GetLatestVersionFromRemote(GITHUB_LATEST_RELEASE_API_URL);
-            var isLatest = VersionCheckUtility.IsLatestVersion(GetToolVersion(), remoteVersion);
-            var message = (isLatest) ? 
-                            LocalizeText.instance.langPair.localIsLatestMessageText.Replace("<LocalVersion>", GetToolVersion()) :
-                            LocalizeText.instance.langPair.remoteIsLatestMessageText.Replace("<LocalVersion>", GetToolVersion()).Replace("<RemoteVersion>", remoteVersion);
-            var okText = (isLatest) ? 
-                            LocalizeText.instance.langPair.ok :
-                            LocalizeText.instance.langPair.downloadLatestButtonText;
-            if (EditorUtility.DisplayDialog(LocalizeText.instance.langPair.checkVersionDialogTitle, message, okText) && !isLatest) 
-            {
-                Application.OpenURL(BOOTH_ITEM_URL);
-            }
         }
 
         // TODO: NowLoadingをもう少しいい感じにする
