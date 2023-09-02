@@ -32,7 +32,7 @@ namespace VRCAvatarEditor
         private const string TOOL_VERSION = "v0.6.4";
         private const string TWITTER_ID = "gatosyocora";
         private const string DISCORD_ID = "gatosyocora#9575";
-        private const string MANUAL_URL = "https://cream-period-a2e.notion.site/VRCAvatarEditor-071113bf7e814a51bf135155e85746ef";
+        private const string MANUAL_URL = "https://gatosyocora.notion.site/VRCAvatarEditor-071113bf7e814a51bf135155e85746ef";
         private const string BOOTH_URL = "gatosyocora.booth.pm";
         private const string BOOTH_ITEM_URL = "https://booth.pm/ja/items/1258744";
         private static readonly string GITHUB_LATEST_RELEASE_API_URL = "https://api.github.com/repos/gatosyocora/VRCAvatarEditor/releases/latest";
