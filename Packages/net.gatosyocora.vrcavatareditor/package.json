@@ -1,14 +1,21 @@
 {
   "name": "net.gatosyocora.vrcavatareditor",
-  "displayName": "net.gatosyocora.vrcavatareditor",
-  "version": "0.0.1",
-  "description": "Describe this Package",
+  "displayName": "VRCAvatarEditor",
+  "version": "0.7.0",
+  "description": "Unity Editor Extension supported to edit VRChat avatar",
+  "author": {
+    "name": "gatosyocora",
+    "email": "gatosyocora36@gmail.com",
+    "url": "https://github.com/gatosyocora"
+  },
   "dependencies": {},
   "gitDependencies": {},
   "vpmDependencies": {
     "com.vrchat.avatars": "3.2.3"
   },
-  "legacyFolders": {},
+  "legacyFolders": {
+    "Assets\\VRCAvatarEditor": "6088daf63986a824eb7b895acfbb3c00"
+  },
   "legacyFiles": {},
-  "localPath": "D:\\prog\\Unity\\Projects\\VRCAvatarEditor-Migrated\\Packages\\net.gatosyocora.vrcavatareditor"
+  "type": "tool"
 }
