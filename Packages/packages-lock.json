@@ -211,6 +211,12 @@
         "com.unity.nuget.newtonsoft-json": "2.0.2"
       }
     },
+    "net.gatosyocora.vrcavatareditor": {
+      "version": "file:net.gatosyocora.vrcavatareditor",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "nuget.mono-cecil": {
       "version": "0.1.6-preview",
       "depth": 1,

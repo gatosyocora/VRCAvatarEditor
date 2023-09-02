@@ -55,9 +55,8 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
-# VRCAvatarEditorとVRCAvatarEditorTest以外は除く
+# VRCAvatarEditorTest以外は除く
 Assets/*
-!Assets/VRCAvatarEditor/
 !Assets/VRCAvatarEditorTest/
 
 # 作成したAnimationファイルは除く
