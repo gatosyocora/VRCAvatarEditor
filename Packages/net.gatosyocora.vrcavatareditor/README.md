@@ -1,1 +1,0 @@
-# net.gatosyocora.vrcavatareditor by Owner
