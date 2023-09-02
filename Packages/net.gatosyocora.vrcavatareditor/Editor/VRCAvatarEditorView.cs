@@ -29,7 +29,6 @@ namespace VRCAvatarEditor
 {
     public class VRCAvatarEditorView : EditorWindow
     {
-        private const string TOOL_VERSION = "v0.6.4";
         private const string TWITTER_ID = "gatosyocora";
         private const string DISCORD_ID = "gatosyocora#9575";
         private const string MANUAL_URL = "https://gatosyocora.notion.site/VRCAvatarEditor-071113bf7e814a51bf135155e85746ef";
@@ -386,7 +385,7 @@ namespace VRCAvatarEditor
         private void ToolInfoGUI()
         {
             EditorGUILayout.LabelField("VRC Avatar Editor", EditorStyles.boldLabel);
-            EditorGUILayout.LabelField(LocalizeText.instance.langPair.versionLabel, TOOL_VERSION);
+            EditorGUILayout.LabelField(LocalizeText.instance.langPair.versionLabel, GetToolVersion());
 
             EditorGUILayout.Space();
 
@@ -610,10 +609,10 @@ namespace VRCAvatarEditor
         public static async void CheckForUpdates()
         {
             var remoteVersion = await VersionCheckUtility.GetLatestVersionFromRemote(GITHUB_LATEST_RELEASE_API_URL);
-            var isLatest = VersionCheckUtility.IsLatestVersion(TOOL_VERSION, remoteVersion);
+            var isLatest = VersionCheckUtility.IsLatestVersion(GetToolVersion(), remoteVersion);
             var message = (isLatest) ? 
-                            LocalizeText.instance.langPair.localIsLatestMessageText.Replace("<LocalVersion>", TOOL_VERSION) :
-                            LocalizeText.instance.langPair.remoteIsLatestMessageText.Replace("<LocalVersion>", TOOL_VERSION).Replace("<RemoteVersion>", remoteVersion);
+                            LocalizeText.instance.langPair.localIsLatestMessageText.Replace("<LocalVersion>", GetToolVersion()) :
+                            LocalizeText.instance.langPair.remoteIsLatestMessageText.Replace("<LocalVersion>", GetToolVersion()).Replace("<RemoteVersion>", remoteVersion);
             var okText = (isLatest) ? 
                             LocalizeText.instance.langPair.ok :
                             LocalizeText.instance.langPair.downloadLatestButtonText;
@@ -660,6 +659,20 @@ namespace VRCAvatarEditor
                     }
                 }
             }
+        }
+
+        private static string GetToolVersion()
+        {
+            var jsonTextPath = AssetDatabase.GUIDToAssetPath("e679438555bdaa24eabe579189c2bb52");
+            var jsonText = File.ReadAllText(jsonTextPath);
+            var packagejson = JsonUtility.FromJson<PackageJson>(jsonText);
+            return packagejson.version;
+        }
+
+        [Serializable]
+        public class PackageJson
+        {
+            public string version;
         }
     }
 }
