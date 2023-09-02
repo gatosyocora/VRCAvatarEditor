@@ -29,7 +29,7 @@ namespace VRCAvatarEditor
 {
     public class VRCAvatarEditorView : EditorWindow
     {
-        private const string TWITTER_ID = "gatosyocora";
+        private const string X_ID = "gatosyocora";
         private const string DISCORD_ID = "gatosyocora#9575";
         private const string MANUAL_URL = "https://gatosyocora.notion.site/VRCAvatarEditor-071113bf7e814a51bf135155e85746ef";
         private const string BOOTH_URL = "gatosyocora.booth.pm";
@@ -412,11 +412,11 @@ namespace VRCAvatarEditor
             {
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    EditorGUILayout.LabelField("Twitter", "@" + TWITTER_ID, GUILayout.Width(300));
+                    EditorGUILayout.LabelField("X", "@" + X_ID, GUILayout.Width(300));
                     GatoGUILayout.Button(
                         LocalizeText.instance.langPair.open,
                         () => {
-                            Application.OpenURL("https://twitter.com/" + TWITTER_ID);
+                            Application.OpenURL("https://x.com/" + X_ID);
                         },
                         true,
                         GUILayout.Width(50));
