@@ -2,12 +2,7 @@
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-#if VRC_SDK_VRCSDK2
-using VRCSDK2;
-using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
-#elif VRC_SDK_VRCSDK3
 using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
-#endif
 using LipSyncStyle = VRC.SDKBase.VRC_AvatarDescriptor.LipSyncStyle;
 using AnimationSet = VRC.SDKBase.VRC_AvatarDescriptor.AnimationSet;
 using Viseme = VRC.SDKBase.VRC_AvatarDescriptor.Viseme;
@@ -67,15 +62,6 @@ namespace VRCAvatarEditor
                     // AnimatorOverrideController
                     using (var check = new EditorGUI.ChangeCheckScope())
                     {
-#if VRC_SDK_VRCSDK2
-                        originalAvatar.StandingAnimController = GatoGUILayout.ObjectField(
-                            LocalizeText.instance.langPair.customStandingAnimsLabel,
-                            originalAvatar.StandingAnimController);
-
-                        originalAvatar.SittingAnimController = GatoGUILayout.ObjectField(
-                            LocalizeText.instance.langPair.customSittingAnimsLabel,
-                            originalAvatar.SittingAnimController);
-#elif VRC_SDK_VRCSDK3
                         originalAvatar.GestureController = GatoGUILayout.ObjectField(
                             "Gesture Layer",
                             originalAvatar.GestureController);
@@ -83,17 +69,11 @@ namespace VRCAvatarEditor
                         originalAvatar.FxController = GatoGUILayout.ObjectField(
                             "FX Layer",
                             originalAvatar.FxController);
-#endif
 
                         if (check.changed)
                         {
-#if VRC_SDK_VRCSDK2
-                            originalAvatar.Descriptor.CustomStandingAnims = originalAvatar.StandingAnimController;
-                            originalAvatar.Descriptor.CustomSittingAnims = originalAvatar.SittingAnimController;
-#elif VRC_SDK_VRCSDK3
                             originalAvatar.Descriptor.baseAnimationLayers[2].animatorController = originalAvatar.GestureController;
                             originalAvatar.Descriptor.baseAnimationLayers[4].animatorController = originalAvatar.FxController;
-#endif
                             EditorUtility.SetDirty(originalAvatar.Descriptor);
 
                             originalAvatar.SetAnimSavedFolderPath();

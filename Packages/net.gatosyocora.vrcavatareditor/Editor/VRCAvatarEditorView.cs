@@ -9,19 +9,11 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 using VRCAvatarEditor.Utilities;
-#if VRC_SDK_VRCSDK2
-using VRCSDK2;
-using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
-using AnimationsGUI = VRCAvatarEditor.Avatars2.AnimationsGUI2;
-using VRC_AvatarDescriptor = VRCSDK2.VRC_AvatarDescriptor;
-using FaceEmotionGUI = VRCAvatarEditor.Avatars2.FaceEmotionGUI2;
-#elif VRC_SDK_VRCSDK3
 using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
 using VRC.SDK3.Avatars.Components;
 using VRC_AvatarDescriptor = VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
 using AnimationsGUI = VRCAvatarEditor.Avatars3.AnimationsView3;
 using FaceEmotionGUI = VRCAvatarEditor.Avatars3.FaceEmotionView3;
-#endif
 
 // Copyright (c) 2019 gatosyocora
 

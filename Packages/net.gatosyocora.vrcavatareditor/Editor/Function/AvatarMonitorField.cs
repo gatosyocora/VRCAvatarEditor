@@ -3,15 +3,9 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-#if VRC_SDK_VRCSDK2
-using VRCSDK2;
-using VRCAvatar = VRCAvatarEditor.Avatars2.VRCAvatar2;
-using VRC_AvatarDescriptor = VRCSDK2.VRC_AvatarDescriptor;
-#else
 using VRCAvatar = VRCAvatarEditor.Avatars3.VRCAvatar3;
 using VRC.SDK3.Avatars.Components;
 using VRC_AvatarDescriptor = VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
-#endif
 
 namespace VRCAvatarEditor
 {
