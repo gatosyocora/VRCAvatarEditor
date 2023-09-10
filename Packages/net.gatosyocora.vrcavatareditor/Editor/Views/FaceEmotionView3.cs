@@ -1,5 +1,4 @@
-﻿#if VRC_SDK_VRCSDK3
-using System.Linq;
+﻿using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -279,4 +278,3 @@ namespace VRCAvatarEditor.Avatars3
         }
     }
 }
-#endif

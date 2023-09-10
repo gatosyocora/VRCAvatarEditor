@@ -6,10 +6,8 @@ using UnityEditor.Animations;
 using UnityEngine;
 using VRCAvatarEditor.Base;
 using VRCAvatarEditor.Avatars3;
-#if VRC_SDK_VRCSDK3
 using VRC.SDK3.Avatars.Components;
 using static VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
-#endif
 
 namespace VRCAvatarEditor.Utilities
 {
@@ -98,7 +96,6 @@ namespace VRCAvatarEditor.Utilities
                 .stateMachine.states
                 .SingleOrDefault(s => s.state.name == VRCAvatarConstants.IDLE_STATE_NAME);
 
-#if VRC_SDK_VRCSDK3
         public static CustomAnimLayer GetPlayableLayer(VRCAvatarDescriptor descripter, AnimLayerType layerType)
             => descripter.baseAnimationLayers
                 .Where(l => l.type == layerType)
@@ -124,5 +121,4 @@ namespace VRCAvatarEditor.Utilities
                     .SingleOrDefault();
         }
     }
-#endif
 }
